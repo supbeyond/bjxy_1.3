@@ -11,9 +11,18 @@ var xs_tjfx_range_centerPoint = null;
     贫困发生率
     脱贫率
  */
+/**
+ *
+ * @param level 区域级别  @see XS.Main.ZoneLevel
+ * @param parentId 上级ID
+ * @param type 统计分析类型 @see XS.Main.Tjfx.type
+ */
+var xs_tjfx_zoneLevel = -1;
 XS.Main.Tjfx.range = function(level, parentId, type){
+
     xs_isShowUtfGridTip = true;
     xs_currentZoneLevel = level;
+    xs_tjfx_zoneLevel = level;
     xs_superZoneCode = -1;
 
     xs_tjfx_type =  type;
@@ -278,11 +287,32 @@ XS.Main.Tjfx.range_addFeatures2Layer = function(featureArr, data, level){ // 0:c
     for (var i in featureArr)
     {
         feature = featureArr[i];
-        for(var j in data)
+        for(var j=0; j<data.length; j++)
         {
             var obj = data[j];
             if(obj[oId]==feature.data[fId])
             {
+                var isNext = false;
+                switch (level){
+                    case 0: //市
+                        if(xs_user_regionLevel == XS.Main.ZoneLevel.county &&  xs_user_regionId != feature.data[fId]){
+                            isNext = true;
+                        }
+                        break;
+                    case 1: //县
+                        if(xs_user_regionLevel == XS.Main.ZoneLevel.town &&  xs_user_regionId != feature.data[fId]){
+                            isNext = true;
+                        }
+                        break;
+                    case 2: //镇;
+                        if(xs_user_regionLevel == XS.Main.ZoneLevel.village &&  xs_user_regionId != feature.data[fId]){
+                            isNext = true;
+                        }
+                        break;
+                }
+                if(isNext){
+                    break;
+                }
                 var rate = 0;
                 switch (xs_tjfx_type)
                 {
@@ -342,7 +372,7 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
         switch (xs_tjfx_type)
         {
             case XS.Main.Tjfx.type.range_pkfsx:
-                switch (xs_currentZoneLevel)
+                switch (xs_tjfx_zoneLevel)
                 {
                     case XS.Main.ZoneLevel.city:
                     {

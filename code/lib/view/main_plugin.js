@@ -755,14 +755,14 @@ XS.Main.clickMapCallback = function(mouseEvent){
     var layerName = "";
     if(scale>300000){ //county
         layerName = "County_Code";
-        xs_currentZoneLevel = XS.Main.ZoneLevel.county;
+       // xs_currentZoneLevel = XS.Main.ZoneLevel.county;
     }else if(scale<=300000&& scale>80000) //town
     {
         layerName = "Twon_Code";
-        xs_currentZoneLevel = XS.Main.ZoneLevel.town;
+       // xs_currentZoneLevel = XS.Main.ZoneLevel.town;
     }else{ //village
         layerName = "Village_Code";
-        xs_currentZoneLevel = XS.Main.ZoneLevel.village;
+      //  xs_currentZoneLevel = XS.Main.ZoneLevel.village;
     }
     var lonLat = xs_MapInstance.getMapObj().getLonLatFromPixel(mouseEvent.xy);
     var point = new SuperMap.Geometry.Point(lonLat.lon, lonLat.lat);
@@ -775,8 +775,29 @@ XS.Main.clickMapCallback = function(mouseEvent){
                 feature = result.recordsets[0].features[i];
                 break;
             }
+
+            if(feature==null){
+                XS.CommonUtil.hideLoader();
+                return;
+            }
+
+            var scale = 1/xs_MapInstance.getMapObj().getScale();
+            var layerName = "";
+            var level = -1;
+            if(scale>300000){ //county
+                layerName = "County_Code";
+                level = XS.Main.ZoneLevel.county;
+            }else if(scale<=300000&& scale>80000) //town
+            {
+                layerName = "Twon_Code";
+                level = XS.Main.ZoneLevel.town;
+            }else{ //village
+                layerName = "Village_Code";
+                level = XS.Main.ZoneLevel.village;
+            }
+
             //加载数据到矢量图层中
-            switch (xs_currentZoneLevel)
+            switch (level)
             {
                 case XS.Main.ZoneLevel.county:
                 {
@@ -804,6 +825,13 @@ XS.Main.clickMapCallback = function(mouseEvent){
                 case XS.Main.ZoneLevel.town:
                 {
                     switch (xs_user_regionLevel){
+                        case XS.Main.ZoneLevel.county:
+                            if(xs_user_regionId != feature.data.县级代码){
+                                XS.CommonUtil.showMsgDialog("", "您的权限不够");
+                                XS.CommonUtil.hideLoader();
+                                return;
+                            }
+                            break;
                         case XS.Main.ZoneLevel.town:
                             if(xs_user_regionId != feature.data.乡镇代码){
                                 XS.CommonUtil.showMsgDialog("", "您的权限不够");
@@ -862,6 +890,7 @@ XS.Main.clickMapCallback = function(mouseEvent){
             xs_zone_vectorLayer.removeAllFeatures();
             xs_zone_vectorLayer.addFeatures(feature);
             xs_isMapClickTypeNone = true;
+            xs_currentZoneLevel = level;
             //查询信息
             XS.CommonUtil.hideLoader();
         }else{
@@ -946,16 +975,23 @@ XS.Main.depClearMap = function() {
 
 
 //************************处理点击鼠标右键选中菜单选项处理函数************************************
-//分段专题图 贫困发生率
+//分段专题图 贫困发生率 脱贫率
 XS.Main.cRItem_Tjfx_Range = function(type){
-    if(xs_superZoneCode == -1 || xs_superZoneCode == xs_cityID){
-        XS.Main.Tjfx.range(XS.Main.ZoneLevel.city, xs_cityID, type);
+    if(xs_currentZoneFuture != null){
+        xs_tjfx_range_centerPoint = xs_currentZoneFuture.geometry.getBounds().getCenterLonLat();
+        XS.Main.Tjfx.range(xs_currentZoneLevel-1, xs_superZoneCode, type);
     }else{
-        if(xs_currentZoneFuture != null){
-            xs_tjfx_range_centerPoint = xs_currentZoneFuture.geometry.getBounds().getCenterLonLat();
-            XS.Main.Tjfx.range(xs_currentZoneLevel-1, xs_superZoneCode, type);
-        }else{
-            XS.CommonUtil.showMsgDialog("","请先选中区域");
+        switch (xs_user_regionLevel){
+            case XS.Main.ZoneLevel.city:
+            case XS.Main.ZoneLevel.county:
+                XS.Main.Tjfx.range(XS.Main.ZoneLevel.city, xs_cityID, type);
+                break;
+            case XS.Main.ZoneLevel.town:
+                XS.Main.Tjfx.range(XS.Main.ZoneLevel.county, xs_user_Features[0].data.县级代码, type);
+                break;
+            case XS.Main.ZoneLevel.village:
+                XS.Main.Tjfx.range(XS.Main.ZoneLevel.town,  xs_user_Features[0].data.Town_id, type);
+                break;
         }
     }
 }
