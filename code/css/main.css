@@ -1,0 +1,346 @@
+.window {
+    background-color:  #00bbee !important;
+}
+html, body{
+    height: 100%;
+    width: 100%;
+    background: #ffffff;
+}
+
+.window, .panel-header, .l-btn{
+    background: #00bbee;
+}
+.xs_loading{
+    color: #00bbee;
+}
+.l-btn:hover{
+    background: #6abafe;
+}
+
+.galleria-info-link{
+    display: none;
+}
+.panel-header{
+    border-color: #6abafe;
+}
+
+#xs_MapContainer {
+    position: absolute;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    border: 0px;
+}
+#xs_Map {
+    position: relative;
+    left: 0px;
+    top: 0px;
+    width: 100%;
+    height: 100%;
+    min-height: 100%;
+    border: 0px;
+    cursor: pointer;
+}
+
+#xs_title{
+    z-index: 999;
+    position: absolute;
+    width: 100%;
+    left: 0px;
+    top: 10px;
+    text-align: center;
+    background: transparent;
+    font-size: 40px;
+    font-weight: 900;
+    color: rgba(255, 255, 255, 0.8); /*00bbee  2531EE*/
+
+    text-shadow:
+    2px -2px 2px #000000
+   /* ,-2px 2px 2px #808080;*/
+}
+
+#xs_leftToolBarC{
+    z-index: 999;
+    position: absolute;
+    left: -302px;
+    top: 150px;
+    background: transparent;
+    width: 110px;
+    height: 320px;
+    scroll:no;
+    -webkit-box-shadow:0 0 2px 2px rgba(19, 33, 46, 0.12);
+    -moz-box-shadow:0 0 2px 2px rgba(19, 33, 46, 0.12);
+    box-shadow:0 0 2px 2px rgba(19, 33, 46, 0.12);
+}
+
+/*---------------贫困户-video------------------------------*/
+#xs_poor_video_down{
+    width: 25px;
+    height: 25px;
+    border-radius:12px;
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background-color: #6e6e6e;
+    cursor: pointer;
+}
+#xs_poor_video_down:hover{
+    background-color: #5c5c5c;
+}
+
+/*-----------------------------统计分析--分段专题图-------------------------------------------------*/
+#xs_tjfx_range_Legend{
+    position: absolute;
+    right: 5px;
+    bottom: 5px;
+    width: 250px;
+    text-align: center;
+    border: 2px solid #D6E3F1;
+    border-radius: 2px;
+    background: #FFF;
+    opacity: 0.8;
+    display: none;
+    z-index: 1000;
+}
+#xs_tjfx_range_Legend .legendTitle{
+    background: #1E90FF;
+}
+#xs_tjfx_range_Legend .legendContent{
+    font-size: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    height: 200px;
+    display: block;
+    overflow-y: auto;
+}
+#xs_tjfx_range_Legend .legendItemHeader{
+    top: 5px;
+    width: 100px;
+    height: 5px;
+    text-align: center;
+}
+#xs_tjfx_range_Legend .legendItemValue{
+    top: 5px;
+    width: 120px;
+    text-align: center;
+    height: 5px;
+}
+/*-----------------------------脱贫率-------------------------------------------------*/
+
+/*---------------贫困洞察-----------------*/
+.orgchart{
+   /* background: transparent;*/
+    min-width: 96%;
+    height: 100%;
+    text-align: center;
+    vertical-align: middle;
+}
+
+.orgchart td.left, .orgchart td.right, .orgchart td.top{
+    border-color: #00bbee;
+}
+.orgchart .node {
+    width: 130px;
+}
+.orgchart .node .title{
+    padding: 3px;
+    white-space: normal;
+    height: auto;
+}
+.orgchart .node .content{
+    padding: 3px;
+    white-space: normal;
+    height: auto;
+    min-height: 44px;
+}
+.orgchart td>.down, .orgchart .node .title{
+    background-color: #00bbee;
+}
+
+.orgchart .node .content {
+    border-color: #00bbee;
+}
+
+.oc-export-btn{
+    background: #00bbee;
+    margin-top: 10px;
+    margin-right: 10px;
+    width: 30px;
+    height: 30px;
+    line-height: 30px;
+    border-radius: 15px;
+    text-align: center;
+    border-width: 0px;
+    display: inline-block;
+    padding: 0px;
+    opacity: 0.9;
+}
+
+.oc-export-btn:hover,.oc-export-btn:focus,.oc-export-btn:active{
+    background: #00bbee;
+    border-width: 0px;
+}
+
+.oc-export-btn:hover{
+    background: #09a1ee;
+}
+.xs_pkdc_AnalyslayLBtn{
+    width: 90px;
+    height: 60px;
+    background: #eaf2ff;
+    color: #000000;
+    margin-bottom: 5px;
+}
+
+/*------------------贫困户--四通五覆盖---------------------*/
+.xs_poor_45{
+    background-color: #eee;
+    padding-bottom: 10px;
+    width: 840px;
+    box-sizing: border-box;
+}
+.xs_poor_45_c{
+    width: 150px;
+    height: 190px;
+    box-sizing: border-box;
+    background-color: #ffffff;
+    box-shadow: 2px 2px 3px rgba(50,50,50,0.5);
+    position: relative;
+    border-radius: 3px;
+    padding: 10px;
+    padding-top: 0px;
+
+    -webkit-transition: all 0.5s ease-in;
+    -moz-transition: all 0.5s ease-in;
+    -ms-transition: all 0.5s ease-in;
+    -o-transition: all 0.5s ease-in;
+    transition: all 0.5s ease-in;
+
+    display: inline-block;
+    margin-left: 15px;
+}
+
+.xs_poor_45_c:hover{
+    box-shadow: 15px 15px 20px rgba(50,50,50,0.4);
+    transform:scale(1.20);
+    -webkit-transform:rotate(0deg) scale(1.01);
+    z-index: 2;
+    cursor: pointer;
+}
+
+.xs_poor_45_title{
+    height: 50px;
+    line-height: 50px;
+    width: 100%;
+    color:#000088;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+    margin-bottom: 5px;
+}
+
+.xs_poor_45_f{
+    font-size: 18px;
+    font-weight: bold;
+    color: #5c5c5c;
+    text-align: center;
+    height:40px;
+    line-height: 40px;
+}
+
+.xs_poor_45_c img{
+    width: 100%;
+    height: 140px;
+    box-sizing: border-box;
+    border: 3px solid #f0f0f0;
+    /* filter:Gray;
+     -webkit-filter: grayscale(1);*/
+}
+
+.xs_poor_45_villItem{
+    width:28%;
+    height:40%;
+    border: 3px solid #f0f0f0;
+}
+
+.xs_poor_45_tip{
+    position: absolute;
+    bottom: 10px;
+    background-color: rgba(0, 0, 0, 0.31);
+    width: 130px;
+    text-align: center;
+    color: #FFFFFF;
+    padding-bottom: 2px;
+    display: none;
+    font-size: 13px;
+    padding: 8px 0px;
+    color: #ffffff;
+}
+
+#xs_poor_45_aqyd{
+    margin-left: 100px;
+}
+
+.xs_poor_45_villTitle{
+    height: 10%;
+    width: 100%;
+    color:#000088;
+    font-size: 30px;
+    font-weight: bold;
+    text-align: center;
+}
+
+.xs_poor_45_vill{
+    background-color: #eee;
+    padding-bottom: 10px;
+    width: 100%;height:100%;
+    box-sizing: border-box;
+    padding: 1%;
+}
+
+.xs_poor_45_villC{
+    width: 19%;
+    height: 35%;
+    box-sizing: border-box;
+    border: 3px solid #f0f0f0;
+    background-color: #ffffff;
+    box-shadow: 2px 2px 3px rgba(50,50,50,0.5);
+    position: relative;
+    border-radius: 3px;
+    padding: 10px;
+    padding-top: 0px;
+    display: inline-block;
+    padding:1%;
+}
+
+.xs_poor_45_villF{
+    font-size: 18px;
+    font-weight: bold;
+    color: #5c5c5c;
+    text-align: center;
+    height:10%;
+    display: inline-block;
+    vertical-align:middle;
+    /*line-height: 40px;*/
+}
+
+.xs_poor_45_villImg{
+    width: 100%;
+    height: 80%;
+    box-sizing: border-box;
+    margin-top: 10%;
+}
+
+.xs_poor_45_villTip{
+    position: absolute;
+    bottom: 10px;
+    background-color: rgba(0, 0, 0, 0.31);
+    width: 89%;
+    text-align: center;
+    color: #FFFFFF;
+    padding-bottom: 2px;
+    display: none;
+    font-size: 13px;
+    padding: 8px 0px;
+}
