@@ -1,0 +1,481 @@
+/**
+ * Created by GZXS on 2016/7/4.
+ */
+//专门处理分段专题图
+
+//记录中心点 --
+var xs_tjfx_range_centerPoint = null;
+
+//贫困发生率率统计
+/*
+    贫困发生率
+    脱贫率
+ */
+XS.Main.Tjfx.range = function(level, parentId, type){
+    xs_isShowUtfGridTip = true;
+    xs_currentZoneLevel = level;
+    xs_superZoneCode = -1;
+
+    xs_tjfx_type =  type;
+
+    xs_isShowUtfGridTip = false;
+    XS.Main.hiddenDivTags();
+    XS.Main.Tjfx.removeLayer();
+
+    //添加标签专题图
+    var strategy = new SuperMap.Strategy.GeoText();
+    strategy.style = {
+        fontColor:"#ffffff",
+        fontWeight:"bolder",
+        fontSize:"20px",
+        fill: true,
+        fillColor: "#000000",
+        fillOpacity: 1,
+        stroke: true,
+        strokeColor:"#ff0000"
+    };
+    xs_labelLayer = new SuperMap.Layer.Vector("tjfx_label",{strategies: [strategy]});
+    xs_MapInstance.getMapObj().addLayer(xs_labelLayer);
+
+    //专题图层
+    xs_tjfx_themeLayer = new SuperMap.Layer.Range("tjfx_themeLayer");
+    xs_tjfx_themeLayer.setOpacity(0.85);
+    // 图层基础样式
+    xs_tjfx_themeLayer.style = {
+        shadowBlur: 16,
+        shadowColor: "#000000",
+        fillColor: "#FFFFFF"
+    };
+    // 开启 hover 高亮效果
+    xs_tjfx_themeLayer.isHoverAble = true;
+    // hover高亮样式
+    xs_tjfx_themeLayer.highlightStyle = {
+        stroke: true,
+        strokeWidth: 4,
+        strokeColor: '#00bbee',
+        fillColor: "#00EEEE",
+        shadowBlur: 3,
+        shadowColor: "#000000",
+        shadowOffsetX: 3,
+        shadowOffsetY: 3,
+        fillOpacity: 0.5
+    };
+    //专题图 字段
+    xs_tjfx_themeLayer.themeField = "xs_tjfx_range";
+
+    if(document.getElementById("xs_tjfx_range_Legend")){
+        $("#xs_tjfx_range_Legend").remove();
+    }
+
+    xs_tjfx_themeLayer.styleGroups = XS.Main.Tjfx.range_createRangeStyleGroups(type,level);
+    $("#xs_mainC").append(XS.Main.Tjfx.range_createRangeLegendTag(type,level));
+
+    $("#xs_tjfx_range_Legend").css("display", "block");
+
+    // 注册 mousemove 事件
+    xs_tjfx_themeLayer.on("mousemove", XS.Main.Tjfx.range_themeLayerMouseOverCallback);
+    xs_tjfx_themeLayer.on("mouseout", XS.Main.Tjfx.range_themeLayerMouseOutCallback);
+    xs_tjfx_themeLayer.on("click", XS.Main.Tjfx.range_themeLayerClickCallback);
+    xs_tjfx_themeLayer.setVisibility(false);
+    xs_MapInstance.getMapObj().addLayer(xs_tjfx_themeLayer);
+
+    switch (level)
+    {
+        case XS.Main.ZoneLevel.city:
+        {
+            xs_tjfx_range_centerPoint = xs_MapInstance.getMapCenterPoint();
+            xs_MapInstance.getMapObj().setCenter(xs_tjfx_range_centerPoint, 0);
+            XS.CommonUtil.showLoader();
+            //1.先获业务数据通过业务数据
+            //2.获取空间数据
+            //3.通过业务数据过滤空间数据
+
+            //请求县级数据
+            var action = "";
+            switch (type){
+                case XS.Main.Tjfx.type.range_pkfsx:
+                    action = "QueryCountyBaseInfoByareaId";
+                    break;
+                case XS.Main.Tjfx.type.range_tpx:
+                    action = "QueryOutPoorBycount";
+                    break;
+            }
+            var data = {pbno:parentId, pd_id:parentId};
+
+            if(type ==XS.Main.Tjfx.type.range_pkfsx && XS.Main.CacheZoneInfos.county.length>0)
+            {
+                XS.Main.Tjfx.CacheZoneInfos.county = XS.Main.CacheZoneInfos.county;
+                //2.获取空间数据
+                XS.Main.Tjfx.loadZoneFeatuers(level, "SMID>0", function()
+                    {
+                        if(XS.Main.Tjfx.type_featuersArr.county.length>0)
+                        {
+                            XS.Main.Tjfx.range_addFeatures2Layer(XS.Main.Tjfx.type_featuersArr.county,XS.Main.Tjfx.CacheZoneInfos.county,0);
+                        }
+                        XS.CommonUtil.hideLoader();
+                    }, function(e)
+                    {
+                        XS.CommonUtil.hideLoader();
+                    }
+                );
+            }else
+            {
+                XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json)
+                {
+                    if (json && json.length > 0)
+                    {
+                        if(xs_tjfx_type == XS.Main.Tjfx.type.range_pkfsx){
+                            XS.Main.CacheZoneInfos.county = json;
+                        }
+                        XS.Main.Tjfx.CacheZoneInfos.county = json;
+                        //2.获取空间数据
+                        XS.Main.Tjfx.loadZoneFeatuers(level, "SMID>0", function()
+                            {
+                                if(XS.Main.Tjfx.type_featuersArr.county.length>0)
+                                {
+                                    XS.Main.Tjfx.range_addFeatures2Layer(XS.Main.Tjfx.type_featuersArr.county,XS.Main.Tjfx.CacheZoneInfos.county,0);
+                                }
+                                XS.CommonUtil.hideLoader();
+                            }, function(e)
+                            {
+                                XS.CommonUtil.hideLoader();
+                            }
+                        );
+                    }else{
+                        XS.CommonUtil.hideLoader();
+                        XS.CommonUtil.showMsgDialog("", "获取数据失败！");
+                    }
+                },function(e){XS.CommonUtil.hideLoader();});
+            }
+            break;
+        }
+        case XS.Main.ZoneLevel.county:
+        {
+            xs_MapInstance.getMapObj().setCenter(xs_tjfx_range_centerPoint, 5);
+            XS.CommonUtil.showLoader();
+
+            //请求镇级数据
+            var action = "";
+            switch (type){
+                case XS.Main.Tjfx.type.range_pkfsx:
+                    action = "QueryTownsBaseInfoByareaId";
+                    break;
+                case XS.Main.Tjfx.type.range_tpx:
+                    action = "QueryOutPoorBycount";
+                    break;
+            }
+            var data = {pbno:parentId, pd_id:parentId};
+            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json) {
+                if (json && json.length > 0)
+                {
+                    XS.Main.Tjfx.CacheZoneInfos.town = json;
+                    XS.Main.Tjfx.loadZoneFeatuers(level, "县级代码=="+parentId, function()
+                        {
+                            if(XS.Main.Tjfx.type_featuersArr.town.length>0)
+                            {
+                                XS.Main.Tjfx.range_addFeatures2Layer(XS.Main.Tjfx.type_featuersArr.town,XS.Main.Tjfx.CacheZoneInfos.town,1);
+                            }
+                            XS.CommonUtil.hideLoader();
+                        }, function(e)
+                        {
+                            XS.CommonUtil.hideLoader();
+                        }
+                    );
+                }else{
+                    XS.CommonUtil.hideLoader();
+                    XS.CommonUtil.showMsgDialog("", "获取数据失败！");
+                }
+            },function(e){XS.CommonUtil.hideLoader();});
+            break;
+        }
+        case XS.Main.ZoneLevel.town:
+        {
+            xs_MapInstance.getMapObj().setCenter(xs_tjfx_range_centerPoint, 8);
+            XS.CommonUtil.showLoader();
+
+            //请求村数据
+            var action = "";
+            switch (type){
+                case XS.Main.Tjfx.type.range_pkfsx:
+                    action = "QueryVillBaseByareaId";
+                    break;
+                case XS.Main.Tjfx.type.range_tpx:
+                    action = "QueryOutPoorBycount";
+                    break;
+            }
+            var data = {pbno:parentId, pd_id:parentId};
+            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json) {
+                if (json && json.length > 0) {
+                    XS.Main.Tjfx.CacheZoneInfos.village = json;
+                    XS.Main.Tjfx.loadZoneFeatuers(level, "Town_id=="+parentId, function()
+                        {
+                            if(XS.Main.Tjfx.type_featuersArr.village.length>0)
+                            {
+                                XS.Main.Tjfx.range_addFeatures2Layer(XS.Main.Tjfx.type_featuersArr.village,XS.Main.Tjfx.CacheZoneInfos.village,2);
+                            }
+                            XS.CommonUtil.hideLoader();
+                        }, function(e)
+                        {
+                            XS.CommonUtil.hideLoader();
+                        }
+                    );
+                }else{
+                    XS.CommonUtil.hideLoader();
+                    XS.CommonUtil.showMsgDialog("", "获取数据失败！");
+                }
+            },function(e){XS.CommonUtil.hideLoader();});
+            break;
+        }
+    }
+}
+
+//添加Features到ThemeLayer
+XS.Main.Tjfx.range_addFeatures2Layer = function(featureArr, data, level){ // 0:city 1:county 2:town
+    var oId = "";
+    var fId = "";
+
+    switch (level){
+        case 0: //市
+            fId = "AdminCode";
+            break;
+        case 1: //县
+            fId = "乡镇代码";
+            break;
+        case 2: //镇
+            fId = "OldID";
+            break;
+    }
+    switch (xs_tjfx_type)
+    {
+        case XS.Main.Tjfx.type.range_pkfsx:
+            switch (level)
+            {
+                case 0: //市
+                    oId = "CBI_ID";
+                    break;
+                case 1: //县
+                    oId = "TOWB_ID";
+                    break;
+                case 2: //镇
+                    oId = "VBI__ID";
+                    break;
+            }
+            break;
+        case XS.Main.Tjfx.type.range_tpx:
+            oId = "REGION_ID";
+            break;
+    }
+
+    var features = [];
+    var geotextFeatures = [];
+    var feature = null;
+    var geotextFeature = null;
+    var geoText = null;
+
+    var xOff = (1 / xs_MapInstance.getMapObj().getScale()) * 0.00000001;
+    var yOff = -(1 / xs_MapInstance.getMapObj().getScale()) * 0.00000005;
+
+    for (var i in featureArr)
+    {
+        feature = featureArr[i];
+        for(var j in data)
+        {
+            var obj = data[j];
+            if(obj[oId]==feature.data[fId])
+            {
+                var rate = 0;
+                switch (xs_tjfx_type)
+                {
+                    case XS.Main.Tjfx.type.range_pkfsx:
+                        switch (level)
+                        {
+                            case 0: //市
+                                rate = obj.cps_Poverty_rate;
+                                break;
+                            case 1: //县
+                                rate = obj.tpl_PoorRate;
+                                break;
+                            case 2: //镇
+                                rate = obj.VillPoorRate;
+                                break;
+                        }
+                        break;
+                    case XS.Main.Tjfx.type.range_tpx:
+                        rate = obj.OutPoorRate;
+                        break;
+                }
+
+                feature.attributes.xs_tjfx_range = rate;
+                feature.data.xs_data = obj;
+                features.push(feature);
+                geoText = new SuperMap.Geometry.GeoText(feature.geometry.getBounds().getCenterLonLat().lon+xOff, feature.geometry.getBounds().getCenterLonLat().lat+yOff,(rate*1.0).toFixed(2)+"%");
+                geotextFeature = new SuperMap.Feature.Vector(geoText);
+                geotextFeatures.push(geotextFeature);
+            }
+        }
+    }
+    xs_labelLayer.addFeatures(geotextFeatures);
+    xs_tjfx_themeLayer.addFeatures(features);
+    xs_tjfx_themeLayer.setVisibility(true);
+}
+
+//鼠标在 脱贫率专题图 移动事件处理
+XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
+    $("#xs_tjfx_range_themeTipC").css("display", "none");
+    xs_isShowUtfGridTip = true;
+    if(event.target && event.target.refDataID)
+    {
+        if($("#xs_utfGridC").length>0) $("#xs_utfGridC").css("display","none");
+       // $("#xs_tjfx_range_themeTipC").css("display", "block");
+        var feature = xs_tjfx_themeLayer.getFeatureById(event.target.refDataID);
+        if(feature==null){
+            return;
+        }
+        xs_tjfx_range_centerPoint = feature.geometry.getBounds().getCenterLonLat();
+        var x = event.event.clientX;
+        var y = event.event.clientY;
+
+        var jsonObj = [];
+        var title = "";
+        var obj = feature.data.xs_data;
+
+        switch (xs_tjfx_type)
+        {
+            case XS.Main.Tjfx.type.range_pkfsx:
+                switch (xs_currentZoneLevel)
+                {
+                    case XS.Main.ZoneLevel.city:
+                    {
+                        title = obj.CBI_NAME;
+                        jsonObj.push({"name":"贫困发生率","value":obj.cps_Poverty_rate});
+                        jsonObj.push({"name":"贫困人口","value":obj.cps_poor_pop});
+                        jsonObj.push({"name":"贫困户","value":obj.cps_poor_hhnum});
+                        jsonObj.push({"name":"贫困镇","value":obj.CBI_PoorTOWNS_NUM});
+                        jsonObj.push({"name":"贫困村","value":obj.CBI_PoorVILLAGE_NUM});
+                        jsonObj.push({"name":"总人口","value":obj.cps_pop});
+                        jsonObj.push({"name":"贫困类型","value":obj.CBI_type});
+                        break;
+                    }
+                    case XS.Main.ZoneLevel.county:
+                    {
+                        title = obj.TOWB_NAME;
+                        //{"__type":"TOWNS_BASE_INFO:#WcfService2","TOWB_HouseNum":0,"TOWB_ID":522401120,
+                        // "TOWB_LATITUDE":27.38116461560371,"TOWB_LONGITUDE":105.30560876171876,"TOWB_MEAN":0,
+                        // "TOWB_MEMO":"","TOWB_NAME":"田坝桥镇","TOWB_PeopleNum":0,
+                        // "TOWB_PoorHouseNum":0,"TOWB_PoorPeopleNum":0,"TOWB_VillNum":5,
+                        // "Totolarea":0,"Totolvillnum":8,"tpl_PoorRate":0,"tpl_TownType":"",
+                        // "tpl_arden_hhnum":0,"tpl_harden_mile":0,"tpl_team_num":0}
+                        jsonObj.push({"name":"贫困发生率","value":obj.tpl_PoorRate});
+                        jsonObj.push({"name":"贫困人口","value":obj.TOWB_PeopleNum});
+                        jsonObj.push({"name":"贫困户","value":obj.TOWB_HouseNum});
+                        jsonObj.push({"name":"贫困村","value":obj.TOWB_VillNum});
+                        jsonObj.push({"name":"村","value":obj.Totolvillnum});
+                        jsonObj.push({"name":"面积","value":obj.Totolarea});
+                        break;
+                    }
+                    case XS.Main.ZoneLevel.town:
+                    {
+                        title = obj.VBI_NAME;
+                        jsonObj.push({"name":"贫困发生率","value":obj.VillPoorRate});
+                        jsonObj.push({"name":"贫困人口","value":obj.VBI_PeopleNum});
+                        jsonObj.push({"name":"贫困户","value":obj.VBI_HouseNum});
+                        jsonObj.push({"name":"贫困村","value":obj.VBI_AveIncome});
+                        jsonObj.push({"name":"海拔","value":obj.VBI_ALTITUDE});
+                        jsonObj.push({"name":"面积","value":0});
+                        break;
+                    }
+                }
+                break;
+            case XS.Main.Tjfx.type.range_tpx:
+                //{"__type":"OutPoorCount:#WcfService2",
+                // "OutPoorHNum":40181,"OutPoorPNum":159277,"OutPoorRate":54.425150349460909140163623560,
+                // "REGION_ID":522427,"REGION_Name":"威宁县"}
+                title = obj.REGION_Name;
+                jsonObj.push({"name":"脱贫率","value":obj.OutPoorRate});
+                jsonObj.push({"name":"脱贫户数","value":obj.OutPoorHNum});
+                jsonObj.push({"name":"脱贫人数","value":obj.OutPoorPNum});
+                jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
+                jsonObj.push({"name":"区域","value":obj.REGION_Name});
+                break;
+        }
+        XS.Main.Tjfx.range_showThemeLayerMouseOverTip(x, y, title, jsonObj);
+    }
+}
+
+/**
+ * 鼠标移到专题图上 信息显示
+ * @param x 鼠标x轴
+ * @param y 鼠标y轴
+ * @param title 标题
+ * @param jsonObjArr 显示信息数据集
+ */
+XS.Main.Tjfx.range_showThemeLayerMouseOverTip = function(x, y, title, jsonObjArr){
+    if (x > 20 && x < ($(window).width() - 252) && y > 20 && y < ($(window).height() - 252))
+    {
+        xs_isShowUtfGridTip = false;
+        if ($("#xs_tjfx_range_themeTipC").length < 1)
+        {
+            var tag ="<div id='xs_tjfx_range_themeTipC' style='width: 200px; height: 200px; border-radius: 2px; border: 5px solid #00bbee;position:absolute;z-index: 12;opacity: 0.9; display: none;background: #ffffff;'></div>";
+            $("#xs_mainC").append(tag);
+        }
+        $("#xs_tjfx_range_themeTipC").empty();
+
+        var contentTag =
+            '<div style="width: 100%; height: 10%; background: #00bbee;color: #ffffff;line-height: 100%;font-size: 15px;font-weight: bold;padding-left: 5px;overflow: hidden;">'+title+'</div>'+
+            '<div style="border: 5px solid transparent; box-sizing: border-box; width: 100%; height: 90%;"><table border="1" style="width: 100%; height: 100%;border: 1px solid rgba(128, 128, 128, 0.16);border-collapse: collapse;font-size: 13px;">';
+                for(var i=0; i<jsonObjArr.length; i++){
+                    contentTag +=  '<tr><td>'+jsonObjArr[i].name+'</td><td>'+jsonObjArr[i].value+'</td></tr>';
+                }
+        contentTag += '</div></table>';
+        $("#xs_tjfx_range_themeTipC").append(contentTag);
+        $("#xs_tjfx_range_themeTipC").css({
+                    left: x+ 20,
+                    top: y + 20,
+                    display: 'block'
+        });
+    }else{
+        $("#xs_tjfx_range_themeTipC").css({display: 'none'});
+    }
+}
+
+//鼠标移动移出
+XS.Main.Tjfx.range_themeLayerMouseOutCallback = function(event){
+    $("#xs_tjfx_range_themeTipC").css({display: 'none'});
+}
+
+//专题图被点击事件
+XS.Main.Tjfx.range_themeLayerClickCallback = function(event){
+    if(event.target && event.target.refDataID)
+    {
+        var feature = xs_tjfx_themeLayer.getFeatureById(event.target.refDataID);
+        switch (xs_currentZoneLevel) {
+            case XS.Main.ZoneLevel.city:
+            {
+                xs_currentZoneFuture = null;
+                xs_superZoneCode = feature.data.AdminCode;
+                xs_clickMapType = XS.Main.clickMapType.tjfx_range;
+                XS.Main.Tjfx.range(xs_currentZoneLevel + 1, xs_superZoneCode, xs_tjfx_type);
+                break;
+            }
+            case XS.Main.ZoneLevel.county:
+            {
+                xs_currentZoneFuture = null;
+                xs_superZoneCode = feature.data.乡镇代码;
+                xs_clickMapType = XS.Main.clickMapType.tjfx_range;
+                XS.Main.Tjfx.range(xs_currentZoneLevel + 1, xs_superZoneCode, xs_tjfx_type);
+                break;
+            }
+            case XS.Main.ZoneLevel.town:
+            {
+                xs_currentZoneFuture = null;
+                xs_superZoneCode = feature.data.OldID;
+                XS.CommonUtil.showMsgDialog("", "没有下级专题图");
+               // xs_clickMapType = XS.Main.clickMapType.none;
+                break;
+            }
+        }
+    }else
+    {
+        xs_clickMapType = XS.Main.clickMapType.none;
+    }
+}
