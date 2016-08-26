@@ -40,6 +40,7 @@ XS.Login.login = function(){
         if(json && json.success && json.regionid){
             sessionStorage.setItem("username", xs_Username);
             sessionStorage.setItem("password", xs_Password);
+            sessionStorage.setItem("userid", json.userid);
             sessionStorage.setItem("regionid", (json.regionid).trim());
             //加载主页
             XS.Index.loadMain();
@@ -51,8 +52,8 @@ XS.Login.login = function(){
             XS.CommonUtil.hideLoader();
             $("#xs_msg").append("服务器异常！");
 
-            sessionStorage.setItem("username", 'admin');
-            sessionStorage.setItem("password", 'admin');
+            //sessionStorage.setItem("username", 'admin');
+            //sessionStorage.setItem("password", 'admin');
            // XS.Index.loadMain();
         }
     });

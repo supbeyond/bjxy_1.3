@@ -465,7 +465,7 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
         XS.Main.Poor.playVideo(obj.PB_HHID,obj.HHNAME);
     });
     $('#xs_poor_msgBtn').click(function(){
-        XS.CommonUtil.showMsgDialog("", "扶贫意见");
+        XS.Main.showAdvanceFeedDialog(obj.PB_HHID);
     });
 
     $('#xs_poor_detail_tab').tabs('add',{

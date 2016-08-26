@@ -178,7 +178,7 @@ XS.Main.RightClickMenuHandler = function(name){
             XS.Main.hideLeftToolBar();
         }
     }
-    else if(name=='pkdc'){
+    else if(name== 'pkdc'){
         XS.Main.Pkjc.pkdc();
     }
     else if(name == 'zrjk'){
@@ -971,6 +971,38 @@ XS.Main.depClearMap = function() {
     clearInterval(xs_pkjc_IntervalId);
     xs_tasker_labelLayer.removeAllFeatures();
     xs_tasker_animatorVectorLayer.removeAllFeatures();
+}
+
+//意见反馈
+XS.Main.showAdvanceFeedDialog = function(regionid){
+    var htmlContent =
+        '<div style="width: 100%; height: 100%; display: inline-block; box-sizing: border-box; padding: 5px;">' +
+            '<input id="xs_main_ipt_advance" class="easyui-textbox easyui-resizable" data-options="multiline:true,prompt:\'请输入意见\'" style="width:100%;height:200px">'+
+            '<a id="xs_main_btn_advance" href="javascript:0;" class="easyui-linkbutton" style="margin-top: 10px; margin-left: 340px;"><span style="width:120px; height: 40px; text-align: center;line-height: 40px;font-size: 25px;font-weight: bold; display: inline-block;">提交</span></a>'
+        '</div>';
+    XS.CommonUtil.openDialog("xs_main_detail_1", "意见反馈", "icon-man", htmlContent, false, false, true, 500, 300);
+
+    $("#xs_main_btn_advance").click(function(){
+        var advance = $("#xs_main_ipt_advance").val();
+        if(XS.StrUtil.isEmpty(advance)){
+            XS.CommonUtil.showMsgDialog("", "意见内容不能为空");
+            return;
+        }
+        var data = {sendid:sessionStorage.getItem("userid"),regionid:regionid,content:advance};
+        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "AddTbOpinion", data, function (json)
+        {
+            XS.CommonUtil.hideLoader();
+            if (json==true || json=="true") {
+                XS.CommonUtil.showMsgDialog("","发送成功");
+                XS.CommonUtil.closeDialog("xs_main_detail_1");
+            }else{
+                XS.CommonUtil.showMsgDialog("", "发送失败");
+            }
+        },function(e){
+            XS.CommonUtil.showMsgDialog("", "网络异常，请重新发送");
+            XS.CommonUtil.hideLoader();
+        });
+    });
 }
 
 

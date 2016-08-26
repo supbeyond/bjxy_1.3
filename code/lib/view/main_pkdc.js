@@ -242,10 +242,10 @@ XS.Main.Pkjc.pieOption = {
     ]
 };
 
-var xs_pkdc_GaugeChart = null;
-var xs_pkdc_PieChart = null;
-var xs_pkdc_BarChartDataIndex = -1;
-var xs_pkdc_isGaugeClose = true;
+var xs_pkdc_GaugeChart = null; //仪表盘
+var xs_pkdc_PieChart = null; //右 pieChart
+var xs_pkdc_BarChartDataIndex = -1; //左 barChart 被点击时的Index
+var xs_pkdc_isGaugeClose = true; //记录仪表盘是否关闭
 
 //barOption的yAxis类目
 var xs_pkdc_categoryData = [];
@@ -286,6 +286,7 @@ XS.Main.Pkjc.showGaugeData = function(pop, ratio, family){
 
         //点击仪表盘指针事件处理
         xs_pkdc_GaugeChart.on('click', function (params) {
+            if($("#xs_utfGridC").length>0) $("#xs_utfGridC").css("display","none");
             //XS.LogUtil.log(params);
             //显示下一级贫困信息窗口
             if(!xs_currentZoneFuture){
@@ -414,7 +415,8 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                     "<a id='xs_pkdc_dataAnalysis' href='javascript:void(0);'  style='background: #304655;margin:0% 8%;margin-bottom: 8px;color: #ffffff;'>数据分析</a>" +
                     "<a id='xs_pkdc_dutyMonitor' href='javascript:void(0);'  style='background: #304655;color: #ffffff;margin-bottom: 8px;'>责任监控</a>" +
                     "<a id='xs_pkdc_taskMonitor' href='javascript:void(0);'  style='background: #304655;margin:0% 8%;margin-bottom: 8px;color: #ffffff;'>任务监控</a>" +
-                    "<a id='xs_pkdc_itemFund' href='javascript:void(0);'  style='background: #304655;margin-bottom: 8px;color: #ffffff;'>项目资金</a>" +
+                    "<a id='xs_pkdc_itemFund' href='javascript:void(0);'  style='background: #304655;margin-right:8%; margin-bottom: 8px;color: #ffffff;'>项目资金</a>" +
+                    "<a id='xs_pkdc_itemRelocate' href='javascript:void(0);'  style='background: #304655;margin-bottom: 8px;color: #ffffff;'>扶贫搬迁</a>" +
                 "</div>" +
             "</div>" +
         "</div>";
@@ -426,6 +428,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         $('#xs_pkdc_dutyMonitor').linkbutton({iconCls:'icon-large-picture',iconAlign:'top',size:'large',width:80,height:64});
         $('#xs_pkdc_taskMonitor').linkbutton({iconCls:'xs_pkdc_task',iconAlign:'top',size:'large',width:80,height:64});
         $('#xs_pkdc_itemFund').linkbutton({iconCls:'xs_pkdc_money',iconAlign:'top',size:'large',width:80,height:64});
+        $('#xs_pkdc_itemRelocate').linkbutton({iconCls:'xs_pkdc_family',iconAlign:'top',size:'large',width:80,height:64});
 
         //返回上一级
         $('#xs_pkdc_backSuperBtn').linkbutton({iconCls:'icon-back'});
@@ -537,7 +540,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
 
         //扶贫意见事件处理
         $('#xs_pkdc_poorAdviceBtn').click(function(){
-            XS.CommonUtil.showMsgDialog("", "扶贫意见");
+            XS.Main.showAdvanceFeedDialog(id);
         });
 
         //详情点击
@@ -1167,7 +1170,7 @@ XS.Main.Pkjc.task_queryLine = function(){
  * 根据区域ID查询在线任务监督人
  * @param regionid
  */
-var xs_pkjc_IntervalId = null;
+var xs_pkjc_IntervalId = null; //实时在线任务人 window.Interval ID
 var xs_pkdc_tasker_isFirstReq = true; //是否首次查询
 XS.Main.Pkjc.reqOnLineTasker = function(regionid){
     clearInterval(xs_pkjc_IntervalId);
