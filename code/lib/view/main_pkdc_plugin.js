@@ -699,7 +699,7 @@ XS.Main.Pkjc.clickAnalysis = function(){
                 XS.Main.Pkjc.ciAnalyOpt([5,'饮水分析'],['axis',['line',""]],[40,['未安全饮水人数','未安全饮水率']],[120,40,80,40],xAxis,
                     [['人数','value'],['(%)','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
             }else{
-                $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                $('#xs_pkdc_AnalysTabsChart').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
             }
         });
         $("#xs_pkdc_AnalysTabs").tabs({
@@ -816,7 +816,7 @@ XS.Main.Pkjc.clickAnalysis = function(){
                                 break;
                         }
                     }else{
-                        $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                        $('#xs_pkdc_AnalysTabsChart').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
                     }
                 });
             }
@@ -847,7 +847,7 @@ XS.Main.Pkjc.clickAnalysis = function(){
                 XS.Main.Pkjc.ananlyValueOfJson(json,[yAxis[0][2],series[0][3]],['EDU','NUM'],'',[]);
                 XS.Main.Pkjc.ciAnalyOpt([10,'文化程度'],['axis',['shadow']],[],[60,60,80,60],['人数','value'],yAxis,[],[],series,"xs_pkdc_AnalysTabsChart");
             }else{
-                $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                $('#xs_pkdc_AnalysTabsChart').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
             }
         });
         $("#xs_pkdc_AnalysTabs").tabs({
@@ -951,7 +951,7 @@ XS.Main.Pkjc.clickAnalysis = function(){
         data = {pd_id:xs_pkdc_currentStateCode};
         XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTownsBaseInfoById", data, function(json) {
             xs_pkdc_addrName = json.TOWB_NAME;
-            $("#xs_pkdc_detailDialog").dialog("setTitle",xs_pkdc_addrName + "-数据分析");
+            $("#xs_pkdc_AnalysTabsChart").dialog("setTitle",xs_pkdc_addrName + "-数据分析");
         });
 
         var selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", 0);
@@ -984,7 +984,7 @@ XS.Main.Pkjc.clickAnalysis = function(){
                         action = "QueryGroupbyReasonById";
                         break;
                     case 2 ://帮扶措施
-                        action = "QueryCountyPopStatByTid";
+                        action = "QueryTownsBasicStatByTid";
                         break;
                     case 3 ://五通四有
                         action = "QueryVillFiveFourByCountByAreaId";
@@ -1019,13 +1019,13 @@ XS.Main.Pkjc.clickAnalysis = function(){
                                 XS.Main.Pkjc.ciAnalyOpt([5,'致贫原因'],['item',['']],[],[],[],[],radar,[],series,"xs_pkdc_AnalysTabsChart",['rgba(0,0,255,1)']);
                                 break;
                             case 2 ://帮扶措施
-                                /*var legend = [40,["低保人数","参加培训人数","异地扶贫搬迁户","异地扶贫搬迁人数","危房改造户"]];
+                                var legend = [40,["低保人数","参加培训人数","异地扶贫搬迁户","异地扶贫搬迁人数","危房改造户"]];
                                 var xAxis = ['','category',legend[1],true];
-                                var series = [['帮扶措施','bar',0,[],null]];
+                                var series = [['帮扶措施','bar',0,[],false,true,'top']];
                                 XS.Main.Pkjc.ananlyValueOfJson(json,[series[0][3],series[0][3],series[0][3],series[0][3],series[0][3]],
                                     ['cps_lowgaran_pop','cps_outpov_pop','cps_move_hhnum','cps_move_pop','cps_reconstru_hhnum'],'',[]);
-                                XS.Main.Pkjc.ciAnalyOpt([5,'帮扶措施'],['',[]],legend,[120,40,80,40],xAxis,[['人数','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
-                                break;*/
+                                XS.Main.Pkjc.ciAnalyOpt([15,'帮扶措施'],['',[]],legend,[110,40,80,40],xAxis,[['人数','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
+                                break;
                             case 3 ://五通四有
                                 var field = ["BeautifulNum","BusStateNum","CultureNum","EconomyNum","HRoadHardNum","HealthRoomNum","PowerNum","RoadHardNum","TelNum","WlanNum","ZRoadHardNum"];
                                 var xAxis = ['','category',["美丽乡村","通客运","文化场所","村集体经济","通户公路","村卫生室","通生产用电","村沥青路","通电话","通宽带","通组公路"],false,45];
@@ -1059,7 +1059,7 @@ XS.Main.Pkjc.clickAnalysis = function(){
                                 break;
                         }
                     }else{
-                        $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                        $('#xs_pkdc_AnalysTabsChart').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
                     }
                 });
             }
@@ -1074,7 +1074,7 @@ XS.Main.Pkjc.clickAnalysis = function(){
         data = {pd_id:xs_pkdc_currentStateCode};
         XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryVillBaseById", data, function(json) {
             xs_pkdc_addrName = json.VBI_NAME;
-            $("#xs_pkdc_detailDialog").dialog("setTitle",xs_pkdc_addrName + "-贫困数据分析");
+            $("#xs_pkdc_AnalysTabsChart").dialog("setTitle",xs_pkdc_addrName + "-贫困数据分析");
         });
 
         var selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", 0);
@@ -1107,20 +1107,20 @@ XS.Main.Pkjc.clickAnalysis = function(){
                         action = "QueryCountyPopStatByTid";
                         break;
                     case 3 ://五通四有
-                        action = "QueryVillFiveFourByCountByAreaId";
+                        action = "QueryVillFiveFourById";
                         break;
                     case 4 ://四有五覆盖
                         action = "QueryFourFiveByAreaId";
                         break;
                     case 5 ://脱贫进展
-                        action = "";
+                        action = "QueryFourFiveByAreaId";
                         break;
                 }
                 $("#xs_pkdc_AnalysTabsChart").remove();
                 selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", index);
                 selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box"></div>');
 
-                data = {pd_id:xs_pkdc_currentStateCode,pid:xs_pkdc_currentStateCode,cid:xs_pkdc_currentStateCode};
+                data = {pd_id:xs_pkdc_currentStateCode,pid:xs_pkdc_currentStateCode,cid:xs_pkdc_currentStateCode,vid:xs_pkdc_currentStateCode};
                 $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
                     $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
@@ -1154,6 +1154,7 @@ XS.Main.Pkjc.clickAnalysis = function(){
                                 XS.Main.Pkjc.ciAnalyOpt([5,'帮扶措施'],['',[]],legend,[120,40,80,40],xAxis,[['人数','value']],[],[],series,"xs_pkdc_AnalysTabsChart");*/
                                 break;
                             case 3 ://五通四有
+                                XS.Main.Pkjc.viAnaly54(json,"xs_pkdc_AnalysTabsChart");
                                /* var field = ["BeautifulNum","BusStateNum","CultureNum","EconomyNum","HRoadHardNum","HealthRoomNum","PowerNum","RoadHardNum","TelNum","WlanNum","ZRoadHardNum"];
                                 var xAxis = ['','category',["美丽乡村","通客运","文化场所","村集体经济","通户公路","村卫生室","通生产用电","村沥青路","通电话","通宽带","通组公路"],false,45];
                                 var legend = [40,[],[]];
@@ -1189,7 +1190,7 @@ XS.Main.Pkjc.clickAnalysis = function(){
                                 break;
                         }
                     }else{
-                        $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                        $('#xs_pkdc_AnalysTabsChart').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
                     }
                 });
             }
@@ -1198,7 +1199,7 @@ XS.Main.Pkjc.clickAnalysis = function(){
 }
 //项目资金点击函数
 XS.Main.Pkjc.clickItemFund = function(){
-    var content = '<div style="height: 100%;padding:12px;box-sizing: border-box;">' +
+    var content = '<div style="height: 100%;padding:5px;box-sizing: border-box;">' +
             '<div id="xs_pkdc_itemFundDgridDom" style="height: 100%;">' +
                 '<i id="xs_pkdc_itemFound_loading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: -25px;visibility: visible;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading">' +
                 '</i>' +
@@ -1207,157 +1208,42 @@ XS.Main.Pkjc.clickItemFund = function(){
     XS.CommonUtil.openDialog("xs_pkdc_detailDialog", xs_pkdc_addrName + "项目资金", "icon-save", content, false, true, false, "900","480",null,40);
 
     $("#xs_pkdc_itemFound_loading").css({"visibility":"visible"});
-    if(xs_currentZoneLevel == XS.Main.ZoneLevel.city || xs_currentZoneLevel == XS.Main.ZoneLevel.county || xs_currentZoneLevel == XS.Main.ZoneLevel.town)
-    {
-        var data = {regionid:xs_pkdc_currentStateCode};
-        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryProjecFundByRegionid", data, function(json) {
-            $("#xs_pkdc_itemFound_loading").css({"visibility":"hidden"});
-            if(json && json.length > 0){
-                xs_pkdc_addrName = json[0].COUNTY;
-                $("#xs_pkdc_detailDialog").dialog("setTitle",xs_pkdc_addrName + "-项目资金");
-                $('#xs_pkdc_itemFundDgridDom').datagrid({
-                    data: XS.Main.Pkjc.itemFundPageData(json,1,10),
-                    pagination: true,
-                    pageSize: 10,
-                    striped: true,
-                    singleSelect: true,
-                    rownumbers: false,
-                    rowStyler: function(rowIndex,rowData){
-                        /*var height = $("#xs_pkdc_itemFundDgridDom").css("height");
-                        var rowH = (height)/10;
-                        return rowH;*/
-                    },
-                    columns: XS.Main.Pkjc.itemFundGridColumns(xs_pkdc_itemFundGridField,'7%'),
-                });
-                var pager = $("#xs_pkdc_itemFundDgridDom").datagrid("getPager");
-                pager.pagination({
-                    total:json.length,
-                    showPageList: false,
-                    onSelectPage:function (pageNumber, pageSize) {
-                        $("#xs_pkdc_itemFundDgridDom").datagrid("loadData", XS.Main.Pkjc.itemFundPageData(json,pageNumber,pageSize));
-                        pager.pagination('refresh', {
-                            showPageList: false,
-                            total:json.length,
-                            pageNumber:pageNumber
-                        });
-                    }
-                });
-            }else{
-                $('#xs_pkdc_itemFundDgridDom').append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
-            }
-        });
-    }else if(xs_currentZoneLevel == XS.Main.ZoneLevel.village)
-    {
-        var data = {vid:xs_pkdc_currentStateCode};
-        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryVillFiveFourById", data, function(json) {
-            $("#xs_pkdc_itemFound_loading").css({"visibility": "hidden"});
-            console.log(json);
-            if (json && json.length > 0) {
-                xs_pkdc_addrName = json[0].VNAME;
-                $("#xs_pkdc_detailDialog").dialog("setTitle",xs_pkdc_addrName + "-脱贫管理");
-                xs_pkdc_addrName = json[0].VNAME;
-                $("#xs_pkdc_detailDialog").dialog("setTitle",xs_pkdc_addrName + "-脱贫管理");
-                var contentHtml =
-                    '<div align="center" class="xs_poor_45_vill">'+
-                    '<div class="xs_poor_45_villTitle">五通(' + xs_pkdc_addrName + ')</div>'+
-                        //通村沥青路
-                    '<div class="xs_poor_45_villC" style1="margin-left: 100px;">' +
-                    '<div class="xs_poor_45_villF">通村沥青路</div>';
-                    contentHtml += '<img class="xs_poor_45_villImg" src="../img/poor/通村沥青.jpg">' +
-                        '<div class="xs_poor_45_villTip"><span style="display: inline-block;">通村沥青路:'+ json[0].ISROADHARD +'</span></div>';
-                contentHtml
-                    += '</div>'+
-                    '<div class="xs_poor_45_villC">' +
-                    '<div class="xs_poor_45_villF">通客运</div>';
-                    contentHtml += '<img class="xs_poor_45_villImg" src="../img/poor/灰度通客运.jpg">' +
-                        '<div class="xs_poor_45_villTip">' +
-                            '<span style="display: inline-block;">是否通客运:' + json[0].ISBUSSTATE + '</span>' +
-                            '<span style="display: inline-block;">是否通客运:' + json[0].UNSTATENUM + '</span>' +
-                        '</div>';
-                contentHtml
-                    += '</div>'+
-                    '<div class="xs_poor_45_villC">' +
-                    '<div class="xs_poor_45_villF">通宽带及电话</div>';
-                    contentHtml += '<img class="xs_poor_45_villImg" src="../img/poor/灰度通宽带.jpg">' +
-                        '<div class="xs_poor_45_villTip">' +
-                            '<span style="display: inline-block;">通宽带:' + json[0].ISWLAN + '</span>' +
-                            '<span style="display: inline-block;">需建设基站:' + json[0].UNTELSTATENUM + '</span>' +
-                            '<span style="display: inline-block;">需光缆建设:' + json[0].UNTELMETER + '</span>' +
-                            '<span style="display: inline-block;">通电话:' + json[0].ISTELE + '</span>' +
-                        '</div>';
-                contentHtml
-                    += '</div>'+
-                    '<div class="xs_poor_45_villC">' +
-                    '<div class="xs_poor_45_villF">通生产用电</div>';
-                    contentHtml += '<img class="xs_poor_45_villImg" src="../img/poor/通生产用电.jpg">' +
-                        '<div class="xs_poor_45_villTip"><span style="display: inline-block;">通生产用电:' + json[0].ISPELECTRY + '</span></div>';
-                contentHtml
-                    += '</div>'+
-                    '<div class="xs_poor_45_villC">' +
-                    '<div class="xs_poor_45_villF">通组公路及连户路硬化</div>';
-                    contentHtml += '<img class="xs_poor_45_villImg" src="../img/poor/通组公路.jpg">' +
-                        '<div class="xs_poor_45_villTip">' +
-                        '<span style="display: inline-block;">通组公路是否硬化:' + json[0].ISZROADHARD + '</span>' +
-                        '<span style="display: inline-block;">连户路是否硬化:' + json[0].ISHROADHARD + '</span>' +
-                        '</div>';
-                contentHtml
-                    += '</div>'+
-                    '<div class="xs_poor_45_villTitle" style="margin-top: 30px;">四有</div>'+
-                    '<div class="xs_poor_45_villC">' +
-                    '<div class="xs_poor_45_villF">美丽乡村创建</div>';
-                    contentHtml += '<img class="xs_poor_45_villImg" src="../img/poor/灰度美丽乡村.jpg">' +
-                        '<div class="xs_poor_45_villTip">' +
-                        '<span style="display: inline-block;">有美丽乡村建设点:' + json[0].ISBEAUTIFULVILLAGE + '</span>' +
-                        '<span style="display: inline-block;">建示范点个数:' + json[0].UNBEAUTIFULVILLAGENUM + '</span>' +
-                        '</div>';
-                contentHtml
-                    += '</div>'+
-                    '<div class="xs_poor_45_villC">' +
-                    '<div class="xs_poor_45_villF">村卫生室和执业医生</div>';
-                    contentHtml += '<img class="xs_poor_45_villImg" src="../img/poor/村卫生室.jpg">' +
-                        '<div class="xs_poor_45_villTip">' +
-                            '<span style="display: inline-block;">有村卫生室及执业医生:' + json[0].ISVILLAGEHEALTHROOM + '</span>' +
-                            '<span style="display: inline-block;">医生配备人数:' + json[0].UNVILLAGEHEALTHROOMNUM + '</span>' +
-                        '</div>';
-                    contentHtml
-                        += '</div>'+
-                        '<div class="xs_poor_45_villC">' +
-                        '<div class="xs_poor_45_villF">村文化场所和信息员</div>';
-                        contentHtml += '<img class="xs_poor_45_villImg" src="../img/poor/灰度村文化.jpg">' +
-                            '<div class="xs_poor_45_villTip">' +
-                                '<span style="display: inline-block;">有村文化场所和文化信息员:' + json[0].ISENTERTAINMENTROOM + '</span>' +
-                                '<span style="display: inline-block;">建设个数:' + json[0].UNENTERTAINMENTROOMNUM + '</span>' +
-                                '<span style="display: inline-block;">信息员配备人数:' + json[0].INFORMATIONPERSONNUM + '</span>' +
-                            '</div>';
-                    contentHtml
-                        += '</div>'+
-                        '<div class="xs_poor_45_villC">' +
-                        '<div class="xs_poor_45_villF">村集体经济</div>';
-                        contentHtml += '<img class="xs_poor_45_villImg" src="../img/poor/灰度村集体经济.jpg">' +
-                            '<div class="xs_poor_45_villTip">' +
-                            '<span style="display: inline-block;">有高于3万元村集体经济:' + json[0].ISVILLAGEECONOMY + '</span>' +
-                            '<span style="display: inline-block;">组建村级经济组织个数:' + json[0].VILLAGEENTERPRISENUM + '</span>' +
-                            '<span style="display: inline-block;">需建设内容:' + json[0].UNVILLAGEECONOMY + '</span>' +
-                            '</div>';
-                contentHtml
-                    += '</div>'+
-                    '</div>';
-                contentHtml +=
-                    '<script>' +
-                    '$(".xs_poor_45_villC").mouseenter(function(){' +
-                    '$(this).find(".xs_poor_45_villTip").show("fast");' +
-                    '});' +
-                    ' $(".xs_poor_45_villC").mouseleave(function(){' +
-                    '$(this).find(".xs_poor_45_villTip").hide("fast");' +
-                    '});' +
-                    '</script>';
-                $("#xs_pkdc_itemFundDgridDom").append(contentHtml);
-            }else{
-                $('#xs_pkdc_itemFundDgridDom').append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关图片</div>');
-            }
-        });
-    }
-
+    var data = {regionid:xs_pkdc_currentStateCode};
+    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryProjecFundByRegionid", data, function(json) {
+        $("#xs_pkdc_itemFound_loading").css({"visibility":"hidden"});
+        if(json && json.length > 0){
+            xs_pkdc_addrName = json[0].COUNTY;
+            $("#xs_pkdc_detailDialog").dialog("setTitle",xs_pkdc_addrName + "-项目资金");
+            $('#xs_pkdc_itemFundDgridDom').datagrid({
+                data: XS.Main.Pkjc.itemFundPageData(json,1,10),
+                pagination: true,
+                pageSize: 10,
+                striped: true,
+                singleSelect: true,
+                rownumbers: false,
+                onDblClickRow:XS.Main.Pkjc.selectItemFoundRowData,
+                rowStyler: function(rowIndex,rowData){
+                    return 'height:37px;';
+                },
+                columns: XS.Main.Pkjc.itemFundGridColumns(xs_pkdc_itemFundGridField,'7%',[[0,'4%'],[2,'11%'],[3,'5%'],[4,'12%'],[5,'5%'],[6,'10%'],[7,'10%'],[8,'9%'],[10,'5%'],[11,'5%'],[12,'5%'],[13,'8%']]),
+            });
+            var pager = $("#xs_pkdc_itemFundDgridDom").datagrid("getPager");
+            pager.pagination({
+                total:json.length,
+                showPageList: false,
+                onSelectPage:function (pageNumber, pageSize) {
+                    $("#xs_pkdc_itemFundDgridDom").datagrid("loadData", XS.Main.Pkjc.itemFundPageData(json,pageNumber,pageSize));
+                    pager.pagination('refresh', {
+                        showPageList: false,
+                        total:json.length,
+                        pageNumber:pageNumber
+                    });
+                }
+            });
+        }else{
+            $('#xs_pkdc_itemFundDgridDom').append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+        }
+    });
 }
 
 /**
@@ -1651,4 +1537,119 @@ XS.Main.Pkjc.ananlyValueOfJson = function(json,target,field,maxField,radarIndica
             radarIndicator[1].push(xs_pkdc_analyMax);
         }
     }
+}
+/**
+ *
+ * @param json
+ * @param AnalysTabsChart
+ */
+XS.Main.Pkjc.viAnaly54 = function(json,AnalysTabsChart){
+    var contentHtml =
+        '<div align="center" class="xs_poor_45_vill">'+
+        '<div class="xs_poor_45_villTitle">五通(' + xs_pkdc_addrName + ')</div>'+
+            //通村沥青路
+        '<div class="xs_poor_45_villC" style1="margin-left: 100px;">' +
+        '<div class="xs_poor_45_villF">通村沥青路</div>';
+    contentHtml += '<img class="xs_poor_45_villImg" src="../img/poor/通村沥青.jpg">' +
+        '<div class="xs_poor_45_villTip"><span style="display: inline-block;">通村沥青路:'+ json[0].ISROADHARD +'</span></div>';
+    contentHtml
+        += '</div>'+
+        '<div class="xs_poor_45_villC">' +
+        '<div class="xs_poor_45_villF">通客运</div>';
+    contentHtml += '<img class="xs_poor_45_villImg" src="../img/poor/通客运.jpg">' +
+        '<div class="xs_poor_45_villTip">' +
+        '<span style="display: inline-block;">是否通客运:' + json[0].ISBUSSTATE + '</span>' +
+        '<span style="display: inline-block;">是否通客运:' + json[0].UNSTATENUM + '</span>' +
+        '</div>';
+    contentHtml
+        += '</div>'+
+        '<div class="xs_poor_45_villC">' +
+        '<div class="xs_poor_45_villF">通宽带及电话</div>';
+    contentHtml += '<img class="xs_poor_45_villImg" src="../img/poor/通宽带.jpg">' +
+        '<div class="xs_poor_45_villTip">' +
+        '<span style="display: inline-block;">通宽带:' + json[0].ISWLAN + '</span>' +
+        '<span style="display: inline-block;">需建设基站:' + json[0].UNTELSTATENUM + '</span>' +
+        '<span style="display: inline-block;">需光缆建设:' + json[0].UNTELMETER + '</span>' +
+        '<span style="display: inline-block;">通电话:' + json[0].ISTELE + '</span>' +
+        '</div>';
+    contentHtml
+        += '</div>'+
+        '<div class="xs_poor_45_villC">' +
+        '<div class="xs_poor_45_villF">通生产用电</div>';
+    contentHtml += '<img class="xs_poor_45_villImg" src="../img/poor/通生产用电.jpg">' +
+        '<div class="xs_poor_45_villTip"><span style="display: inline-block;">通生产用电:' + json[0].ISPELECTRY + '</span></div>';
+    contentHtml
+        += '</div>'+
+        '<div class="xs_poor_45_villC">' +
+        '<div class="xs_poor_45_villF">通组公路及连户路硬化</div>';
+    contentHtml += '<img class="xs_poor_45_villImg" src="../img/poor/通组公路.jpg">' +
+        '<div class="xs_poor_45_villTip">' +
+        '<span style="display: inline-block;">通组公路是否硬化:' + json[0].ISZROADHARD + '</span>' +
+        '<span style="display: inline-block;">连户路是否硬化:' + json[0].ISHROADHARD + '</span>' +
+        '</div>';
+    contentHtml
+        += '</div>'+
+        '<div class="xs_poor_45_villTitle" style="margin-top: 30px;">四有</div>'+
+        '<div class="xs_poor_45_villC">' +
+        '<div class="xs_poor_45_villF">美丽乡村创建</div>';
+    contentHtml += '<img class="xs_poor_45_villImg" src="../img/poor/美丽乡村.jpg">' +
+        '<div class="xs_poor_45_villTip">' +
+        '<span style="display: inline-block;">有美丽乡村建设点:' + json[0].ISBEAUTIFULVILLAGE + '</span>' +
+        '<span style="display: inline-block;">建示范点个数:' + json[0].UNBEAUTIFULVILLAGENUM + '</span>' +
+        '</div>';
+    contentHtml
+        += '</div>'+
+        '<div class="xs_poor_45_villC">' +
+        '<div class="xs_poor_45_villF">村卫生室和执业医生</div>';
+    contentHtml += '<img class="xs_poor_45_villImg" src="../img/poor/村卫生室.jpg">' +
+        '<div class="xs_poor_45_villTip">' +
+        '<span style="display: inline-block;">有村卫生室及执业医生:' + json[0].ISVILLAGEHEALTHROOM + '</span>' +
+        '<span style="display: inline-block;">医生配备人数:' + json[0].UNVILLAGEHEALTHROOMNUM + '</span>' +
+        '</div>';
+    contentHtml
+        += '</div>'+
+        '<div class="xs_poor_45_villC">' +
+        '<div class="xs_poor_45_villF">村文化场所和信息员</div>';
+    contentHtml += '<img class="xs_poor_45_villImg" src="../img/poor/村文化.jpg">' +
+        '<div class="xs_poor_45_villTip">' +
+        '<span style="display: inline-block;">有村文化场所和文化信息员:' + json[0].ISENTERTAINMENTROOM + '</span>' +
+        '<span style="display: inline-block;">建设个数:' + json[0].UNENTERTAINMENTROOMNUM + '</span>' +
+        '<span style="display: inline-block;">信息员配备人数:' + json[0].INFORMATIONPERSONNUM + '</span>' +
+        '</div>';
+    contentHtml
+        += '</div>'+
+        '<div class="xs_poor_45_villC">' +
+        '<div class="xs_poor_45_villF">村集体经济</div>';
+    contentHtml += '<img class="xs_poor_45_villImg" src="../img/poor/村集体经济.jpg">' +
+        '<div class="xs_poor_45_villTip">' +
+        '<span style="display: inline-block;">有高于3万元村集体经济:' + json[0].ISVILLAGEECONOMY + '</span>' +
+        '<span style="display: inline-block;">组建村级经济组织个数:' + json[0].VILLAGEENTERPRISENUM + '</span>' +
+        '<span style="display: inline-block;">需建设内容:' + json[0].UNVILLAGEECONOMY + '</span>' +
+        '</div>';
+    contentHtml
+        += '</div>'+
+        '</div>';
+    contentHtml +=
+        '<script>' +
+        '$(".xs_poor_45_villC").mouseenter(function(){' +
+        '$(this).find(".xs_poor_45_villTip").show("fast");' +
+        '});' +
+        ' $(".xs_poor_45_villC").mouseleave(function(){' +
+        '$(this).find(".xs_poor_45_villTip").hide("fast");' +
+        '});' +
+        '</script>';
+    $("#" + AnalysTabsChart).append(contentHtml);
+}
+/**
+ * 双击项目资金的行数据展示该项目的层级关系
+ * @param rowIndex 行编号
+ * @param rowData 行数据
+ */
+XS.Main.Pkjc.selectItemFoundRowData = function(rowIndex,rowData){
+    var content = '<div style="height: 100%;padding:5px;box-sizing: border-box;">' +
+            '<div id="xs_pkdc_itemFundRowDataTree" style="height: 100%;">' +
+            '</div>' +
+        '</div>';
+    XS.CommonUtil.openDialog("xs_pkdc_itemFundRowDataWin", rowData.PROJECID + "号项目详情", "icon-save", content, false, true, false, "700","380",null,90);
+
 }
