@@ -23,6 +23,10 @@
     background:url('../img/icon/xs_pkdc_task.png') no-repeat center center;
 }
 
+.xs_pkdc_family{
+    background:url('../img/icon/xs_pkjc_family.png') no-repeat center center;
+}
+
 .xs_poor_rotate{
     background:url('../img/icon/xs_main_poor_rotate_mini.png') no-repeat center center;
 }
