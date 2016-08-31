@@ -10,7 +10,8 @@ var xs_tjfx_type = -1; //当前统计类型
 //统计类型
 XS.Main.Tjfx.type = {
     range_pkfsx:0, //分段--贫困发生率
-    range_tpx:1   //分段--脱贫率
+    range_tpx:1,   //分段--脱贫率
+    range_wfx:2   //分段--危房率
 }
 
 //缓存行政区域Featuers

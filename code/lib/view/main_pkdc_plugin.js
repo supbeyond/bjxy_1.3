@@ -1199,8 +1199,10 @@ XS.Main.Pkjc.clickAnalysis = function(){
 }
 //项目资金点击函数
 XS.Main.Pkjc.clickItemFund = function(){
+
+   /* */
     var content = '<div style="height: 100%;padding:5px;box-sizing: border-box;">' +
-            '<div id="xs_pkdc_itemFundDgridDom" style="height: 100%;">' +
+            '<div align="center" id="xs_pkdc_itemFundDgridDom" class="textCenter">' +
                 '<i id="xs_pkdc_itemFound_loading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: -25px;visibility: visible;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading">' +
                 '</i>' +
             '</div>' +
@@ -1241,11 +1243,14 @@ XS.Main.Pkjc.clickItemFund = function(){
                 }
             });
         }else{
-            $('#xs_pkdc_itemFundDgridDom').append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+            $('#xs_pkdc_itemFundDgridDom').append('<div style="-webkit-flex:1;flex:1;color:#ff0000;font-size: 40px;">暂无相关数据</div>');
         }
     });
 }
+//扶贫搬迁点击
+XS.Main.Pkjc.clickRelocate = function(){
 
+}
 /**
  * 获取项目资金的分页数据
  * @param json

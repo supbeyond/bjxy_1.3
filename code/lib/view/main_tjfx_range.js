@@ -108,6 +108,9 @@ XS.Main.Tjfx.range = function(level, parentId, type){
                 case XS.Main.Tjfx.type.range_tpx:
                     action = "QueryOutPoorBycount";
                     break;
+                case XS.Main.Tjfx.type.range_wfx:
+                    action = "QueryDangerHouseBycount";
+                    break;
             }
             var data = {pbno:parentId, pd_id:parentId};
 
@@ -172,6 +175,9 @@ XS.Main.Tjfx.range = function(level, parentId, type){
                 case XS.Main.Tjfx.type.range_tpx:
                     action = "QueryOutPoorBycount";
                     break;
+                case XS.Main.Tjfx.type.range_wfx:
+                    action = "QueryDangerHouseByTown";
+                    break;
             }
             var data = {pbno:parentId, pd_id:parentId};
             XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json) {
@@ -210,6 +216,9 @@ XS.Main.Tjfx.range = function(level, parentId, type){
                     break;
                 case XS.Main.Tjfx.type.range_tpx:
                     action = "QueryOutPoorBycount";
+                    break;
+                case XS.Main.Tjfx.type.range_wfx:
+                    action = "QueryDangerHouseBycount";
                     break;
             }
             var data = {pbno:parentId, pd_id:parentId};
@@ -273,6 +282,9 @@ XS.Main.Tjfx.range_addFeatures2Layer = function(featureArr, data, level){ // 0:c
         case XS.Main.Tjfx.type.range_tpx:
             oId = "REGION_ID";
             break;
+        case XS.Main.Tjfx.type.range_wfx:
+            oId = "REGION_ID";
+            break;
     }
 
     var features = [];
@@ -332,6 +344,9 @@ XS.Main.Tjfx.range_addFeatures2Layer = function(featureArr, data, level){ // 0:c
                         break;
                     case XS.Main.Tjfx.type.range_tpx:
                         rate = obj.OutPoorRate;
+                        break;
+                    case XS.Main.Tjfx.type.range_wfx:
+                        rate = obj.DangerHRate;
                         break;
                 }
 
@@ -426,6 +441,45 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                 jsonObj.push({"name":"脱贫人数","value":obj.OutPoorPNum});
                 jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
                 jsonObj.push({"name":"区域","value":obj.REGION_Name});
+                break;
+            case XS.Main.Tjfx.type.range_wfx:
+                switch (xs_tjfx_zoneLevel){
+                    case XS.Main.ZoneLevel.city:
+                        /*{
+                         "__type": "DangerHouse:#WcfService2",
+                         "DangerHRate": 18.380216951645523074094502670,
+                         "DangerHnum": 9997,
+                         "REGION_ID": 522401,
+                         "REGION_Name": "七星关区"
+                         }*/
+                        title = obj.REGION_Name;
+                        jsonObj.push({"name":"危房率","value":obj.DangerHRate});
+                        jsonObj.push({"name":"危房户数","value":obj.DangerHnum});
+                        jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
+                        jsonObj.push({"name":"区域","value":obj.REGION_Name});
+                        break;
+                    case XS.Main.ZoneLevel.county:
+                        /*{
+                            "__type": "DangerHouse:#WcfService2",
+                            "DangerHRate": 0,
+                            "DangerHnum": 0,
+                            "REGION_ID": 522401001,
+                            "REGION_Name": "市西街道"
+                        }*/
+                        title = obj.REGION_Name;
+                        jsonObj.push({"name":"危房率","value":obj.DangerHRate});
+                        jsonObj.push({"name":"危房户数","value":obj.DangerHnum});
+                        jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
+                        jsonObj.push({"name":"区域","value":obj.REGION_Name});
+                        break;
+                    case XS.Main.ZoneLevel.town:
+                        title = obj.REGION_Name;
+                        jsonObj.push({"name":"危房率","value":obj.DangerHRate});
+                        jsonObj.push({"name":"危房户数","value":obj.DangerHnum});
+                        jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
+                        jsonObj.push({"name":"区域","value":obj.REGION_Name});
+                        break;
+                }
                 break;
         }
         XS.Main.Tjfx.range_showThemeLayerMouseOverTip(x, y, title, jsonObj);

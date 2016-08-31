@@ -262,6 +262,7 @@ XS.Main.Pkjc.pkdc = function(){
     if(xs_currentZoneFuture==null){
         xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 0);
     }
+    $("#xs_tjfx_range_Legend").remove();
     XS.Main.Pkjc.showGaugeData(0, 0, 0);
 }
 
@@ -557,6 +558,8 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         });
         //项目资金点击
         $('#xs_pkdc_itemFund').click(XS.Main.Pkjc.clickItemFund);
+        //扶贫搬迁点击
+        $("#xs_pkdc_itemRelocate").click(XS.Main.Pkjc.clickRelocate);
     }
     //-------------------------加载一次 结束-----------------------------------
 

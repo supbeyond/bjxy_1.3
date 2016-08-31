@@ -170,6 +170,13 @@ XS.Main.Tjfx.range_createRangeStyleGroups = function(type, level){
             style_se = XS.Main.Tjfx.pkfsx_styleGroups_countyTownSE;
             break;
         }
+        case XS.Main.Tjfx.type.range_wfx:
+        {
+            style_color = XS.Main.Tjfx.range_styleGroups_color;
+            style_se = XS.Main.Tjfx.pkfsx_styleGroups_countyTownSE;
+            style_se[9].end = 10000;
+            break;
+        }
     }
 
     var styleGroups = [];
@@ -224,6 +231,20 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
                 tag += '<tr>';
                 tag += '<td class="legendItemHeader">'+XS.Main.Tjfx.pkfsx_legendItemHeaders.countytown[i]+'</td>';
                 tag += "<td class='legendItemValue' style='background: "+XS.Main.Tjfx.range_styleGroups_color[len-1-i]+"'"+"></td>";
+                tag += '</tr>';
+            }
+            break;
+        }
+        case XS.Main.Tjfx.type.range_wfx:
+        {
+            XS.Main.Tjfx.pkfsx_legendItemHeaders.countytown[9] = '40% - 10000%';
+            tag += '<td class="legendItemHeader">危房率</td><td class="legendItemValue">颜色</td></tr>';
+
+            var len = XS.Main.Tjfx.range_styleGroups_color.length;
+            for(var i in XS.Main.Tjfx.pkfsx_legendItemHeaders.countytown){
+                tag += '<tr>';
+                tag += '<td class="legendItemHeader">'+XS.Main.Tjfx.pkfsx_legendItemHeaders.countytown[i]+'</td>';
+                tag += "<td class='legendItemValue' style='background: "+XS.Main.Tjfx.range_styleGroups_color[i]+"'"+"></td>";
                 tag += '</tr>';
             }
             break;
