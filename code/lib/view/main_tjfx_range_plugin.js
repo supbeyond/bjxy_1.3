@@ -174,7 +174,7 @@ XS.Main.Tjfx.range_createRangeStyleGroups = function(type, level){
         {
             style_color = XS.Main.Tjfx.range_styleGroups_color;
             style_se = XS.Main.Tjfx.pkfsx_styleGroups_countyTownSE;
-            style_se[9].end = 10000;
+            //style_se[9].end = 10000;
             break;
         }
     }
@@ -237,7 +237,7 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
         }
         case XS.Main.Tjfx.type.range_wfx:
         {
-            XS.Main.Tjfx.pkfsx_legendItemHeaders.countytown[9] = '40% - 10000%';
+            //XS.Main.Tjfx.pkfsx_legendItemHeaders.countytown[9] = '40% - 10000%';
             tag += '<td class="legendItemHeader">危房率</td><td class="legendItemValue">颜色</td></tr>';
 
             var len = XS.Main.Tjfx.range_styleGroups_color.length;
