@@ -56,9 +56,9 @@
         inputScript('../base/easyui/jquery.easyui-1.4.3.min.js',false);
         inputScript('../base/easyui/locale/easyui-lang-zh_CN.min.js',false);
 
-        inputScript('../lib/StrUtil.min.js',false);
-        inputScript('../lib/view/CommonUtil.min.js',false);
-        inputScript('../lib/view/login.min.js',false);
+        inputScript('../lib/StrUtil.js',false);
+        inputScript('../lib/view/CommonUtil.js',false);
+        inputScript('../lib/view/login.js',false);
     }
     loadLibs();
 })();
