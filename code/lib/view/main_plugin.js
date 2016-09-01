@@ -980,9 +980,7 @@ XS.Main.showAdvanceFeedDialog = function(regionid){
             '<input id="xs_main_ipt_advance" class="easyui-textbox easyui-resizable" data-options="multiline:true,prompt:\'请输入意见\'" style="width:100%;height:200px">'+
             '<a id="xs_main_btn_advance" href="javascript:0;" class="easyui-linkbutton" style="margin-top: 10px; margin-left: 340px;"><span style="width:120px; height: 40px; text-align: center;line-height: 40px;font-size: 25px;font-weight: bold; display: inline-block;">提交</span></a>'
         '</div>';
-    XS.CommonUtil.openDialog("xs_main_detail_1", "意见反馈", "icon-man", htmlContent, false, false, true, 500, 300);
-
-    $("#xs_main_btn_advance").click(function(){
+    XS.CommonUtil.openDialog("xs_main_detail_1", "意见反馈", "icon-man", htmlContent, false, false, true, 500, 300);    $("#xs_main_btn_advance").click(function(){
         var advance = $("#xs_main_ipt_advance").val();
         if(XS.StrUtil.isEmpty(advance)){
             XS.CommonUtil.showMsgDialog("", "意见内容不能为空");

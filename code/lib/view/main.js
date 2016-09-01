@@ -11,7 +11,6 @@ $(function(){
         window.location.href = window.location.toString().substring(0,window.location.toString().lastIndexOf("/")+1) +"index.html";
         return;
     }
-
     //市id 4位 5224
     //县id 6位
     //乡镇id 9位

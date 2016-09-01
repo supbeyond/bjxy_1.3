@@ -543,7 +543,6 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         $('#xs_pkdc_poorAdviceBtn').click(function(){
             XS.Main.showAdvanceFeedDialog(id);
         });
-
         //详情点击
         $('#xs_pkdc_details').click(XS.Main.Pkjc.clickDetail);
         //数据分析点击
