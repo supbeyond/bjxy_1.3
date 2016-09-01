@@ -249,6 +249,7 @@ XS.Main.Tjfx.range = function(level, parentId, type){
 
 //添加Features到ThemeLayer
 XS.Main.Tjfx.range_addFeatures2Layer = function(featureArr, data, level){ // 0:city 1:county 2:town
+
     var oId = "";
     var fId = "";
 
