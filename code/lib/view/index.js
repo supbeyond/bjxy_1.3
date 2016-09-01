@@ -50,7 +50,7 @@
         inputCSS("../base/easyui/themes/icon.css");
         inputCSS("../base/easyui/themes/extend-icon.css");
         inputCSS("../base/easyui/themes/color.css");
-        inputCSS("../css/init.min.css");
+        inputCSS("../css/init.css");
         inputCSS("../css/ui_loader.css");
 
         inputScript('../base/easyui/jquery.easyui-1.4.3.min.js',false);
