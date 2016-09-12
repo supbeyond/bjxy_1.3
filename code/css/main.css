@@ -103,6 +103,7 @@ html, body{
     display: none;
     z-index: 1000;
 }
+
 #xs_tjfx_range_Legend .legendTitle{
     background: #1E90FF;
 }
@@ -353,4 +354,9 @@ html, body{
     height: 100%;
     -webkit-flex:1; /* Safari 6.1+ */
     flex:1;
+}
+
+#framedCloud{
+    -moz-border-radius: 5px;
+    -webkit-border-radius: 5px
 }
