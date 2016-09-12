@@ -11,7 +11,9 @@ var xs_tjfx_type = -1; //当前统计类型
 XS.Main.Tjfx.type = {
     range_pkfsx:0, //分段--贫困发生率
     range_tpx:1,   //分段--脱贫率
-    range_wfx:2   //分段--危房率
+    range_wfx:2,   //分段--危房率
+    range_fpbqx:3   //分段--扶贫搬迁率
+
 }
 
 //缓存行政区域Featuers
@@ -97,7 +99,7 @@ XS.Main.Tjfx.loadZoneFeatuers = function(level, sql, succeedCallback, failCallba
 
 //清除 图层
 XS.Main.Tjfx.removeLayer = function(){
-    $("#xs_tjfx_toolmenuC").dialog('close');
+        $("#xs_tjfx_toolmenuC").dialog('close');
     if(xs_labelLayer != null){
         xs_MapInstance.getMapObj().removeLayer(xs_labelLayer);
         xs_labelLayer = null;
@@ -105,5 +107,9 @@ XS.Main.Tjfx.removeLayer = function(){
     if(xs_tjfx_themeLayer != null){
         xs_MapInstance.getMapObj().removeLayer(xs_tjfx_themeLayer);
         xs_tjfx_themeLayer = null;
+    }
+    if(xs_tjfx_graph_themeLayer != null){
+        xs_MapInstance.getMapObj().removeLayer(xs_tjfx_graph_themeLayer);
+        xs_tjfx_graph_themeLayer = null;
     }
 }
