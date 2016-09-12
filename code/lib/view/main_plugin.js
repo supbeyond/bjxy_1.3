@@ -50,11 +50,57 @@ XS.Main.ClusterPointerStyle = {
 XS.Main.clickMapType = {
     none:-1, //放大地图
     pkdc:0, //贫困洞穴
-    tjfx_range:1 //统计分析--分段专题图
+    tjfx_range:1, //统计分析--分段专题图
+    tjfx_graph: 2 //统计分析--图表专题图
 };
 
 $(function(){
     //右击-菜单
+    var tjfxItem = $('#xs_rightMeun').menu('findItem','统计分析');
+    $('#xs_rightMeun').menu('appendItem', {
+        parent: tjfxItem.target,
+        separator: true
+    });
+    $('#xs_rightMeun').menu('appendItem', {
+        parent: tjfxItem.target,
+        text: '扶贫搬迁',
+        iconCls: 'xs_fpbq_family'
+    });
+    var fpqyItem = $('#xs_rightMeun').menu('findItem','扶贫搬迁');
+    $('#xs_rightMeun').menu('appendItem', {
+        parent: fpqyItem.target,
+        text: '扶贫搬迁率',
+        onclick: function(){
+            XS.Main.cRItem_Tjfx_Range(XS.Main.Tjfx.type.range_fpbqx);
+        }
+    });
+    $('#xs_rightMeun').menu('appendItem', {
+        parent: tjfxItem.target,
+        separator: true
+    });
+    $('#xs_rightMeun').menu('appendItem', {
+        parent: tjfxItem.target,
+        text: '土地信息',
+        //iconCls: 'xs_fpbq_family',
+        onclick: function(){
+            XS.Main.detail_landInfo_graph(XS.Main.Tjfx.graph.type.graph_pie);
+        }
+    });
+    $('#xs_rightMeun').menu('appendItem', {
+        parent: tjfxItem.target,
+        separator: true
+    });
+    $('#xs_rightMeun').menu('appendItem', {
+        parent: tjfxItem.target,
+        text: '社会保障',
+        //iconCls: 'xs_fpbq_family',
+        onclick: function(){
+            XS.Main.detail_landInfo_graph(XS.Main.Tjfx.graph.type.graph_bar);
+        }
+    });
+    $('#xs_rightMeun').menu('appendItem', {
+        separator: true
+    });
     $('#xs_rightMeun').menu('appendItem', {
         text: '贫困洞察',
         iconCls: 'icon-search',
@@ -921,9 +967,12 @@ XS.Main.hiddenDivTags = function(){
     //聚散点提示
     if($("#xs_clusterTipC").length>0) $("#xs_clusterTipC").css({display: 'none'});
 
-    //统计分析
+    //统计分析--分段专题图Tip
     if($("#xs_tjfx_range_themeTipC").length>0) $("#xs_tjfx_tpx_themeTipC").css("display","none");
     if($("#xs_tjfx_range_Legend").length>0) $("#xs_tjfx_range_Legend").css("display", "none");
+    //统计分析--图表专题图Tip
+    if($("#xs_tjfx_graph_themeTipC").length>0) $("#xs_tjfx_graph_themeTipC").css("display","none");
+    if($("#xs_tjfx_graph_Legend").length>0) $("#xs_tjfx_graph_Legend").css("display", "none");
 
 }
 
@@ -937,6 +986,7 @@ XS.Main.closeDialogs = function(){
 XS.Main.hiddenLayers = function(){
     XS.Main.Tjfx.removeLayer();
     xs_vectorLayer.removeAllFeatures();
+    xs_isShowUtfGridTip = true;
    // xs_zone_vectorLayer.removeAllFeatures();
     if(xs_animatorVectorLayer != null){
         xs_MapInstance.getMapObj().removeLayer(xs_animatorVectorLayer);
