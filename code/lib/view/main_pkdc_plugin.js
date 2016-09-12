@@ -177,12 +177,7 @@ XS.Main.Pkjc.detailKV = {
 };
 var xs_pkdc_colorArr  = ["#96FF20","#35FFDF","#1FA7FF","#0A54FF","#1917FF","#6625FF",
     "#CA34FF","#FF3A92","#FF2A39","#FF7023","#FFC52C","#FFFD45","#FFA0A0","#AEB1FF"];
-/*var xs_pkdc_itemFundGridField = [["serialNo","序号"],["PROJECID","项目编号"],["PROJECTNAME","项目名称"],
-    ["FONDYEAR","年度"],["FOUNDNUM","资金号"],["FINAFOUND","到帐资金"],["ENDMONTH","到账月份"],
-    ["FOUNDDETAIL","资金细节"],["AUTISTATE","备案状态"],["AFTERID","备案编号"],["COUNTY","帮扶地区"],
-    ["CREATTIME","立项时间"],["CREATUSERID","立项人或单位"],["HELPHOUSE","帮扶户数"],["HELPPEOPLE","帮扶人数"],
-    ["REACHCOUNTYFOUNDS","到县资金"],["REPLYID","接受编号"],["SPECNAME","投入项目"],["PROJECTHEAD","负责人"]];*/
-var xs_pkdc_itemFundGridField = [["serialNo","序号"],["PROJECID","项目编号"],["PROJECTNAME","项目名称"],
+var xs_pkdc_itemFundGridField = [["serialNo","序号"],["PROJECID","项目编号"],["AUTISTATE","申请状态"],["PROJECTNAME","项目名称"],
     ["FONDYEAR","年度"],["FOUNDNUM","资金号"],["REACHCOUNTYFOUNDS","到帐资金"],["FOUNDDETAIL","资金细节"],
     ["REPLYID","批复文号"],["PROJECTHEAD","项目负责人"],["FOUNDSIZECONTENT","资金规模内容"],["HELPHOUSE","覆盖户数"],
     ["HELPPEOPLE","覆盖人数"],["FINAFOUND","最终资金"],["CREATTIME","创建时间"]];
@@ -262,6 +257,7 @@ XS.Main.Pkjc.scatterOption = {
 var xs_pkdc_analyMax = 0;
 var xs_pkdc_btnCliDatagridObj = null;
 var xs_pkdc_addrName = "";
+var xs_pkdc_itemFoundJson = null;
 //详情点击函数
 XS.Main.Pkjc.clickDetail = function(){
     var jsonObj = null;
@@ -339,7 +335,7 @@ XS.Main.Pkjc.clickDetail = function(){
                                     XS.Main.Pkjc.tabsContentPie("人口贫困分布情况", [5, 10], "xs_pkdc_tabsContPieDiv2", [3, 5], "非贫困人口");
                                 });
                                 $("#xs_pkdc_tabsContentBtn2").click(function () {
-                                    XS.Main.Pkjc.tabsContentPie("户贫困分布情况", [6, 9], "xs_pkdc_tabsContPieDiv2", [4, 6], "非贫困户");
+                                    XS.Main.Pkjc.tabsContentPie("户贫困分布情况", [6, 9], "xs_pkdc_tabsContPieDiv1", [4, 6], "非贫困户");
                                     XS.Main.Pkjc.tabsContentPie("危房户分布情况", [12, 13, 14], "xs_pkdc_tabsContPieDiv2", [], "");
                                 });
                                 break;
@@ -1214,6 +1210,7 @@ XS.Main.Pkjc.clickItemFund = function(){
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryProjecFundByRegionid", data, function(json) {
         $("#xs_pkdc_itemFound_loading").css({"visibility":"hidden"});
         if(json && json.length > 0){
+            xs_pkdc_itemFoundJson = json;
             xs_pkdc_addrName = json[0].COUNTY;
             $("#xs_pkdc_detailDialog").dialog("setTitle",xs_pkdc_addrName + "-项目资金");
             $('#xs_pkdc_itemFundDgridDom').datagrid({
@@ -1227,7 +1224,7 @@ XS.Main.Pkjc.clickItemFund = function(){
                 rowStyler: function(rowIndex,rowData){
                     return 'height:37px;';
                 },
-                columns: XS.Main.Pkjc.itemFundGridColumns(xs_pkdc_itemFundGridField,'7%',[[0,'4%'],[2,'11%'],[3,'5%'],[4,'12%'],[5,'5%'],[6,'10%'],[7,'10%'],[8,'9%'],[10,'5%'],[11,'5%'],[12,'5%'],[13,'8%']]),
+                columns: XS.Main.Pkjc.itemFundGridColumns(xs_pkdc_itemFundGridField,'7%',[[0,'4%'],[2,'5%'],[3,'11%'],[4,'5%'],[5,'12%'],[6,'5%'],[7,'8%'],[8,'10%'],[9,'6%'],[11,'5%'],[12,'5%'],[13,'5%'],[14,'8%']]),
             });
             var pager = $("#xs_pkdc_itemFundDgridDom").datagrid("getPager");
             pager.pagination({
@@ -1650,6 +1647,7 @@ XS.Main.Pkjc.viAnaly54 = function(json,AnalysTabsChart){
  * @param rowIndex 行编号
  * @param rowData 行数据
  */
+/*
 XS.Main.Pkjc.selectItemFoundRowData = function(rowIndex,rowData){
     var content = '<div style="height: 100%;padding:5px;box-sizing: border-box;">' +
             '<div id="xs_pkdc_itemFundRowDataTree" style="height: 100%;">' +
@@ -1657,4 +1655,4 @@ XS.Main.Pkjc.selectItemFoundRowData = function(rowIndex,rowData){
         '</div>';
     XS.CommonUtil.openDialog("xs_pkdc_itemFundRowDataWin", rowData.PROJECID + "号项目详情", "icon-save", content, false, true, false, "700","380",null,90);
 
-}
+}*/
