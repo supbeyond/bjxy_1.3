@@ -88,13 +88,13 @@ XS.Main.Tjfx.range = function(level, parentId, type){
     xs_tjfx_themeLayer.setVisibility(false);
     xs_MapInstance.getMapObj().addLayer(xs_tjfx_themeLayer);
 
+    XS.CommonUtil.showLoader();
     switch (level)
     {
         case XS.Main.ZoneLevel.city:
         {
             xs_tjfx_range_centerPoint = xs_MapInstance.getMapCenterPoint();
             xs_MapInstance.getMapObj().setCenter(xs_tjfx_range_centerPoint, 0);
-            XS.CommonUtil.showLoader();
             //1.先获业务数据通过业务数据
             //2.获取空间数据
             //3.通过业务数据过滤空间数据
@@ -110,6 +110,9 @@ XS.Main.Tjfx.range = function(level, parentId, type){
                     break;
                 case XS.Main.Tjfx.type.range_wfx:
                     action = "QueryDangerHouseBycount";
+                    break;
+                case XS.Main.Tjfx.type.range_fpbqx:
+                    action = "QueryMovePoorBycount";
                     break;
             }
             var data = {pbno:parentId, pd_id:parentId};
@@ -163,8 +166,7 @@ XS.Main.Tjfx.range = function(level, parentId, type){
         }
         case XS.Main.ZoneLevel.county:
         {
-            xs_MapInstance.getMapObj().setCenter(xs_tjfx_range_centerPoint, 5);
-            XS.CommonUtil.showLoader();
+            xs_MapInstance.getMapObj().setCenter(xs_tjfx_range_centerPoint, 3);
 
             //请求镇级数据
             var action = "";
@@ -177,6 +179,9 @@ XS.Main.Tjfx.range = function(level, parentId, type){
                     break;
                 case XS.Main.Tjfx.type.range_wfx:
                     action = "QueryDangerHouseByTown";
+                    break;
+                case XS.Main.Tjfx.type.range_fpbqx:
+                    action = "QueryMovePoorByTown";
                     break;
             }
             var data = {pbno:parentId, pd_id:parentId};
@@ -206,7 +211,6 @@ XS.Main.Tjfx.range = function(level, parentId, type){
         case XS.Main.ZoneLevel.town:
         {
             xs_MapInstance.getMapObj().setCenter(xs_tjfx_range_centerPoint, 8);
-            XS.CommonUtil.showLoader();
 
             //请求村数据
             var action = "";
@@ -219,6 +223,9 @@ XS.Main.Tjfx.range = function(level, parentId, type){
                     break;
                 case XS.Main.Tjfx.type.range_wfx:
                     action = "QueryDangerHouseBycount";
+                    break;
+                case XS.Main.Tjfx.type.range_fpbqx:
+                    action = "QueryMovePoorByTown";
                     break;
             }
             var data = {pbno:parentId, pd_id:parentId};
@@ -281,9 +288,8 @@ XS.Main.Tjfx.range_addFeatures2Layer = function(featureArr, data, level){ // 0:c
             }
             break;
         case XS.Main.Tjfx.type.range_tpx:
-            oId = "REGION_ID";
-            break;
         case XS.Main.Tjfx.type.range_wfx:
+        case XS.Main.Tjfx.type.range_fpbqx:
             oId = "REGION_ID";
             break;
     }
@@ -349,6 +355,9 @@ XS.Main.Tjfx.range_addFeatures2Layer = function(featureArr, data, level){ // 0:c
                     case XS.Main.Tjfx.type.range_wfx:
                         rate = obj.DangerHRate;
                         break;
+                    case XS.Main.Tjfx.type.range_fpbqx:
+                        rate = obj.MoveRate;
+                        break;
                 }
 
                 feature.attributes.xs_tjfx_range = rate;
@@ -368,7 +377,6 @@ XS.Main.Tjfx.range_addFeatures2Layer = function(featureArr, data, level){ // 0:c
 //鼠标在 脱贫率专题图 移动事件处理
 XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
     $("#xs_tjfx_range_themeTipC").css("display", "none");
-    xs_isShowUtfGridTip = true;
     if(event.target && event.target.refDataID)
     {
         if($("#xs_utfGridC").length>0) $("#xs_utfGridC").css("display","none");
@@ -482,6 +490,50 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                         break;
                 }
                 break;
+            case XS.Main.Tjfx.type.range_fpbqx:
+                switch (xs_tjfx_zoneLevel){
+                    case XS.Main.ZoneLevel.city:
+                        /*{
+                         "__type": "MovePoor:#WcfService2",
+                         "MoveHnum": 9997,
+                         "MovePnum": 9997,
+                         "MoveRate": 18.380216951645523074094502670,
+                         "REGION_ID": 522401,
+                         "REGION_Name": "七星关区"
+                         }*/
+                        title = obj.REGION_Name;
+                        jsonObj.push({"name":"扶贫搬迁率","value":obj.MoveRate});
+                        jsonObj.push({"name":"搬迁户数","value":obj.MoveHnum});
+                        jsonObj.push({"name":"搬迁人数","value":obj.MovePnum});
+                        jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
+                        jsonObj.push({"name":"区域","value":obj.REGION_Name});
+                        break;
+                    case XS.Main.ZoneLevel.county:
+                        /*{
+                         "__type": "MovePoor:#WcfService2",
+                         "MoveHnum": 800,
+                         "MovePnum": 4105,
+                         "MoveRate": 8000,
+                         "REGION_ID": 522426213,
+                         "REGION_Name": "昆寨乡"
+                         }*/
+                        title = obj.REGION_Name;
+                        jsonObj.push({"name":"扶贫搬迁率","value":obj.MoveRate});
+                        jsonObj.push({"name":"搬迁户数","value":obj.MoveHnum});
+                        jsonObj.push({"name":"搬迁人数","value":obj.MovePnum});
+                        jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
+                        jsonObj.push({"name":"区域","value":obj.REGION_Name});
+                        break;
+                    case XS.Main.ZoneLevel.town:
+                        title = obj.REGION_Name;
+                        jsonObj.push({"name":"扶贫搬迁率","value":obj.MoveRate});
+                        jsonObj.push({"name":"搬迁户数","value":obj.MoveHnum});
+                        jsonObj.push({"name":"搬迁人数","value":obj.MovePnum});
+                        jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
+                        jsonObj.push({"name":"区域","value":obj.REGION_Name});
+                        break;
+                }
+                break;
         }
         XS.Main.Tjfx.range_showThemeLayerMouseOverTip(x, y, title, jsonObj);
     }
@@ -494,7 +546,7 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
  * @param title 标题
  * @param jsonObjArr 显示信息数据集
  */
-XS.Main.Tjfx.range_showThemeLayerMouseOverTip = function(x, y, title, jsonObjArr){
+/*XS.Main.Tjfx.range_showThemeLayerMouseOverTip = function(x, y, title, jsonObjArr){
     if (x > 20 && x < ($(window).width() - 252) && y > 20 && y < ($(window).height() - 252))
     {
         xs_isShowUtfGridTip = false;
@@ -521,6 +573,51 @@ XS.Main.Tjfx.range_showThemeLayerMouseOverTip = function(x, y, title, jsonObjArr
     }else{
         $("#xs_tjfx_range_themeTipC").css({display: 'none'});
     }
+}*/
+XS.Main.Tjfx.range_showThemeLayerMouseOverTip = function(x, y, title, jsonObjArr){
+    xs_isShowUtfGridTip = false;
+    if ($("#xs_tjfx_range_themeTipC").length < 1)
+    {
+        var tag ="<div id='xs_tjfx_range_themeTipC' style='width: 200px; height: 200px; border-radius: 2px; border: 5px solid #00bbee;position:absolute;z-index: 12;opacity: 0.9; display: none;background: #ffffff;'></div>";
+        $("#xs_mainC").append(tag);
+    }
+    $("#xs_tjfx_range_themeTipC").empty();
+
+    var contentTag =
+        '<div style="width: 100%; height: 10%; background: #00bbee;color: #ffffff;line-height: 100%;font-size: 15px;font-weight: bold;padding-left: 5px;overflow: hidden;">'+title+'</div>'+
+        '<div style="border: 5px solid transparent; box-sizing: border-box; width: 100%; height: 90%;"><table border="1" style="width: 100%; height: 100%;border: 1px solid rgba(128, 128, 128, 0.16);border-collapse: collapse;font-size: 13px;">';
+    for(var i=0; i<jsonObjArr.length; i++){
+        contentTag +=  '<tr><td>'+jsonObjArr[i].name+'</td><td>'+jsonObjArr[i].value+'</td></tr>';
+    }
+    contentTag += '</div></table>';
+    $("#xs_tjfx_range_themeTipC").append(contentTag);
+
+    if (x > 20 && x < ($(window).width() - 252) && y > 20 && y < ($(window).height() - 252))
+    {
+        $("#xs_tjfx_range_themeTipC").css({
+                    left: x+ 20,
+                    top: y + 20,
+                    display: 'block'
+        });
+    }else if(x >= ($(window).width() - 252) && y >= ($(window).height() - 252)){
+        $("#xs_tjfx_range_themeTipC").css({
+            left: x - 252 + 30,
+            top: y - 252 + 30,
+            display: 'block'
+        });
+    }else if(x >= ($(window).width() - 252)){
+        $("#xs_tjfx_range_themeTipC").css({
+            left: x - 252 + 30,
+            top: y + 20,
+            display: 'block'
+        });
+    }else if(y >= ($(window).height() - 252)){
+        $("#xs_tjfx_range_themeTipC").css({
+            left: x + 20,
+            top: y - 252 + 30,
+            display: 'block'
+        });
+    }
 }
 
 //鼠标移动移出
@@ -533,6 +630,7 @@ XS.Main.Tjfx.range_themeLayerClickCallback = function(event){
     if(event.target && event.target.refDataID)
     {
         var feature = xs_tjfx_themeLayer.getFeatureById(event.target.refDataID);
+        xs_tjfx_range_centerPoint = feature.geometry.getBounds().getCenterLonLat();
         switch (xs_currentZoneLevel) {
             case XS.Main.ZoneLevel.city:
             {
