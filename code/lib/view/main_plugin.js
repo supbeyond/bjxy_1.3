@@ -970,6 +970,7 @@ XS.Main.hiddenDivTags = function(){
     //统计分析--分段专题图Tip
     if($("#xs_tjfx_range_themeTipC").length>0) $("#xs_tjfx_tpx_themeTipC").css("display","none");
     if($("#xs_tjfx_range_Legend").length>0) $("#xs_tjfx_range_Legend").css("display", "none");
+    if($("#xs_tjfx_graph_Legend").length>0) $("#xs_tjfx_graph_Legend").css("display", "block");
     //统计分析--图表专题图Tip
     if($("#xs_tjfx_graph_themeTipC").length>0) $("#xs_tjfx_graph_themeTipC").css("display","none");
     if($("#xs_tjfx_graph_Legend").length>0) $("#xs_tjfx_graph_Legend").css("display", "none");
