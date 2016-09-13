@@ -5,7 +5,7 @@
 var xs_pkdc_itemFoundForceOpt = {
     title : {
         text: '',
-        x:'center',
+        x:'center'
     },
     tooltip : {
         trigger: 'item',
@@ -71,7 +71,7 @@ var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
             '<div id="xs_pkdc_itemFundRowDataTree" style="height: 100%;"></div></div>';
      XS.CommonUtil.openDialog("xs_pkdc_itemFundRowDataWin", projectName + "-项目资金", "icon-save", content, false, true, false, "900","480",null,70,function(){
          
-         //$('#xs_pkdc_detailDialog').dialog('open');
+         $('#xs_pkdc_itemFundRowDataWin').remove();
      });
     var data = {regionid: xs_pkdc_currentStateCode};
      XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryProjecFundByRegionidLike", data, function(json){
@@ -153,7 +153,7 @@ var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
              var  echart = echarts.init(document.getElementById("xs_pkdc_itemFundRowDataTree"));
              echart.setOption(xs_pkdc_itemFoundForceOpt);
              echart.on("click",function(params,aa,bb){
-
+                alert(1);
              });
          }
      });
