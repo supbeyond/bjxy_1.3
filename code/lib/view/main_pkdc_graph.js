@@ -68,6 +68,7 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
     var graph = "";
     var themeFields = [];
     var chartsSetting = null;
+    var color = XS.Main.Tjfx.range_styleGroups_color;
     switch (type){
         case XS.Main.Tjfx.graph.type.graph_pie:
         {
@@ -78,8 +79,8 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
                 height: 100,
                 codomain: [0, 1100000],
                 //sectorStyle: { fillOpacity: 0.9 },
-                sectorStyleByFields: [{ fillColor: "#C8E49C" }, { fillColor: "#ED9678" }, { fillColor: "#E7DAC9" }, { fillColor: "#CB8E85" }, { fillColor: "#F3F39D" },
-                    { fillColor: "#86B379" }, { fillColor: "#68A54A" }, { fillColor: "#408829" }],
+                sectorStyleByFields: [{ fillColor: color[0] }, { fillColor: color[1] }, { fillColor: color[2] }, { fillColor: color[3] }, { fillColor: color[4] },
+                    { fillColor: color[5] }, { fillColor: color[7] }, { fillColor: color[8] }],
                 // 饼图扇形 hover 样式
                 sectorHoverStyle: {
                     fillOpacity: 1 ,
@@ -127,11 +128,26 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
     xs_tjfx_graph_themeLayer.setOpacity(0.9);
     xs_tjfx_graph_themeLayer.isOverLay = false;
 
-    $("#xs_mainC").append(XS.Main.Tjfx.range_createRangeLegendTag(type,parentCode));
+    if(document.getElementById("xs_tjfx_graph_Legend")){
+        $("#xs_tjfx_graph_Legend").remove();
+    }
+
+    $("#xs_mainC").append(XS.Main.Tjfx.graph_createGraphLegendTag(type));
+    $("#xs_tjfx_graph_Legend").css("display", "block");
+
+    switch (type){
+        case XS.Main.Tjfx.graph.type.graph_pie:
+            $(".legendContent").css({height:"165px"});
+            break;
+        case XS.Main.Tjfx.graph.type.graph_bar:
+            $(".legendContent").css({height:"80px"});
+            break;
+    }
 
     // 注册专题图 mousemove, mouseout事件(注意：专题图图层对象自带 on 函数，没有 events 对象)
     xs_tjfx_graph_themeLayer.on("mousemove", XS.Main.Tjfx.graph.showInfoWin);
     xs_tjfx_graph_themeLayer.on("mouseout", XS.Main.Tjfx.graph.closeInfoWin);
+    xs_tjfx_graph_themeLayer.on("click", XS.Main.Tjfx.graph_themeLayerClickCallback);
 
     xs_tjfx_graph_themeLayer.setVisibility(false);
     xs_MapInstance.getMapObj().addLayer(xs_tjfx_graph_themeLayer);
@@ -141,7 +157,7 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
     {
         case XS.Main.ZoneLevel.city:
         {
-            xs_MapInstance.getMapObj().setCenter(xs_tjfx_range_centerPoint, 1);
+            xs_MapInstance.getMapObj().setCenter(xs_tjfx_range_centerPoint, 2);
             XS.CommonUtil.showLoader();
             //1.先获业务数据通过业务数据
             //2.获取空间数据
@@ -246,7 +262,7 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
         }
         case XS.Main.ZoneLevel.town:
         {
-            xs_MapInstance.getMapObj().setCenter(xs_tjfx_range_centerPoint, 8);
+            xs_MapInstance.getMapObj().setCenter(xs_tjfx_range_centerPoint, 9);
             XS.CommonUtil.showLoader();
 
             //请求村数据
@@ -262,7 +278,7 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
             data = {pid:parentCode, pd_id:parentCode};
             XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json) {
                 if (json && json.length > 0) {
-                    XS.Main.Tjfx.graph.CacheZoneInfos.town = json;
+                    XS.Main.Tjfx.graph.CacheZoneInfos.village = json;
                     XS.Main.Tjfx.graph_loadZoneFeatuers(parentLevel, "Town_id=="+parentCode, function()
                         {
                             if(XS.Main.Tjfx.graph.featuersArr.village.length>0)
@@ -432,7 +448,6 @@ XS.Main.Tjfx.graph_addFeatures2Layer = function(featureArr, data, parentLevel){ 
     xs_tjfx_graph_themeLayer.addFeatures(features);
     xs_tjfx_graph_themeLayer.setVisibility(true);
     XS.CommonUtil.hideLoader();
-    console.log(xs_tjfx_graph_themeLayer);
 }
 /**
  * 专题图pie mousemove事件
@@ -458,12 +473,29 @@ XS.Main.Tjfx.graph.showInfoWin = function(e){
                 break;
             }
         }
-        console.log(sum);
+
         var jsonObjArr = [];
         var title = "";
-
-        jsonObjArr.push({name:'区域',value:attributes.Name});
-        jsonObjArr.push({name:'区域ID',value:attributes.AdminCode});
+        switch (xs_currentZoneLevel){
+            case XS.Main.ZoneLevel.city:
+            {
+                jsonObjArr.push({name:'区域',value:attributes.Name});
+                jsonObjArr.push({name:'区域ID',value:attributes.AdminCode});
+                break;
+            }
+            case XS.Main.ZoneLevel.county:
+            {
+                jsonObjArr.push({name:'区域',value:attributes.乡镇代码});
+                jsonObjArr.push({name:'区域ID',value:attributes.乡镇名称});
+                break;
+            }
+            case XS.Main.ZoneLevel.town:
+            {
+                jsonObjArr.push({name:'区域',value:attributes.vd_name});
+                jsonObjArr.push({name:'区域ID',value:attributes.OldID});
+                break;
+            }
+        }
 
         switch (xs_pkdc_graph_type){
             case XS.Main.Tjfx.graph.type.graph_pie:{
@@ -586,18 +618,15 @@ XS.Main.Tjfx.graph.closeInfoWin = function (e) {
         }
     }
 }
-/*
-//创建分段专题 图例
-XS.Main.Tjfx.range_createRangeLegendTag = function(type, parentLevel){
-    var tag = '<div id="xs_tjfx_range_Legend">'+
+//创建统计专题 图例
+XS.Main.Tjfx.graph_createGraphLegendTag = function(type){
+    var tag = '<div id="xs_tjfx_graph_Legend">'+
         '<div class="legendTitle">'+
         '<span>图例</span>'+
         '</div>'+
         '<div class="legendContent">'+
         '<table>'+
         '<tr>';
-
-    XS.Main.Tjfx.graph.socialProtect = ["参合率","养老率","低保率"];
     switch (type)
     {
         case XS.Main.Tjfx.graph.type.graph_pie:
@@ -607,11 +636,11 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, parentLevel){
             var landCategory = ["耕地","林地","退耕还林","牧草地","退耕还草","水域","荒漠化","林果"];
             var landCategoryStyle = ["#C8E49C","#ED9678","#E7DAC9","#CB8E85","#F3F39D","#86B379","#68A54A","#408829"];
             for(var i in landCategory){
-                    tag += '<tr>';
-                    tag += '<td class="legendItemHeader">'+landCategory[i]+'</td>';
-                    tag += "<td class='legendItemValue' style='background: "+landCategoryStyle[i]+"'"+"></td>";
-                    tag += '</tr>';
-                }
+                tag += '<tr>';
+                tag += '<td class="legendItemHeader">'+landCategory[i]+'</td>';
+                tag += "<td class='legendItemValue' style='background: "+XS.Main.Tjfx.range_styleGroups_color[i]+"'"+"></td>";
+                tag += '</tr>';
+            }
             break;
         }
         case XS.Main.Tjfx.graph.type.graph_bar:
@@ -623,7 +652,7 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, parentLevel){
             for(var i in landCategory){
                 tag += '<tr>';
                 tag += '<td class="legendItemHeader">'+landCategory[i]+'</td>';
-                tag += "<td class='legendItemValue' style='background: linear-gradient(to top, red, orange, yellow, green, blue, indigo, violet)"+landCategory[i]+"'"+"></td>";
+                tag += "<td class='legendItemValue' style='background: -WebKit-linear-gradient( top," + landCategoryStyle[i][0] + "," + landCategoryStyle[i][1] + ");'></td>";
                 tag += '</tr>';
             }
             break;
@@ -633,4 +662,39 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, parentLevel){
 
     return tag;
 }
-*/
+
+//专题图被点击事件
+XS.Main.Tjfx.graph_themeLayerClickCallback = function(event){
+    if(event.target && event.target.refDataID)
+    {
+        var feature = xs_tjfx_graph_themeLayer.getFeatureById(event.target.refDataID);
+        xs_tjfx_range_centerPoint = feature.geometry.getBounds().getCenterLonLat();
+
+        xs_currentZoneFuture = null;
+        xs_clickMapType = XS.Main.clickMapType.tjfx_graph;
+        switch (xs_currentZoneLevel) {
+            case XS.Main.ZoneLevel.city:
+            {
+                xs_superZoneCode = feature.data.AdminCode;
+                XS.Main.Tjfx.graph_theme(xs_currentZoneLevel + 1, xs_superZoneCode, xs_pkdc_graph_type);
+                break;
+            }
+            case XS.Main.ZoneLevel.county:
+            {
+                xs_superZoneCode = feature.data.乡镇代码;
+                XS.Main.Tjfx.graph_theme(xs_currentZoneLevel + 1, xs_superZoneCode, xs_pkdc_graph_type);
+                break;
+            }
+            case XS.Main.ZoneLevel.town:
+            {
+                xs_superZoneCode = feature.data.OldID;
+                XS.CommonUtil.showMsgDialog("", "没有下级专题图");
+                // xs_clickMapType = XS.Main.clickMapType.none;
+                break;
+            }
+        }
+    }else
+    {
+        xs_clickMapType = XS.Main.clickMapType.tjfx_range;
+    }
+}
