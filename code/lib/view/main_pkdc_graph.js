@@ -2,54 +2,60 @@
 /**
  * Created by Administrator on 2016/9/8.
  */
-XS.Main.Tjfx.graph = {};
+XS.Main.Tjfx.Graph = {};
 //统计类型
-XS.Main.Tjfx.graph.type = {
+    XS.Main.Tjfx.Graph.Type = {
     graph_pie:0, //图表pie--土地信息
     graph_bar:{social:1,fourFive:2,fiveFour:3}, //图表bar--社会保障
 }
 
 //缓存行政区域Featuers
-XS.Main.Tjfx.graph.featuersArr = {
+XS.Main.Tjfx.Graph.featuersArr = {
     county:{graphType:0,data:[]}, //县
     town:[], //乡
     village:[] //村
 };
 
 //缓存行政区域信息:县级参考：XS.Main.CacheZoneInfos.county
-XS.Main.Tjfx.graph.CacheZoneInfos = {
+XS.Main.Tjfx.Graph.CacheZoneInfos = {
     county:{graphType:-1,data:[]},
     town:[],
     village:[]
 };
 
-XS.Main.Tjfx.graph.barGradient = [["#00FF00","#00CD00"],["#1bff83","#1bCD83"],["#3ff3ff","#3ff3cd"],["#238aff","#23aaff"],
-    ["#932eff","#932ecd"],["#bdff3b","#bdcd3b"],["#ffee2f","#cdee2f"],["#ffb24a","#cdb24a"],["#ff4341","#cd4341"]
-    ,["#cd0000","#FF0000"]];
+XS.Main.Tjfx.Graph.barGradient = [["#00FF00","#00CD00"],["#1bff83","#1bCD83"],["#3ff3ff","#3ff3cd"],["#238aff","#23aaff"],
+    ["#932eff","#932ecd"],["#bdff3b","#bdcd3b"],["#ffee2f","#cdee2f"],["#ffb24a","#cdb24a"],["#ff4341","#cd4341"],
+    ["#cd0000","#FF0000"]];
+XS.Main.Tjfx.Graph.filed = [
+    ['C12', 'C14', 'C14A', 'C15', 'C19', 'C16', 'C17','C14B'],
+    ["CoMedicalRate", "EndowRate", "LowRate"],
+    ["WaterSafeNum","ElectricSafeNum","HouseSafeNum","EnroadHardNum","YardHardNum","CoMedicNum","InsureNum","WorkSkillNum",
+    "EduHelpNum","IndustyNum"]
+];
 
-var xs_pkdc_graph_type = 0;
+var xs_tjfx_graph_type = 0;
 var xs_tjfx_graph_themeLayer = null;
 var xs_tjfx_graph_framedCloud = null;
 /**
  * 统计专题图
  * @param type 统计类型
  */
-XS.Main.detail_landInfo_graph = function(type){
+XS.Main.Tjfx.Graph.graph = function(type){
     if(xs_currentZoneFuture != null){
         xs_tjfx_range_centerPoint = xs_currentZoneFuture.geometry.getBounds().getCenterLonLat();
-        XS.Main.Tjfx.graph_theme(xs_currentZoneLevel-1, xs_superZoneCode, type);
+        XS.Main.Tjfx.Graph.theme(xs_currentZoneLevel-1, xs_superZoneCode, type);
     }else{
         xs_tjfx_range_centerPoint = xs_MapInstance.getMapCenterPoint();
         switch (xs_user_regionLevel){
             case XS.Main.ZoneLevel.city:
             case XS.Main.ZoneLevel.county:
-                XS.Main.Tjfx.graph_theme(XS.Main.ZoneLevel.city, xs_cityID, type);
+                XS.Main.Tjfx.Graph.theme(XS.Main.ZoneLevel.city, xs_cityID, type);
                 break;
             case XS.Main.ZoneLevel.town:
-                XS.Main.Tjfx.graph_theme(XS.Main.ZoneLevel.county, xs_user_Features[0].data.县级代码, type);
+                XS.Main.Tjfx.Graph.theme(XS.Main.ZoneLevel.county, xs_user_Features[0].data.县级代码, type);
                 break;
             case XS.Main.ZoneLevel.village:
-                XS.Main.Tjfx.graph_theme(XS.Main.ZoneLevel.town,  xs_user_Features[0].data.Town_id, type);
+                XS.Main.Tjfx.Graph.theme(XS.Main.ZoneLevel.town,  xs_user_Features[0].data.Town_id, type);
                 break;
         }
     }
@@ -60,11 +66,11 @@ XS.Main.detail_landInfo_graph = function(type){
  * @param parentCode
  * @param type
  */
-XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
+XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
     xs_isShowUtfGridTip = false;
     xs_currentZoneLevel = parentLevel;
     xs_tjfx_zoneLevel = parentLevel;
-    xs_pkdc_graph_type =  type;
+    xs_tjfx_graph_type =  type;
 
     XS.Main.hiddenDivTags();
     XS.Main.Tjfx.removeLayer();
@@ -75,17 +81,17 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
     var color = XS.Main.Tjfx.range_styleGroups_color;
 
     switch (type){
-        case XS.Main.Tjfx.graph.type.graph_pie:
+        case XS.Main.Tjfx.Graph.Type.graph_pie:
         {
             graph = "Pie";
-            themeFields = ['C12', 'C14', 'C14A', 'C15', 'C19', 'C16', 'C17','C14B'];
+            themeFields = XS.Main.Tjfx.Graph.filed[0];
             chartsSetting = {
                 width: 100,
                 height: 100,
                 codomain: [0, 1100000],
                 //sectorStyle: { fillOpacity: 0.9 },
-                sectorStyleByFields: [{ fillColor: color[0] }, { fillColor: color[1] }, { fillColor: color[2] }, { fillColor: color[3] }, { fillColor: color[4] },
-                    { fillColor: color[5] }, { fillColor: color[7] }, { fillColor: color[8] }],
+                sectorStyleByFields: [{ fillColor: color[0] }, { fillColor: color[1] }, { fillColor: color[2] }, { fillColor: color[3] }, { fillColor: color[5] },
+                    { fillColor: color[6] }, { fillColor: color[7] }, { fillColor: color[8] }],
                 // 饼图扇形 hover 样式
                 sectorHoverStyle: {
                     fillOpacity: 1 ,
@@ -94,10 +100,10 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
             };
             break;
         }
-        case  XS.Main.Tjfx.graph.type.graph_bar.social:
+        case  XS.Main.Tjfx.Graph.Type.graph_bar.social:
         {
             graph = "Bar";
-            themeFields = ["CoMedicalRate", "EndowRate", "LowRate"];
+            themeFields = XS.Main.Tjfx.Graph.filed[1];
             chartsSetting = {
                 // width，height，codomain 分别表示图表宽、高、数据值域；此三项参数为必设参数
                 width: 150,
@@ -117,21 +123,20 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
                 //阴影样式
                 barShadowStyle:{shadowBlur : 8, shadowOffsetX: 2 , shadowOffsetY : 2,shadowColor : "rgba(100,100,100,0.8)"},
                 //按字段设置柱条样式[渐变开始颜色,渐变终止颜色] 与 themeLayer.themeFields 中的字段一一对应）
-                barLinearGradient: XS.Main.Tjfx.graph.barGradient
+                barLinearGradient: XS.Main.Tjfx.Graph.barGradient
             };
             break;
         }
-        case  XS.Main.Tjfx.graph.type.graph_bar.fourFive:
+        case  XS.Main.Tjfx.Graph.Type.graph_bar.fourFive:
         {
             graph = "Bar";
-            themeFields = ["WaterSafeNum","ElectricSafeNum","HouseSafeNum","EnroadHardNum","YardHardNum","CoMedicNum",
-                "InsureNum","WorkSkillNum","EduHelpNum","IndustyNum"];
+            themeFields = XS.Main.Tjfx.Graph.filed[2];
             //['','category',["安全饮水","安全用电","安全住房","入户路硬化","院坝硬化","合作医保","养老保险","就业技能培训","教育资助",
             // "有增收产业"],false];
 
             chartsSetting = {
                 // width，height，codomain 分别表示图表宽、高、数据值域；此三项参数为必设参数
-                width: 200,
+                width: 300,
                 height: 100,
                 codomain: [0, 40000], // 允许图表展示的值域范围，此范围外的数据将不制作图表
                 dataViewBoxParameter:[30,15,5,5],
@@ -149,7 +154,7 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
                 //阴影样式
                 barShadowStyle:{shadowBlur : 8, shadowOffsetX: 2 , shadowOffsetY : 2,shadowColor : "rgba(100,100,100,0.8)"},
                 //按字段设置柱条样式[渐变开始颜色,渐变终止颜色] 与 themeLayer.themeFields 中的字段一一对应）
-                barLinearGradient: XS.Main.Tjfx.graph.barGradient
+                barLinearGradient: XS.Main.Tjfx.Graph.barGradient
             };
             break;
         }
@@ -169,25 +174,25 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
         $("#xs_tjfx_graph_Legend").remove();
     }
 
-    $("#xs_mainC").append(XS.Main.Tjfx.graph_createGraphLegendTag(type));
+    $("#xs_mainC").append(XS.Main.Tjfx.Graph.createGraphLegendTag(type));
     $("#xs_tjfx_graph_Legend").css("display", "block");
 
     switch (type){
-        case XS.Main.Tjfx.graph.type.graph_pie:
+        case XS.Main.Tjfx.Graph.Type.graph_pie:
             $(".legendContent").css({height:"165px"});
             break;
-        case XS.Main.Tjfx.graph.type.graph_bar.social:
+        case XS.Main.Tjfx.Graph.Type.graph_bar.social:
             $(".legendContent").css({height:"80px"});
             break;
-        case XS.Main.Tjfx.graph.type.graph_bar.fiveFour:
+        case XS.Main.Tjfx.Graph.Type.graph_bar.fiveFour:
             $(".legendContent").css({height:"200px"});
             break;
     }
 
-    /*// 注册专题图 mousemove, mouseout事件(注意：专题图图层对象自带 on 函数，没有 events 对象)
-    xs_tjfx_graph_themeLayer.on("mousemove", XS.Main.Tjfx.graph.showInfoWin);
-    xs_tjfx_graph_themeLayer.on("mouseout", XS.Main.Tjfx.graph.closeInfoWin);
-    xs_tjfx_graph_themeLayer.on("click", XS.Main.Tjfx.graph_themeLayerClickCallback);
+    // 注册专题图 mousemove, mouseout事件(注意：专题图图层对象自带 on 函数，没有 events 对象)
+    xs_tjfx_graph_themeLayer.on("mousemove", XS.Main.Tjfx.Graph.showInfoWin);
+    xs_tjfx_graph_themeLayer.on("mouseout", XS.Main.Tjfx.Graph.closeInfoWin);
+    xs_tjfx_graph_themeLayer.on("click", XS.Main.Tjfx.Graph.themeLayerClickCallback);
 
     xs_tjfx_graph_themeLayer.setVisibility(false);
     xs_MapInstance.getMapObj().addLayer(xs_tjfx_graph_themeLayer);
@@ -203,17 +208,17 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
             //2.获取空间数据
             //3.通过业务数据过滤空间数据
 
-            if(type == XS.Main.Tjfx.graph.CacheZoneInfos.county.graphType && XS.Main.Tjfx.graph.CacheZoneInfos.county.data.length > 0){
+            if(type == XS.Main.Tjfx.Graph.CacheZoneInfos.county.graphType && XS.Main.Tjfx.Graph.CacheZoneInfos.county.data.length > 0){
                 //2.获取空间数据
-                if(XS.Main.Tjfx.graph.featuersArr.county.data.length > 0){
-                    XS.Main.Tjfx.graph_addFeatures2Layer(XS.Main.Tjfx.graph.featuersArr.county.data,XS.Main.Tjfx.graph.CacheZoneInfos.county.data,0);
+                if(XS.Main.Tjfx.Graph.featuersArr.county.data.length > 0){
+                    XS.Main.Tjfx.Graph.addFeatures2Layer(XS.Main.Tjfx.Graph.featuersArr.county.data,XS.Main.Tjfx.Graph.CacheZoneInfos.county.data,0);
                     return;
                 }
-                XS.Main.Tjfx.graph_loadZoneFeatuers(parentLevel, "SMID>0", function()
+                XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel, "SMID>0", function()
                     {
-                        if(XS.Main.Tjfx.graph.featuersArr.county.data.length>0)
+                        if(XS.Main.Tjfx.Graph.featuersArr.county.data.length>0)
                         {
-                            XS.Main.Tjfx.graph_addFeatures2Layer(XS.Main.Tjfx.graph.featuersArr.county.data,XS.Main.Tjfx.graph.CacheZoneInfos.county.data,0);
+                            XS.Main.Tjfx.Graph.addFeatures2Layer(XS.Main.Tjfx.Graph.featuersArr.county.data,XS.Main.Tjfx.Graph.CacheZoneInfos.county.data,0);
                         }
                         XS.CommonUtil.hideLoader();
                     }, function(e)
@@ -224,28 +229,31 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
             }else {
                 var action = "";
                 switch (type) {
-                    case XS.Main.Tjfx.graph.type.graph_pie:
+                    case XS.Main.Tjfx.Graph.Type.graph_pie:
                         action = "QueryCounty_EarthInfo";
                         break;
-                    case XS.Main.Tjfx.graph.type.graph_bar.social:
+                    case XS.Main.Tjfx.Graph.Type.graph_bar.social:
                         action = "QuerySocityProtectBycounty";
+                        break;
+                    case XS.Main.Tjfx.Graph.Type.graph_bar.fourFive:
+                        action = "QueryVillFiveFourByCountByAreaId";
                         break;
                 }
 
                 data = {pid: parentCode,pd_id: parentCode};
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json) {
                     if (json && json.length > 0) {
-                        XS.Main.Tjfx.graph.CacheZoneInfos.county.data = json;
-                        XS.Main.Tjfx.graph.CacheZoneInfos.county.graphType = type;
+                        XS.Main.Tjfx.Graph.CacheZoneInfos.county.data = json;
+                        XS.Main.Tjfx.Graph.CacheZoneInfos.county.graphType = type;
 
                         //2.获取空间数据
-                        if (XS.Main.Tjfx.graph.featuersArr.county.data.length > 0) {
-                            XS.Main.Tjfx.graph_addFeatures2Layer(XS.Main.Tjfx.graph.featuersArr.county.data, XS.Main.Tjfx.graph.CacheZoneInfos.county.data, 0);
+                        if (XS.Main.Tjfx.Graph.featuersArr.county.data.length > 0) {
+                            XS.Main.Tjfx.Graph.addFeatures2Layer(XS.Main.Tjfx.Graph.featuersArr.county.data, XS.Main.Tjfx.Graph.CacheZoneInfos.county.data, 0);
                             return;
                         }
-                        XS.Main.Tjfx.graph_loadZoneFeatuers(parentLevel, "SMID>0", function () {
-                                if (XS.Main.Tjfx.graph.featuersArr.county.data.length > 0) {
-                                    XS.Main.Tjfx.graph_addFeatures2Layer(XS.Main.Tjfx.graph.featuersArr.county.data,XS.Main.Tjfx.graph.CacheZoneInfos.county.data,0);
+                        XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel, "SMID>0", function () {
+                                if (XS.Main.Tjfx.Graph.featuersArr.county.data.length > 0) {
+                                    XS.Main.Tjfx.Graph.addFeatures2Layer(XS.Main.Tjfx.Graph.featuersArr.county.data,XS.Main.Tjfx.Graph.CacheZoneInfos.county.data,0);
                                 }
                             }, function (e) {
                                 XS.CommonUtil.hideLoader();
@@ -269,10 +277,10 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
             //请求镇级数据
             var action = "";
             switch (type){
-                case XS.Main.Tjfx.graph.type.graph_pie:
+                case XS.Main.Tjfx.Graph.Type.graph_pie:
                     action = "QueryTowns_EarthInfo";
                     break;
-                case XS.Main.Tjfx.graph.type.graph_bar.social:
+                case XS.Main.Tjfx.Graph.Type.graph_bar.social:
                     action = "QuerySocityProtectByTown";
                     break;
             }
@@ -280,12 +288,12 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
             XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json) {
                 if (json && json.length > 0)
                 {
-                    XS.Main.Tjfx.graph.CacheZoneInfos.town = json;
-                    XS.Main.Tjfx.graph_loadZoneFeatuers(parentLevel, "县级代码=="+parentCode, function()
+                    XS.Main.Tjfx.Graph.CacheZoneInfos.town = json;
+                    XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel, "县级代码=="+parentCode, function()
                         {
-                            if(XS.Main.Tjfx.graph.featuersArr.town.length>0)
+                            if(XS.Main.Tjfx.Graph.featuersArr.town.length>0)
                             {
-                                XS.Main.Tjfx.graph_addFeatures2Layer(XS.Main.Tjfx.graph.featuersArr.town,XS.Main.Tjfx.graph.CacheZoneInfos.town,1);
+                                XS.Main.Tjfx.Graph.addFeatures2Layer(XS.Main.Tjfx.Graph.featuersArr.town,XS.Main.Tjfx.Graph.CacheZoneInfos.town,1);
                             }
                             XS.CommonUtil.hideLoader();
                         }, function(e)
@@ -308,22 +316,22 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
             //请求村数据
             var action = "";
             switch (type){
-                case XS.Main.Tjfx.graph.type.graph_pie:
+                case XS.Main.Tjfx.Graph.Type.graph_pie:
                     action = "QueryVillEarthInfo";
                     break;
-                case XS.Main.Tjfx.graph.type.graph_bar.social:
+                case XS.Main.Tjfx.Graph.Type.graph_bar.social:
                     action = "QuerySocityProtectByTown";
                     break;
             }
             data = {pid:parentCode, pd_id:parentCode};
             XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json) {
                 if (json && json.length > 0) {
-                    XS.Main.Tjfx.graph.CacheZoneInfos.village = json;
-                    XS.Main.Tjfx.graph_loadZoneFeatuers(parentLevel, "Town_id=="+parentCode, function()
+                    XS.Main.Tjfx.Graph.CacheZoneInfos.village = json;
+                    XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel, "Town_id=="+parentCode, function()
                         {
-                            if(XS.Main.Tjfx.graph.featuersArr.village.length>0)
+                            if(XS.Main.Tjfx.Graph.featuersArr.village.length>0)
                             {
-                                XS.Main.Tjfx.graph_addFeatures2Layer(XS.Main.Tjfx.graph.featuersArr.village,XS.Main.Tjfx.graph.CacheZoneInfos.village,2);
+                                XS.Main.Tjfx.Graph.addFeatures2Layer(XS.Main.Tjfx.Graph.featuersArr.village,XS.Main.Tjfx.Graph.CacheZoneInfos.village,2);
                             }
                             XS.CommonUtil.hideLoader();
                         }, function(e)
@@ -338,14 +346,14 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
             },function(e){XS.CommonUtil.hideLoader();});
             break;
         }
-    }*/
+    }
 }
 //加载县、乡、村features
-XS.Main.Tjfx.graph_loadZoneFeatuers = function(parentLevel, sql, succeedCallback, failCallback){
+XS.Main.Tjfx.Graph.loadZoneFeatuers = function(parentLevel, sql, succeedCallback, failCallback){
     var layerName = "";
     switch (parentLevel) {
         case XS.Main.ZoneLevel.city:
-            if(XS.Main.Tjfx.graph.featuersArr.county.data.length>0){
+            if(XS.Main.Tjfx.Graph.featuersArr.county.data.length>0){
                 succeedCallback();
                 return;
             }
@@ -362,10 +370,10 @@ XS.Main.Tjfx.graph_loadZoneFeatuers = function(parentLevel, sql, succeedCallback
     {
         switch (parentLevel) {
             case XS.Main.ZoneLevel.county:
-                XS.Main.Tjfx.graph.featuersArr.town = [];
+                XS.Main.Tjfx.Graph.featuersArr.town = [];
                 break;
             case XS.Main.ZoneLevel.town:
-                XS.Main.Tjfx.graph.featuersArr.village = [];
+                XS.Main.Tjfx.Graph.featuersArr.village = [];
                 break;
         }
         var i, feature, result = queryEventArgs.result;
@@ -374,18 +382,18 @@ XS.Main.Tjfx.graph_loadZoneFeatuers = function(parentLevel, sql, succeedCallback
                 feature = result.recordsets[0].features[i];
                 switch (parentLevel) {
                     case XS.Main.ZoneLevel.city:
-                        XS.Main.Tjfx.graph.featuersArr.county.data.push(feature);
+                        XS.Main.Tjfx.Graph.featuersArr.county.data.push(feature);
                         break;
                     case XS.Main.ZoneLevel.county:
-                        XS.Main.Tjfx.graph.featuersArr.town.push(feature);
+                        XS.Main.Tjfx.Graph.featuersArr.town.push(feature);
                         break;
                     case XS.Main.ZoneLevel.town:
-                        XS.Main.Tjfx.graph.featuersArr.village.push(feature);
+                        XS.Main.Tjfx.Graph.featuersArr.village.push(feature);
                         break;
                 }
             }
             if(parentLevel == XS.Main.ZoneLevel.city){
-                XS.Main.Tjfx.graph.featuersArr.county.graphType = xs_pkdc_graph_type;
+                XS.Main.Tjfx.Graph.featuersArr.county.graphType = xs_tjfx_graph_type;
             }
             succeedCallback();
         }else{
@@ -396,7 +404,7 @@ XS.Main.Tjfx.graph_loadZoneFeatuers = function(parentLevel, sql, succeedCallback
     });
 }
 //添加Features到ThemeLayer
-XS.Main.Tjfx.graph_addFeatures2Layer = function(featureArr, data, parentLevel){ // 0:city 1:county 2:town
+XS.Main.Tjfx.Graph.addFeatures2Layer = function(featureArr, data, parentLevel){ // 0:city 1:county 2:town
 
     var oId = "";
     var fId = "";
@@ -412,12 +420,13 @@ XS.Main.Tjfx.graph_addFeatures2Layer = function(featureArr, data, parentLevel){ 
             fId = "OldID";
             break;
     }
-    switch (xs_pkdc_graph_type)
+    switch (xs_tjfx_graph_type)
     {
-        case XS.Main.Tjfx.graph.type.graph_pie:
+        case XS.Main.Tjfx.Graph.Type.graph_pie:
             oId = "regionid";
             break;
-        case XS.Main.Tjfx.graph.type.graph_bar.social:
+        case XS.Main.Tjfx.Graph.Type.graph_bar.social:
+        case XS.Main.Tjfx.Graph.Type.graph_bar.fourFive:
             oId = "REGION_ID";
             break;
     }
@@ -457,29 +466,30 @@ XS.Main.Tjfx.graph_addFeatures2Layer = function(featureArr, data, parentLevel){ 
                 if(isNext){
                     break;
                 }
-
-                switch (xs_pkdc_graph_type)
+                var fileds = [];
+                switch (xs_tjfx_graph_type)
                 {
-                    case XS.Main.Tjfx.graph.type.graph_pie:
+                    case XS.Main.Tjfx.Graph.Type.graph_pie:
                     {
-                        feature.attributes.C12 = obj.C12 != null ? obj.C12 : 0;
-                        feature.attributes.C14 = obj.C14 != null ? obj.C14 : 0;
-                        feature.attributes.C14A = obj.C14A != null ? obj.C14A : 0;
-                        feature.attributes.C15 = obj.C15 != null ? obj.C15 : 0;
-                        feature.attributes.C19 = obj.C19 != null ? obj.C19 : 0;
-                        feature.attributes.C16 = obj.C16 != null ? obj.C16 : 0;
-                        feature.attributes.C17 = obj.C17 != null ? obj.C17 : 0;
-                        feature.attributes.C14B = obj.C14B != null ? obj.C14B : 0;
+                        fileds = XS.Main.Tjfx.Graph.filed[0];
                         break;
                     }
-                    case XS.Main.Tjfx.graph.type.graph_bar.social:
+                    case XS.Main.Tjfx.Graph.Type.graph_bar.social:
                     {
-                        feature.attributes.CoMedicalRate = obj.CoMedicalRate;
-                        feature.attributes.EndowRate = obj.EndowRate;
-                        feature.attributes.LowRate = obj.LowRate;
+                        fileds = XS.Main.Tjfx.Graph.filed[1];
+                        break;
+                    }
+                    case XS.Main.Tjfx.Graph.Type.graph_bar.fourFive:
+                    {
+                        fileds = XS.Main.Tjfx.Graph.filed[2];
                         break;
                     }
                 }
+
+                for(var i in fileds){
+                    feature.attributes[fileds[i]] = obj[fileds[i]]==null ? 0 : obj[fileds[i]];
+                }
+
                 feature.data.xs_data = obj;
                 features.push(feature);
             }
@@ -493,9 +503,9 @@ XS.Main.Tjfx.graph_addFeatures2Layer = function(featureArr, data, parentLevel){ 
  * 专题图pie mousemove事件
  * @param e
  */
-XS.Main.Tjfx.graph.showInfoWin = function(e){
+XS.Main.Tjfx.Graph.showInfoWin = function(e){
     if(e.target && e.target.refDataID && e.target.dataInfo){
-        XS.Main.Tjfx.graph.closeInfoWin(e);
+        XS.Main.Tjfx.Graph.closeInfoWin(e);
          // 获取图形对应的数据 (feature)
         var fea = xs_tjfx_graph_themeLayer.getFeatureById(e.target.refDataID);
         if(fea == null){
@@ -504,11 +514,10 @@ XS.Main.Tjfx.graph.showInfoWin = function(e){
         var attributes = fea.attributes;
         var info = e.target.dataInfo;
         var sum = 0;
-        var fields = ['C12', 'C14', 'C14A', 'C15', 'C19', 'C16', 'C17','C14B'];
-        switch(xs_pkdc_graph_type){
-            case XS.Main.Tjfx.graph.type.graph_pie:{
-                for(var i in fields){
-                    sum +=　parseInt(attributes[fields[i]]);
+        switch(xs_tjfx_graph_type){
+            case XS.Main.Tjfx.Graph.Type.graph_pie:{
+                for(var i in XS.Main.Tjfx.Graph.filed[0]){
+                    sum +=　parseInt(attributes[XS.Main.Tjfx.Graph.filed[0][i]]);
                 }
                 break;
             }
@@ -537,8 +546,8 @@ XS.Main.Tjfx.graph.showInfoWin = function(e){
             }
         }
 
-        switch (xs_pkdc_graph_type){
-            case XS.Main.Tjfx.graph.type.graph_pie:{
+        switch (xs_tjfx_graph_type){
+            case XS.Main.Tjfx.Graph.Type.graph_pie:{
                 title = "土地信息";
                 switch (info.field){
                     case "C12":{
@@ -548,43 +557,43 @@ XS.Main.Tjfx.graph.showInfoWin = function(e){
                         break;
                     }
                     case "C14":{
-                        jsonObjArr.push({name:'土地类型',value:"退耕还林"});
+                        jsonObjArr.push({name:'土地类型',value:"林地"});
                         jsonObjArr.push({name:'面积',value:attributes.C14});
                         jsonObjArr.push({name:'占比(%)',value:new Number((attributes.C14/sum)*100).toFixed(2)});
                         break;
                     }
                     case "C14A":{
-                        jsonObjArr.push({name:'土地类型',value:"荒漠化"});
+                        jsonObjArr.push({name:'土地类型',value:"退耕还林"});
                         jsonObjArr.push({name:'面积',value:attributes.C14A});
                         jsonObjArr.push({name:'占比(%)',value:new Number((attributes.C14A/sum)*100).toFixed(2)});
                         break;
                     }
                     case "C15":{
-                        jsonObjArr.push({name:'土地类型',value:"退耕还草"});
+                        jsonObjArr.push({name:'土地类型',value:"牧草"});
                         jsonObjArr.push({name:'面积',value:attributes.C15});
                         jsonObjArr.push({name:'占比(%)',value:new Number((attributes.C15/sum)*100).toFixed(2)});
                         break;
                     }
                     case "C19":{
-                        jsonObjArr.push({name:'土地类型',value:"林地"});
+                        jsonObjArr.push({name:'土地类型',value:"退耕还草"});
                         jsonObjArr.push({name:'面积',value:attributes.C19});
                         jsonObjArr.push({name:'占比(%)',value:new Number((attributes.C19/sum)*100).toFixed(2)});
                         break;
                     }
                     case "C16":{
-                        jsonObjArr.push({name:'土地类型',value:"林地"});
+                        jsonObjArr.push({name:'土地类型',value:"水域"});
                         jsonObjArr.push({name:'面积',value:attributes.C16});
                         jsonObjArr.push({name:'占比(%)',value:new Number((attributes.C16/sum)*100).toFixed(2)});
                         break;
                     }
                     case "C17":{
-                        jsonObjArr.push({name:'土地类型',value:"林地"});
+                        jsonObjArr.push({name:'土地类型',value:"荒漠化"});
                         jsonObjArr.push({name:'面积',value:attributes.C17});
                         jsonObjArr.push({name:'占比(%)',value:new Number((attributes.C17/sum)*100).toFixed(2)});
                         break;
                     }
                     case "C14B":{
-                        jsonObjArr.push({name:'土地类型',value:"林地"});
+                        jsonObjArr.push({name:'土地类型',value:"林果"});
                         jsonObjArr.push({name:'面积',value:attributes.C14B});
                         jsonObjArr.push({name:'占比(%)',value:new Number((attributes.C14B/sum)*100).toFixed(2)});
                         break;
@@ -592,7 +601,7 @@ XS.Main.Tjfx.graph.showInfoWin = function(e){
                 }
                 break;
             }
-            case XS.Main.Tjfx.graph.type.graph_bar.social:{
+            case XS.Main.Tjfx.Graph.Type.graph_bar.social:{
                 title = "社会保障";
                 switch (info.field){
                     case "CoMedicalRate":{
@@ -605,6 +614,56 @@ XS.Main.Tjfx.graph.showInfoWin = function(e){
                     }
                     case "CoMedicalRate":{
                         jsonObjArr.push({name:'低保率(%)',value:new Number(attributes.CoMedicalRate).toFixed(2)});
+                        break;
+                    }
+                }
+                break;
+            }
+            case XS.Main.Tjfx.Graph.Type.graph_bar.fourFive:{
+                title = "四有五覆盖";
+                ["InsureNum","WorkSkillNum",
+                    "EduHelpNum","IndustyNum"]
+                    ["养老保险","就业技能培训",
+                    "教育资助","有增收产业"]
+                switch (info.field){
+                    case "WaterSafeNum":{
+                        jsonObjArr.push({name:'安全饮水',value:attributes.WaterSafeNum});
+                        break;
+                    }
+                    case "EndowRate":{
+                        jsonObjArr.push({name:'安全用电',value:attributes.ElectricSafeNum});
+                        break;
+                    }
+                    case "EndowRate":{
+                        jsonObjArr.push({name:'安全住房',value:attributes.HouseSafeNum});
+                        break;
+                    }
+                    case "EndowRate":{
+                        jsonObjArr.push({name:'入户路硬化',value:attributes.EnroadHardNum});
+                        break;
+                    }
+                    case "EndowRate":{
+                        jsonObjArr.push({name:'院坝硬化',value:attributes.YardHardNum});
+                        break;
+                    }
+                    case "EndowRate":{
+                        jsonObjArr.push({name:'合作医保',value:attributes.CoMedicNum});
+                        break;
+                    }
+                    case "EndowRate":{
+                        jsonObjArr.push({name:'养老保险',value:attributes.InsureNum});
+                        break;
+                    }
+                    case "EndowRate":{
+                        jsonObjArr.push({name:'就业技能培训',value:attributes.WorkSkillNum});
+                        break;
+                    }
+                    case "EndowRate":{
+                        jsonObjArr.push({name:'教育资助',value:attributes.EduHelpNum});
+                        break;
+                    }
+                    case "EndowRate":{
+                        jsonObjArr.push({name:'有增收产业',value:attributes.IndustyNum});
                         break;
                     }
                 }
@@ -637,14 +696,6 @@ XS.Main.Tjfx.graph.showInfoWin = function(e){
              tag
          );
 
-        switch (xs_pkdc_graph_type){
-            case XS.Main.Tjfx.graph.type.graph_pie:
-                break;
-            case XS.Main.Tjfx.graph.type.graph_bar.social:
-                $("#xs_tjfx_range_themeTipC").css({height:"120px"});
-                xs_tjfx_graph_framedCloud.setSize(new SuperMap.Size(210, 130));
-        }
-
         xs_tjfx_graph_framedCloud.autoSize = false;
         xs_tjfx_graph_framedCloud.setOpacity(0.8);
         if(xs_tjfx_graph_framedCloud) xs_MapInstance.getMapObj().removePopup(xs_tjfx_graph_framedCloud);
@@ -655,7 +706,7 @@ XS.Main.Tjfx.graph.showInfoWin = function(e){
  * 专题图pie mouseout事件
  * @param e
  */
-XS.Main.Tjfx.graph.closeInfoWin = function (e) {
+XS.Main.Tjfx.Graph.closeInfoWin = function (e) {
     if(xs_tjfx_graph_framedCloud) {
         try {
             xs_MapInstance.getMapObj().removePopup(xs_tjfx_graph_framedCloud);
@@ -667,7 +718,7 @@ XS.Main.Tjfx.graph.closeInfoWin = function (e) {
     }
 }
 //创建统计专题 图例
-XS.Main.Tjfx.graph_createGraphLegendTag = function(type){
+XS.Main.Tjfx.Graph.createGraphLegendTag = function(type){
     var tag = '<div id="xs_tjfx_graph_Legend">'+
         '<div class="legendTitle">'+
         '<span>图例</span>'+
@@ -677,21 +728,21 @@ XS.Main.Tjfx.graph_createGraphLegendTag = function(type){
         '<tr>';
     switch (type)
     {
-        case XS.Main.Tjfx.graph.type.graph_pie:
+        case XS.Main.Tjfx.Graph.Type.graph_pie:
         {
             tag += '<td class="legendItemHeader">土地信息</td><td class="legendItemValue">颜色</td></tr>';
 
-            var landCategory = ["耕地","林地","退耕还林","牧草地","退耕还草","水域","荒漠化","林果"];
-            var landCategoryStyle = ["#C8E49C","#ED9678","#E7DAC9","#CB8E85","#F3F39D","#86B379","#68A54A","#408829"];
+            var landCategory = ["耕地","林地","退耕还林","牧草","退耕还草","水域","荒漠化","林果"];
+            var landCategoryStyle = ["#00FF00","#1bff83","#3ff3ff","#238aff","#bdff3b","#ffee2f","#ffb24a","#ff4341"];
             for(var i in landCategory){
                 tag += '<tr>';
                 tag += '<td class="legendItemHeader">'+landCategory[i]+'</td>';
-                tag += "<td class='legendItemValue' style='background: "+XS.Main.Tjfx.range_styleGroups_color[i]+"'"+"></td>";
+                tag += "<td class='legendItemValue' style='background: "+landCategoryStyle[i]+"'"+"></td>";
                 tag += '</tr>';
             }
             break;
         }
-        case XS.Main.Tjfx.graph.type.graph_bar.social:
+        case XS.Main.Tjfx.Graph.Type.graph_bar.social:
         {
             tag += '<td class="legendItemHeader">社会保障</td><td class="legendItemValue">颜色</td></tr>';
 
@@ -705,7 +756,7 @@ XS.Main.Tjfx.graph_createGraphLegendTag = function(type){
             }
             break;
         }
-        case XS.Main.Tjfx.graph.type.graph_bar.fiveFour:
+        case XS.Main.Tjfx.Graph.Type.graph_bar.fourFive:
         {
             tag += '<td class="legendItemHeader">社会保障</td><td class="legendItemValue">颜色</td></tr>';
 
@@ -714,7 +765,7 @@ XS.Main.Tjfx.graph_createGraphLegendTag = function(type){
             for(var i in landCategory){
                 tag += '<tr>';
                 tag += '<td class="legendItemHeader">'+landCategory[i]+'</td>';
-                tag += "<td class='legendItemValue' style='background: -WebKit-linear-gradient( top," + XS.Main.Tjfx.graph.barGradient[i][0] + "," + XS.Main.Tjfx.graph.barGradient[i][1] + ");'></td>";
+                tag += "<td class='legendItemValue' style='background: -WebKit-linear-gradient( top," + XS.Main.Tjfx.Graph.barGradient[i][0] + "," + XS.Main.Tjfx.Graph.barGradient[i][1] + ");'></td>";
                 tag += '</tr>';
             }
             break;
@@ -726,7 +777,7 @@ XS.Main.Tjfx.graph_createGraphLegendTag = function(type){
 }
 
 //专题图被点击事件
-XS.Main.Tjfx.graph_themeLayerClickCallback = function(event){
+XS.Main.Tjfx.Graph.themeLayerClickCallback = function(event){
     if(event.target && event.target.refDataID)
     {
         var feature = xs_tjfx_graph_themeLayer.getFeatureById(event.target.refDataID);
@@ -738,13 +789,13 @@ XS.Main.Tjfx.graph_themeLayerClickCallback = function(event){
             case XS.Main.ZoneLevel.city:
             {
                 xs_superZoneCode = feature.data.AdminCode;
-                XS.Main.Tjfx.graph_theme(xs_currentZoneLevel + 1, xs_superZoneCode, xs_pkdc_graph_type);
+                XS.Main.Tjfx.Graph.theme(xs_currentZoneLevel + 1, xs_superZoneCode, xs_tjfx_graph_type);
                 break;
             }
             case XS.Main.ZoneLevel.county:
             {
                 xs_superZoneCode = feature.data.乡镇代码;
-                XS.Main.Tjfx.graph_theme(xs_currentZoneLevel + 1, xs_superZoneCode, xs_pkdc_graph_type);
+                XS.Main.Tjfx.Graph.theme(xs_currentZoneLevel + 1, xs_superZoneCode, xs_tjfx_graph_type);
                 break;
             }
             case XS.Main.ZoneLevel.town:
