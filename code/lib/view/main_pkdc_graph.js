@@ -6,7 +6,7 @@ XS.Main.Tjfx.Graph = {};
 //统计类型
     XS.Main.Tjfx.Graph.Type = {
     graph_pie:0, //图表pie--土地信息
-    graph_bar:{social:1,fourFive:2,fiveFour:3}, //图表bar--社会保障
+    graph_bar:{social:1,fourFive:2,fiveFour:3} //图表bar--社会保障
 }
 
 //缓存行政区域Featuers
@@ -24,13 +24,19 @@ XS.Main.Tjfx.Graph.CacheZoneInfos = {
 };
 
 XS.Main.Tjfx.Graph.barGradient = [["#00FF00","#00CD00"],["#1bff83","#1bCD83"],["#3ff3ff","#3ff3cd"],["#238aff","#23aaff"],
-    ["#932eff","#932ecd"],["#bdff3b","#bdcd3b"],["#ffee2f","#cdee2f"],["#ffb24a","#cdb24a"],["#ff4341","#cd4341"],
+    ["#932eff","#932ee0"],["#bdff3b","#bdcd3b"],["#ffee2f","#cdee2f"],["#ffb24a","#cdb24a"],["#ff4341","#cd4341"],
     ["#cd0000","#FF0000"]];
 XS.Main.Tjfx.Graph.filed = [
     ['C12', 'C14', 'C14A', 'C15', 'C19', 'C16', 'C17','C14B'],
     ["CoMedicalRate", "EndowRate", "LowRate"],
-    ["WaterSafeNum","ElectricSafeNum","HouseSafeNum","EnroadHardNum","YardHardNum","CoMedicNum","InsureNum","WorkSkillNum",
-    "EduHelpNum","IndustyNum"]
+    /*["WaterSafeNum","ElectricSafeNum","HouseSafeNum","EnroadHardNum","YardHardNum","CoMedicNum","InsureNum","WorkSkillNum",
+    "EduHelpNum","IndustyNum"]*/
+    ["CoMedicNum","ElectricSafeNum","InsureNum","WaterSafeNum","WorkSkillNum"]
+];
+XS.Main.Tjfx.Graph.axisXLabels = [
+    ["参合率", "养老率", "低保率"],
+    //["安全饮水","安全用电","安全住房","入户路硬化","院坝硬化","合作医保","养老保险","就业技能培训","教育资助","有增收产业"]
+    ["合作医保","养老保险","安全住房","安全饮水","就业技能培训"]
 ];
 
 var xs_tjfx_graph_type = 0;
@@ -115,7 +121,7 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                 xShapeBlank: [10, 10, 10], // 水平方向上的空白间距参数
                 axisYTick: 4, // y 轴刻度数量
                 axisYLabels: ["100", "75", "50", "25", "0"], // y 轴标签内容
-                axisXLabels: ["参合率", "养老率", "低保率"], // x 轴标签内容
+                axisXLabels: XS.Main.Tjfx.Graph.axisXLabels[0], // x 轴标签内容
                 backgroundStyle: {fillColor: "#CCE8CF"}, // 背景样式
                 backgroundRadius: [5, 5, 5, 5], // 背景框圆角参数
                 //阴影开关 默认是打开
@@ -131,22 +137,19 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
         {
             graph = "Bar";
             themeFields = XS.Main.Tjfx.Graph.filed[2];
-            //['','category',["安全饮水","安全用电","安全住房","入户路硬化","院坝硬化","合作医保","养老保险","就业技能培训","教育资助",
-            // "有增收产业"],false];
 
             chartsSetting = {
                 // width，height，codomain 分别表示图表宽、高、数据值域；此三项参数为必设参数
-                width: 300,
+                width: 400,
                 height: 100,
                 codomain: [0, 40000], // 允许图表展示的值域范围，此范围外的数据将不制作图表
-                dataViewBoxParameter:[30,15,5,5],
+                dataViewBoxParameter:[40,15,5,5],
                 barStyle: { fillOpacity: 0.7 }, // 柱状图中柱条的（表示字段值的图形）样式
                 barHoverStyle: {fillOpacity: 1}, // 柱条 hover 样式
-                xShapeBlank: [5, 5, 5], // 水平方向上的空白间距参数
+                xShapeBlank: [10, 20, 10], // 水平方向上的空白间距参数
                 axisYTick: 4, // y 轴刻度数量
                 axisYLabels: ["40000", "30000", "20000", "10000", "0"], // y 轴标签内容
-                axisXLabels: ["安全饮水","安全用电","安全住房","入户路硬化","院坝硬化","合作医保","养老保险","就业技能培训",
-                    "教育资助","有增收产业"], // x 轴标签内容
+                axisXLabels: XS.Main.Tjfx.Graph.axisXLabels[1], // x 轴标签内容
                 backgroundStyle: {fillColor: "#CCE8CF"}, // 背景样式
                 backgroundRadius: [5, 5, 5, 5], // 背景框圆角参数
                 //阴影开关 默认是打开
@@ -236,7 +239,7 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                         action = "QuerySocityProtectBycounty";
                         break;
                     case XS.Main.Tjfx.Graph.Type.graph_bar.fourFive:
-                        action = "QueryVillFiveFourByCountByAreaId";
+                        action = "QueryFourFiveByAreaId";
                         break;
                 }
 
@@ -283,6 +286,9 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                 case XS.Main.Tjfx.Graph.Type.graph_bar.social:
                     action = "QuerySocityProtectByTown";
                     break;
+                case XS.Main.Tjfx.Graph.Type.graph_bar.fourFive:
+                    action = "QueryFourFiveByAreaId";
+                    break;
             }
             data = {pid:parentCode,pd_id:parentCode};
             XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json) {
@@ -321,6 +327,9 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                     break;
                 case XS.Main.Tjfx.Graph.Type.graph_bar.social:
                     action = "QuerySocityProtectByTown";
+                    break;
+                case XS.Main.Tjfx.Graph.Type.graph_bar.fourFive:
+                    action = "QueryFourFiveByAreaId";
                     break;
             }
             data = {pid:parentCode, pd_id:parentCode};
@@ -603,68 +612,18 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
             }
             case XS.Main.Tjfx.Graph.Type.graph_bar.social:{
                 title = "社会保障";
-                switch (info.field){
-                    case "CoMedicalRate":{
-                        jsonObjArr.push({name:'参合率(%)',value:new Number(attributes.CoMedicalRate).toFixed(2)});
-                        break;
-                    }
-                    case "EndowRate":{
-                        jsonObjArr.push({name:'养老率(%)',value:new Number(attributes.EndowRate).toFixed(2)});
-                        break;
-                    }
-                    case "CoMedicalRate":{
-                        jsonObjArr.push({name:'低保率(%)',value:new Number(attributes.CoMedicalRate).toFixed(2)});
-                        break;
+                for(var i in XS.Main.Tjfx.Graph.filed[1]){
+                    if(XS.Main.Tjfx.Graph.filed[1][i] == info.field){
+                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[0][i],value:new Number(info.value).toFixed(2)});
                     }
                 }
                 break;
             }
             case XS.Main.Tjfx.Graph.Type.graph_bar.fourFive:{
                 title = "四有五覆盖";
-                ["InsureNum","WorkSkillNum",
-                    "EduHelpNum","IndustyNum"]
-                    ["养老保险","就业技能培训",
-                    "教育资助","有增收产业"]
-                switch (info.field){
-                    case "WaterSafeNum":{
-                        jsonObjArr.push({name:'安全饮水',value:attributes.WaterSafeNum});
-                        break;
-                    }
-                    case "EndowRate":{
-                        jsonObjArr.push({name:'安全用电',value:attributes.ElectricSafeNum});
-                        break;
-                    }
-                    case "EndowRate":{
-                        jsonObjArr.push({name:'安全住房',value:attributes.HouseSafeNum});
-                        break;
-                    }
-                    case "EndowRate":{
-                        jsonObjArr.push({name:'入户路硬化',value:attributes.EnroadHardNum});
-                        break;
-                    }
-                    case "EndowRate":{
-                        jsonObjArr.push({name:'院坝硬化',value:attributes.YardHardNum});
-                        break;
-                    }
-                    case "EndowRate":{
-                        jsonObjArr.push({name:'合作医保',value:attributes.CoMedicNum});
-                        break;
-                    }
-                    case "EndowRate":{
-                        jsonObjArr.push({name:'养老保险',value:attributes.InsureNum});
-                        break;
-                    }
-                    case "EndowRate":{
-                        jsonObjArr.push({name:'就业技能培训',value:attributes.WorkSkillNum});
-                        break;
-                    }
-                    case "EndowRate":{
-                        jsonObjArr.push({name:'教育资助',value:attributes.EduHelpNum});
-                        break;
-                    }
-                    case "EndowRate":{
-                        jsonObjArr.push({name:'有增收产业',value:attributes.IndustyNum});
-                        break;
+                for(var i in XS.Main.Tjfx.Graph.filed[2]){
+                    if(XS.Main.Tjfx.Graph.filed[2][i] == info.field){
+                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[1][i],value:new Number(info.value).toFixed(2)});
                     }
                 }
                 break;
@@ -758,7 +717,7 @@ XS.Main.Tjfx.Graph.createGraphLegendTag = function(type){
         }
         case XS.Main.Tjfx.Graph.Type.graph_bar.fourFive:
         {
-            tag += '<td class="legendItemHeader">社会保障</td><td class="legendItemValue">颜色</td></tr>';
+            tag += '<td class="legendItemHeader">四有五覆盖</td><td class="legendItemValue">颜色</td></tr>';
 
             var landCategory = ["安全饮水","安全用电","安全住房","入户路硬化","院坝硬化","合作医保","养老保险","就业技能培训",
                 "教育资助","有增收产业"];
@@ -808,6 +767,6 @@ XS.Main.Tjfx.Graph.themeLayerClickCallback = function(event){
         }
     }else
     {
-        xs_clickMapType = XS.Main.clickMapType.tjfx_range;
+        xs_clickMapType = XS.Main.clickMapType.none;
     }
 }

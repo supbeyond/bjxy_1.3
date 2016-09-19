@@ -263,6 +263,7 @@ XS.Main.Pkjc.pkdc = function(){
         xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 0);
     }
     $("#xs_tjfx_range_Legend").remove();
+    $("#xs_tjfx_graph_Legend").remove();
     XS.Main.Pkjc.showGaugeData(0, 0, 0);
 }
 
