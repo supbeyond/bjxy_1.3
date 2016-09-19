@@ -179,9 +179,12 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
         case XS.Main.Tjfx.graph.type.graph_bar.social:
             $(".legendContent").css({height:"80px"});
             break;
+        case XS.Main.Tjfx.graph.type.graph_bar.fiveFour:
+            $(".legendContent").css({height:"200px"});
+            break;
     }
 
-    // 注册专题图 mousemove, mouseout事件(注意：专题图图层对象自带 on 函数，没有 events 对象)
+    /*// 注册专题图 mousemove, mouseout事件(注意：专题图图层对象自带 on 函数，没有 events 对象)
     xs_tjfx_graph_themeLayer.on("mousemove", XS.Main.Tjfx.graph.showInfoWin);
     xs_tjfx_graph_themeLayer.on("mouseout", XS.Main.Tjfx.graph.closeInfoWin);
     xs_tjfx_graph_themeLayer.on("click", XS.Main.Tjfx.graph_themeLayerClickCallback);
@@ -335,7 +338,7 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
             },function(e){XS.CommonUtil.hideLoader();});
             break;
         }
-    }
+    }*/
 }
 //加载县、乡、村features
 XS.Main.Tjfx.graph_loadZoneFeatuers = function(parentLevel, sql, succeedCallback, failCallback){
@@ -702,7 +705,7 @@ XS.Main.Tjfx.graph_createGraphLegendTag = function(type){
             }
             break;
         }
-        case XS.Main.Tjfx.graph.type.graph_bar.social:
+        case XS.Main.Tjfx.graph.type.graph_bar.fiveFour:
         {
             tag += '<td class="legendItemHeader">社会保障</td><td class="legendItemValue">颜色</td></tr>';
 
