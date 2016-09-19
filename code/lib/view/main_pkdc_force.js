@@ -113,7 +113,7 @@ var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
                  return;
              }
              XS.Main.Pkjc.itemFoundNodesCreate(xs_pkdc_itemFoundFIndex);
-             xs_pkdc_itemFoundForceOpt.title.text = projectName +　"资金流";
+             xs_pkdc_itemFoundForceOpt.title.text = projectName + "资金流";
              xs_pkdc_itemFoundForceOpt.legend.data = [];
              xs_pkdc_itemFoundForceOpt.series[0].categories = [];
 
