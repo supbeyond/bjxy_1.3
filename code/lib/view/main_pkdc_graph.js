@@ -5,8 +5,8 @@
 XS.Main.Tjfx.Graph = {};
 //统计类型
     XS.Main.Tjfx.Graph.Type = {
-    graph_pie:0, //图表pie--土地信息
-    graph_bar:{social:1,fourFive:2,fiveFour:3} //图表bar--社会保障
+    pie:0, //图表pie--土地信息
+    bar:{social:1,fourOf45:2,fiveOf45:3,fiveOf54:4,fourOf54:5} //图表bar--社会保障
 }
 
 //缓存行政区域Featuers
@@ -24,19 +24,22 @@ XS.Main.Tjfx.Graph.CacheZoneInfos = {
 };
 
 XS.Main.Tjfx.Graph.barGradient = [["#00FF00","#00CD00"],["#1bff83","#1bCD83"],["#3ff3ff","#3ff3cd"],["#238aff","#23aaff"],
-    ["#932eff","#932ee0"],["#bdff3b","#bdcd3b"],["#ffee2f","#cdee2f"],["#ffb24a","#cdb24a"],["#ff4341","#cd4341"],
-    ["#cd0000","#FF0000"]];
+    ["#932eff","#932ee0"]];
 XS.Main.Tjfx.Graph.filed = [
     ['C12', 'C14', 'C14A', 'C15', 'C19', 'C16', 'C17','C14B'],
     ["CoMedicalRate", "EndowRate", "LowRate"],
-    /*["WaterSafeNum","ElectricSafeNum","HouseSafeNum","EnroadHardNum","YardHardNum","CoMedicNum","InsureNum","WorkSkillNum",
-    "EduHelpNum","IndustyNum"]*/
-    ["CoMedicNum","ElectricSafeNum","InsureNum","WaterSafeNum","WorkSkillNum"]
+    ["WaterSafeNum","ElectricSafeNum","HouseSafeNum","YardHardNum"],
+    ["CoMedicNum","InsureNum","WorkSkillNum","EduHelpNum","IndustyNum"],
+    ["RoadHardNum","BusStateNum","WlanAndTelNum","PowerNum","ZAndHRoadHardNum"],
+    ["BeautifulNum","HealthRoomNum","CultureNum","EconomyNum"]
 ];
 XS.Main.Tjfx.Graph.axisXLabels = [
+    ["耕地","林地","退耕还林","牧草","退耕还草","水域","荒漠化","林果"],
     ["参合率", "养老率", "低保率"],
-    //["安全饮水","安全用电","安全住房","入户路硬化","院坝硬化","合作医保","养老保险","就业技能培训","教育资助","有增收产业"]
-    ["合作医保","养老保险","安全住房","安全饮水","就业技能培训"]
+    ["安全饮水","安全用电","安全住房","院坝硬化"],
+    ["合作医保","养老保险","就业技能培训","教育资助","有增收产业"],
+    ["通村沥青路","通客运","通宽带及电话","通生产用电","通组及户公路"],
+    ["美丽乡村","村卫生室","文化场所","村集体经济"]
 ];
 
 var xs_tjfx_graph_type = 0;
@@ -81,125 +84,7 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
     XS.Main.hiddenDivTags();
     XS.Main.Tjfx.removeLayer();
 
-    var graph = "";
-    var themeFields = [];
-    var chartsSetting = null;
-    var color = XS.Main.Tjfx.range_styleGroups_color;
-
-    switch (type){
-        case XS.Main.Tjfx.Graph.Type.graph_pie:
-        {
-            graph = "Pie";
-            themeFields = XS.Main.Tjfx.Graph.filed[0];
-            chartsSetting = {
-                width: 100,
-                height: 100,
-                codomain: [0, 1100000],
-                //sectorStyle: { fillOpacity: 0.9 },
-                sectorStyleByFields: [{ fillColor: color[0] }, { fillColor: color[1] }, { fillColor: color[2] }, { fillColor: color[3] }, { fillColor: color[5] },
-                    { fillColor: color[6] }, { fillColor: color[7] }, { fillColor: color[8] }],
-                // 饼图扇形 hover 样式
-                sectorHoverStyle: {
-                    fillOpacity: 1 ,
-                    fillColor: "#397B29",
-                }
-            };
-            break;
-        }
-        case  XS.Main.Tjfx.Graph.Type.graph_bar.social:
-        {
-            graph = "Bar";
-            themeFields = XS.Main.Tjfx.Graph.filed[1];
-            chartsSetting = {
-                // width，height，codomain 分别表示图表宽、高、数据值域；此三项参数为必设参数
-                width: 150,
-                height: 100,
-                codomain: [0, 100], // 允许图表展示的值域范围，此范围外的数据将不制作图表
-                dataViewBoxParameter:[22,15,5,5],
-                barStyle: { fillOpacity: 0.7 }, // 柱状图中柱条的（表示字段值的图形）样式
-                barHoverStyle: {fillOpacity: 1}, // 柱条 hover 样式
-                xShapeBlank: [10, 10, 10], // 水平方向上的空白间距参数
-                axisYTick: 4, // y 轴刻度数量
-                axisYLabels: ["100", "75", "50", "25", "0"], // y 轴标签内容
-                axisXLabels: XS.Main.Tjfx.Graph.axisXLabels[0], // x 轴标签内容
-                backgroundStyle: {fillColor: "#CCE8CF"}, // 背景样式
-                backgroundRadius: [5, 5, 5, 5], // 背景框圆角参数
-                //阴影开关 默认是打开
-                showShadow: true,
-                //阴影样式
-                barShadowStyle:{shadowBlur : 8, shadowOffsetX: 2 , shadowOffsetY : 2,shadowColor : "rgba(100,100,100,0.8)"},
-                //按字段设置柱条样式[渐变开始颜色,渐变终止颜色] 与 themeLayer.themeFields 中的字段一一对应）
-                barLinearGradient: XS.Main.Tjfx.Graph.barGradient
-            };
-            break;
-        }
-        case  XS.Main.Tjfx.Graph.Type.graph_bar.fourFive:
-        {
-            graph = "Bar";
-            themeFields = XS.Main.Tjfx.Graph.filed[2];
-
-            chartsSetting = {
-                // width，height，codomain 分别表示图表宽、高、数据值域；此三项参数为必设参数
-                width: 400,
-                height: 100,
-                codomain: [0, 40000], // 允许图表展示的值域范围，此范围外的数据将不制作图表
-                dataViewBoxParameter:[40,15,5,5],
-                barStyle: { fillOpacity: 0.7 }, // 柱状图中柱条的（表示字段值的图形）样式
-                barHoverStyle: {fillOpacity: 1}, // 柱条 hover 样式
-                xShapeBlank: [10, 20, 10], // 水平方向上的空白间距参数
-                axisYTick: 4, // y 轴刻度数量
-                axisYLabels: ["40000", "30000", "20000", "10000", "0"], // y 轴标签内容
-                axisXLabels: XS.Main.Tjfx.Graph.axisXLabels[1], // x 轴标签内容
-                backgroundStyle: {fillColor: "#CCE8CF"}, // 背景样式
-                backgroundRadius: [5, 5, 5, 5], // 背景框圆角参数
-                //阴影开关 默认是打开
-                showShadow: true,
-                //阴影样式
-                barShadowStyle:{shadowBlur : 8, shadowOffsetX: 2 , shadowOffsetY : 2,shadowColor : "rgba(100,100,100,0.8)"},
-                //按字段设置柱条样式[渐变开始颜色,渐变终止颜色] 与 themeLayer.themeFields 中的字段一一对应）
-                barLinearGradient: XS.Main.Tjfx.Graph.barGradient
-            };
-            break;
-        }
-    }
-
-    // 创建一个统计专题图图层
-    xs_tjfx_graph_themeLayer = new SuperMap.Layer.Graph("ThemeLayer", graph);
-    // 指定用于专题图制作的属性字段
-    xs_tjfx_graph_themeLayer.themeFields = themeFields;
-    // 配置图表参数
-    xs_tjfx_graph_themeLayer.chartsSetting = chartsSetting;
-
-    xs_tjfx_graph_themeLayer.setOpacity(0.9);
-    xs_tjfx_graph_themeLayer.isOverLay = false;
-
-    if(document.getElementById("xs_tjfx_graph_Legend")){
-        $("#xs_tjfx_graph_Legend").remove();
-    }
-
-    $("#xs_mainC").append(XS.Main.Tjfx.Graph.createGraphLegendTag(type));
-    $("#xs_tjfx_graph_Legend").css("display", "block");
-
-    switch (type){
-        case XS.Main.Tjfx.Graph.Type.graph_pie:
-            $(".legendContent").css({height:"165px"});
-            break;
-        case XS.Main.Tjfx.Graph.Type.graph_bar.social:
-            $(".legendContent").css({height:"80px"});
-            break;
-        case XS.Main.Tjfx.Graph.Type.graph_bar.fiveFour:
-            $(".legendContent").css({height:"200px"});
-            break;
-    }
-
-    // 注册专题图 mousemove, mouseout事件(注意：专题图图层对象自带 on 函数，没有 events 对象)
-    xs_tjfx_graph_themeLayer.on("mousemove", XS.Main.Tjfx.Graph.showInfoWin);
-    xs_tjfx_graph_themeLayer.on("mouseout", XS.Main.Tjfx.Graph.closeInfoWin);
-    xs_tjfx_graph_themeLayer.on("click", XS.Main.Tjfx.Graph.themeLayerClickCallback);
-
-    xs_tjfx_graph_themeLayer.setVisibility(false);
-    xs_MapInstance.getMapObj().addLayer(xs_tjfx_graph_themeLayer);
-
+    XS.Main.Tjfx.Graph.createTheme();
     var data = {};
     switch (parentLevel)
     {
@@ -232,13 +117,13 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
             }else {
                 var action = "";
                 switch (type) {
-                    case XS.Main.Tjfx.Graph.Type.graph_pie:
+                    case XS.Main.Tjfx.Graph.Type.pie:
                         action = "QueryCounty_EarthInfo";
                         break;
-                    case XS.Main.Tjfx.Graph.Type.graph_bar.social:
+                    case XS.Main.Tjfx.Graph.Type.bar.social:
                         action = "QuerySocityProtectBycounty";
                         break;
-                    case XS.Main.Tjfx.Graph.Type.graph_bar.fourFive:
+                    case XS.Main.Tjfx.Graph.Type.bar.fourFive:
                         action = "QueryFourFiveByAreaId";
                         break;
                 }
@@ -280,13 +165,13 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
             //请求镇级数据
             var action = "";
             switch (type){
-                case XS.Main.Tjfx.Graph.Type.graph_pie:
+                case XS.Main.Tjfx.Graph.Type.pie:
                     action = "QueryTowns_EarthInfo";
                     break;
-                case XS.Main.Tjfx.Graph.Type.graph_bar.social:
+                case XS.Main.Tjfx.Graph.Type.bar.social:
                     action = "QuerySocityProtectByTown";
                     break;
-                case XS.Main.Tjfx.Graph.Type.graph_bar.fourFive:
+                case XS.Main.Tjfx.Graph.Type.bar.fourFive:
                     action = "QueryFourFiveByAreaId";
                     break;
             }
@@ -322,13 +207,13 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
             //请求村数据
             var action = "";
             switch (type){
-                case XS.Main.Tjfx.Graph.Type.graph_pie:
+                case XS.Main.Tjfx.Graph.Type.pie:
                     action = "QueryVillEarthInfo";
                     break;
-                case XS.Main.Tjfx.Graph.Type.graph_bar.social:
+                case XS.Main.Tjfx.Graph.Type.bar.social:
                     action = "QuerySocityProtectByTown";
                     break;
-                case XS.Main.Tjfx.Graph.Type.graph_bar.fourFive:
+                case XS.Main.Tjfx.Graph.Type.bar.fourFive:
                     action = "QueryFourFiveByAreaId";
                     break;
             }
@@ -357,6 +242,131 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
         }
     }
 }
+/**
+ * 创建Graph专题图
+ */
+XS.Main.Tjfx.Graph.createTheme = function(){
+    var graph = "";
+    var themeFields = [];
+    var chartsSetting = null;
+    var color = XS.Main.Tjfx.range_styleGroups_color;
+
+    switch (xs_tjfx_graph_type){
+        case XS.Main.Tjfx.Graph.Type.pie:
+        {
+            graph = "Pie";
+            themeFields = XS.Main.Tjfx.Graph.filed[0];
+            chartsSetting = {
+                width: 100,
+                height: 100,
+                codomain: [0, 1100000],
+                //sectorStyle: { fillOpacity: 0.9 },
+                sectorStyleByFields: [{ fillColor: color[0] }, { fillColor: color[1] }, { fillColor: color[2] }, { fillColor: color[3] }, { fillColor: color[4] },
+                    { fillColor: color[5] }, { fillColor: color[6] }, { fillColor: color[7] }],
+                // 饼图扇形 hover 样式
+                sectorHoverStyle: {
+                    fillOpacity: 1 ,
+                    fillColor: "#397B29",
+                }
+            };
+            break;
+        }
+        case  XS.Main.Tjfx.Graph.Type.bar.social:
+        {
+            graph = "Bar";
+            themeFields = XS.Main.Tjfx.Graph.filed[1];
+            chartsSetting = {
+                // width，height，codomain 分别表示图表宽、高、数据值域；此三项参数为必设参数
+                width: 150,
+                height: 100,
+                codomain: [0, 100], // 允许图表展示的值域范围，此范围外的数据将不制作图表
+                dataViewBoxParameter:[22,15,5,5],
+                barStyle: { fillOpacity: 0.7 }, // 柱状图中柱条的（表示字段值的图形）样式
+                barHoverStyle: {fillOpacity: 1}, // 柱条 hover 样式
+                xShapeBlank: [10, 10, 10], // 水平方向上的空白间距参数
+                axisYTick: 4, // y 轴刻度数量
+                axisYLabels: ["100", "75", "50", "25", "0"], // y 轴标签内容
+                axisXLabels: XS.Main.Tjfx.Graph.axisXLabels[1], // x 轴标签内容
+                backgroundStyle: {fillColor: "#CCE8CF"}, // 背景样式
+                backgroundRadius: [5, 5, 5, 5], // 背景框圆角参数
+                //阴影开关 默认是打开
+                showShadow: true,
+                //阴影样式
+                barShadowStyle:{shadowBlur : 8, shadowOffsetX: 2 , shadowOffsetY : 2,shadowColor : "rgba(100,100,100,0.8)"},
+                //按字段设置柱条样式[渐变开始颜色,渐变终止颜色] 与 themeLayer.themeFields 中的字段一一对应）
+                barLinearGradient: XS.Main.Tjfx.Graph.barGradient
+            };
+            break;
+        }
+        case  XS.Main.Tjfx.Graph.Type.bar.fourOf45:
+        {
+            graph = "Bar";
+            themeFields = XS.Main.Tjfx.Graph.filed[2];
+
+            chartsSetting = {
+                // width，height，codomain 分别表示图表宽、高、数据值域；此三项参数为必设参数
+                width: 400,
+                height: 100,
+                codomain: [0, 40000], // 允许图表展示的值域范围，此范围外的数据将不制作图表
+                dataViewBoxParameter:[40,15,5,5],
+                barStyle: { fillOpacity: 0.7 }, // 柱状图中柱条的（表示字段值的图形）样式
+                barHoverStyle: {fillOpacity: 1}, // 柱条 hover 样式
+                xShapeBlank: [10, 20, 10], // 水平方向上的空白间距参数
+                axisYTick: 4, // y 轴刻度数量
+                axisYLabels: ["40000", "30000", "20000", "10000", "0"], // y 轴标签内容
+                axisXLabels: XS.Main.Tjfx.Graph.axisXLabels[2], // x 轴标签内容
+                backgroundStyle: {fillColor: "#CCE8CF"}, // 背景样式
+                backgroundRadius: [5, 5, 5, 5], // 背景框圆角参数
+                //阴影开关 默认是打开
+                showShadow: true,
+                //阴影样式
+                barShadowStyle:{shadowBlur : 8, shadowOffsetX: 2 , shadowOffsetY : 2,shadowColor : "rgba(100,100,100,0.8)"},
+                //按字段设置柱条样式[渐变开始颜色,渐变终止颜色] 与 themeLayer.themeFields 中的字段一一对应）
+                barLinearGradient: XS.Main.Tjfx.Graph.barGradient
+            };
+            break;
+        }
+    }
+
+    // 创建一个统计专题图图层
+    xs_tjfx_graph_themeLayer = new SuperMap.Layer.Graph("ThemeLayer", graph);
+    // 指定用于专题图制作的属性字段
+    xs_tjfx_graph_themeLayer.themeFields = themeFields;
+    // 配置图表参数
+    xs_tjfx_graph_themeLayer.chartsSetting = chartsSetting;
+
+    xs_tjfx_graph_themeLayer.setOpacity(0.9);
+    xs_tjfx_graph_themeLayer.isOverLay = false;
+
+    if(document.getElementById("xs_tjfx_graph_Legend")){
+        $("#xs_tjfx_graph_Legend").remove();
+    }
+
+    $("#xs_mainC").append(XS.Main.Tjfx.Graph.createGraphLegendTag());
+    $("#xs_tjfx_graph_Legend").css("display", "block");
+
+    switch (xs_tjfx_graph_type){
+        case XS.Main.Tjfx.Graph.Type.pie:
+            $(".legendContent").css({height:"165px"});
+            break;
+        case XS.Main.Tjfx.Graph.Type.bar.social:
+            $(".legendContent").css({height:"80px"});
+            break;
+        case XS.Main.Tjfx.Graph.Type.bar.fiveFour:
+            $(".legendContent").css({height:"200px"});
+            break;
+    }
+
+    // 注册专题图 mousemove, mouseout事件(注意：专题图图层对象自带 on 函数，没有 events 对象)
+    xs_tjfx_graph_themeLayer.on("mousemove", XS.Main.Tjfx.Graph.showInfoWin);
+    xs_tjfx_graph_themeLayer.on("mouseout", XS.Main.Tjfx.Graph.closeInfoWin);
+    xs_tjfx_graph_themeLayer.on("click", XS.Main.Tjfx.Graph.themeLayerClickCallback);
+
+    xs_tjfx_graph_themeLayer.setVisibility(false);
+    xs_MapInstance.getMapObj().addLayer(xs_tjfx_graph_themeLayer);
+
+}
+
 //加载县、乡、村features
 XS.Main.Tjfx.Graph.loadZoneFeatuers = function(parentLevel, sql, succeedCallback, failCallback){
     var layerName = "";
@@ -431,11 +441,11 @@ XS.Main.Tjfx.Graph.addFeatures2Layer = function(featureArr, data, parentLevel){ 
     }
     switch (xs_tjfx_graph_type)
     {
-        case XS.Main.Tjfx.Graph.Type.graph_pie:
+        case XS.Main.Tjfx.Graph.Type.pie:
             oId = "regionid";
             break;
-        case XS.Main.Tjfx.Graph.Type.graph_bar.social:
-        case XS.Main.Tjfx.Graph.Type.graph_bar.fourFive:
+        case XS.Main.Tjfx.Graph.Type.bar.social:
+        case XS.Main.Tjfx.Graph.Type.bar.fourFive:
             oId = "REGION_ID";
             break;
     }
@@ -478,17 +488,17 @@ XS.Main.Tjfx.Graph.addFeatures2Layer = function(featureArr, data, parentLevel){ 
                 var fileds = [];
                 switch (xs_tjfx_graph_type)
                 {
-                    case XS.Main.Tjfx.Graph.Type.graph_pie:
+                    case XS.Main.Tjfx.Graph.Type.pie:
                     {
                         fileds = XS.Main.Tjfx.Graph.filed[0];
                         break;
                     }
-                    case XS.Main.Tjfx.Graph.Type.graph_bar.social:
+                    case XS.Main.Tjfx.Graph.Type.bar.social:
                     {
                         fileds = XS.Main.Tjfx.Graph.filed[1];
                         break;
                     }
-                    case XS.Main.Tjfx.Graph.Type.graph_bar.fourFive:
+                    case XS.Main.Tjfx.Graph.Type.bar.fourFive:
                     {
                         fileds = XS.Main.Tjfx.Graph.filed[2];
                         break;
@@ -524,7 +534,7 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
         var info = e.target.dataInfo;
         var sum = 0;
         switch(xs_tjfx_graph_type){
-            case XS.Main.Tjfx.Graph.Type.graph_pie:{
+            case XS.Main.Tjfx.Graph.Type.pie:{
                 for(var i in XS.Main.Tjfx.Graph.filed[0]){
                     sum +=　parseInt(attributes[XS.Main.Tjfx.Graph.filed[0][i]]);
                 }
@@ -556,7 +566,7 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
         }
 
         switch (xs_tjfx_graph_type){
-            case XS.Main.Tjfx.Graph.Type.graph_pie:{
+            case XS.Main.Tjfx.Graph.Type.pie:{
                 title = "土地信息";
                 switch (info.field){
                     case "C12":{
@@ -610,7 +620,7 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
                 }
                 break;
             }
-            case XS.Main.Tjfx.Graph.Type.graph_bar.social:{
+            case XS.Main.Tjfx.Graph.Type.bar.social:{
                 title = "社会保障";
                 for(var i in XS.Main.Tjfx.Graph.filed[1]){
                     if(XS.Main.Tjfx.Graph.filed[1][i] == info.field){
@@ -619,7 +629,7 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
                 }
                 break;
             }
-            case XS.Main.Tjfx.Graph.Type.graph_bar.fourFive:{
+            case XS.Main.Tjfx.Graph.Type.bar.fourFive:{
                 title = "四有五覆盖";
                 for(var i in XS.Main.Tjfx.Graph.filed[2]){
                     if(XS.Main.Tjfx.Graph.filed[2][i] == info.field){
@@ -677,7 +687,7 @@ XS.Main.Tjfx.Graph.closeInfoWin = function (e) {
     }
 }
 //创建统计专题 图例
-XS.Main.Tjfx.Graph.createGraphLegendTag = function(type){
+XS.Main.Tjfx.Graph.createGraphLegendTag = function(){
     var tag = '<div id="xs_tjfx_graph_Legend">'+
         '<div class="legendTitle">'+
         '<span>图例</span>'+
@@ -685,45 +695,39 @@ XS.Main.Tjfx.Graph.createGraphLegendTag = function(type){
         '<div class="legendContent">'+
         '<table>'+
         '<tr>';
-    switch (type)
+    switch (xs_tjfx_graph_type)
     {
-        case XS.Main.Tjfx.Graph.Type.graph_pie:
+        case XS.Main.Tjfx.Graph.Type.pie:
         {
             tag += '<td class="legendItemHeader">土地信息</td><td class="legendItemValue">颜色</td></tr>';
 
-            var landCategory = ["耕地","林地","退耕还林","牧草","退耕还草","水域","荒漠化","林果"];
-            var landCategoryStyle = ["#00FF00","#1bff83","#3ff3ff","#238aff","#bdff3b","#ffee2f","#ffb24a","#ff4341"];
-            for(var i in landCategory){
+            for(var i in XS.Main.Tjfx.Graph.axisXLabels[0]){
                 tag += '<tr>';
-                tag += '<td class="legendItemHeader">'+landCategory[i]+'</td>';
-                tag += "<td class='legendItemValue' style='background: "+landCategoryStyle[i]+"'"+"></td>";
+                tag += '<td class="legendItemHeader">'+XS.Main.Tjfx.Graph.axisXLabels[0][i]+'</td>';
+                tag += "<td class='legendItemValue' style='background: "+XS.Main.Tjfx.range_styleGroups_color[i]+"'"+"></td>";
                 tag += '</tr>';
             }
             break;
         }
-        case XS.Main.Tjfx.Graph.Type.graph_bar.social:
+        case XS.Main.Tjfx.Graph.Type.bar.social:
         {
             tag += '<td class="legendItemHeader">社会保障</td><td class="legendItemValue">颜色</td></tr>';
 
-            var landCategory = ["参合率","养老率","低保率"];
-            var landCategoryStyle = [["#00FF00","#00CD00"],["#00CCFF","#5E87A2"],["#00FF66","#669985"]];
-            for(var i in landCategory){
+            for(var i in XS.Main.Tjfx.Graph.axisXLabels[1]){
                 tag += '<tr>';
-                tag += '<td class="legendItemHeader">'+landCategory[i]+'</td>';
+                tag += '<td class="legendItemHeader">'+XS.Main.Tjfx.Graph.axisXLabels[1][i]+'</td>';
                 tag += "<td class='legendItemValue' style='background: -WebKit-linear-gradient( top," + landCategoryStyle[i][0] + "," + landCategoryStyle[i][1] + ");'></td>";
                 tag += '</tr>';
             }
             break;
         }
-        case XS.Main.Tjfx.Graph.Type.graph_bar.fourFive:
+        case XS.Main.Tjfx.Graph.Type.bar.fourOf45:
         {
             tag += '<td class="legendItemHeader">四有五覆盖</td><td class="legendItemValue">颜色</td></tr>';
 
-            var landCategory = ["安全饮水","安全用电","安全住房","入户路硬化","院坝硬化","合作医保","养老保险","就业技能培训",
-                "教育资助","有增收产业"];
-            for(var i in landCategory){
+            for(var i in XS.Main.Tjfx.Graph.axisXLabels[2]){
                 tag += '<tr>';
-                tag += '<td class="legendItemHeader">'+landCategory[i]+'</td>';
+                tag += '<td class="legendItemHeader">'+XS.Main.Tjfx.Graph.axisXLabels[2]+'</td>';
                 tag += "<td class='legendItemValue' style='background: -WebKit-linear-gradient( top," + XS.Main.Tjfx.Graph.barGradient[i][0] + "," + XS.Main.Tjfx.Graph.barGradient[i][1] + ");'></td>";
                 tag += '</tr>';
             }
