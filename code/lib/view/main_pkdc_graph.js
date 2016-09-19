@@ -6,12 +6,12 @@ XS.Main.Tjfx.graph = {};
 //统计类型
 XS.Main.Tjfx.graph.type = {
     graph_pie:0, //图表pie--土地信息
-    graph_bar:1, //图表bar--社会保障
+    graph_bar:{social:1,fourFive:2,fiveFour:3}, //图表bar--社会保障
 }
 
 //缓存行政区域Featuers
 XS.Main.Tjfx.graph.featuersArr = {
-    county:{graphType:-1,data:[]}, //县
+    county:{graphType:0,data:[]}, //县
     town:[], //乡
     village:[] //村
 };
@@ -23,7 +23,11 @@ XS.Main.Tjfx.graph.CacheZoneInfos = {
     village:[]
 };
 
-var xs_pkdc_graph_type = -1;
+XS.Main.Tjfx.graph.barGradient = [["#00FF00","#00CD00"],["#1bff83","#1bCD83"],["#3ff3ff","#3ff3cd"],["#238aff","#23aaff"],
+    ["#932eff","#932ecd"],["#bdff3b","#bdcd3b"],["#ffee2f","#cdee2f"],["#ffb24a","#cdb24a"],["#ff4341","#cd4341"]
+    ,["#cd0000","#FF0000"]];
+
+var xs_pkdc_graph_type = 0;
 var xs_tjfx_graph_themeLayer = null;
 var xs_tjfx_graph_framedCloud = null;
 /**
@@ -69,6 +73,7 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
     var themeFields = [];
     var chartsSetting = null;
     var color = XS.Main.Tjfx.range_styleGroups_color;
+
     switch (type){
         case XS.Main.Tjfx.graph.type.graph_pie:
         {
@@ -89,7 +94,7 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
             };
             break;
         }
-        case  XS.Main.Tjfx.graph.type.graph_bar:
+        case  XS.Main.Tjfx.graph.type.graph_bar.social:
         {
             graph = "Bar";
             themeFields = ["CoMedicalRate", "EndowRate", "LowRate"];
@@ -112,7 +117,39 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
                 //阴影样式
                 barShadowStyle:{shadowBlur : 8, shadowOffsetX: 2 , shadowOffsetY : 2,shadowColor : "rgba(100,100,100,0.8)"},
                 //按字段设置柱条样式[渐变开始颜色,渐变终止颜色] 与 themeLayer.themeFields 中的字段一一对应）
-                barLinearGradient: [["#00FF00","#00CD00"],["#00CCFF","#5E87A2"],["#00FF66","#669985"]]
+                barLinearGradient: XS.Main.Tjfx.graph.barGradient
+            };
+            break;
+        }
+        case  XS.Main.Tjfx.graph.type.graph_bar.fourFive:
+        {
+            graph = "Bar";
+            themeFields = ["WaterSafeNum","ElectricSafeNum","HouseSafeNum","EnroadHardNum","YardHardNum","CoMedicNum",
+                "InsureNum","WorkSkillNum","EduHelpNum","IndustyNum"];
+            //['','category',["安全饮水","安全用电","安全住房","入户路硬化","院坝硬化","合作医保","养老保险","就业技能培训","教育资助",
+            // "有增收产业"],false];
+
+            chartsSetting = {
+                // width，height，codomain 分别表示图表宽、高、数据值域；此三项参数为必设参数
+                width: 200,
+                height: 100,
+                codomain: [0, 40000], // 允许图表展示的值域范围，此范围外的数据将不制作图表
+                dataViewBoxParameter:[30,15,5,5],
+                barStyle: { fillOpacity: 0.7 }, // 柱状图中柱条的（表示字段值的图形）样式
+                barHoverStyle: {fillOpacity: 1}, // 柱条 hover 样式
+                xShapeBlank: [5, 5, 5], // 水平方向上的空白间距参数
+                axisYTick: 4, // y 轴刻度数量
+                axisYLabels: ["40000", "30000", "20000", "10000", "0"], // y 轴标签内容
+                axisXLabels: ["安全饮水","安全用电","安全住房","入户路硬化","院坝硬化","合作医保","养老保险","就业技能培训",
+                    "教育资助","有增收产业"], // x 轴标签内容
+                backgroundStyle: {fillColor: "#CCE8CF"}, // 背景样式
+                backgroundRadius: [5, 5, 5, 5], // 背景框圆角参数
+                //阴影开关 默认是打开
+                showShadow: true,
+                //阴影样式
+                barShadowStyle:{shadowBlur : 8, shadowOffsetX: 2 , shadowOffsetY : 2,shadowColor : "rgba(100,100,100,0.8)"},
+                //按字段设置柱条样式[渐变开始颜色,渐变终止颜色] 与 themeLayer.themeFields 中的字段一一对应）
+                barLinearGradient: XS.Main.Tjfx.graph.barGradient
             };
             break;
         }
@@ -139,7 +176,7 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
         case XS.Main.Tjfx.graph.type.graph_pie:
             $(".legendContent").css({height:"165px"});
             break;
-        case XS.Main.Tjfx.graph.type.graph_bar:
+        case XS.Main.Tjfx.graph.type.graph_bar.social:
             $(".legendContent").css({height:"80px"});
             break;
     }
@@ -187,7 +224,7 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
                     case XS.Main.Tjfx.graph.type.graph_pie:
                         action = "QueryCounty_EarthInfo";
                         break;
-                    case XS.Main.Tjfx.graph.type.graph_bar:
+                    case XS.Main.Tjfx.graph.type.graph_bar.social:
                         action = "QuerySocityProtectBycounty";
                         break;
                 }
@@ -232,7 +269,7 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
                 case XS.Main.Tjfx.graph.type.graph_pie:
                     action = "QueryTowns_EarthInfo";
                     break;
-                case XS.Main.Tjfx.graph.type.graph_bar:
+                case XS.Main.Tjfx.graph.type.graph_bar.social:
                     action = "QuerySocityProtectByTown";
                     break;
             }
@@ -271,7 +308,7 @@ XS.Main.Tjfx.graph_theme = function(parentLevel,parentCode,type){
                 case XS.Main.Tjfx.graph.type.graph_pie:
                     action = "QueryVillEarthInfo";
                     break;
-                case XS.Main.Tjfx.graph.type.graph_bar:
+                case XS.Main.Tjfx.graph.type.graph_bar.social:
                     action = "QuerySocityProtectByTown";
                     break;
             }
@@ -377,7 +414,7 @@ XS.Main.Tjfx.graph_addFeatures2Layer = function(featureArr, data, parentLevel){ 
         case XS.Main.Tjfx.graph.type.graph_pie:
             oId = "regionid";
             break;
-        case XS.Main.Tjfx.graph.type.graph_bar:
+        case XS.Main.Tjfx.graph.type.graph_bar.social:
             oId = "REGION_ID";
             break;
     }
@@ -432,7 +469,7 @@ XS.Main.Tjfx.graph_addFeatures2Layer = function(featureArr, data, parentLevel){ 
                         feature.attributes.C14B = obj.C14B != null ? obj.C14B : 0;
                         break;
                     }
-                    case XS.Main.Tjfx.graph.type.graph_bar:
+                    case XS.Main.Tjfx.graph.type.graph_bar.social:
                     {
                         feature.attributes.CoMedicalRate = obj.CoMedicalRate;
                         feature.attributes.EndowRate = obj.EndowRate;
@@ -552,7 +589,7 @@ XS.Main.Tjfx.graph.showInfoWin = function(e){
                 }
                 break;
             }
-            case XS.Main.Tjfx.graph.type.graph_bar:{
+            case XS.Main.Tjfx.graph.type.graph_bar.social:{
                 title = "社会保障";
                 switch (info.field){
                     case "CoMedicalRate":{
@@ -596,6 +633,14 @@ XS.Main.Tjfx.graph.showInfoWin = function(e){
              new SuperMap.Size(210, 210),
              tag
          );
+
+        switch (xs_pkdc_graph_type){
+            case XS.Main.Tjfx.graph.type.graph_pie:
+                break;
+            case XS.Main.Tjfx.graph.type.graph_bar.social:
+                $("#xs_tjfx_range_themeTipC").css({height:"120px"});
+                xs_tjfx_graph_framedCloud.setSize(new SuperMap.Size(210, 130));
+        }
 
         xs_tjfx_graph_framedCloud.autoSize = false;
         xs_tjfx_graph_framedCloud.setOpacity(0.8);
@@ -643,7 +688,7 @@ XS.Main.Tjfx.graph_createGraphLegendTag = function(type){
             }
             break;
         }
-        case XS.Main.Tjfx.graph.type.graph_bar:
+        case XS.Main.Tjfx.graph.type.graph_bar.social:
         {
             tag += '<td class="legendItemHeader">社会保障</td><td class="legendItemValue">颜色</td></tr>';
 
@@ -653,6 +698,20 @@ XS.Main.Tjfx.graph_createGraphLegendTag = function(type){
                 tag += '<tr>';
                 tag += '<td class="legendItemHeader">'+landCategory[i]+'</td>';
                 tag += "<td class='legendItemValue' style='background: -WebKit-linear-gradient( top," + landCategoryStyle[i][0] + "," + landCategoryStyle[i][1] + ");'></td>";
+                tag += '</tr>';
+            }
+            break;
+        }
+        case XS.Main.Tjfx.graph.type.graph_bar.social:
+        {
+            tag += '<td class="legendItemHeader">社会保障</td><td class="legendItemValue">颜色</td></tr>';
+
+            var landCategory = ["安全饮水","安全用电","安全住房","入户路硬化","院坝硬化","合作医保","养老保险","就业技能培训",
+                "教育资助","有增收产业"];
+            for(var i in landCategory){
+                tag += '<tr>';
+                tag += '<td class="legendItemHeader">'+landCategory[i]+'</td>';
+                tag += "<td class='legendItemValue' style='background: -WebKit-linear-gradient( top," + XS.Main.Tjfx.graph.barGradient[i][0] + "," + XS.Main.Tjfx.graph.barGradient[i][1] + ");'></td>";
                 tag += '</tr>';
             }
             break;
