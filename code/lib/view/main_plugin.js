@@ -56,63 +56,6 @@ XS.Main.clickMapType = {
 
 $(function(){
     //右击-菜单
-    var tjfxItem = $('#xs_rightMeun').menu('findItem','统计分析');
-    $('#xs_rightMeun').menu('appendItem', {
-        parent: tjfxItem.target,
-        separator: true
-    });
-    $('#xs_rightMeun').menu('appendItem', {
-        parent: tjfxItem.target,
-        text: '扶贫搬迁',
-        iconCls: 'xs_fpbq_family'
-    });
-    var fpqyItem = $('#xs_rightMeun').menu('findItem','扶贫搬迁');
-    $('#xs_rightMeun').menu('appendItem', {
-        parent: fpqyItem.target,
-        text: '扶贫搬迁率',
-        onclick: function(){
-            XS.Main.cRItem_Tjfx_Range(XS.Main.Tjfx.type.range_fpbqx);
-        }
-    });
-    $('#xs_rightMeun').menu('appendItem', {
-        parent: tjfxItem.target,
-        separator: true
-    });
-    $('#xs_rightMeun').menu('appendItem', {
-        parent: tjfxItem.target,
-        text: '土地信息',
-        //iconCls: 'xs_fpbq_family',
-        onclick: function(){
-            XS.Main.detail_landInfo_graph(XS.Main.Tjfx.graph.type.graph_pie);
-        }
-    });
-    $('#xs_rightMeun').menu('appendItem', {
-        parent: tjfxItem.target,
-        separator: true
-    });
-    $('#xs_rightMeun').menu('appendItem', {
-        parent: tjfxItem.target,
-        text: '社会保障',
-        //iconCls: 'xs_fpbq_family',
-        onclick: function(){
-            XS.Main.detail_landInfo_graph(XS.Main.Tjfx.graph.type.graph_bar.social);
-        }
-    });
-    $('#xs_rightMeun').menu('appendItem', {
-        parent: tjfxItem.target,
-        separator: true
-    });
-    $('#xs_rightMeun').menu('appendItem', {
-        parent: tjfxItem.target,
-        text: '四有五覆盖',
-        //iconCls: 'xs_fpbq_family',
-        onclick: function(){
-            XS.Main.detail_landInfo_graph(XS.Main.Tjfx.graph.type.graph_bar.fourFive);
-        }
-    });
-    $('#xs_rightMeun').menu('appendItem', {
-        separator: true
-    });
     $('#xs_rightMeun').menu('appendItem', {
         text: '贫困洞察',
         iconCls: 'icon-search',
