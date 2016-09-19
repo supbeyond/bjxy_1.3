@@ -95,7 +95,19 @@ $(function(){
         text: '社会保障',
         //iconCls: 'xs_fpbq_family',
         onclick: function(){
-            XS.Main.detail_landInfo_graph(XS.Main.Tjfx.graph.type.graph_bar);
+            XS.Main.detail_landInfo_graph(XS.Main.Tjfx.graph.type.graph_bar.social);
+        }
+    });
+    $('#xs_rightMeun').menu('appendItem', {
+        parent: tjfxItem.target,
+        separator: true
+    });
+    $('#xs_rightMeun').menu('appendItem', {
+        parent: tjfxItem.target,
+        text: '四有五覆盖',
+        //iconCls: 'xs_fpbq_family',
+        onclick: function(){
+            XS.Main.detail_landInfo_graph(XS.Main.Tjfx.graph.type.graph_bar.fourFive);
         }
     });
     $('#xs_rightMeun').menu('appendItem', {
