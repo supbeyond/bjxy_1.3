@@ -37,7 +37,7 @@ XS.Main.Tjfx.Graph.axisXLabels = [
     ["耕地","林地","退耕还林","牧草","退耕还草","水域","荒漠化","林果"],
     ["参合率", "养老率", "低保率"],
     ["安全饮水","安全用电","安全住房","院坝硬化"],
-    ["合作医保","养老保险","就业技能培训","教育资助","有增收产业"],
+    ["合作医保","养老保险","技能培训","教育资助","增收产业"],
     ["通村沥青路","通客运","通宽带及电话","通生产用电","通组及户公路"],
     ["美丽乡村","村卫生室","文化场所","村集体经济"]
 ];
@@ -45,6 +45,10 @@ XS.Main.Tjfx.Graph.axisXLabels = [
 var xs_tjfx_graph_type = 0;
 var xs_tjfx_graph_themeLayer = null;
 var xs_tjfx_graph_framedCloud = null;
+var xs_tjfx_graph_graphType = "";
+var xs_tjfx_graph_themeFields = [];
+var xs_tjfx_graph_chartsSetting = null;
+
 /**
  * 统计专题图
  * @param type 统计类型
@@ -84,7 +88,109 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
     XS.Main.hiddenDivTags();
     XS.Main.Tjfx.removeLayer();
 
-    XS.Main.Tjfx.Graph.createTheme();
+    xs_tjfx_graph_graphType = "";
+    xs_tjfx_graph_themeFields = [];
+    xs_tjfx_graph_chartsSetting = null;
+    var color = XS.Main.Tjfx.range_styleGroups_color;
+
+    switch (type){
+        case XS.Main.Tjfx.Graph.Type.pie:
+        {
+            xs_tjfx_graph_graphType = "Pie";
+            xs_tjfx_graph_themeFields = XS.Main.Tjfx.Graph.filed[0];
+            xs_tjfx_graph_chartsSetting = {
+                width: 100,
+                height: 100,
+                codomain: [0, 1100000],
+                //sectorStyle: { fillOpacity: 0.9 },
+                sectorStyleByFields: [{ fillColor: color[0] }, { fillColor: color[1] }, { fillColor: color[2] }, { fillColor: color[3] }, { fillColor: color[4] },
+                    { fillColor: color[5] }, { fillColor: color[6] }, { fillColor: color[7] }],
+                // 饼图扇形 hover 样式
+                sectorHoverStyle: {
+                    fillOpacity: 1 ,
+                    fillColor: "#397B29",
+                }
+            };
+            break;
+        }
+        case  XS.Main.Tjfx.Graph.Type.bar.social:
+        {
+            XS.Main.Tjfx.Graph.themeParam("Bar",XS.Main.Tjfx.Graph.filed[1],[0, 100],[22,15,5,5],[10,10,10],
+                ["100", "75", "50","25", "0"],XS.Main.Tjfx.Graph.axisXLabels[1],150);
+            break;
+        }
+        case  XS.Main.Tjfx.Graph.Type.bar.fourOf45:
+        {
+            XS.Main.Tjfx.Graph.themeParam("Bar",XS.Main.Tjfx.Graph.filed[2],[0, 10000],[40,15,5,5],[10,20,10],
+                ["12000", "9000", "6000","3000", "0"],XS.Main.Tjfx.Graph.axisXLabels[2],260);
+            break;
+        }
+        case  XS.Main.Tjfx.Graph.Type.bar.fiveOf45:
+        {
+            XS.Main.Tjfx.Graph.themeParam("Bar",XS.Main.Tjfx.Graph.filed[3],[0, 40000],[40,15,5,5],[15,20,15],
+                ["40000", "30000", "20000","10000", "0"],XS.Main.Tjfx.Graph.axisXLabels[3],320);
+            break;
+        }
+        case  XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
+        {
+            XS.Main.Tjfx.Graph.themeParam("Bar",XS.Main.Tjfx.Graph.filed[4],[0, 200],[22,15,5,5],[15,30,15],
+                ["200", "150", "100","50", "0"],XS.Main.Tjfx.Graph.axisXLabels[4],380);
+            break;
+        }
+        case  XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+        {
+            XS.Main.Tjfx.Graph.themeParam("Bar",XS.Main.Tjfx.Graph.filed[5],[0, 40],[22,15,5,5],[10,20,10],
+                ["40", "30", "20","10", "0"],XS.Main.Tjfx.Graph.axisXLabels[5],250);
+            break;
+        }
+    }
+
+    // 创建一个统计专题图图层
+    xs_tjfx_graph_themeLayer = new SuperMap.Layer.Graph("ThemeLayer", xs_tjfx_graph_graphType);
+    // 指定用于专题图制作的属性字段
+    xs_tjfx_graph_themeLayer.themeFields = xs_tjfx_graph_themeFields;
+    // 配置图表参数
+    xs_tjfx_graph_themeLayer.chartsSetting = xs_tjfx_graph_chartsSetting;
+
+    xs_tjfx_graph_themeLayer.setOpacity(0.9);
+    xs_tjfx_graph_themeLayer.isOverLay = false;
+
+    if(document.getElementById("xs_tjfx_graph_Legend")){
+        $("#xs_tjfx_graph_Legend").remove();
+    }
+
+    $("#xs_mainC").append(XS.Main.Tjfx.Graph.createGraphLegendTag());
+    $("#xs_tjfx_graph_Legend").css("display", "block");
+
+    switch (type){
+        case XS.Main.Tjfx.Graph.Type.pie:
+            $(".legendContent").css({height:"165px"});
+            break;
+        case XS.Main.Tjfx.Graph.Type.bar.social:
+            $(".legendContent").css({height:"80px"});
+            break;
+        case XS.Main.Tjfx.Graph.Type.bar.fourOf45:
+            $(".legendContent").css({height:"95px"});
+            break;
+        case XS.Main.Tjfx.Graph.Type.bar.fiveOf45:
+            $(".legendContent").css({height:"130px"});
+            break;
+        case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
+            $(".legendContent").css({height:"110px"});
+            break;
+        case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+            $(".legendContent").css({height:"95px"});
+            break;
+    }
+
+    // 注册专题图 mousemove, mouseout事件(注意：专题图图层对象自带 on 函数，没有 events 对象)
+    xs_tjfx_graph_themeLayer.on("mousemove", XS.Main.Tjfx.Graph.showInfoWin);
+    xs_tjfx_graph_themeLayer.on("mouseout", XS.Main.Tjfx.Graph.closeInfoWin);
+    xs_tjfx_graph_themeLayer.on("click", XS.Main.Tjfx.Graph.themeLayerClickCallback);
+
+    xs_tjfx_graph_themeLayer.setVisibility(false);
+    xs_MapInstance.getMapObj().addLayer(xs_tjfx_graph_themeLayer);
+
     var data = {};
     switch (parentLevel)
     {
@@ -123,14 +229,31 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                     case XS.Main.Tjfx.Graph.Type.bar.social:
                         action = "QuerySocityProtectBycounty";
                         break;
-                    case XS.Main.Tjfx.Graph.Type.bar.fourFive:
+                    case XS.Main.Tjfx.Graph.Type.bar.fourOf45:
+                    case XS.Main.Tjfx.Graph.Type.bar.fiveOf45:
                         action = "QueryFourFiveByAreaId";
+                        break;
+                    case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
+                    case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+                        action = "QueryVillFiveFourByCountByAreaId";
                         break;
                 }
 
                 data = {pid: parentCode,pd_id: parentCode};
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json) {
                     if (json && json.length > 0) {
+                        switch (type){
+                            case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
+                            case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+                            {
+                                for(var i in json){
+                                    json[i].WlanAndTelNum = json[i].WlanNum +　json[i].TelNum;
+                                    json[i].ZAndHRoadHardNum = json[i].ZRoadHardNum +　json[i].HRoadHardNum;
+                                }
+
+                                break
+                            }
+                        }
                         XS.Main.Tjfx.Graph.CacheZoneInfos.county.data = json;
                         XS.Main.Tjfx.Graph.CacheZoneInfos.county.graphType = type;
 
@@ -171,8 +294,13 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                 case XS.Main.Tjfx.Graph.Type.bar.social:
                     action = "QuerySocityProtectByTown";
                     break;
-                case XS.Main.Tjfx.Graph.Type.bar.fourFive:
+                case XS.Main.Tjfx.Graph.Type.bar.fourOf45:
+                case XS.Main.Tjfx.Graph.Type.bar.fiveOf45:
                     action = "QueryFourFiveByAreaId";
+                    break;
+                case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
+                case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+                    action = "QueryVillFiveFourByCountByAreaId";
                     break;
             }
             data = {pid:parentCode,pd_id:parentCode};
@@ -213,8 +341,13 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                 case XS.Main.Tjfx.Graph.Type.bar.social:
                     action = "QuerySocityProtectByTown";
                     break;
-                case XS.Main.Tjfx.Graph.Type.bar.fourFive:
+                case XS.Main.Tjfx.Graph.Type.bar.fourOf45:
+                case XS.Main.Tjfx.Graph.Type.bar.fiveOf45:
                     action = "QueryFourFiveByAreaId";
+                    break;
+                case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
+                case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+                    action = "QueryVillFiveFourByCountByAreaId";
                     break;
             }
             data = {pid:parentCode, pd_id:parentCode};
@@ -243,128 +376,39 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
     }
 }
 /**
- * 创建Graph专题图
+ * 配置graph专题图层的参数
+ * @param graph
+ * @param fields
+ * @param codomain
+ * @param ViewBox
+ * @param axisYLabels
+ * @param axisXLabels
+ * @param width
  */
-XS.Main.Tjfx.Graph.createTheme = function(){
-    var graph = "";
-    var themeFields = [];
-    var chartsSetting = null;
-    var color = XS.Main.Tjfx.range_styleGroups_color;
-
-    switch (xs_tjfx_graph_type){
-        case XS.Main.Tjfx.Graph.Type.pie:
-        {
-            graph = "Pie";
-            themeFields = XS.Main.Tjfx.Graph.filed[0];
-            chartsSetting = {
-                width: 100,
-                height: 100,
-                codomain: [0, 1100000],
-                //sectorStyle: { fillOpacity: 0.9 },
-                sectorStyleByFields: [{ fillColor: color[0] }, { fillColor: color[1] }, { fillColor: color[2] }, { fillColor: color[3] }, { fillColor: color[4] },
-                    { fillColor: color[5] }, { fillColor: color[6] }, { fillColor: color[7] }],
-                // 饼图扇形 hover 样式
-                sectorHoverStyle: {
-                    fillOpacity: 1 ,
-                    fillColor: "#397B29",
-                }
-            };
-            break;
-        }
-        case  XS.Main.Tjfx.Graph.Type.bar.social:
-        {
-            graph = "Bar";
-            themeFields = XS.Main.Tjfx.Graph.filed[1];
-            chartsSetting = {
-                // width，height，codomain 分别表示图表宽、高、数据值域；此三项参数为必设参数
-                width: 150,
-                height: 100,
-                codomain: [0, 100], // 允许图表展示的值域范围，此范围外的数据将不制作图表
-                dataViewBoxParameter:[22,15,5,5],
-                barStyle: { fillOpacity: 0.7 }, // 柱状图中柱条的（表示字段值的图形）样式
-                barHoverStyle: {fillOpacity: 1}, // 柱条 hover 样式
-                xShapeBlank: [10, 10, 10], // 水平方向上的空白间距参数
-                axisYTick: 4, // y 轴刻度数量
-                axisYLabels: ["100", "75", "50", "25", "0"], // y 轴标签内容
-                axisXLabels: XS.Main.Tjfx.Graph.axisXLabels[1], // x 轴标签内容
-                backgroundStyle: {fillColor: "#CCE8CF"}, // 背景样式
-                backgroundRadius: [5, 5, 5, 5], // 背景框圆角参数
-                //阴影开关 默认是打开
-                showShadow: true,
-                //阴影样式
-                barShadowStyle:{shadowBlur : 8, shadowOffsetX: 2 , shadowOffsetY : 2,shadowColor : "rgba(100,100,100,0.8)"},
-                //按字段设置柱条样式[渐变开始颜色,渐变终止颜色] 与 themeLayer.themeFields 中的字段一一对应）
-                barLinearGradient: XS.Main.Tjfx.Graph.barGradient
-            };
-            break;
-        }
-        case  XS.Main.Tjfx.Graph.Type.bar.fourOf45:
-        {
-            graph = "Bar";
-            themeFields = XS.Main.Tjfx.Graph.filed[2];
-
-            chartsSetting = {
-                // width，height，codomain 分别表示图表宽、高、数据值域；此三项参数为必设参数
-                width: 400,
-                height: 100,
-                codomain: [0, 40000], // 允许图表展示的值域范围，此范围外的数据将不制作图表
-                dataViewBoxParameter:[40,15,5,5],
-                barStyle: { fillOpacity: 0.7 }, // 柱状图中柱条的（表示字段值的图形）样式
-                barHoverStyle: {fillOpacity: 1}, // 柱条 hover 样式
-                xShapeBlank: [10, 20, 10], // 水平方向上的空白间距参数
-                axisYTick: 4, // y 轴刻度数量
-                axisYLabels: ["40000", "30000", "20000", "10000", "0"], // y 轴标签内容
-                axisXLabels: XS.Main.Tjfx.Graph.axisXLabels[2], // x 轴标签内容
-                backgroundStyle: {fillColor: "#CCE8CF"}, // 背景样式
-                backgroundRadius: [5, 5, 5, 5], // 背景框圆角参数
-                //阴影开关 默认是打开
-                showShadow: true,
-                //阴影样式
-                barShadowStyle:{shadowBlur : 8, shadowOffsetX: 2 , shadowOffsetY : 2,shadowColor : "rgba(100,100,100,0.8)"},
-                //按字段设置柱条样式[渐变开始颜色,渐变终止颜色] 与 themeLayer.themeFields 中的字段一一对应）
-                barLinearGradient: XS.Main.Tjfx.Graph.barGradient
-            };
-            break;
-        }
-    }
-
-    // 创建一个统计专题图图层
-    xs_tjfx_graph_themeLayer = new SuperMap.Layer.Graph("ThemeLayer", graph);
-    // 指定用于专题图制作的属性字段
-    xs_tjfx_graph_themeLayer.themeFields = themeFields;
-    // 配置图表参数
-    xs_tjfx_graph_themeLayer.chartsSetting = chartsSetting;
-
-    xs_tjfx_graph_themeLayer.setOpacity(0.9);
-    xs_tjfx_graph_themeLayer.isOverLay = false;
-
-    if(document.getElementById("xs_tjfx_graph_Legend")){
-        $("#xs_tjfx_graph_Legend").remove();
-    }
-
-    $("#xs_mainC").append(XS.Main.Tjfx.Graph.createGraphLegendTag());
-    $("#xs_tjfx_graph_Legend").css("display", "block");
-
-    switch (xs_tjfx_graph_type){
-        case XS.Main.Tjfx.Graph.Type.pie:
-            $(".legendContent").css({height:"165px"});
-            break;
-        case XS.Main.Tjfx.Graph.Type.bar.social:
-            $(".legendContent").css({height:"80px"});
-            break;
-        case XS.Main.Tjfx.Graph.Type.bar.fiveFour:
-            $(".legendContent").css({height:"200px"});
-            break;
-    }
-
-    // 注册专题图 mousemove, mouseout事件(注意：专题图图层对象自带 on 函数，没有 events 对象)
-    xs_tjfx_graph_themeLayer.on("mousemove", XS.Main.Tjfx.Graph.showInfoWin);
-    xs_tjfx_graph_themeLayer.on("mouseout", XS.Main.Tjfx.Graph.closeInfoWin);
-    xs_tjfx_graph_themeLayer.on("click", XS.Main.Tjfx.Graph.themeLayerClickCallback);
-
-    xs_tjfx_graph_themeLayer.setVisibility(false);
-    xs_MapInstance.getMapObj().addLayer(xs_tjfx_graph_themeLayer);
-
+XS.Main.Tjfx.Graph.themeParam = function(graph,fields,codomain,ViewBox,xShapeBlank,axisYLabels,axisXLabels,width){
+    xs_tjfx_graph_graphType = graph;
+    xs_tjfx_graph_themeFields = fields;
+    xs_tjfx_graph_chartsSetting = {
+        // width，height，codomain 分别表示图表宽、高、数据值域；此三项参数为必设参数
+        width: width,
+        height: 100,
+        codomain: codomain, // 允许图表展示的值域范围，此范围外的数据将不制作图表
+        dataViewBoxParameter:ViewBox,
+        barStyle: { fillOpacity: 0.7 }, // 柱状图中柱条的（表示字段值的图形）样式
+        barHoverStyle: {fillOpacity: 1}, // 柱条 hover 样式
+        xShapeBlank: xShapeBlank, // 水平方向上的空白间距参数
+        axisYTick: 4, // y 轴刻度数量
+        axisYLabels: axisYLabels, // y 轴标签内容
+        axisXLabels: axisXLabels, // x 轴标签内容
+        backgroundStyle: {fillColor: "#CCE8CF"}, // 背景样式
+        backgroundRadius: [5, 5, 5, 5], // 背景框圆角参数
+        //阴影开关 默认是打开
+        showShadow: true,
+        //阴影样式
+        barShadowStyle:{shadowBlur : 8, shadowOffsetX: 2 , shadowOffsetY : 2,shadowColor : "rgba(100,100,100,0.8)"},
+        //按字段设置柱条样式[渐变开始颜色,渐变终止颜色] 与 themeLayer.themeFields 中的字段一一对应）
+        barLinearGradient: XS.Main.Tjfx.Graph.barGradient
+    };
 }
 
 //加载县、乡、村features
@@ -445,7 +489,10 @@ XS.Main.Tjfx.Graph.addFeatures2Layer = function(featureArr, data, parentLevel){ 
             oId = "regionid";
             break;
         case XS.Main.Tjfx.Graph.Type.bar.social:
-        case XS.Main.Tjfx.Graph.Type.bar.fourFive:
+        case XS.Main.Tjfx.Graph.Type.bar.fourOf45:
+        case XS.Main.Tjfx.Graph.Type.bar.fiveOf45:
+        case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
+        case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
             oId = "REGION_ID";
             break;
     }
@@ -498,9 +545,24 @@ XS.Main.Tjfx.Graph.addFeatures2Layer = function(featureArr, data, parentLevel){ 
                         fileds = XS.Main.Tjfx.Graph.filed[1];
                         break;
                     }
-                    case XS.Main.Tjfx.Graph.Type.bar.fourFive:
+                    case XS.Main.Tjfx.Graph.Type.bar.fourOf45:
                     {
                         fileds = XS.Main.Tjfx.Graph.filed[2];
+                        break;
+                    }
+                    case XS.Main.Tjfx.Graph.Type.bar.fiveOf45:
+                    {
+                        fileds = XS.Main.Tjfx.Graph.filed[3];
+                        break;
+                    }
+                    case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
+                    {
+                        fileds = XS.Main.Tjfx.Graph.filed[4];
+                        break;
+                    }
+                    case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+                    {
+                        fileds = XS.Main.Tjfx.Graph.filed[5];
                         break;
                     }
                 }
@@ -624,16 +686,43 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
                 title = "社会保障";
                 for(var i in XS.Main.Tjfx.Graph.filed[1]){
                     if(XS.Main.Tjfx.Graph.filed[1][i] == info.field){
-                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[0][i],value:new Number(info.value).toFixed(2)});
+                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[1][i],value:new Number(info.value).toFixed(2)});
                     }
                 }
                 break;
             }
-            case XS.Main.Tjfx.Graph.Type.bar.fourFive:{
-                title = "四有五覆盖";
+            case XS.Main.Tjfx.Graph.Type.bar.fourOf45:{
+                title = "四有五覆盖(四有)";
                 for(var i in XS.Main.Tjfx.Graph.filed[2]){
                     if(XS.Main.Tjfx.Graph.filed[2][i] == info.field){
-                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[1][i],value:new Number(info.value).toFixed(2)});
+                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[2][i],value:new Number(info.value).toFixed(2)});
+                    }
+                }
+                break;
+            }
+            case XS.Main.Tjfx.Graph.Type.bar.fiveOf45:{
+                title = "四有五覆盖(五覆盖)";
+                for(var i in XS.Main.Tjfx.Graph.filed[3]){
+                    if(XS.Main.Tjfx.Graph.filed[3][i] == info.field){
+                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[3][i],value:new Number(info.value).toFixed(2)});
+                    }
+                }
+                break;
+            }
+            case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:{
+                title = "四有五覆盖(五覆盖)";
+                for(var i in XS.Main.Tjfx.Graph.filed[4]){
+                    if(XS.Main.Tjfx.Graph.filed[4][i] == info.field){
+                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[4][i],value:new Number(info.value).toFixed(2)});
+                    }
+                }
+                break;
+            }
+            case XS.Main.Tjfx.Graph.Type.bar.fourOf54:{
+                title = "四有五覆盖(五覆盖)";
+                for(var i in XS.Main.Tjfx.Graph.filed[5]){
+                    if(XS.Main.Tjfx.Graph.filed[5][i] == info.field){
+                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[5][i],value:new Number(info.value).toFixed(2)});
                     }
                 }
                 break;
@@ -716,19 +805,60 @@ XS.Main.Tjfx.Graph.createGraphLegendTag = function(){
             for(var i in XS.Main.Tjfx.Graph.axisXLabels[1]){
                 tag += '<tr>';
                 tag += '<td class="legendItemHeader">'+XS.Main.Tjfx.Graph.axisXLabels[1][i]+'</td>';
-                tag += "<td class='legendItemValue' style='background: -WebKit-linear-gradient( top," + landCategoryStyle[i][0] + "," + landCategoryStyle[i][1] + ");'></td>";
+                tag += '<td class="legendItemValue" style="background: -WebKit-linear-gradient( top,'
+                    + XS.Main.Tjfx.Graph.barGradient[i][0] + ',' + XS.Main.Tjfx.Graph.barGradient[i][1] + ');"></td>';
                 tag += '</tr>';
             }
             break;
         }
         case XS.Main.Tjfx.Graph.Type.bar.fourOf45:
         {
-            tag += '<td class="legendItemHeader">四有五覆盖</td><td class="legendItemValue">颜色</td></tr>';
+            tag += '<td class="legendItemHeader">四有五覆盖(四有)</td><td class="legendItemValue">颜色</td></tr>';
 
             for(var i in XS.Main.Tjfx.Graph.axisXLabels[2]){
                 tag += '<tr>';
-                tag += '<td class="legendItemHeader">'+XS.Main.Tjfx.Graph.axisXLabels[2]+'</td>';
-                tag += "<td class='legendItemValue' style='background: -WebKit-linear-gradient( top," + XS.Main.Tjfx.Graph.barGradient[i][0] + "," + XS.Main.Tjfx.Graph.barGradient[i][1] + ");'></td>";
+                tag += '<td class="legendItemHeader">'+XS.Main.Tjfx.Graph.axisXLabels[2][i]+'</td>';
+                tag += '<td class="legendItemValue" style="background: -WebKit-linear-gradient( top,'
+                    + XS.Main.Tjfx.Graph.barGradient[i][0] + ',' + XS.Main.Tjfx.Graph.barGradient[i][1] + ');"></td>';
+                tag += '</tr>';
+            }
+            break;
+        }
+        case XS.Main.Tjfx.Graph.Type.bar.fiveOf45:
+        {
+            tag += '<td class="legendItemHeader">四有五覆盖(五覆盖)</td><td class="legendItemValue">颜色</td></tr>';
+
+            for(var i in XS.Main.Tjfx.Graph.axisXLabels[3]){
+                tag += '<tr>';
+                tag += '<td class="legendItemHeader">'+XS.Main.Tjfx.Graph.axisXLabels[3][i]+'</td>';
+                tag += '<td class="legendItemValue" style="background: -WebKit-linear-gradient( top,'
+                    + XS.Main.Tjfx.Graph.barGradient[i][0] + ',' + XS.Main.Tjfx.Graph.barGradient[i][1] + ');"></td>';
+                tag += '</tr>';
+            }
+            break;
+        }
+        case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
+        {
+            tag += '<td class="legendItemHeader">五通四有(五通)</td><td class="legendItemValue">颜色</td></tr>';
+
+            for(var i in XS.Main.Tjfx.Graph.axisXLabels[4]){
+                tag += '<tr>';
+                tag += '<td class="legendItemHeader">'+XS.Main.Tjfx.Graph.axisXLabels[4][i]+'</td>';
+                tag += '<td class="legendItemValue" style="background: -WebKit-linear-gradient( top,'
+                    + XS.Main.Tjfx.Graph.barGradient[i][0] + ',' + XS.Main.Tjfx.Graph.barGradient[i][1] + ');"></td>';
+                tag += '</tr>';
+            }
+            break;
+        }
+        case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+        {
+            tag += '<td class="legendItemHeader">五通四有(四有)</td><td class="legendItemValue">颜色</td></tr>';
+
+            for(var i in XS.Main.Tjfx.Graph.axisXLabels[2]){
+                tag += '<tr>';
+                tag += '<td class="legendItemHeader">'+XS.Main.Tjfx.Graph.axisXLabels[2][i]+'</td>';
+                tag += '<td class="legendItemValue" style="background: -WebKit-linear-gradient( top,'
+                    + XS.Main.Tjfx.Graph.barGradient[i][0] + ',' + XS.Main.Tjfx.Graph.barGradient[i][1] + ');"></td>';
                 tag += '</tr>';
             }
             break;
