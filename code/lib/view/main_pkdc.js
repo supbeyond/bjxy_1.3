@@ -388,6 +388,8 @@ var xs_pkdc_cacheDataArr = []; //数据缓存
 //点击仪表盘显示下级信息窗口 superId:通过查找当前的区域的信息，id 通过当前的ID查找下一级的信息
 XS.Main.Pkjc.showInfoWin = function(level, superId, id){
    // XS.LogUtil.log($("#xs_pkdc_msgWin"));
+    $("#xs_echartjs").empty().append('<script src="../base/echart/echarts.js"></script>');
+
     xs_pkdc_isWinMin = false;
     xs_pkdc_superStateCode = superId;
     xs_pkdc_currentStateCode = id;
@@ -559,7 +561,9 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         //项目资金点击
         $('#xs_pkdc_itemFund').click(XS.Main.Pkjc.clickItemFund);
         //扶贫搬迁点击
-        $("#xs_pkdc_itemRelocate").click(XS.Main.Pkjc.clickRelocate);
+        $("#xs_pkdc_itemRelocate").click(function(){
+            XS.Main.Poor.povertyRelocation(xs_currentZoneLevel, xs_pkdc_currentStateCode);
+        });
     }
     //-------------------------加载一次 结束-----------------------------------
 
@@ -950,9 +954,12 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode){
         XS.CommonUtil.closeDialog("xs_main_detail_1");
     });
 
+    //轨迹查询
     $("#xs_pkdc_task_linebtn").click(XS.Main.Pkjc.task_queryLine);
     $("#xs_pkdc_task_taskbtn").click(null);
     $("#xs_pkdc_task_alertbtn").click(null);
+
+    //动态
     $("#xs_pkdc_task_monitorbtn").click(function(){
         xs_pkdc_tasker_isFirstReq = true;
         XS.Main.Pkjc.reqOnLineTasker(zoneCode);
@@ -1169,12 +1176,13 @@ XS.Main.Pkjc.task_queryLine = function(){
     },function(e){$("#xs_pkdc_task_loading").css({visibility:"hidden"});});
 }
 
-/**
- * 根据区域ID查询在线任务监督人
- * @param regionid
- */
+
 var xs_pkjc_IntervalId = null; //实时在线任务人 window.Interval ID
 var xs_pkdc_tasker_isFirstReq = true; //是否首次查询
+/**
+ * 根据区域ID查询在线任务监督人 --动态
+ * @param regionid
+ */
 XS.Main.Pkjc.reqOnLineTasker = function(regionid){
     clearInterval(xs_pkjc_IntervalId);
     xs_tasker_labelLayer.removeAllFeatures();
@@ -1253,3 +1261,4 @@ XS.Main.Pkjc.clickClusterCallback = function(f){
 
     XS.CommonUtil.openDialog("xs_main_detail_1", "采集人信息", "icon-man", contentTag, false, false, false,null, null,xy.x+15, xy.y+5);
 }
+

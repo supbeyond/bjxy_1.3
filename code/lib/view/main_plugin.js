@@ -913,6 +913,11 @@ XS.Main.zoomedMapCallback = function(e){
     }
 }
 
+//地图移动完成事件回调
+XS.Main.movedMapCallback = function(event){
+    XS.Main.Poor.movedMapCallback(event);
+}
+
 //隐藏所有Tip的Div标签
 XS.Main.hiddenDivTags = function(){
     //utfGridLayer
