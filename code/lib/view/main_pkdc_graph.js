@@ -48,6 +48,7 @@ var xs_tjfx_graph_framedCloud = null;
 var xs_tjfx_graph_graphType = "";
 var xs_tjfx_graph_themeFields = [];
 var xs_tjfx_graph_chartsSetting = null;
+var xs_tjfx_graph_maxValue = 0;
 
 /**
  * 统计专题图
@@ -170,13 +171,13 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
             $(".legendContent").css({height:"80px"});
             break;
         case XS.Main.Tjfx.Graph.Type.bar.fourOf45:
-            $(".legendContent").css({height:"95px"});
+            $(".legendContent").css({height:"110px"});
             break;
         case XS.Main.Tjfx.Graph.Type.bar.fiveOf45:
             $(".legendContent").css({height:"130px"});
             break;
         case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
-            $(".legendContent").css({height:"110px"});
+            $(".legendContent").css({height:"115px"});
             break;
         case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
             $(".legendContent").css({height:"95px"});
@@ -208,18 +209,21 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                     XS.Main.Tjfx.Graph.addFeatures2Layer(XS.Main.Tjfx.Graph.featuersArr.county.data,XS.Main.Tjfx.Graph.CacheZoneInfos.county.data,0);
                     return;
                 }
-                XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel, "SMID>0", function()
-                    {
-                        if(XS.Main.Tjfx.Graph.featuersArr.county.data.length>0)
+                if(XS.Main.Tjfx.Graph.featuersArr.county.data.length < 1){
+
+                    XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel, "SMID>0", function()
                         {
-                            XS.Main.Tjfx.Graph.addFeatures2Layer(XS.Main.Tjfx.Graph.featuersArr.county.data,XS.Main.Tjfx.Graph.CacheZoneInfos.county.data,0);
+                            if(XS.Main.Tjfx.Graph.featuersArr.county.data.length>0)
+                            {
+                                XS.Main.Tjfx.Graph.addFeatures2Layer(XS.Main.Tjfx.Graph.featuersArr.county.data,XS.Main.Tjfx.Graph.CacheZoneInfos.county.data,0);
+                            }
+                            XS.CommonUtil.hideLoader();
+                        }, function(e)
+                        {
+                            XS.CommonUtil.hideLoader();
                         }
-                        XS.CommonUtil.hideLoader();
-                    }, function(e)
-                    {
-                        XS.CommonUtil.hideLoader();
-                    }
-                );
+                    );
+                }
             }else {
                 var action = "";
                 switch (type) {
@@ -262,14 +266,18 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                             XS.Main.Tjfx.Graph.addFeatures2Layer(XS.Main.Tjfx.Graph.featuersArr.county.data, XS.Main.Tjfx.Graph.CacheZoneInfos.county.data, 0);
                             return;
                         }
-                        XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel, "SMID>0", function () {
-                                if (XS.Main.Tjfx.Graph.featuersArr.county.data.length > 0) {
-                                    XS.Main.Tjfx.Graph.addFeatures2Layer(XS.Main.Tjfx.Graph.featuersArr.county.data,XS.Main.Tjfx.Graph.CacheZoneInfos.county.data,0);
+                        if (XS.Main.Tjfx.Graph.featuersArr.county.data.length < 1) {
+
+                            XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel, "SMID>0", function () {
+                                    if (XS.Main.Tjfx.Graph.featuersArr.county.data.length > 0) {
+                                        XS.Main.Tjfx.Graph.addFeatures2Layer(XS.Main.Tjfx.Graph.featuersArr.county.data,XS.Main.Tjfx.Graph.CacheZoneInfos.county.data,0);
+                                    }
+                                    XS.CommonUtil.hideLoader();
+                                }, function (e) {
+                                    XS.CommonUtil.hideLoader();
                                 }
-                            }, function (e) {
-                                XS.CommonUtil.hideLoader();
-                            }
-                        );
+                            );
+                        }
                     } else {
                         XS.CommonUtil.hideLoader();
                         XS.CommonUtil.showMsgDialog("", "获取数据失败！");
@@ -307,6 +315,18 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
             XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json) {
                 if (json && json.length > 0)
                 {
+                    switch (type){
+                        case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
+                        case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+                        {
+                            for(var i in json){
+                                json[i].WlanAndTelNum = json[i].WlanNum +　json[i].TelNum;
+                                json[i].ZAndHRoadHardNum = json[i].ZRoadHardNum +　json[i].HRoadHardNum;
+                            }
+
+                            break
+                        }
+                    }
                     XS.Main.Tjfx.Graph.CacheZoneInfos.town = json;
                     XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel, "县级代码=="+parentCode, function()
                         {
@@ -352,7 +372,20 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
             }
             data = {pid:parentCode, pd_id:parentCode};
             XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json) {
-                if (json && json.length > 0) {
+                if (json && json.length > 0)
+                {
+                    switch (type){
+                        case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
+                        case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+                        {
+                            for(var i in json){
+                                json[i].WlanAndTelNum = json[i].WlanNum +　json[i].TelNum;
+                                json[i].ZAndHRoadHardNum = json[i].ZRoadHardNum +　json[i].HRoadHardNum;
+                            }
+
+                            break
+                        }
+                    }
                     XS.Main.Tjfx.Graph.CacheZoneInfos.village = json;
                     XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel, "Town_id=="+parentCode, function()
                         {
@@ -499,6 +532,7 @@ XS.Main.Tjfx.Graph.addFeatures2Layer = function(featureArr, data, parentLevel){ 
 
     var features = [];
     var feature = null;
+    xs_tjfx_graph_maxValue = 0;
 
     var xOff = (1 / xs_MapInstance.getMapObj().getScale()) * 0.00000001;
     var yOff = -(1 / xs_MapInstance.getMapObj().getScale()) * 0.00000005;
@@ -566,9 +600,9 @@ XS.Main.Tjfx.Graph.addFeatures2Layer = function(featureArr, data, parentLevel){ 
                         break;
                     }
                 }
-
                 for(var i in fileds){
                     feature.attributes[fileds[i]] = obj[fileds[i]]==null ? 0 : obj[fileds[i]];
+                    xs_tjfx_graph_maxValue = xs_tjfx_graph_maxValue > obj[fileds[i]] ? xs_tjfx_graph_maxValue : obj[fileds[i]];
                 }
 
                 feature.data.xs_data = obj;
@@ -576,6 +610,36 @@ XS.Main.Tjfx.Graph.addFeatures2Layer = function(featureArr, data, parentLevel){ 
             }
         }
     }
+    switch (xs_tjfx_graph_type){
+        case XS.Main.Tjfx.Graph.Type.bar.fourOf45:
+        case XS.Main.Tjfx.Graph.Type.bar.fiveOf45:
+        case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
+        case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+        {
+            var axisYInterval = Math.ceil(xs_tjfx_graph_maxValue/4);
+            var maxValueLength = axisYInterval.toString().length;
+            if(axisYInterval == 0){
+                axisYInterval = 4;
+            }
+            else if(axisYInterval>10 && axisYInterval<=20 && axisYInterval%2!=0){
+                axisYInterval += 1;
+            }else if(axisYInterval>20 && axisYInterval%(Math.pow(10,maxValueLength-1))!=0){
+                var bottomValue = Math.floor(axisYInterval/(Math.pow(10,maxValueLength-1)))*10;
+                var before2 = Math.floor(axisYInterval/(Math.pow(10,maxValueLength-2)));
+                if(before2>=bottomValue && before2<bottomValue+5)
+                {
+                    axisYInterval = (bottomValue+5)*(Math.pow(10,maxValueLength-2));
+                }else if(before2>=bottomValue+5 && before2<bottomValue+10){
+                    axisYInterval = (bottomValue+10)*(Math.pow(10,maxValueLength-2));
+                }
+            }
+            var codomain = [0,axisYInterval * 4];
+            var axisYLabels = [axisYInterval * 4, axisYInterval * 3, axisYInterval * 2,axisYInterval * 1, "0"];
+            xs_tjfx_graph_themeLayer.chartsSetting.codomain = codomain;
+            xs_tjfx_graph_themeLayer.chartsSetting.axisYLabels = axisYLabels;
+        }
+    }
+
     xs_tjfx_graph_themeLayer.addFeatures(features);
     xs_tjfx_graph_themeLayer.setVisibility(true);
     XS.CommonUtil.hideLoader();
@@ -585,6 +649,7 @@ XS.Main.Tjfx.Graph.addFeatures2Layer = function(featureArr, data, parentLevel){ 
  * @param e
  */
 XS.Main.Tjfx.Graph.showInfoWin = function(e){
+    $("#xs_tjfx_graph_themeTipC").css("display", "none");
     if(e.target && e.target.refDataID && e.target.dataInfo){
         XS.Main.Tjfx.Graph.closeInfoWin(e);
          // 获取图形对应的数据 (feature)
@@ -606,6 +671,9 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
 
         var jsonObjArr = [];
         var title = "";
+        var x = e.event.clientX;
+        var y = e.event.clientY;
+        console.log(e);
         switch (xs_currentZoneLevel){
             case XS.Main.ZoneLevel.city:
             {
@@ -728,36 +796,7 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
                 break;
             }
         }
-        // 弹窗内容
-        var tag ="<div id='xs_tjfx_range_themeTipC' style='width: 200px; height: 200px; border-radius: 2px; border: 5px solid #00bbee;position1:absolute;z-index1: 12;opacity: 0.9; display1: none;background: #ffffff;'>" +
-            '<div style="width: 100%; height: 10%; background: #00bbee;color: #ffffff;line-height: 100%;font-size: 15px;font-weight: bold;padding-left: 5px;overflow: hidden;">' + title + '</div>'+
-            '<div style="border: 5px solid transparent; box-sizing: border-box; width: 100%; height: 90%;"><table border="1" style="width: 100%; height: 100%;border: 1px solid rgba(128, 128, 128, 0.16);border-collapse: collapse;font-size: 13px;">';
-            for(var i=0; i<jsonObjArr.length; i++){
-                tag +=  '<tr><td>'+jsonObjArr[i].name+'</td><td>'+jsonObjArr[i].value+'</td></tr>';
-            }
-        tag += '</div></table></div>';
-
-
-        var pixel = new SuperMap.Pixel(e.event.x,e.event.y);
-        var lonLat = xs_MapInstance.getMapObj().getLonLatFromPixel(pixel);
-        /*xs_tjfx_graph_framedCloud = new SuperMap.Popup.FramedCloud(
-            "infowin",
-            lonLat,
-            new SuperMap.Size(210, 210),
-            tag
-        );*/
-
-        xs_tjfx_graph_framedCloud = new SuperMap.Popup.Anchored(
-            "framedCloud",
-             lonLat,
-             new SuperMap.Size(210, 210),
-             tag
-         );
-
-        xs_tjfx_graph_framedCloud.autoSize = false;
-        xs_tjfx_graph_framedCloud.setOpacity(0.8);
-        if(xs_tjfx_graph_framedCloud) xs_MapInstance.getMapObj().removePopup(xs_tjfx_graph_framedCloud);
-        xs_MapInstance.getMapObj().addPopup(xs_tjfx_graph_framedCloud);
+        XS.Main.Tjfx.Graph.MouseOverTip(x, y, title, jsonObjArr);
     }
 }
 /**
@@ -902,5 +941,73 @@ XS.Main.Tjfx.Graph.themeLayerClickCallback = function(event){
     }else
     {
         xs_clickMapType = XS.Main.clickMapType.none;
+    }
+}
+/**
+ * 显示鼠标移动掠过的专题图信息
+ * @param x
+ * @param y
+ * @param title
+ * @param jsonObjArr
+ */
+XS.Main.Tjfx.Graph.MouseOverTip = function(x, y, title, jsonObjArr){
+    if ($("#xs_tjfx_graph_themeTipC").length < 1)
+    {
+        var tag ="<div id='xs_tjfx_graph_themeTipC' style='width: 200px; height: 200px; border-radius: 2px; border: 5px solid #00bbee;position:absolute;z-index: 12;opacity: 0.9; display: none;background: #ffffff;'></div>";
+        $("#xs_mainC").append(tag);
+    }
+    $("#xs_tjfx_graph_themeTipC").empty();
+
+    var contentTag =
+        '<div id="xs_tjfx_graph_themeTipCTitile" style="width: 100%; height: 10%; background: #00bbee;color: #ffffff;line-height: 100%;font-size: 15px;font-weight: bold;padding-left: 5px;overflow: hidden;">'+title+'</div>'+
+        '<div style="border: 5px solid transparent; box-sizing: border-box; width: 100%; height: 90%;"><table border="1" style="width: 100%; height: 100%;border: 1px solid rgba(128, 128, 128, 0.16);border-collapse: collapse;font-size: 13px;">';
+    for(var i=0; i<jsonObjArr.length; i++){
+        contentTag +=  '<tr><td style="width: 50%;">'+jsonObjArr[i].name+'</td><td>'+jsonObjArr[i].value+'</td></tr>';
+    }
+    contentTag += '</div></table>';
+    $("#xs_tjfx_graph_themeTipC").append(contentTag);
+
+    switch (xs_tjfx_graph_type){
+        case XS.Main.Tjfx.Graph.Type.pie:{
+            $("#xs_tjfx_graph_themeTipC").css({height:"200px"});
+            break;
+        }
+        case XS.Main.Tjfx.Graph.Type.bar.social:
+        case XS.Main.Tjfx.Graph.Type.bar.fourOf45:
+        case XS.Main.Tjfx.Graph.Type.bar.fiveOf45:
+        case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
+        case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+        {
+            $("#xs_tjfx_graph_themeTipC").css({height:"140px"});
+            $("#xs_tjfx_graph_themeTipCTitile").css({height:"14%"});
+            break;
+        }
+    }
+
+    if (x > 20 && x < ($(window).width() - 252) && y > 20 && y < ($(window).height() - 252))
+    {
+        $("#xs_tjfx_graph_themeTipC").css({
+            left: x+ 20,
+            top: y + 20,
+            display: 'block'
+        });
+    }else if(x >= ($(window).width() - 252) && y >= ($(window).height() - 252)){
+        $("#xs_tjfx_graph_themeTipC").css({
+            left: x - 252 + 30,
+            top: y - 252 + 90,
+            display: 'block'
+        });
+    }else if(x >= ($(window).width() - 252)){
+        $("#xs_tjfx_graph_themeTipC").css({
+            left: x - 252 + 30,
+            top: y + 20,
+            display: 'block'
+        });
+    }else if(y >= ($(window).height() - 252)){
+        $("#xs_tjfx_graph_themeTipC").css({
+            left: x + 20,
+            top: y - 252 + 90,
+            display: 'block'
+        });
     }
 }
