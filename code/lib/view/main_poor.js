@@ -564,13 +564,12 @@ XS.Main.Poor.povertyRelocation = function(level, parentId) {
 
         xs_poor_echartObj.on('click', function (params)
         {
-            console.log(params);
-            XS.LogUtil.log("level="+level+"parentId="+parentId);
-
+           // console.log(params);
+            //XS.LogUtil.log("level="+level+"parentId="+parentId);
+            xs_clickMapType = XS.Main.clickMapType.poor_povertyrelocation;
             if(params){
                 if(params.data.xs_level ==XS.Main.ZoneLevel.village){
                    //显示扶贫搬的信息
-
                 }else{
                     XS.Main.Poor.povertyRelocation(params.data.xs_level+1, params.data.xs_code);
                 }
@@ -687,7 +686,11 @@ XS.Main.Poor.povertyRelocation = function(level, parentId) {
 }
 
 //扶贫搬迁-村级展示
+var xs_poor_detail_is_relocationdialog_open = false;
 XS.Main.Poor.preloc_handleVill = function(level, parentId){
+    xs_clickMapType = XS.Main.clickMapType.poor_povertyrelocation;
+    xs_poor_detail_is_relocationdialog_open = false;
+    xs_poor_elementsLayer.setVisibility(true);
     XS.CommonUtil.hideLoader();
     var testObj = [
         {'name':'张三', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'镰刀湾村', 'flon':105.43084410858, 'flat':27.7626084993159, 'to':'青林村', 'tlon':105.40357648564, 'tlat':27.7557783311176},
@@ -704,11 +707,14 @@ XS.Main.Poor.preloc_handleVill = function(level, parentId){
     '</div>';
     content += '</div>';
     //id, title, iconCls, content, resizable, maximizable, modal, width, height, left, top, closeCallback, maximizeCallback, minimizeCallback
-    XS.CommonUtil.openDialog("xs_main_detail", "扶贫搬迁", "icon-man", content, false, true, false, 350, null,10,null,function(){
-        xs_poor_elementsLayer.setVisibility(false);
-      //  XS.CommonUtil.closeDialog("xs_main_detail_1");
-        xs_clickMapType = XS.Main.clickMapType.none;
+    XS.CommonUtil.openDialog("xs_main_detail_relocation", "扶贫搬迁", "icon-man", content, false, true, false, 350, null,10,null,function(){
+        if(xs_poor_detail_is_relocationdialog_open){
+            xs_poor_elementsLayer.setVisibility(false);
+            xs_clickMapType = XS.Main.clickMapType.none;
+            xs_poor_detail_is_relocationdialog_open = false;
+        }
     });
+    xs_poor_detail_is_relocationdialog_open = true;
 
     $("#xs_poor_reloc_tabC").empty().append('<table id="xs_poor_reloc_dg" class="easyui-datagrid" style="width:100%;height:100%;" ></table>');
     $('#xs_poor_reloc_dg').datagrid({
