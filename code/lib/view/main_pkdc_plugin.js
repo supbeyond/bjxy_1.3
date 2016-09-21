@@ -1196,14 +1196,14 @@ XS.Main.Pkjc.clickAnalysis = function(level){
 //项目资金点击函数
 XS.Main.Pkjc.clickItemFund = function(){
 
-   /* */
     var content = '<div style="height: 100%;padding:5px;box-sizing: border-box;">' +
             '<div align="center" id="xs_pkdc_itemFundDgridDom" class="textCenter">' +
                 '<i id="xs_pkdc_itemFound_loading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: -25px;visibility: visible;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading">' +
                 '</i>' +
             '</div>' +
         '</div>';
-    XS.CommonUtil.openDialog("xs_pkdc_detailDialog", xs_pkdc_addrName + "项目资金", "icon-save", content, false, true, false, "900","480",null,40);
+
+    XS.CommonUtil.openDialog("xs_pkdc_detailDialog", xs_pkdc_addrName + "-项目资金", "icon-save", content, false, true, false, "900","480",null,40);
 
     $("#xs_pkdc_itemFound_loading").css({"visibility":"visible"});
     var data = {regionid:xs_pkdc_currentStateCode};
@@ -1211,7 +1211,20 @@ XS.Main.Pkjc.clickItemFund = function(){
         $("#xs_pkdc_itemFound_loading").css({"visibility":"hidden"});
         if(json && json.length > 0){
             xs_pkdc_itemFoundJson = json;
-            xs_pkdc_addrName = json[0].COUNTY;
+
+            switch (json[0].REGIONID.length){
+                case 4:
+                case 6:
+                    xs_pkdc_addrName = json[0].COUNTY;
+                    break;
+                case 9:
+                    xs_pkdc_addrName = json[0].TOWN;
+                    break;
+                case 11:
+                case 12:
+                    xs_pkdc_addrName = json[0].VILL;
+                    break;
+            }
             $("#xs_pkdc_detailDialog").dialog("setTitle",xs_pkdc_addrName + "-项目资金");
             $('#xs_pkdc_itemFundDgridDom').datagrid({
                 data: XS.Main.Pkjc.itemFundPageData(json,1,10),
@@ -1240,6 +1253,7 @@ XS.Main.Pkjc.clickItemFund = function(){
                 }
             });
         }else{
+            $("#xs_pkdc_detailDialog").dialog("setTitle","项目资金");
             $('#xs_pkdc_itemFundDgridDom').append('<div style="-webkit-flex:1;flex:1;color:#ff0000;font-size: 40px;">暂无相关数据</div>');
         }
     });
