@@ -154,7 +154,7 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
     xs_tjfx_graph_themeLayer.chartsSetting = xs_tjfx_graph_chartsSetting;
 
     xs_tjfx_graph_themeLayer.setOpacity(0.9);
-    xs_tjfx_graph_themeLayer.isOverLay = false;
+    xs_tjfx_graph_themeLayer.isOverLay = true;
 
     if(document.getElementById("xs_tjfx_graph_Legend")){
         $("#xs_tjfx_graph_Legend").remove();
