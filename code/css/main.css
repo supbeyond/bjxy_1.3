@@ -178,6 +178,10 @@ html, body{
     opacity: 0.9;
 }
 
+#xs_pkdc_msg_btnC a:hover{
+    background: #263844 !important;
+}
+
 .oc-export-btn:hover,.oc-export-btn:focus,.oc-export-btn:active{
     background: #00bbee;
     border-width: 0px;
