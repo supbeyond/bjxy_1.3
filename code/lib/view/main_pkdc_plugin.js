@@ -259,10 +259,10 @@ var xs_pkdc_btnCliDatagridObj = null;
 var xs_pkdc_addrName = "";
 var xs_pkdc_itemFoundJson = null;
 //详情点击函数
-XS.Main.Pkjc.clickDetail = function(){
+XS.Main.Pkjc.clickDetail = function(level){
     var jsonObj = null;
     var data = null;
-    if(xs_currentZoneLevel == XS.Main.ZoneLevel.city)
+    if(level == XS.Main.ZoneLevel.city)
     {
         xs_pkdc_addrName = "毕节市";
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.city.title,"xs_pkdc_detailTabs","top",false);
@@ -371,7 +371,7 @@ XS.Main.Pkjc.clickDetail = function(){
                 });
             }
         });
-    }else if(xs_currentZoneLevel == XS.Main.ZoneLevel.county)
+    }else if(level == XS.Main.ZoneLevel.county)
     {
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.county.title,"xs_pkdc_detailTabs","top",false);
         XS.CommonUtil.openDialog("xs_pkdc_detailDialog", "详情", "icon-save", content, false, false, false, 900,"auto",null,80);
@@ -507,7 +507,7 @@ XS.Main.Pkjc.clickDetail = function(){
                 });
             }
         });
-    }else if(xs_currentZoneLevel == XS.Main.ZoneLevel.town)
+    }else if(level == XS.Main.ZoneLevel.town)
     {
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.town.title,"xs_pkdc_detailTabs","top",false);
         XS.CommonUtil.openDialog("xs_pkdc_detailDialog", "详情", "icon-save", content, false, false, false, 900,"auto",null,80);
@@ -587,7 +587,7 @@ XS.Main.Pkjc.clickDetail = function(){
                 });
             }
         });
-    }else if(xs_currentZoneLevel == XS.Main.ZoneLevel.village)
+    }else if(level == XS.Main.ZoneLevel.village)
     {
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.village.title,"xs_pkdc_detailTabs","top",false);
         XS.CommonUtil.openDialog("xs_pkdc_detailDialog", "详情", "icon-save", content, false, false, false, 900,"auto",null,80);
@@ -670,9 +670,9 @@ XS.Main.Pkjc.clickDetail = function(){
     }
 }
 // 数据分析点击函数
-XS.Main.Pkjc.clickAnalysis = function(){
+XS.Main.Pkjc.clickAnalysis = function(level){
     var xs_pkdc_analyIndex = 0;
-    if(xs_currentZoneLevel == XS.Main.ZoneLevel.city)
+    if(level == XS.Main.ZoneLevel.city)
     {
         xs_pkdc_addrName = "毕节市";
         var tabTile = ["饮水分析","异地搬迁","培训分析","社会保障","危房情况","脱贫分析","致贫原因","文化程度"];
@@ -817,7 +817,7 @@ XS.Main.Pkjc.clickAnalysis = function(){
                 });
             }
         });
-    }else if(xs_currentZoneLevel == XS.Main.ZoneLevel.county)
+    }else if(level == XS.Main.ZoneLevel.county)
     {
         var tabTile = ["文化程度", "致贫原因", "帮扶措施", "五通四有", "四有五覆盖"];
         var content = '<div style="padding: 2px;box-sizing: border-box;height: 100%;">' +
@@ -937,7 +937,7 @@ XS.Main.Pkjc.clickAnalysis = function(){
                 });
             }
         });
-    }else if(xs_currentZoneLevel == XS.Main.ZoneLevel.town)
+    }else if(level == XS.Main.ZoneLevel.town)
     {
         var tabTile = ["文化程度", "致贫原因", "帮扶措施", "五通四有", "四有五覆盖"];
         var content = '<div style="padding: 2px;box-sizing: border-box;height: 100%;">' +
@@ -1060,7 +1060,7 @@ XS.Main.Pkjc.clickAnalysis = function(){
                 });
             }
         });
-    }else if(xs_currentZoneLevel == XS.Main.ZoneLevel.village)
+    }else if(level == XS.Main.ZoneLevel.village)
     {
         var tabTile = ["文化程度", "致贫原因", "帮扶措施", "五通四有", "四有五覆盖","脱贫进展"];
         var content = '<div style="padding: 2px;box-sizing: border-box;height: 100%;">' +
@@ -1244,10 +1244,7 @@ XS.Main.Pkjc.clickItemFund = function(){
         }
     });
 }
-//扶贫搬迁点击
-XS.Main.Pkjc.clickRelocate = function(){
 
-}
 /**
  * 获取项目资金的分页数据
  * @param json

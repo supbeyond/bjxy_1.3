@@ -51,7 +51,8 @@ XS.Main.clickMapType = {
     none:-1, //放大地图
     pkdc:0, //贫困洞穴
     tjfx_range:1, //统计分析--分段专题图
-    tjfx_graph: 2 //统计分析--图表专题图
+    tjfx_graph: 2,//统计分析--图表专题图
+    poor_povertyrelocation:3 //扶贫搬迁
 };
 
 $(function(){

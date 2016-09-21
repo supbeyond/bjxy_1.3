@@ -537,7 +537,10 @@ var xs_poor_echart_option =
  * @param id
  */
 XS.Main.Poor.povertyRelocation = function(level, parentId) {
+    xs_clickMapType = XS.Main.clickMapType.poor_povertyrelocation;
     xs_poor_isELayerVisible = false;
+    XS.Main.Pkjc.minInfoWinDialog();
+    XS.Main.Pkjc.closeGaugeData();
 
     $("#xs_echartjs").empty().append('<script src="../base/echart2/dist/echarts-all.js"></script>');
     if(xs_poor_elementsLayer==null)
@@ -562,6 +565,16 @@ XS.Main.Poor.povertyRelocation = function(level, parentId) {
         xs_poor_echartObj.on('click', function (params)
         {
             console.log(params);
+            XS.LogUtil.log("level="+level+"parentId="+parentId);
+
+            if(params){
+                if(params.data.xs_level ==XS.Main.ZoneLevel.village){
+                   //显示扶贫搬的信息
+
+                }else{
+                    XS.Main.Poor.povertyRelocation(params.data.xs_level+1, params.data.xs_code);
+                }
+            }
         });
     }
 
@@ -666,12 +679,63 @@ XS.Main.Poor.povertyRelocation = function(level, parentId) {
             );
             break;
         case XS.Main.ZoneLevel.village:
+            //直接显列表
+            XS.Main.Poor.preloc_handleVill(level, parentId);
             break;
     }
 }
 
+//扶贫搬迁-村级展示
+XS.Main.Poor.preloc_handleVill = function(level, parentId){
+    XS.CommonUtil.hideLoader();
+    var testObj = [
+        {'name':'张三', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'镰刀湾村', 'flon':105.43084410858, 'flat':27.7626084993159, 'to':'青林村', 'tlon':105.40357648564, 'tlat':27.7557783311176},
+        {'name':'李四', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'煤冲村', 'flon':105.283967412228, 'flat':27.2141378668798, 'to':'核桃村', 'tlon':105.272751223953, 'tlat':27.2173935617529},
+        {'name':'王二', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'沙朗村', 'flon':105.34166954055, 'flat':27.2097694416046, 'to':'双堰村', 'tlon':105.286757418278, 'tlat':27.195028364937},
+        {'name':'赵七', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'常丰村', 'flon':105.427392355285, 'flat':27.1832865727689, 'to':'岔河村', 'tlon':105.364960147198, 'tlat':27.1834449228978},
+        {'name':'孙五', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'塘丰村', 'flon':105.396583630234, 'flat':27.1804027318534, 'to':'晨思村', 'tlon':105.351825839819, 'tlat':27.1919977053125}
+    ];
+    //1.搬迁人口列表
+    var content =
+        '<div id="xs_poor_reloc_C" style="width: 100%; height:100%;padding: 5px;box-sizing: border-box;">'+
+    '<div id="xs_poor_reloc_tabC" style="width:100%;height:465px;"></div>'+
+    '<i id="xs_poor_reloc_loading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: -25px;visibility: hidden;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading"></i>'+
+    '</div>';
+    content += '</div>';
+    //id, title, iconCls, content, resizable, maximizable, modal, width, height, left, top, closeCallback, maximizeCallback, minimizeCallback
+    XS.CommonUtil.openDialog("xs_main_detail", "扶贫搬迁", "icon-man", content, false, true, false, 350, null,10,null,function(){
+        xs_poor_elementsLayer.setVisibility(false);
+      //  XS.CommonUtil.closeDialog("xs_main_detail_1");
+        xs_clickMapType = XS.Main.clickMapType.none;
+    });
+
+    $("#xs_poor_reloc_tabC").empty().append('<table id="xs_poor_reloc_dg" class="easyui-datagrid" style="width:100%;height:100%;" ></table>');
+    $('#xs_poor_reloc_dg').datagrid({
+        data: testObj,
+        pagination: true,
+        pageSize: 15,
+        pageList: [15,20,30],
+        striped: true,
+        onSelect:function(index, data){
+            XS.Main.Poor.preloc_handleData(level, parentId, data);
+        },
+        singleSelect: true,
+        rownumbers: true,
+        columns: [[
+            {field: 'name', title: '姓名',width:'10%'},
+            {field: 'helpdepartment', title: '扶贫单位',width:'20%'},
+            {field: 'sum', title: '扶贫资金',width:'20%'},
+            {field: 'from', title: '原始地',width:'20%'},
+            {field: 'to', title: '搬迁地',width:'25%'}
+        ]]
+    });
+    $("#xs_poor_reloc_dg").datagrid("getPager").pagination({displayMsg:""});
+    $('#xs_poor_reloc_dg').datagrid('clientPaging');
+}
+
 //扶贫搬迁-数据处理
-XS.Main.Poor.preloc_handleData = function(level, parentId){
+var xs_poor_timeoutId = null;
+XS.Main.Poor.preloc_handleData = function(level, parentId, relocatorData){
     var geoCoord = {};
     var lineData = [];
     var pointData =  [];
@@ -686,7 +750,10 @@ XS.Main.Poor.preloc_handleData = function(level, parentId){
     switch (level)
     {
         case XS.Main.ZoneLevel.city:
-            xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 0);
+            clearTimeout(xs_poor_timeoutId)
+            xs_poor_timeoutId = setTimeout(function(){
+                xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 0);
+            },500);
             superName = "毕节";
             geoCoord[superName] = [xs_MapInstance.getMapCenterPoint().lon,xs_MapInstance.getMapCenterPoint().lat];
             curNameParam = "Name";
@@ -705,7 +772,11 @@ XS.Main.Poor.preloc_handleData = function(level, parentId){
             if(feature)
             {
                 var centerPoint = feature.geometry.getBounds().getCenterLonLat();
-                xs_MapInstance.getMapObj().setCenter(centerPoint, 5);
+
+                clearTimeout(xs_poor_timeoutId)
+                xs_poor_timeoutId = setTimeout(function(){
+                    xs_MapInstance.getMapObj().setCenter(centerPoint, 5);
+                },500);
 
                 superName = feature.data.Name;
                 geoCoord[superName] = [centerPoint.lon,centerPoint.lat];
@@ -719,7 +790,11 @@ XS.Main.Poor.preloc_handleData = function(level, parentId){
         case XS.Main.ZoneLevel.town:
 
             var centerPoint = xs_poor_superFeature.geometry.getBounds().getCenterLonLat();
-            xs_MapInstance.getMapObj().setCenter(centerPoint, 8);
+
+            clearTimeout(xs_poor_timeoutId)
+            xs_poor_timeoutId = setTimeout(function(){
+                xs_MapInstance.getMapObj().setCenter(centerPoint, 8);
+            },500);
 
             superName = xs_poor_superFeature.data.乡镇名称;
             geoCoord[superName] = [centerPoint.lon,centerPoint.lat];
@@ -727,41 +802,107 @@ XS.Main.Poor.preloc_handleData = function(level, parentId){
             curCodeParam = "OldID";
             cacheFeatureArr = XS.Main.Tjfx.type_featuersArr.village;
             break;
-        case XS.Main.ZoneLevel.village:
-            break;
     }
 
-    for(var i=0; i<cacheFeatureArr.length; i++)
+    if(level==XS.Main.ZoneLevel.village)
     {
-        var feature = cacheFeatureArr[i];
-        var lonLat = feature.geometry.getBounds().getCenterLonLat();
-
-        var name = feature.data[curNameParam];
-        var code = feature.data[curCodeParam];
-
-        geoCoord[name] = [lonLat.lon,lonLat.lat];
-        var value = Math.random()*1000;
-        value = Math.floor(value);
-        if(value>max){
-            max = value;
-        }
+        clearTimeout(xs_poor_timeoutId)
+        xs_poor_timeoutId = setTimeout(function(){
+            xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(relocatorData.tlon , relocatorData.tlat), 8);
+        },500);
+        //显示搬迁户数据
+        //{'name':'张三', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'镰刀湾村',
+        // 'flon':105.43084410858, 'flat':27.7626084993159, 'to':'青林村', 'tlon':105.40357648564, 'tlat':27.7557783311176}
+        geoCoord[relocatorData.from] = [relocatorData.flon,relocatorData.flat];
+        geoCoord[relocatorData.to] = [relocatorData.tlon,relocatorData.tlat];
         var lineObj = [{
             xs_type:0,
-            xs_code:code,
-            xs_ename:name,
-            name: superName
+            xs_code:parentId,
+            xs_ename:relocatorData.to,
+            xs_level:level,
+            name: relocatorData.from
         }, {
-            name: name,
-            value: value
+            name: relocatorData.to,
+            value: 1
         }];
         var pointObj = {
-            name: name,
-            xs_code:code,
+            name: relocatorData.from,
+            xs_code:parentId,
             xs_type:1,
-            value: value
+            xs_level:level,
+            value: 1
+        };
+        var pointObj1 = {
+            name: relocatorData.to,
+            xs_code:parentId,
+            xs_type:1,
+            xs_level:level,
+            value: 1
         };
         lineData.push(lineObj);
         pointData.push(pointObj);
+        pointData.push(pointObj1);
+
+        xs_poor_echart_option.dataRange.show = false;
+    }else
+    {
+        for(var i=0; i<cacheFeatureArr.length; i++)
+        {
+            var feature = cacheFeatureArr[i];
+            var lonLat = feature.geometry.getBounds().getCenterLonLat();
+
+            var name = feature.data[curNameParam];
+            var code = feature.data[curCodeParam];
+
+            var isNext = false;
+            switch (xs_user_regionLevel)
+            {
+                case XS.Main.ZoneLevel.county:
+                    if(level==XS.Main.ZoneLevel.city){
+                        if(xs_user_regionId != code){
+                            isNext = true;
+                        }
+                    }
+                    break;
+                case XS.Main.ZoneLevel.town:
+                    if(level==XS.Main.ZoneLevel.county){
+                        if(xs_user_regionId != code){
+                            isNext = true;
+                        }
+                    }
+                    break;
+            }
+
+            if(!isNext)
+            {
+                geoCoord[name] = [lonLat.lon,lonLat.lat];
+                var value = Math.random()*1000;
+                value = Math.floor(value);
+                if(value>max){
+                    max = value;
+                }
+                var lineObj = [{
+                    xs_type:0,
+                    xs_code:code,
+                    xs_ename:name,
+                    xs_level:level,
+                    name: superName
+                }, {
+                    name: name,
+                    value: value
+                }];
+                var pointObj = {
+                    name: name,
+                    xs_code:code,
+                    xs_type:1,
+                    xs_level:level,
+                    value: value
+                };
+                lineData.push(lineObj);
+                pointData.push(pointObj);
+            }
+        }
+        xs_poor_echart_option.dataRange.show = true;
     }
 
     xs_poor_isELayerVisible = true;
