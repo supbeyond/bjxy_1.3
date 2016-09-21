@@ -683,6 +683,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId) {
             XS.Main.Poor.preloc_handleVill(level, parentId);
             break;
     }
+
 }
 
 //扶贫搬迁-村级展示
