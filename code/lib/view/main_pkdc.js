@@ -592,6 +592,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
     xs_pkdc_categoryData = [];
     xs_pkdc_barChartData = {poorHSeries:[],poorPSeries:[]};
     xs_pkdc_poorOccurRate = [];
+    xs_pkdc_cacheDataArr  = [];
     $('#xs_pkdc_backSuperBtn').linkbutton({disabled:false});
     $('#xs_pkdc_positionBtn').linkbutton({disabled:true});
 
@@ -606,10 +607,12 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                 $("#xs_pkdc_msgWin_p").css("display", "none");
                 if(json && json.length>0){
                     XS.Main.CacheZoneInfos.county = json;
+                    xs_pkdc_cacheDataArr = json;
                     XS.Main.Pkjc.showCity();
                 }
             });
         }else{
+            xs_pkdc_cacheDataArr = XS.Main.CacheZoneInfos.county;
             XS.Main.Pkjc.showCity();
         }
     }else if(xs_pkdc_zoneLevel == XS.Main.ZoneLevel.county)
