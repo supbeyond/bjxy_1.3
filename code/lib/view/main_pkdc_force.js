@@ -182,21 +182,28 @@ var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
              $("#xs_pkdc_itemFound_loading").css({"visibility":"hidden"});
             //资金流节点  点击事件
              echart.on("click",function(params){
-                console.log(params);
-
                  /*var content = '<div style="height: 100%;padding:5px;box-sizing: border-box;">' +
                      '<div id="xs_pkdc_itemFundTree_click" style="height: 100%;">' +
                      '</div></div>';
-                 XS.CommonUtil.openDialog("xs_pkdc_itemFundTreeClick_win", params.name + "-" + projectName, "icon-save", content, false, true, false, "900","480",null,70);*/
-                 var content = '<div style="height: 100%;padding:5px;box-sizing: border-box;">' +
-                     '<div id="xs_pkdc_itemFundTree_click" style="height: 100%;">';
-                 
-                 var node
-                for(var i in xs_pkdc_itemFoundFJsonData[params.data.depth]){
-                    if(xs_pkdc_itemFoundFJsonData[params.data.depth].REGIONID == params.data.region_id){
+                 XS.CommonUtil.openDialog("xs_pkdc_itemFundTreeClick_win", params.name + "-" + projectName, "icon-save", content, false, true, false, "900","480",null,70);
 
+                 var nodeDataArr = [];
+                 var index = params.data.depth + xs_pkdc_itemFoundFIndex;
+                for(var i in xs_pkdc_itemFoundFJsonData[index]){
+                    if(xs_pkdc_itemFoundFJsonData[index][i].REGIONID == params.data.region_id){
+                        nodeDataArr.push(xs_pkdc_itemFoundFJsonData[index][i]);
                     }
                 }
+
+                 console.log(nodeDataArr);
+
+                 //$("#xs_pkdc_itemFundTree_click").
+                 var nodeDataObj = [];
+                 for(var i in xs_pkdc_itemFundGridField){
+                     nodeDataObj.push({name:xs_pkdc_itemFundGridField[i+1][1],value:nodeDataArr[0][xs_pkdc_itemFundGridField[i+1][0]]});
+                 }
+                 console.log(nodeDataObj);
+                 //XS.Main.Poor.createTable(objArr, 4, 30, "color:#00bbee","");*/
              });
 
          }else{
@@ -256,21 +263,21 @@ XS.Main.Pkjc.itemFoundNodesCreate = function (index) {
  * @param depth
  */
 XS.Main.Pkjc.itemFoundMock = function (parentNode, index) {
-    var nChildren = 0;
+    var nChildren = [];
     var currentDepthDigit = xs_pkdc_itemFoundFRegion.toString().length;
     for(var i in xs_pkdc_itemFoundFJsonData_update[index]){
         if(xs_pkdc_itemFoundFJsonData_update[index][i].REGIONID.substr(0,currentDepthDigit) == xs_pkdc_itemFoundFRegion){
-            nChildren++;
+            nChildren.push(i);
         }
     }
-    if(nChildren == 0){
+    if(nChildren.length == 0){
         return;
     }
     if(index - xs_pkdc_itemFoundFIndex > xs_pkdc_itemFoundFMaxDepth){
         xs_pkdc_itemFoundFMaxDepth = index - xs_pkdc_itemFoundFIndex;
     }
-    for (var i = 0; i < nChildren; i++) {
-        var childNode = XS.Main.Pkjc.itemFoundNodeCreate(index,i);
+    for (var i = 0; i < nChildren.length; i++) {
+        var childNode = XS.Main.Pkjc.itemFoundNodeCreate(index,nChildren[i]);
         xs_pkdc_itemFoundFLinks.push({
             source : parentNode.id,
             target : childNode.id,
