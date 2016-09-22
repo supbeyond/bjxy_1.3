@@ -65,8 +65,7 @@ var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
  * @param rowData 行数据
  */
  XS.Main.Pkjc.selectItemFoundRowData = function(rowIndex,rowData){
-     //$('#xs_pkdc_detailDialog').dialog('close');
-     var currentIdNum = xs_pkdc_currentStateCode.toString();
+     //$("#xs_pkdc_detailDialog").dialog("close");
      var projectName = rowData.PROJECTNAME;
      var content = '<script id="echarts-all" src="../base/echart2/dist/echarts-all.js"></script>' +
          '<div style="height: 100%;padding:5px;box-sizing: border-box;">' +
@@ -75,8 +74,7 @@ var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
              '</i>' +
          '</div></div>';
      XS.CommonUtil.openDialog("xs_pkdc_itemFundRowDataWin", projectName + "-项目资金", "icon-save", content, false, true, false, "900","480",null,70,function(){
-         
-         //$('#xs_pkdc_itemFundRowDataWin').remove();
+         //$("#xs_pkdc_detailDialog").dialog("open");
      });
      xs_pkdc_itemFoundFJsonData = [[],[],[],[]];
      xs_pkdc_itemFoundFJsonData_update = [[],[],[],[]];
@@ -136,13 +134,12 @@ var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
              xs_pkdc_itemFoundForceOpt.title.text = projectName + "资金流";
 
              xs_pkdc_itemFoundForceOpt.tooltip.formatter = function(params){
-
                  var region_id = params.data.region_id;
                  var tipStr = "";
                  if(region_id){
                      var tipProjectName = params.data.name;
-                     var index = params.data.depth;
-                     tipStr = tipProjectName + "<br/>";
+                     var index = params.data.depth + xs_pkdc_itemFoundFIndex;
+                     tipStr = tipProjectName + '<br/><hr border="1" color="gray"/>';
                      for(var i in xs_pkdc_itemFoundFJsonData[index]){
                          if(xs_pkdc_itemFoundFJsonData[index][i].REGIONID == region_id) {
                              tipStr += xs_pkdc_itemFoundFJsonData[index][i].PROJECTNAME + ": ";
@@ -176,27 +173,32 @@ var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
                      for(var i in legend){
                          xs_pkdc_itemFoundForceOpt.series[0].categories.push({name:legend[i]});
                      }
-             for(var i=0;i<xs_pkdc_itemFoundFNodes.length-1;i++){
-                 for(var j=i+1;j<xs_pkdc_itemFoundFNodes.length;j++){
-                     var nameIndex = 1;
-                     if(xs_pkdc_itemFoundFNodes[i].name == xs_pkdc_itemFoundFNodes[j].name){
-                         xs_pkdc_itemFoundFNodes[j].name = xs_pkdc_itemFoundFNodes[j].name + nameIndex;
-                         nameIndex++;
-                     }
-                     if(nameIndex>1){
-                         xs_pkdc_itemFoundFNodes[i].name = xs_pkdc_itemFoundFNodes[i].name + 0;
-                     }
-                 }
-             }
+
              xs_pkdc_itemFoundForceOpt.series[0].nodes = xs_pkdc_itemFoundFNodes;
              xs_pkdc_itemFoundForceOpt.series[0].links = xs_pkdc_itemFoundFLinks;
 
              var  echart = echarts.init(document.getElementById("xs_pkdc_itemFundRowDataTree"));
              echart.setOption(xs_pkdc_itemFoundForceOpt);
-             /*echart.on("click",function(params,aa,bb){
-                alert(1);
-             });*/
              $("#xs_pkdc_itemFound_loading").css({"visibility":"hidden"});
+            //资金流节点  点击事件
+             echart.on("click",function(params){
+                console.log(params);
+
+                 /*var content = '<div style="height: 100%;padding:5px;box-sizing: border-box;">' +
+                     '<div id="xs_pkdc_itemFundTree_click" style="height: 100%;">' +
+                     '</div></div>';
+                 XS.CommonUtil.openDialog("xs_pkdc_itemFundTreeClick_win", params.name + "-" + projectName, "icon-save", content, false, true, false, "900","480",null,70);*/
+                 var content = '<div style="height: 100%;padding:5px;box-sizing: border-box;">' +
+                     '<div id="xs_pkdc_itemFundTree_click" style="height: 100%;">';
+                 
+                 var node
+                for(var i in xs_pkdc_itemFoundFJsonData[params.data.depth]){
+                    if(xs_pkdc_itemFoundFJsonData[params.data.depth].REGIONID == params.data.region_id){
+
+                    }
+                }
+             });
+
          }else{
              $("#xs_pkdc_itemFound_loading").css({"visibility":"hidden"});
              XS.CommonUtil.showMsgDialog("", "获取数据失败！");
