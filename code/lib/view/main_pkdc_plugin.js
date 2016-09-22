@@ -1233,7 +1233,7 @@ XS.Main.Pkjc.clickItemFund = function(){
                 striped: true,
                 singleSelect: true,
                 rownumbers: false,
-                onDblClickRow:XS.Main.Pkjc.selectItemFoundRowData,
+                onClickRow:XS.Main.Pkjc.selectItemFoundRowData,
                 rowStyler: function(rowIndex,rowData){
                     return 'height:37px;';
                 },
