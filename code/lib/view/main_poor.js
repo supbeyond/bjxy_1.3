@@ -197,27 +197,12 @@ XS.Main.Poor.showPic = function(id, name){
         XS.CommonUtil.hideLoader();
         if (json && json.length>0)
         {
-            var content =
-                '<div id="xs_poor_galleria" style="height: 100%; color:#777;>';
-                for(var i in json)
-                {
-                    var obj = json[i];
-                    if(obj.Name.indexOf(".jpg")>0 || obj.Name.indexOf(".JPG")>0 || obj.Name.indexOf(".jpeg")>0){
-                        content +=
-                            '<a href="'+obj.Path+'">'+
-                                '<img'+
-                                ' src="'+obj.Path+'"'+
-                                ' data-big=""'+
-                                ' data-title=""'+
-                                ' data-description=""'+
-                                ' style="width: 100px; height: 100px;"'+
-                                '>'+
-                            '</a>';
-                    }
-                }
-                content += '</div>';
-            XS.CommonUtil.openDialog("xs_main_detail", name, "icon-man", content, false, false, true, 800, 500);
-            Galleria.run('#xs_poor_galleria');
+            var pathArr = [];
+            for(var i in json)
+            {
+                pathArr.push(json[i].Path);
+            }
+            XS.Main.Poor.showPic2Paths(name,pathArr);
         }else{
             XS.CommonUtil.showMsgDialog("", "没有拍摄图片");
         }
@@ -249,68 +234,96 @@ XS.Main.Poor.playVideo = function(id,name){
                 return;
             }else
             {
-                content =
-                    '<link rel="stylesheet" href="../base/other/video/video-js.min.css">'+
-                    '<script src="../base/other/video/video.min.js"></script>'+
-                    '<div style="background-color: #000000;width: 100%;height: 100%; position: relative"><video id="xs_poor_video" class="video-js vjs-default-skin" controls preload="none" width="600" height="600" style="margin: auto;" poster="../img/vedio_poster.png" data-setup="{}">';
-                if(obj.Name.indexOf(".3gp")>0||obj.Name.indexOf(".ogg")>0||obj.Name.indexOf(".ogv")>0){
-                    content += '<source src="'+obj.Path+'" type="video/ogg">';
-                }else if(obj.Name.indexOf(".mp4")>0){
-                    content += '<source src="'+obj.Path+'" type="video/mp4">';
-                }else if(obj.Name.indexOf(".webm")>0){
-                    content += '<source src="'+obj.Path+'" type="video/webm">';
-                }else{
-                    content += '<source src="'+obj.Path+'">';
-                }
-                content += '</video>';
-               // content += "<div id=\"xs_poor_video_down\" xs_path="+obj.Path+"><img src=\"../base/easyui/themes/extend-icons/arrow/arrow_down.png\" style=\"margin-left: 4px;margin-top: 4px;\"></div>";
-                content += "<div id=\"xs_poor_video_down\" xs_path="+obj.Path+"><i class='fa fa-arrow-down fa-1x' style=\"margin-left: 7px;margin-top: 7px;\"></i></div>";
-                content += '</div>';
-                content += '<script>$(function(){try{videojs("xs_poor_video").play();}catch(e){} $("#xs_poor_video_down").click(function(){window.open($(this).attr("xs_path"));});});</script>';
-
-                try{
-                    $('#xs_main_detail').dialog("close");
-                }catch (e){};
-                if(document.getElementById("xs_main_detail")){
-                    $('#xs_main_detail').remove();
-                }
-                var divTag = "<div id='xs_main_detail'></div>";
-                $("#xs_mainC").append(divTag);
-
-                var $_dl = $('#xs_main_detail');
-                $_dl.dialog({
-                    title: name,
-                    closed: true,
-                    tools:[
-                        {
-                            /*iconCls:'e_icon-arrow_rotate_clockwise',*/
-                            iconCls:'xs_poor_rotate',
-                            handler:function(){
-                                var deg = 90*((++xs_poor_video_rotate)%4);
-                                $("#xs_poor_video").css({
-                                    "transform": "rotate("+deg+"deg)"
-                                });
-                            }
-                        }
-                    ],
-                    maximizable:false,
-                    modal:true,
-                    width:750,
-                    height:640,
-                    resizable:true,
-                    iconCls:"icon-man",
-                    cache: false,
-                    content:content,
-                    onClose:function(){
-                        videojs("xs_main_detail").pause();
-                    }
-                }).dialog('open');
+                XS.Main.Poor.showVideo2Path(name, obj.Path);
             }
         }else
         {
             XS.CommonUtil.showMsgDialog("", "没有拍摄视频");
         }
     },function(e){XS.CommonUtil.hideLoader();});
+}
+
+XS.Main.Poor.showPic2Paths = function(title, pathArr){
+    var content =
+        '<div id="xs_poor_galleria" style="height: 100%; color:#777;>';
+    for(var i in pathArr)
+    {
+        var path = pathArr[i];
+        if(path.indexOf(".jpg")>0 || path.indexOf(".JPG")>0 || path.indexOf(".jpeg")>0){
+            content +=
+                '<a href="'+path+'">'+
+                '<img'+
+                ' src="'+path+'"'+
+                ' data-big=""'+
+                ' data-title=""'+
+                ' data-description=""'+
+                ' style="width: 100px; height: 100px;"'+
+                '>'+
+                '</a>';
+        }
+    }
+    content += '</div>';
+    XS.CommonUtil.openDialog("xs_main_detail", title, "icon-man", content, false, false, true, 800, 500);
+    Galleria.run('#xs_poor_galleria');
+}
+
+XS.Main.Poor.showVideo2Path = function(title, path){
+    var content =
+        '<link rel="stylesheet" href="../base/other/video/video-js.min.css">'+
+        '<script src="../base/other/video/video.min.js"></script>'+
+        '<div style="background-color: #000000;width: 100%;height: 100%; position: relative"><video id="xs_poor_video" class="video-js vjs-default-skin" controls preload="none" width="600" height="600" style="margin: auto;" poster="../img/vedio_poster.png" data-setup="{}">';
+    if(path.indexOf(".3gp")>0||path.indexOf(".ogg")>0||path.indexOf(".ogv")>0){
+        content += '<source src="'+path+'" type="video/ogg">';
+    }else if(path.indexOf(".mp4")>0){
+        content += '<source src="'+path+'" type="video/mp4">';
+    }else if(path.indexOf(".webm")>0){
+        content += '<source src="'+path+'" type="video/webm">';
+    }else{
+        content += '<source src="'+path+'">';
+    }
+    content += '</video>';
+    // content += "<div id=\"xs_poor_video_down\" xs_path="+obj.Path+"><img src=\"../base/easyui/themes/extend-icons/arrow/arrow_down.png\" style=\"margin-left: 4px;margin-top: 4px;\"></div>";
+    content += "<div id=\"xs_poor_video_down\" xs_path="+path+"><i class='fa fa-arrow-down fa-1x' style=\"margin-left: 7px;margin-top: 7px;\"></i></div>";
+    content += '</div>';
+    content += '<script>$(function(){try{videojs("xs_poor_video").play();}catch(e){} $("#xs_poor_video_down").click(function(){window.open($(this).attr("xs_path"));});});</script>';
+
+    try{
+        $('#xs_main_detail').dialog("close");
+    }catch (e){};
+    if(document.getElementById("xs_main_detail")){
+        $('#xs_main_detail').remove();
+    }
+    var divTag = "<div id='xs_main_detail'></div>";
+    $("#xs_mainC").append(divTag);
+
+    var $_dl = $('#xs_main_detail');
+    $_dl.dialog({
+        title: title,
+        closed: true,
+        tools:[
+            {
+                /*iconCls:'e_icon-arrow_rotate_clockwise',*/
+                iconCls:'xs_poor_rotate',
+                handler:function(){
+                    var deg = 90*((++xs_poor_video_rotate)%4);
+                    $("#xs_poor_video").css({
+                        "transform": "rotate("+deg+"deg)"
+                    });
+                }
+            }
+        ],
+        maximizable:false,
+        modal:true,
+        width:750,
+        height:640,
+        resizable:true,
+        iconCls:"icon-man",
+        cache: false,
+        content:content,
+        onClose:function(){
+            videojs("xs_main_detail").pause();
+        }
+    }).dialog('open');
 }
 
 //查看贫困户四通五有状态
@@ -457,8 +470,23 @@ var xs_poor_echart_option =
 {
     tooltip: {
         trigger: 'item',
-        formatter: function(v) {
-            return v[1].replace(':', '->');
+        formatter: function(v)
+        {
+            var data = v.data;
+            if(data.xs_type==0){ //line
+                return data.name + '->' + data.xs_ename;
+            }else
+            { //point
+                if(data.xs_level<XS.Main.ZoneLevel.village){
+                    return data.name + "<br/>" + "迁入户数:" + data.value;
+                }else{
+                    if(data.value==0){
+                        return data.xs_name + "<br/>" + "原居地:" + data.name;
+                    }else{
+                        return data.xs_name + "<br/>" + "现居地:" + data.name;
+                    }
+                }
+            }
         }
     },
     legend: {
@@ -539,6 +567,7 @@ var xs_poor_echart_option =
 XS.Main.Poor.povertyRelocation = function(level, parentId) {
     xs_clickMapType = XS.Main.clickMapType.poor_povertyrelocation;
     xs_poor_isELayerVisible = false;
+    xs_isShowUtfGridTip = false;
     XS.Main.Pkjc.minInfoWinDialog();
     XS.Main.Pkjc.closeGaugeData();
 
@@ -567,11 +596,134 @@ XS.Main.Poor.povertyRelocation = function(level, parentId) {
            // console.log(params);
             //XS.LogUtil.log("level="+level+"parentId="+parentId);
             xs_clickMapType = XS.Main.clickMapType.poor_povertyrelocation;
-            if(params){
-                if(params.data.xs_level ==XS.Main.ZoneLevel.village){
-                   //显示扶贫搬的信息
-                }else{
-                    XS.Main.Poor.povertyRelocation(params.data.xs_level+1, params.data.xs_code);
+            if(params)
+            {
+                if(params.data.xs_type==0)
+                { //点击线--上一级
+                    switch(params.data.xs_level)
+                    {
+                        case XS.Main.ZoneLevel.city:
+                            XS.CommonUtil.showMsgDialog("", "没有上一级");
+                            break;
+                        case XS.Main.ZoneLevel.county:
+                            if(xs_user_regionLevel==XS.Main.ZoneLevel.city){
+                                XS.Main.Poor.povertyRelocation(params.data.xs_level-1, xs_cityID);
+                            }else{
+                                XS.CommonUtil.showMsgDialog("", "您的权限不够");
+                            }
+                            break;
+                        case XS.Main.ZoneLevel.town:
+                            if(xs_user_regionLevel<=XS.Main.ZoneLevel.county)
+                            {
+                                if(xs_user_regionLevel==XS.Main.ZoneLevel.county)
+                                {
+                                    XS.Main.Poor.povertyRelocation(params.data.xs_level-1, xs_user_regionId);
+                                }else
+                                {
+                                    //找县Id
+                                    XS.CommonUtil.showLoader();
+                                    var sql = "OldID=="+params.data.xs_code;
+                                    XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, "Village_Code", sql, xs_MapInstance.bLayerUrl,function(queryEventArgs)
+                                    {
+                                        XS.CommonUtil.hideLoader();
+                                        var i, feature, result = queryEventArgs.result;
+                                        if (result && result.recordsets&&result.recordsets[0].features.length>0)
+                                        {
+                                            var feature = result.recordsets[0].features[0];
+                                            XS.Main.Poor.povertyRelocation(params.data.xs_level-1, feature.data.country_id);
+                                        }
+                                    }, function(e){
+                                        XS.CommonUtil.hideLoader();
+                                    });
+                                }
+                            }else{
+                                XS.CommonUtil.showMsgDialog("", "您的权限不够");
+                            }
+                            break;
+                        case XS.Main.ZoneLevel.village:
+                            if(xs_user_regionLevel<=XS.Main.ZoneLevel.town){
+                                if(xs_user_regionLevel==XS.Main.ZoneLevel.town){
+                                    XS.Main.Poor.povertyRelocation(params.data.xs_level-1, xs_user_regionId);
+                                }else{
+                                    XS.CommonUtil.showLoader();
+                                    var sql = "OldID=="+params.data.xs_code;
+                                    XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, "Village_Code", sql, xs_MapInstance.bLayerUrl,function(queryEventArgs)
+                                    {
+                                        XS.CommonUtil.hideLoader();
+                                        var i, feature, result = queryEventArgs.result;
+                                        if (result && result.recordsets&&result.recordsets[0].features.length>0)
+                                        {
+                                            var feature = result.recordsets[0].features[0];
+                                            XS.Main.Poor.povertyRelocation(params.data.xs_level-1, feature.data.Town_id);
+                                        }
+                                    }, function(e){
+                                        XS.CommonUtil.hideLoader();
+                                    });
+                                }
+                            }else{
+                                XS.CommonUtil.showMsgDialog("", "您的权限不够");
+                            }
+                            break;
+                    }
+                }else
+                { //点击的点--下一级
+                    if(params.data.xs_level ==XS.Main.ZoneLevel.village){
+                        //显示扶贫搬户的信息
+                        var title = "";
+                        if(params.data.value==0){
+                            title = "原居地信息";
+                        }else{
+                            title = "现居地信息";
+                        }
+                        var content =
+                            '<div style="width: 100%; background-color: #eee; box-sizing: border-box;">' +
+                            "<a id='xs_poor_preloc_picBtn' href='javascript:void(0);' style='width: 80px; margin: 5px;margin-bottom: 0px;'>图片</a>" +
+                            "<a id='xs_poor_preloc_videoBtn' href='javascript:void(0);'  style='width: 80px; margin: 5px;margin-bottom: 0px;'>视频</a>" +
+                            '</div>' +
+                            '<div id="xs_poor_preloc_detail_tab" style="width:250px; padding: 2px;box-sizing: border-box;"></div>';
+
+                        XS.CommonUtil.openDialog("xs_main_detail_1", title, "icon-man", content, false, false, false, null, null,null,null,function(){
+                        });
+
+                        $('#xs_poor_preloc_picBtn').linkbutton({iconCls:'e_icon-picture'});
+                        $('#xs_poor_preloc_videoBtn').linkbutton({iconCls:'e_icon-film'});
+                        $('#xs_poor_preloc_picBtn').click(function(){
+                            var pathArr = [];
+                            if(params.data.value==0){
+                                pathArr.push("../test/s_01.jpg");
+                                pathArr.push("../test/s_02.jpg");
+                                pathArr.push("../test/s_03.jpg");
+                            }else{
+                                pathArr.push("../test/e_01.jpg");
+                                pathArr.push("../test/e_02.jpg");
+                            }
+                            XS.Main.Poor.showPic2Paths(obj.name, pathArr);
+                        });
+                        $('#xs_poor_preloc_videoBtn').click(function(){
+                            var path = "";
+                            if(params.data.value==0){
+                                path = "../test/s.3gp";
+                            }else{
+                                path = "../test/e.mp4";
+                            }
+                            XS.Main.Poor.showVideo2Path(obj.name, path);
+                        });
+
+                        //基本信息
+                        //xs_info
+                        var obj = params.data.xs_info;
+                        var objArr = [
+                            {"name": "户主", "value": obj.name},
+                            {"name": "扶贫单位", "value": obj.helpdepartment},
+                            {"name": "负责人", "value": obj.helper},
+                            {"name": "资助金", "value": obj.sum},
+                            {"name": "原居地", "value": obj.from},
+                            {"name": "现现地", "value": obj.to},
+                        ];
+                        $("#xs_poor_preloc_detail_tab").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 1, 30,"color:#00bbee",""));
+                    }else{
+                        XS.Main.Poor.povertyRelocation(params.data.xs_level+1, params.data.xs_code);
+                    }
                 }
             }
         });
@@ -580,7 +732,8 @@ XS.Main.Poor.povertyRelocation = function(level, parentId) {
     xs_poor_elementsLayer.setVisibility(true);
 
     XS.CommonUtil.showLoader();
-    switch (level){
+    switch (level)
+    {
         case XS.Main.ZoneLevel.city:
             if(XS.Main.Tjfx.type_featuersArr.county.length>0){
                 XS.Main.Poor.preloc_handleData(level, parentId);
@@ -712,6 +865,7 @@ XS.Main.Poor.preloc_handleVill = function(level, parentId){
             xs_poor_elementsLayer.setVisibility(false);
             xs_clickMapType = XS.Main.clickMapType.none;
             xs_poor_detail_is_relocationdialog_open = false;
+            xs_isShowUtfGridTip = true;
         }
     });
     xs_poor_detail_is_relocationdialog_open = true;
@@ -837,13 +991,17 @@ XS.Main.Poor.preloc_handleData = function(level, parentId, relocatorData){
             xs_code:parentId,
             xs_type:1,
             xs_level:level,
-            value: 1
+            xs_name:relocatorData.name,
+            xs_info:relocatorData,
+            value: 0
         };
         var pointObj1 = {
             name: relocatorData.to,
             xs_code:parentId,
             xs_type:1,
             xs_level:level,
+            xs_name:relocatorData.name,
+            xs_info:relocatorData,
             value: 1
         };
         lineData.push(lineObj);
