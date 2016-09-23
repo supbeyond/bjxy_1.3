@@ -115,7 +115,7 @@ XS.CommonUtil.getRandomNumber = function (min, max, decimalNum){
  * @param top
  * @param closeCallback
  */
-XS.CommonUtil.openDialog = function(id, title, iconCls, content, resizable, maximizable, modal, width, height, left, top, closeCallback, maximizeCallback, minimizeCallback){
+XS.CommonUtil.openDialog = function(id, title, iconCls, content, resizable, maximizable, modal, width, height, left, top, closeCallback, maximizeCallback, minimizeCallback,restoreCallback){
     XS.CommonUtil.closeDialog(id);
     var divTag = "<div id="+id+"></div>";
     $("#xs_mainC").append(divTag);
@@ -128,6 +128,7 @@ XS.CommonUtil.openDialog = function(id, title, iconCls, content, resizable, maxi
         top:top,
         closed: true,
         maximizable:maximizable,
+        onRestore:restoreCallback,
         modal:modal,
         shadow:false,
         resizable:resizable,
