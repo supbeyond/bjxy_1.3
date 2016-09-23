@@ -178,7 +178,7 @@ XS.Main.Pkjc.detailKV = {
 var xs_pkdc_colorArr  = ["#96FF20","#35FFDF","#1FA7FF","#0A54FF","#1917FF","#6625FF",
     "#CA34FF","#FF3A92","#FF2A39","#FF7023","#FFC52C","#FFFD45","#FFA0A0","#AEB1FF"];
 var xs_pkdc_itemFundGridField = [["serialNo","序号"],["PROJECID","项目编号"],["AUTISTATE","申请状态"],["PROJECTNAME","项目名称"],
-    ["FONDYEAR","年度"],["FOUNDNUM","资金号"],["REACHCOUNTYFOUNDS","到帐资金"],["FOUNDDETAIL","资金细节"],
+    ["FONDYEAR","年度"],["FOUNDNUM","资金文号"],["REACHCOUNTYFOUNDS","到帐资金"],["FOUNDDETAIL","资金细节"],
     ["REPLYID","批复文号"],["PROJECTHEAD","项目负责人"],["FOUNDSIZECONTENT","资金规模内容"],["HELPHOUSE","覆盖户数"],
     ["HELPPEOPLE","覆盖人数"],["FINAFOUND","最终资金"],["CREATTIME","创建时间"]];
 XS.Main.Pkjc.DetailPieOpt= {
@@ -1195,15 +1195,27 @@ XS.Main.Pkjc.clickAnalysis = function(level){
 }
 //项目资金点击函数
 XS.Main.Pkjc.clickItemFund = function(){
-
+    xs_pkdc_addrName = "毕节市";
     var content = '<div style="height: 100%;padding:5px;box-sizing: border-box;">' +
-            '<div align="center" id="xs_pkdc_itemFundDgridDom" class="textCenter">' +
+            '<div align="center" id="xs_pkdc_itemFundDgridDom" class="textCenter"">' +
                 '<i id="xs_pkdc_itemFound_loading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: -25px;visibility: visible;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading">' +
                 '</i>' +
             '</div>' +
         '</div>';
 
-    XS.CommonUtil.openDialog("xs_pkdc_detailDialog", xs_pkdc_addrName + "-项目资金", "icon-save", content, false, true, false, "900","480",null,40);
+    XS.CommonUtil.openDialog("xs_pkdc_detailDialog", xs_pkdc_addrName + "-项目资金", "icon-save", content, false, true, false, "900","480",null,40,function(){},function(){
+        $("#xs_pkdc_itemFundDgridDom").datagrid({
+            rowStyler: function(){
+                return 'height:55px;';
+            }
+        });
+    },null,function(){
+        $("#xs_pkdc_itemFundDgridDom").datagrid({
+            rowStyler: function(){
+                return 'height:37px;';
+            }
+        });
+    });
 
     $("#xs_pkdc_itemFound_loading").css({"visibility":"visible"});
     var data = {regionid:xs_pkdc_currentStateCode};
@@ -1230,6 +1242,8 @@ XS.Main.Pkjc.clickItemFund = function(){
                 data: XS.Main.Pkjc.itemFundPageData(json,1,10),
                 pagination: true,
                 pageSize: 10,
+                fit: true,
+                //fitColumns:true,
                 striped: true,
                 singleSelect: true,
                 rownumbers: false,
@@ -1237,7 +1251,7 @@ XS.Main.Pkjc.clickItemFund = function(){
                 rowStyler: function(rowIndex,rowData){
                     return 'height:37px;';
                 },
-                columns: XS.Main.Pkjc.itemFundGridColumns(xs_pkdc_itemFundGridField,'7%',[[0,'4%'],[2,'5%'],[3,'11%'],[4,'5%'],[5,'12%'],[6,'5%'],[7,'8%'],[8,'10%'],[9,'6%'],[11,'5%'],[12,'5%'],[13,'5%'],[14,'8%']]),
+                columns: XS.Main.Pkjc.itemFundGridColumns(xs_pkdc_itemFundGridField,'7%',[[0,'4%'],[2,'5%'],[3,'10%'],[4,'5%'],[5,'11%'],[6,'5%'],[7,'8%'],[8,'10%'],[9,'6%'],[11,'5%'],[12,'5%'],[13,'5%'],[14,'8%']])
             });
             var pager = $("#xs_pkdc_itemFundDgridDom").datagrid("getPager");
             pager.pagination({
