@@ -260,13 +260,14 @@ var xs_pkdc_addrName = "";
 var xs_pkdc_itemFoundJson = null;
 //详情点击函数
 XS.Main.Pkjc.clickDetail = function(level){
+    XS.Main.Pkjc.minInfoWinDialog();
     var jsonObj = null;
     var data = null;
     if(level == XS.Main.ZoneLevel.city)
     {
         xs_pkdc_addrName = "毕节市";
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.city.title,"xs_pkdc_detailTabs","top",false);
-        XS.CommonUtil.openDialog("xs_pkdc_detailDialog", xs_pkdc_addrName + "详情", "icon-save", content, false, false, false, 900,"auto",null,80);
+        XS.CommonUtil.openDialog("xs_pkdc_detailDialog", xs_pkdc_addrName + "详情", "icon-man", content, false, false, false, 900,"auto",null,80);
         $("#xs_pkdc_detailTabs").tabs({tabWidth:121,tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
@@ -374,7 +375,7 @@ XS.Main.Pkjc.clickDetail = function(level){
     }else if(level == XS.Main.ZoneLevel.county)
     {
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.county.title,"xs_pkdc_detailTabs","top",false);
-        XS.CommonUtil.openDialog("xs_pkdc_detailDialog", "详情", "icon-save", content, false, false, false, 900,"auto",null,80);
+        XS.CommonUtil.openDialog("xs_pkdc_detailDialog", "详情", "icon-man", content, false, false, false, 900,"auto",null,80);
         $("#xs_pkdc_detailTabs").tabs({tabWidth:106,tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
@@ -510,7 +511,7 @@ XS.Main.Pkjc.clickDetail = function(level){
     }else if(level == XS.Main.ZoneLevel.town)
     {
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.town.title,"xs_pkdc_detailTabs","top",false);
-        XS.CommonUtil.openDialog("xs_pkdc_detailDialog", "详情", "icon-save", content, false, false, false, 900,"auto",null,80);
+        XS.CommonUtil.openDialog("xs_pkdc_detailDialog", "详情", "icon-man", content, false, false, false, 900,"auto",null,80);
         $("#xs_pkdc_detailTabs").tabs({tabWidth:215,tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
@@ -590,7 +591,7 @@ XS.Main.Pkjc.clickDetail = function(level){
     }else if(level == XS.Main.ZoneLevel.village)
     {
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.village.title,"xs_pkdc_detailTabs","top",false);
-        XS.CommonUtil.openDialog("xs_pkdc_detailDialog", "详情", "icon-save", content, false, false, false, 900,"auto",null,80);
+        XS.CommonUtil.openDialog("xs_pkdc_detailDialog", "详情", "icon-man", content, false, false, false, 900,"auto",null,80);
         $("#xs_pkdc_detailTabs").tabs({tabWidth:215,tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
@@ -671,6 +672,7 @@ XS.Main.Pkjc.clickDetail = function(level){
 }
 // 数据分析点击函数
 XS.Main.Pkjc.clickAnalysis = function(level){
+    XS.Main.Pkjc.minInfoWinDialog();
     var xs_pkdc_analyIndex = 0;
     if(level == XS.Main.ZoneLevel.city)
     {
@@ -680,7 +682,7 @@ XS.Main.Pkjc.clickAnalysis = function(level){
                 XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",true) +
             '</div>';
         $("#xs_pkdc_AnalysTabs").css({boxSizing: "border-box"});
-        XS.CommonUtil.openDialog("xs_pkdc_detailDialog", xs_pkdc_addrName + "-贫困数据分析", "icon-save", content, false, true, false, "900","480",null,80);
+        XS.CommonUtil.openDialog("xs_pkdc_detailDialog", xs_pkdc_addrName + "-贫困数据分析", "icon-man", content, false, true, false, "900","480",null,80);
 
         selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab",0);
         selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box"></div>');
@@ -827,7 +829,7 @@ XS.Main.Pkjc.clickAnalysis = function(level){
         for(var i=0;i<XS.Main.CacheZoneInfos.county.length;i++){
             if(XS.Main.CacheZoneInfos.county[i].CBI_ID == xs_pkdc_currentStateCode){
                 xs_pkdc_addrName = XS.Main.CacheZoneInfos.county[i].CBI_NAME;
-                XS.CommonUtil.openDialog("xs_pkdc_detailDialog", xs_pkdc_addrName + "-贫困数据分析", "icon-save", content, false, true, false, "900","480", null, 40);
+                XS.CommonUtil.openDialog("xs_pkdc_detailDialog", xs_pkdc_addrName + "-贫困数据分析", "icon-man", content, false, true, false, "900","480", null, 40);
             }
         }
 
@@ -943,7 +945,7 @@ XS.Main.Pkjc.clickAnalysis = function(level){
         var content = '<div style="padding: 2px;box-sizing: border-box;height: 100%;">' +
             XS.Main.Pkjc.tabsContent(tabTile, "xs_pkdc_AnalysTabs", "left", true) +
             '</div>';
-        XS.CommonUtil.openDialog("xs_pkdc_detailDialog", "数据分析", "icon-save", content, false, true, false, "900","480", null, 40);
+        XS.CommonUtil.openDialog("xs_pkdc_detailDialog", "数据分析", "icon-man", content, false, true, false, "900","480", null, 40);
         data = {pd_id:xs_pkdc_currentStateCode};
         XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTownsBaseInfoById", data, function(json) {
             xs_pkdc_addrName = json.TOWB_NAME;
@@ -1066,7 +1068,7 @@ XS.Main.Pkjc.clickAnalysis = function(level){
         var content = '<div style="padding: 2px;box-sizing: border-box;height: 100%;">' +
             XS.Main.Pkjc.tabsContent(tabTile, "xs_pkdc_AnalysTabs", "left", true) +
             '</div>';
-        XS.CommonUtil.openDialog("xs_pkdc_detailDialog", "数据分析", "icon-save", content, false, true, false, "900", "480", null, 40);
+        XS.CommonUtil.openDialog("xs_pkdc_detailDialog", "数据分析", "icon-man", content, false, true, false, "900", "480", null, 40);
         data = {pd_id:xs_pkdc_currentStateCode};
         XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryVillBaseById", data, function(json) {
             xs_pkdc_addrName = json.VBI_NAME;
@@ -1195,6 +1197,7 @@ XS.Main.Pkjc.clickAnalysis = function(level){
 }
 //项目资金点击函数
 XS.Main.Pkjc.clickItemFund = function(){
+    XS.Main.Pkjc.minInfoWinDialog();
     xs_pkdc_addrName = "毕节市";
     var content = '<div style="height: 100%;padding:5px;box-sizing: border-box;">' +
             '<div align="center" id="xs_pkdc_itemFundDgridDom" class="textCenter"">' +
@@ -1203,7 +1206,7 @@ XS.Main.Pkjc.clickItemFund = function(){
             '</div>' +
         '</div>';
 
-    XS.CommonUtil.openDialog("xs_pkdc_detailDialog", xs_pkdc_addrName + "-项目资金", "icon-save", content, false, true, false, "900","480",null,40,function(){},function(){
+    XS.CommonUtil.openDialog("xs_pkdc_detailDialog", xs_pkdc_addrName + "-项目资金", "icon-man", content, false, true, false, "900","480",100,40,function(){},function(){
         $("#xs_pkdc_itemFundDgridDom").datagrid({
             rowStyler: function(){
                 return 'height:55px;';

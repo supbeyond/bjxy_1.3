@@ -487,6 +487,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
             ],
             onClose:function(){
                 xs_pkdc_zoneLevel = -1;
+                XS.Main.Poor.clearRelocationLayer();
                 XS.Main.clearMap();
             }
         });
@@ -872,6 +873,7 @@ XS.Main.Pkjc.clickDutyChain = function(zoneLevel, stateCode){
     //{"__type":"WorkRegion:#WcfService2","region_fullname":"毕节市大方县",
     // "region_shortname":"大方县","regionid":"5224","workid":"522400045",
     // "workname":"蔡志君","workpost":"省政协副主席","worktel":"0","workunit":""}
+    XS.Main.Pkjc.minInfoWinDialog();
     var data = {pd_id:stateCode};
     XS.CommonUtil.showLoader();
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryBrigInviBySId", data, function (json) {
@@ -930,6 +932,7 @@ XS.Main.Pkjc.clickDutyChain = function(zoneLevel, stateCode){
  * @param zoneCode 行政区域ID
  */
 XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode){
+    XS.Main.Pkjc.minInfoWinDialog();
     if(XS.StrUtil.isEmpty(zoneCode)){
         XS.CommonUtil.showMsgDialog("","请先选择区域");
         return;
@@ -953,10 +956,10 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode){
                 '</div>';
             content += '<div style="margin:5px 0px;"><label>起始:</label><input id="xs_pkdc_task_ds" style="width: 35%;" class="easyui-datebox" data-options="formatter:XS.CommonUtil.dateFormatter,parser:XS.CommonUtil.dateParser"/>';
             content += '<label>&nbsp;终止:</label><input id="xs_pkdc_task_dd" style="width: 35%;" class="easyui-datebox" data-options="formatter:XS.CommonUtil.dateFormatter,parser:XS.CommonUtil.dateParser"/></div>';
-            content += '<a href="javascript:0;" id="xs_pkdc_task_linebtn" style="width: 22%; margin-right: 5px;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;" class="fa fa-search"></i>轨迹</a>';
-            content += '<a href="javascript:0;" id="xs_pkdc_task_taskbtn" style="width: 22%; margin-right: 5px;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;" class="fa fa-tasks"></i>任务</a>';
-            content += '<a href="javascript:0;" id="xs_pkdc_task_alertbtn" style="width: 22%; margin-right: 5px;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;" class="fa fa-warning"></i>预警</a>';
-            content += '<a href="javascript:0;" id="xs_pkdc_task_monitorbtn" style="width: 22%;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;"class="fa fa-map-marker"></i>动态</a>';
+            content += '<a href="javascript:0;" id="xs_pkdc_task_linebtn" style="width: 40%; margin-right: 5px;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;" class="fa fa-search"></i>轨迹</a>';
+    /*content += '<a href="javascript:0;" id="xs_pkdc_task_taskbtn" style="width: 22%; margin-right: 5px;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;" class="fa fa-tasks"></i>任务</a>';
+            content += '<a href="javascript:0;" id="xs_pkdc_task_alertbtn" style="width: 22%; margin-right: 5px;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;" class="fa fa-warning"></i>预警</a>';*/
+            content += '<a href="javascript:0;" id="xs_pkdc_task_monitorbtn" style="width: 40%;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;"class="fa fa-map-marker"></i>动态</a>';
             content += '<div style="margin-top: 5px;position: relative;">' +
             '<div id="xs_pkdc_task_tabC" style="width:100%;height:465px;"></div>' +
             '<i id="xs_pkdc_task_loading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: -25px;visibility: visible;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading"></i>'+
@@ -976,8 +979,8 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode){
 
     //轨迹查询
     $("#xs_pkdc_task_linebtn").click(XS.Main.Pkjc.task_queryLine);
-    $("#xs_pkdc_task_taskbtn").click(null);
-    $("#xs_pkdc_task_alertbtn").click(null);
+    /*$("#xs_pkdc_task_taskbtn").click(null);
+    $("#xs_pkdc_task_alertbtn").click(null);*/
 
     //动态
     $("#xs_pkdc_task_monitorbtn").click(function(){

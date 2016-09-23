@@ -999,7 +999,6 @@ XS.Main.hiddenLayers = function(){
     xs_clusterLayer.destroyCluster();
     xs_clusterControl.deactivate();
 
-    //XS.Main.Poor.clearRelocationLayer();
 }
 
 //清空地图

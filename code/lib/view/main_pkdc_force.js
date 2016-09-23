@@ -73,7 +73,7 @@ var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
              '<i id="xs_pkdc_itemFound_rowLoading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: -25px;visibility: visible;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading">' +
              '</i>' +
          '</div></div>';
-     XS.CommonUtil.openDialog("xs_pkdc_itemFundRowDataWin", projectName + "-项目资金", "icon-save", content, false, true, false, "900","480",null,70,function(){
+     XS.CommonUtil.openDialog("xs_pkdc_itemFundRowDataWin", projectName + "-项目资金", "icon-man", content, false, true, false, 700,"480",null,70,function(){
          //$("#xs_pkdc_detailDialog").dialog("open");
          $("#xs_echartjs").empty().append('<script src="../base/echart/echarts.js"></script>');
      });
@@ -186,12 +186,12 @@ var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
              echart.on("click",function(params){
                  if(params.data.target)return;
                  //$("#xs_pkdc_itemFundRowDataWin").dialog("close");
-                 var content = '<div style="height: 100%;padding: 5px;box-sizing: border-box;">' +
+                 var content = '<div style="height: 100%;padding: 5px;box-sizing: border-box;width: 1000px;">' +
                  //'<div style="height: 100%;">' +
-                 '<div id="xs_pkdc_itemFundTree_click" style="height: 100%;border1: 1px solid green;"></div>' +
+                 '<div id="xs_pkdc_itemFundTree_click" style="height: 100%;"></div>' +
                  //'<div id="xs_pkdc_itemFundTree_page" style="height: 10%;border1: 1px solid red;"></div>' +
-                 '</div></div>';
-                 XS.CommonUtil.openDialog("xs_pkdc_itemFundTreeClick_win", params.name + "-" + projectName, "icon-save", content, false, false, false, "900","480",null,100,function(){
+                 '</div>';
+                 XS.CommonUtil.openDialog("xs_pkdc_itemFundTreeClick_win", params.name + "-" + projectName, "icon-man", content, true, false, false, 500, 300,null,100,function(){
                      //$("#xs_pkdc_itemFundRowDataWin").dialog("open");
                  });
 
@@ -213,13 +213,13 @@ var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
                      fit: true,
                      //fitColumns:true,
                      striped: true,
-                     singleSelect: true,
+                     singleSelect: false,
                      rownumbers: false,
                      //onClickRow:XS.Main.Pkjc.selectItemFoundRowData,
                      rowStyler: function(rowIndex,rowData){
                          return 'height:40px;';
                      },
-                     columns: XS.Main.Pkjc.itemFundGridColumns(xs_pkdc_itemFundGridField,'7%',[[0,'4%'],[2,'5%'],[3,'10%'],[4,'5%'],[5,'12%'],[6,'5%'],[7,'8%'],[8,'10%'],[9,'7%'],[11,'5%'],[12,'5%'],[13,'5%'],[14,'8%']])
+                     columns: XS.Main.Pkjc.itemFundGridColumns(xs_pkdc_itemFundGridField,'7%',[[0,'4%'],[2,'5%'],[3,'10%'],[4,'5%'],[5,'12%'],[6,'5%'],[7,'8%'],[8,'10%'],[9,'7%'],[11,'5%'],[12,'5%'],[13,'5%'],[14,'6%']])
                  });
                  /*var nodeDataObj = [];
                  for(var i in nodeDataArr){
