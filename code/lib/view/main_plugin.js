@@ -584,7 +584,7 @@ XS.Main.utfGridLayerMoveCallbackCTV = function(level, pbno, parentId, id, x, y){
 
 //更新数据
 XS.Main.utfGridLayerMoveCallbackUpdataData = function(level, x, y, name, poorHus, poorPups){
-    if(x>20 && x < ($(window).width()-252) && y>20 && y < ($(window).height()-252)) {
+    /*if(x>20 && x < ($(window).width()-252) && y>20 && y < ($(window).height()-252)) {
         switch (level){
             case 0: //county
                 break;
@@ -615,6 +615,46 @@ XS.Main.utfGridLayerMoveCallbackUpdataData = function(level, x, y, name, poorHus
         xs_utfGridChart.resize();
     }else{
         $("#xs_utfGridC").css("display","none");
+    }*/
+
+        $("#xs_utfGridC").css("display", "block");
+        xs_utfGridChart.setOption({
+            title: {
+                text: name
+            },
+            tooltip: {
+                show: false
+            },
+            series: [
+                {
+                    color: "#ff0000",
+                    name: "贫困程度",
+                    type: "bar",
+                    data: [poorPups,poorHus]
+                }
+            ]
+        });
+        //xs_utfGridChart.getDom().style.left = (x + 30) + "px";
+        //xs_utfGridChart.getDom().style.top = (y + 30) + "px";
+        //xs_utfGridChart.resize();
+
+    if (x > 20 && x < ($(window).width() - 250) && y > 20 && y < ($(window).height() - 250))
+    {
+        xs_utfGridChart.getDom().style.left = (x + 20) + "px";
+        xs_utfGridChart.getDom().style.top = (y + 20) + "px";
+        xs_utfGridChart.resize();
+    }else if(x >= ($(window).width() - 250) && y >= ($(window).height() - 250)){
+        xs_utfGridChart.getDom().style.left = (x - 250 + 10) + "px";
+        xs_utfGridChart.getDom().style.top = (y - 250 + 10) + "px";
+        xs_utfGridChart.resize();
+    }else if(x >= ($(window).width() - 250)){
+        xs_utfGridChart.getDom().style.left = (x - 250 + 10) + "px";
+        xs_utfGridChart.getDom().style.top = (y + 20) + "px";
+        xs_utfGridChart.resize();
+    }else if(y >= ($(window).height() - 250)){
+        xs_utfGridChart.getDom().style.left = (x + 20) + "px";
+        xs_utfGridChart.getDom().style.top = (y - 250 + 10) + "px";
+        xs_utfGridChart.resize();
     }
 }
 
