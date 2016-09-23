@@ -48,7 +48,7 @@ XS.Main.Poor.clickClusterCallback = function(obj){
 //显示户基本信息
 XS.Main.Poor.showPoorInfo = function(obj){
     var content =
-        '<div style="width: 310px; height: 100%; display: inline-block;">' +
+        '<div style="width: 250px; height: 100%; display: inline-block;">' +
             '<table id="xs_poor_datagrid" class="easyui-propertygrid" style="width:100%;height:184px; display: inline-block;"></table>' +
         '</div>' +
         '<div style="width: 135px; height: 100%;display: inline-block; vertical-align: top;text-align: center;">' +
@@ -56,6 +56,7 @@ XS.Main.Poor.showPoorInfo = function(obj){
                 '<img src="" id="xs_poor_header" style="width: 100%; height: 100%; background-color: #000000; color:#ffffff;" alt="">' +
             '</div>' +
         '</div>';
+    //id, title, iconCls, content, resizable, maximizable, modal, width, height, left, top, closeCallback, maximizeCallback, minimizeCallback
     XS.CommonUtil.openDialog("xs_poor_info", obj.HHNAME, "icon-man", content, false, false, false, null, 225,850);
     var jsonObj = [
         {"name":"户编号","value":obj.PB_HHID},
@@ -108,7 +109,7 @@ XS.Main.Poor.showPoorInfo = function(obj){
                         XS.Main.Poor.helpDynamic(obj);
                     }
                 },
-                '-',
+               /* '-',
                 {
                     iconCls: 'e_icon-film',
                     text: '责任监控',
@@ -116,10 +117,10 @@ XS.Main.Poor.showPoorInfo = function(obj){
                         //XS.Main.Poor.playVideo(obj.PB_HHID,obj.HHNAME);
                        // XS.Main.Poor.show45State(obj.PB_HHID,obj.HHNAME);
                     }
-                },
+                },*/
                 '-',
                 {
-                    iconCls: 'e_icon-email_go',
+                    iconCls: 'icon-man',
                     text: '脱贫管理',
                     handler: function () {
                         XS.Main.Poor.show45State(obj.PB_HHID,obj.HHNAME);
@@ -522,10 +523,10 @@ var xs_poor_echart_option =
                 smooth: true,
                 effect: {
                     show: true,
-                    scaleSize: 3,
-                    period: 15,
+                    scaleSize: 2,
+                    period: 25,
                     color: '#ff0000',
-                    shadowBlur: 30,
+                    shadowBlur: 20,
                     shadowColor: null
                 },
                 itemStyle: {
@@ -564,7 +565,9 @@ var xs_poor_echart_option =
  * 扶贫搬迁
  * @param id
  */
-XS.Main.Poor.povertyRelocation = function(level, parentId) {
+XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
+    XS.Main.hiddenLayers();
+
     xs_clickMapType = XS.Main.clickMapType.poor_povertyrelocation;
     xs_poor_isELayerVisible = false;
     xs_isShowUtfGridTip = false;
@@ -667,14 +670,21 @@ XS.Main.Poor.povertyRelocation = function(level, parentId) {
                     }
                 }else
                 { //点击的点--下一级
-                    if(params.data.xs_level ==XS.Main.ZoneLevel.village){
+                    if(params.data.xs_level >=XS.Main.ZoneLevel.village){
                         //显示扶贫搬户的信息
+                        var lat = "";
+                        var lon = "";
                         var title = "";
                         if(params.data.value==0){
                             title = "原居地信息";
+                            lat = params.data.xs_info.flat;
+                            lon = params.data.xs_info.flon;
                         }else{
                             title = "现居地信息";
+                            lat = params.data.xs_info.tlat;
+                            lon = params.data.xs_info.tlon;
                         }
+                        var xy = XS.GeometryUtil.getPixelFromGeoXY(lon, lat, xs_MapInstance.getMapObj());
                         var content =
                             '<div style="width: 100%; background-color: #eee; box-sizing: border-box;">' +
                             "<a id='xs_poor_preloc_picBtn' href='javascript:void(0);' style='width: 80px; margin: 5px;margin-bottom: 0px;'>图片</a>" +
@@ -682,7 +692,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId) {
                             '</div>' +
                             '<div id="xs_poor_preloc_detail_tab" style="width:250px; padding: 2px;box-sizing: border-box;"></div>';
 
-                        XS.CommonUtil.openDialog("xs_main_detail_1", title, "icon-man", content, false, false, false, null, null,null,null,function(){
+                        XS.CommonUtil.openDialog("xs_main_detail_1", title, "icon-man", content, false, false, false, null, null,xy.x+15,xy.y+5,function(){
                         });
 
                         $('#xs_poor_preloc_picBtn').linkbutton({iconCls:'e_icon-picture'});
@@ -728,6 +738,13 @@ XS.Main.Poor.povertyRelocation = function(level, parentId) {
             }
         });
     }
+
+    try{
+        xs_poor_echartObj.getZrender().animation['start']();
+    }catch (e){}
+    try{
+        xs_poor_echartObj.clear();
+    }catch (e){}
 
     xs_poor_elementsLayer.setVisibility(true);
 
@@ -834,6 +851,9 @@ XS.Main.Poor.povertyRelocation = function(level, parentId) {
             //直接显列表
             XS.Main.Poor.preloc_handleVill(level, parentId);
             break;
+        case XS.Main.ZoneLevel.poor:
+            XS.Main.Poor.preloc_handleData(level, parentId, pdata);
+            break;
     }
 
 }
@@ -844,6 +864,7 @@ XS.Main.Poor.preloc_handleVill = function(level, parentId){
     xs_clickMapType = XS.Main.clickMapType.poor_povertyrelocation;
     xs_poor_detail_is_relocationdialog_open = false;
     xs_poor_elementsLayer.setVisibility(true);
+    if($("#xs_utfGridC").length>0) $("#xs_utfGridC").css("display","none");
     XS.CommonUtil.hideLoader();
     var testObj = [
         {'name':'张三', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'镰刀湾村', 'flon':105.43084410858, 'flat':27.7626084993159, 'to':'青林村', 'tlon':105.40357648564, 'tlat':27.7557783311176},
@@ -861,11 +882,10 @@ XS.Main.Poor.preloc_handleVill = function(level, parentId){
     content += '</div>';
     //id, title, iconCls, content, resizable, maximizable, modal, width, height, left, top, closeCallback, maximizeCallback, minimizeCallback
     XS.CommonUtil.openDialog("xs_main_detail_relocation", "扶贫搬迁", "icon-man", content, false, true, false, 350, null,10,null,function(){
-        if(xs_poor_detail_is_relocationdialog_open){
-            xs_poor_elementsLayer.setVisibility(false);
-            xs_clickMapType = XS.Main.clickMapType.none;
+        if(xs_poor_detail_is_relocationdialog_open)
+        {
             xs_poor_detail_is_relocationdialog_open = false;
-            xs_isShowUtfGridTip = true;
+            XS.Main.Poor.clearRelocationLayer();
         }
     });
     xs_poor_detail_is_relocationdialog_open = true;
@@ -892,6 +912,21 @@ XS.Main.Poor.preloc_handleVill = function(level, parentId){
     });
     $("#xs_poor_reloc_dg").datagrid("getPager").pagination({displayMsg:""});
     $('#xs_poor_reloc_dg').datagrid('clientPaging');
+}
+
+//清除扶贫搬迁Layer
+XS.Main.Poor.clearRelocationLayer = function(){
+    if(xs_poor_elementsLayer){
+        xs_clickMapType = XS.Main.clickMapType.none;
+        xs_isShowUtfGridTip = true;
+        xs_poor_elementsLayer.setVisibility(false);
+        try{
+            xs_poor_echartObj.getZrender().animation['stop']();
+        }catch (e){}
+        try{
+            xs_poor_echartObj.clear();
+        }catch (e){}
+    }
 }
 
 //扶贫搬迁-数据处理
@@ -965,7 +1000,7 @@ XS.Main.Poor.preloc_handleData = function(level, parentId, relocatorData){
             break;
     }
 
-    if(level==XS.Main.ZoneLevel.village)
+    if(level>=XS.Main.ZoneLevel.village)
     {
         clearTimeout(xs_poor_timeoutId)
         xs_poor_timeoutId = setTimeout(function(){
@@ -1140,7 +1175,7 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
     $('#xs_poor_picBtn').linkbutton({iconCls:'e_icon-picture'});
     $('#xs_poor_videoBtn').linkbutton({iconCls:'e_icon-film'});
     $('#xs_poor_msgBtn').linkbutton({iconCls:'e_icon-email_go'});
-    $('#xs_poor_relocateBtn').linkbutton({iconCls:'man'});
+    $('#xs_poor_relocateBtn').linkbutton({iconCls:'xs_fpbq_family_min'});
 
     $('#xs_poor_picBtn').click(function(){
         XS.Main.Poor.showPic(obj.PB_HHID,obj.HHNAME);
@@ -1151,8 +1186,11 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
     $('#xs_poor_msgBtn').click(function(){
         XS.Main.showAdvanceFeedDialog(obj.PB_HHID);
     });
-    $('#xs_poor_relocateBtn').click(function(){
-        XS.Main.Poor.povertyRelocation(obj.PB_HHID,obj.HHNAME);
+    $('#xs_poor_relocateBtn').click(function(){ //扶贫搬迁xs
+        XS.CommonUtil.closeDialog('xs_poor_info');
+        XS.CommonUtil.closeDialog('xs_main_detail_1');
+        var data = {'name':'张三', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'镰刀湾村', 'flon':105.43084410858, 'flat':27.7626084993159, 'to':'青林村', 'tlon':105.40357648564, 'tlat':27.7557783311176};
+        XS.Main.Poor.povertyRelocation(XS.Main.ZoneLevel.poor, -1, data);
     });
 
     $('#xs_poor_detail_tab').tabs('add',{

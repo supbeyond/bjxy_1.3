@@ -621,6 +621,7 @@ XS.Main.utfGridLayerMoveCallbackUpdataData = function(level, x, y, name, poorHus
 //添加矢量点到聚散图层
 XS.Main.addVectorPoint2ClusterLayer = function(objArr, type){
     //XS.Main.clearMap();
+    XS.Main.Poor.clearRelocationLayer();
     xs_isShowUtfGridTip = false;
     xs_clusterLayer.destroyCluster();
     xs_clusterControl.activate();
@@ -935,6 +936,7 @@ XS.Main.hiddenDivTags = function(){
     //统计分析--图表专题图Tip
     if($("#xs_tjfx_graph_themeTipC").length>0) $("#xs_tjfx_graph_themeTipC").css("display","none");
     if($("#xs_tjfx_graph_Legend").length>0) $("#xs_tjfx_graph_Legend").css("display", "none");
+    XS.Main.Poor.clearRelocationLayer();
 
 }
 
@@ -954,6 +956,10 @@ XS.Main.hiddenLayers = function(){
         xs_MapInstance.getMapObj().removeLayer(xs_animatorVectorLayer);
         xs_animatorVectorLayer = null;
     }
+    xs_clusterLayer.destroyCluster();
+    xs_clusterControl.deactivate();
+
+    XS.Main.Poor.clearRelocationLayer();
 }
 
 //清空地图
@@ -963,8 +969,8 @@ XS.Main.clearMap = function(){
     XS.Main.hiddenLayers();
 
     //清空vectorLayer
-    xs_clusterLayer.destroyCluster();
-    xs_clusterControl.deactivate();
+    //xs_clusterLayer.destroyCluster();
+    //xs_clusterControl.deactivate();
 
     xs_zone_vectorLayer.removeAllFeatures();
 

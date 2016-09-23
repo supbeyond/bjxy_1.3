@@ -439,8 +439,8 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
 
         //底部按钮
         $('#xs_pkdc_details').linkbutton({iconCls:'xs_pkdc_chart',iconAlign:'top',size:'large',width:80,height:64});
-        $('#xs_pkdc_dataAnalysis').linkbutton({iconCls:'icon-large-chart',iconAlign:'top',size:'large',width:80,height:64});
-        $('#xs_pkdc_dutyMonitor').linkbutton({iconCls:'icon-large-picture',iconAlign:'top',size:'large',width:80,height:64});
+        $('#xs_pkdc_dataAnalysis').linkbutton({iconCls:'icon-main_tjfx',iconAlign:'top',size:'large',width:80,height:64});
+        $('#xs_pkdc_dutyMonitor').linkbutton({iconCls:'icon-main_gtzz',iconAlign:'top',size:'large',width:80,height:64});
         $('#xs_pkdc_taskMonitor').linkbutton({iconCls:'xs_pkdc_task',iconAlign:'top',size:'large',width:80,height:64});
         $('#xs_pkdc_itemFund').linkbutton({iconCls:'xs_pkdc_money',iconAlign:'top',size:'large',width:80,height:64});
         $('#xs_pkdc_itemRelocate').linkbutton({iconCls:'xs_pkdc_family',iconAlign:'top',size:'large',width:80,height:64});
@@ -457,6 +457,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         //初始化窗口
         $('#xs_pkdc_msgWin').window({
             modal:false,
+            iconCls:'icon-man',
             collapsible: false,
             minimizable: false,
             maximizable: true,
