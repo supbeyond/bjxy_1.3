@@ -75,6 +75,7 @@ var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
          '</div></div>';
      XS.CommonUtil.openDialog("xs_pkdc_itemFundRowDataWin", projectName + "-项目资金", "icon-save", content, false, true, false, "900","480",null,70,function(){
          //$("#xs_pkdc_detailDialog").dialog("open");
+         $("#xs_echartjs").empty().append('<script src="../base/echart/echarts.js"></script>');
      });
      xs_pkdc_itemFoundFJsonData = [[],[],[],[]];
      xs_pkdc_itemFoundFJsonData_update = [[],[],[],[]];
@@ -185,31 +186,48 @@ var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
              echart.on("click",function(params){
                  if(params.data.target)return;
                  //$("#xs_pkdc_itemFundRowDataWin").dialog("close");
-                 var content = '<div style="height: 100%;padding:2px 6px 5px 4px;box-sizing: border-box;">' +
-                 '<div style="height: 100%;">' +
-                 '<div id="xs_pkdc_itemFundTree_click" style="height: 90%;border1: 1px solid green;"></div>' +
-                 '<div id="xs_pkdc_itemFundTree_page" style="height: 10%;border1: 1px solid red;"></div>' +
+                 var content = '<div style="height: 100%;padding: 5px;box-sizing: border-box;">' +
+                 //'<div style="height: 100%;">' +
+                 '<div id="xs_pkdc_itemFundTree_click" style="height: 100%;border1: 1px solid green;"></div>' +
+                 //'<div id="xs_pkdc_itemFundTree_page" style="height: 10%;border1: 1px solid red;"></div>' +
                  '</div></div>';
-                 XS.CommonUtil.openDialog("xs_pkdc_itemFundTreeClick_win", params.name + "-" + projectName, "icon-save", content, false, false, false, "700","350",null,null,function(){
+                 XS.CommonUtil.openDialog("xs_pkdc_itemFundTreeClick_win", params.name + "-" + projectName, "icon-save", content, false, false, false, "900","480",null,100,function(){
                      //$("#xs_pkdc_itemFundRowDataWin").dialog("open");
                  });
 
                  var nodeDataArr = [];
                  var index = params.data.depth + xs_pkdc_itemFoundFIndex;
+                 var num = 0;
                  for(var i in xs_pkdc_itemFoundFJsonData[index]){
                      if(xs_pkdc_itemFoundFJsonData[index][i].REGIONID == params.data.region_id){
+                         xs_pkdc_itemFoundFJsonData[index][i].serialNo = num
                          nodeDataArr.push(xs_pkdc_itemFoundFJsonData[index][i]);
+                         num ++;
                      }
                  }
-
-                 var nodeDataObj = [];
+                 console.log(nodeDataArr);
+                 $('#xs_pkdc_itemFundTree_click').datagrid({
+                     data: nodeDataArr,
+                     //pagination: true,
+                     //pageSize: 10,
+                     fit: true,
+                     //fitColumns:true,
+                     striped: true,
+                     singleSelect: true,
+                     rownumbers: false,
+                     //onClickRow:XS.Main.Pkjc.selectItemFoundRowData,
+                     rowStyler: function(rowIndex,rowData){
+                         return 'height:40px;';
+                     },
+                     columns: XS.Main.Pkjc.itemFundGridColumns(xs_pkdc_itemFundGridField,'7%',[[0,'4%'],[2,'5%'],[3,'10%'],[4,'5%'],[5,'12%'],[6,'5%'],[7,'8%'],[8,'10%'],[9,'7%'],[11,'5%'],[12,'5%'],[13,'5%'],[14,'8%']])
+                 });
+                 /*var nodeDataObj = [];
                  for(var i in nodeDataArr){
                      nodeDataObj.push([]);
                      for(var j=1;j<xs_pkdc_itemFundGridField.length;j++){
                          nodeDataObj[i].push({name:xs_pkdc_itemFundGridField[j][1],value:nodeDataArr[i][xs_pkdc_itemFundGridField[j][0]]});
                      }
                  }
-                 console.log(nodeDataObj);
 
                  $("#xs_pkdc_itemFundTree_click").append(XS.Main.Poor.createTable(nodeDataObj[0], 2, 37, "color:#00bbee",""));
                  $("#xs_pkdc_itemFundTree_page").pagination({
@@ -230,7 +248,7 @@ var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
                              displayMsg:"项目: " + pageNumber + "  ",
                          });
                      }
-                 });
+                 });*/
              });
          }else{
              $("#xs_pkdc_itemFound_loading").css({"visibility":"hidden"});
