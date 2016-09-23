@@ -35,7 +35,7 @@ var xs_pkdc_itemFoundForceOpt = {
                         show: false
                     },
                     nodeStyle : {
-                        brushType : 'both',
+                        //brushType : 'both',
                         borderColor : 'rgba(255,215,0,0.6)',
                         borderWidth : 1
                     }
@@ -67,7 +67,7 @@ var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
  XS.Main.Pkjc.selectItemFoundRowData = function(rowIndex,rowData){
      //$("#xs_pkdc_detailDialog").dialog("close");
      var projectName = rowData.PROJECTNAME;
-     var content = '<script id="echarts-all" src="../base/echart2/dist/echarts-all.js"></script>' +
+     var content = '<script id="echarts_all" src="../base/echart2/dist/echarts-all.js"></script>' +
          '<div style="height: 100%;padding:5px;box-sizing: border-box;">' +
         '<div id="xs_pkdc_itemFundRowDataTree" style="height: 100%;">' +
              '<i id="xs_pkdc_itemFound_rowLoading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: -25px;visibility: visible;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading">' +
@@ -180,32 +180,58 @@ var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
              var  echart = echarts.init(document.getElementById("xs_pkdc_itemFundRowDataTree"));
              echart.setOption(xs_pkdc_itemFoundForceOpt);
              $("#xs_pkdc_itemFound_loading").css({"visibility":"hidden"});
+
             //资金流节点  点击事件
              echart.on("click",function(params){
-                 /*var content = '<div style="height: 100%;padding:5px;box-sizing: border-box;">' +
-                     '<div id="xs_pkdc_itemFundTree_click" style="height: 100%;">' +
-                     '</div></div>';
-                 XS.CommonUtil.openDialog("xs_pkdc_itemFundTreeClick_win", params.name + "-" + projectName, "icon-save", content, false, true, false, "900","480",null,70);
+                 if(params.data.target)return;
+                 //$("#xs_pkdc_itemFundRowDataWin").dialog("close");
+                 var content = '<div style="height: 100%;padding:2px 6px 5px 4px;box-sizing: border-box;">' +
+                 '<div style="height: 100%;">' +
+                 '<div id="xs_pkdc_itemFundTree_click" style="height: 90%;border1: 1px solid green;"></div>' +
+                 '<div id="xs_pkdc_itemFundTree_page" style="height: 10%;border1: 1px solid red;"></div>' +
+                 '</div></div>';
+                 XS.CommonUtil.openDialog("xs_pkdc_itemFundTreeClick_win", params.name + "-" + projectName, "icon-save", content, false, false, false, "700","350",null,null,function(){
+                     //$("#xs_pkdc_itemFundRowDataWin").dialog("open");
+                 });
 
                  var nodeDataArr = [];
                  var index = params.data.depth + xs_pkdc_itemFoundFIndex;
-                for(var i in xs_pkdc_itemFoundFJsonData[index]){
-                    if(xs_pkdc_itemFoundFJsonData[index][i].REGIONID == params.data.region_id){
-                        nodeDataArr.push(xs_pkdc_itemFoundFJsonData[index][i]);
-                    }
-                }
+                 for(var i in xs_pkdc_itemFoundFJsonData[index]){
+                     if(xs_pkdc_itemFoundFJsonData[index][i].REGIONID == params.data.region_id){
+                         nodeDataArr.push(xs_pkdc_itemFoundFJsonData[index][i]);
+                     }
+                 }
 
-                 console.log(nodeDataArr);
-
-                 //$("#xs_pkdc_itemFundTree_click").
                  var nodeDataObj = [];
-                 for(var i in xs_pkdc_itemFundGridField){
-                     nodeDataObj.push({name:xs_pkdc_itemFundGridField[i+1][1],value:nodeDataArr[0][xs_pkdc_itemFundGridField[i+1][0]]});
+                 for(var i in nodeDataArr){
+                     nodeDataObj.push([]);
+                     for(var j=1;j<xs_pkdc_itemFundGridField.length;j++){
+                         nodeDataObj[i].push({name:xs_pkdc_itemFundGridField[j][1],value:nodeDataArr[i][xs_pkdc_itemFundGridField[j][0]]});
+                     }
                  }
                  console.log(nodeDataObj);
-                 //XS.Main.Poor.createTable(objArr, 4, 30, "color:#00bbee","");*/
-             });
 
+                 $("#xs_pkdc_itemFundTree_click").append(XS.Main.Poor.createTable(nodeDataObj[0], 2, 37, "color:#00bbee",""));
+                 $("#xs_pkdc_itemFundTree_page").pagination({
+                     total:nodeDataObj.length,
+                     showPageList: false,
+                     pageNumber:1,
+                     pageSize:1,
+                     pageList:[1],
+                     displayMsg:"项目: " + 1 + "  ",
+                     onSelectPage:function (pageNumber, pageSize) {
+                         $("#xs_pkdc_itemFundTree_click").empty().append(XS.Main.Poor.createTable(nodeDataObj[pageNumber-1], 2, 37, "color:#00bbee",""));
+                         $("#xs_pkdc_itemFundTree_page").pagination('refresh', {
+                             showPageList: false,
+                             total:nodeDataObj.length,
+                             pageNumber:pageNumber,
+                             pageSize:1,
+                             pageList:[1],
+                             displayMsg:"项目: " + pageNumber + "  ",
+                         });
+                     }
+                 });
+             });
          }else{
              $("#xs_pkdc_itemFound_loading").css({"visibility":"hidden"});
              XS.CommonUtil.showMsgDialog("", "获取数据失败！");
