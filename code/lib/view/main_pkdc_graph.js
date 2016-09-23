@@ -673,7 +673,6 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
         var title = "";
         var x = e.event.clientX;
         var y = e.event.clientY;
-        console.log(e);
         switch (xs_currentZoneLevel){
             case XS.Main.ZoneLevel.city:
             {
