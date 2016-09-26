@@ -36,9 +36,17 @@ XS.Main.Tjfx.showToolMenu = function(){
     XS.Main.closeDialogs();
     XS.Main.hiddenLayers();
     if($("#xs_tjfx_toolmenuC").length<=0){
-        XS.CommonUtil.openDialog("xs_tjfx_toomenuC", "统计分析", "icon-large-chart", "", false, false, false, 307, null, 112, 20, function(){
+        var content = '<div style="height: 130px;padding:5px;box-sizing: border-box;">' +
+            '<div id="xs_tjfx_clickMeun" style="height: 100%;"</div>' +
+            '</div>';
+        XS.CommonUtil.openDialog("xs_tjfx_toolmenuC", "统计分析", "icon-large-chart", content, true, false, false, 400, null, 112, 20, function(){
+            xs_isShowUtfGridTip = true;
         });
-        $("#xs_tjfx_toolmenuC").dialog("refresh", "main_tjfx_toolmenu.html");
+        $("#xs_tjfx_clickMeun").panel({
+            border:false,
+            fit:true,
+            href: 'main_tjfx_rightMeun.html'
+        });
     }else{
         $("#xs_tjfx_toolmenuC").dialog('open');
     }
