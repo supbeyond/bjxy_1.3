@@ -120,21 +120,30 @@ $(function(){
     xs_utfGridChart = echarts.init(document.getElementById('xs_utfGridC'));
     xs_utfGridChart.setOption(xs_utfGridOption);
 });
+
+var xs_rbbtn_isfullscreen = false; //是否是全屏
 //初始化数据
 XS.Main.init = function(){
     //左边工具栏
     $("#xs_leftToolPanel").panel(
         {
             href: 'main_leftToolContent.html',
-            title:'工具栏',
-            iconCls:'icon-man',
+            title:'<i style="font-size: 16px;font-weight: bold;" class="fa fa-list-ul" aria-hidden="true"> 工具栏</i>',
+            /*iconCls:'icon-man',*/
             tools:[{
-                iconCls:'icon-back',
-                handler:XS.Main.hideLeftToolBar
+               /* iconCls:'icon-back',
+                handler:XS.Main.hideLeftToolBar*/
             }]
         }
     );
-
+    $("#xs_leftToolBarC").hover(
+        function () {
+            xs_isToolHover = true;
+        },
+        function () {
+            xs_isToolHover = false;
+        }
+    );
     //右击-菜单
     $("#xs_Map").bind('contextmenu',function(e){
         e.preventDefault();
@@ -143,27 +152,61 @@ XS.Main.init = function(){
             top: e.pageY
         });
     });
+    //右顶 计时器
+
+    //右下--工具按钮
+    $('#xs_rb_btn_screen').tooltip({
+        position: 'left',
+        content: '<span style="color:#3f3f3f">全屏模式</span>',
+        onShow: function(){
+            $(this).tooltip('tip').css({
+                backgroundColor: '#fff',
+                opacity:0.8,
+                borderColor: '#efefef'
+            });
+        }
+    });
+    $('#xs_rb_btn_screen').click(function()
+    {
+        XS.Main.fulScreenSwitch(xs_rbbtn_isfullscreen,true);
+    });
+    //右下-工具栏
+    $('#xs_rb_btn_tools').tooltip({
+        position: 'left',
+        content: '<span style="color:#3f3f3f">功能列表</span>',
+        onShow: function(){
+            $(this).tooltip('tip').css({
+                backgroundColor: '#fff',
+                opacity:0.8,
+                borderColor: '#efefef'
+            });
+        }
+    });
+    $('#xs_rb_btn_tools').click(function()
+    {
+        XS.Main.showLeftToolBar();
+    });
 }
 var xs_isShowing = false;
-var xs_isClosed = true;
+var xs_isToolHover = false;
 
 //滑出左工具菜单
 XS.Main.showLeftToolBar = function(){
     if(!xs_isShowing){
         xs_isShowing = true;
         $("#xs_leftToolBarC").stop(true, false).animate({"left": 0}, 200, function(msg){
-            xs_isShowing = false;
-            xs_isClosed = false;
-            window.setTimeout(XS.Main.hideLeftToolBar, 2000);
+          //  xs_isShowing = false;
+          //  xs_isClosed = false;
         });
     }
 }
 
 //隐藏左边工具菜单
 XS.Main.hideLeftToolBar = function(){
-    if(!xs_isShowing){
+    if(!xs_isToolHover&&xs_isShowing){
         $("#xs_leftToolBarC").stop(true, false).animate({"left": -302}, 150, function(nsg){
-            xs_isClosed = true;
+           // xs_isClosed = true;
+            xs_isShowing = false;
         });
     }
 }
@@ -174,11 +217,7 @@ XS.Main.RightClickMenuHandler = function(name){
         XS.Login.logout();
     }
     else if(name == 'toolbar'){
-        if(xs_isClosed){
-            XS.Main.showLeftToolBar();
-        }else{
-            XS.Main.hideLeftToolBar();
-        }
+        XS.Main.showLeftToolBar();
     }
     else if(name== 'pkdc'){
         XS.Main.Pkjc.pkdc();
@@ -1058,6 +1097,92 @@ XS.Main.showAdvanceFeedDialog = function(regionid){
             XS.CommonUtil.hideLoader();
         });
     });
+}
+
+//屏幕全屏切换
+XS.Main.fulScreenSwitch = function(isfull, isReload){
+    if(isfull)
+    {
+        //XS.CommonUtil.exitFullScreen();
+        if(isReload){
+            window.location.reload();
+        }
+        $("#xs_rb_btn_screen").tooltip({content: '<span style="color:#3f3f3f">全屏模式</span>'});
+        $("#xs_rb_btn_screen").css({
+            'color': '#9c9c9c'
+        });
+        $("#xs_rb_btn_screen").hover(
+            function () {
+                $(this).css({
+                    'color': '#0e92ee'
+                });
+            },
+            function () {
+                $(this).css({
+                    'color': '#9c9c9c'
+                });
+            }
+        );
+        xs_rbbtn_isfullscreen = false;
+    }else
+    {
+        XS.CommonUtil.fullScreen();
+        $("#xs_rb_btn_screen").tooltip({content: '<span style="color:#3f3f3f">退出全屏</span>'});
+        $("#xs_rb_btn_screen").css({
+            'color': '#0e92ee'
+        });
+        $("#xs_rb_btn_screen").hover(
+            function () {
+                $(this).css({
+                    'color': '#9c9c9c'
+                });
+            },
+            function () {
+                $(this).css({
+                    'color': '#0e92ee'
+                });
+            }
+        );
+        xs_rbbtn_isfullscreen = true;
+    }
+}
+
+//脱贫时间处理
+XS.Main.povertyTimer = function(){
+    var edate = XS.DateUtil.strFormatToDate("yyyy-MM-dd HH:mm:ss", XS.Constants.poverty_date);
+    var etime = edate.getTime();
+    var ctime = new Date().getTime();
+
+    var isnegative = false; //是否为负数
+    var dtime = edate - ctime;
+    if(dtime<0){
+        isnegative = true;
+    }
+    var dtime = Math.abs(dtime);
+
+    var dday = Math.floor(dtime/(24*3600*1000));
+    dtime -= 24*3600*1000*dday;
+
+    var dhour = Math.floor(dtime/(1*3600*1000));
+    dtime -= 1*3600*1000*dhour;
+
+    var dm = Math.floor(dtime/(1*60*1000));
+    dtime -= 1*60*1000*dm;
+
+    var ds = Math.floor(dtime/(1*1000));
+    if(isnegative){
+        dday = 0 - dday;
+        dhour = 0 - dhour;
+        dm = 0 - dm;
+        ds = 0 - ds;
+    }
+
+    var content ='全市脱贫:'+
+        '<span style="color:#00bbee">'+dday+"</span>天"+
+        '<span style="color:#00bbee">'+dhour+"</span>小时"+
+        '<span style="color:#00bbee">'+dm+"</span>分"+
+        '<span style="color:#00bbee">'+ds+"</span>秒";
+    $("#xs_rt_btn_timer").empty().append(content);
 }
 
 

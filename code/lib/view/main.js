@@ -11,6 +11,19 @@ $(function(){
         window.location.href = window.location.toString().substring(0,window.location.toString().lastIndexOf("/")+1) +"index.html";
         return;
     }
+    $(window).keyup(function(e){
+        if(e.keyCode==27) //Esc
+        {
+            if(xs_rbbtn_isfullscreen)
+            {
+                XS.Main.fulScreenSwitch(xs_rbbtn_isfullscreen,false);
+            }
+        }
+        if(e.keyCode==122) //F11
+        {
+           // XS.Main.fulScreenSwitch(xs_rbbtn_isfullscreen);
+        }
+    });
     //市id 4位 5224
     //县id 6位
     //乡镇id 9位
@@ -271,4 +284,7 @@ XS.Main.addLayers = function(){
     xs_MapInstance.getMapObj().events.on({ "click": XS.Main.clickMapCallback});
     xs_MapInstance.getMapObj().events.on({ "zoomend": XS.Main.zoomedMapCallback});
     xs_MapInstance.getMapObj().events.on({ "moveend": XS.Main.movedMapCallback});
+
+    window.setInterval(XS.Main.hideLeftToolBar, 7000);
+    window.setInterval(XS.Main.povertyTimer, 1000);
 }
