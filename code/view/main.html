@@ -6,10 +6,9 @@
     <link rel="shortcut icon" href="../img/icon_login.png">
     <script src="../base/map/libs/SuperMap.Include.js"></script>
     <script src="../lib/Lib.Include.js"></script>
-    <script src="test.js"></script>
 </head>
 <body>
-<div id="xs_mainC" style="height: 100%; position: relative;background: #000000;">
+<div id="xs_mainC" style="height: 100%; position: relative;background: #292c27;">
     <div id="xs_MapContainer">
         <div id="xs_Map"></div>
     </div>
@@ -50,12 +49,23 @@
                <div onclick="XS.Main.Tjfx.Graph.graph(XS.Main.Tjfx.Graph.Type.bar.social);">社会保障</div>
            </div>
        </div>
-       <div class="menu-sep"></div>
-       <div onclick="_force_est();">
-           <span>树测试</span>
-       </div>
+       <div id="xs_test_allscreen"onclick="fullScreen();">全屏</div>
+       <div onclick="exitFullScreen();">退出全屏</div>
    </div>
+
+    <!-- 右上 时间差-->
+    <div id="xs_rt_btn_timer"></div>
+    <!-- 右下 工具按钮-->
+    <div class="xs_rb_btn" id="xs_rb_btn_screen">
+        <i class="fa fa-arrows-alt fa-1x" aria-hidden="true"></i>
+    </div>
+    <div class="xs_rb_btn" id="xs_rb_btn_tools">
+        <i class="fa fa-list-ul fa-1x" aria-hidden="true"></i>
+    </div>
+    <!--底下 版权-->
+    <div id="xs_b_btn_copyright">Copyright &copy;贵州工程应用技术学院</div>
 </div>
 <div id="xs_echartjs"></div>
 </body>
 </html>
+<script src="test.js"></script>
