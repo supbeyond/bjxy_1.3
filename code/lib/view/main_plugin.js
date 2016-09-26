@@ -1022,7 +1022,7 @@ XS.Main.hiddenDivTags = function(){
 //关闭所有对方话框
 XS.Main.closeDialogs = function(){
     //统计分析--左工具菜单
-    if($("#xs_tjfx_toomenuC").length>0) $("#xs_tjfx_toomenuC").dialog('close');
+    if($("#xs_tjfx_toolmenuC").length>0) $("#xs_tjfx_toomenuC").dialog('close');
 }
 
 //隐藏所有相关图层
