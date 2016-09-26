@@ -228,15 +228,15 @@ XS.Main.Pkjc.scatterOption = {
     },
     legend: {
         right: 0,
-        itemGap:0,
-        height:250,
-        orient:'vertical',
+        itemGap: 0,
+        height: 250,
+        orient: 'vertical',
         data: []
     },
-    grid:{
+    grid: {
         bottom: 30,
-        left:30,
-        right:160
+        left: 30,
+        right: 160
     },
     xAxis: {
         splitLine: {
@@ -254,6 +254,7 @@ XS.Main.Pkjc.scatterOption = {
     },
     series: []
 };
+
 var xs_pkdc_analyMax = 0;
 var xs_pkdc_btnCliDatagridObj = null;
 var xs_pkdc_addrName = "";
@@ -1196,28 +1197,46 @@ XS.Main.Pkjc.clickAnalysis = function(level){
     }
 }
 //项目资金点击函数
+var xs_pkdc_itemFundDgridJson = [];
 XS.Main.Pkjc.clickItemFund = function(){
+    xs_pkdc_itemFundDgridJson = [];
     XS.Main.Pkjc.minInfoWinDialog();
     xs_pkdc_addrName = "毕节市";
-    var content = '<div style="height: 100%;padding:5px;box-sizing: border-box;">' +
-            '<div align="center" id="xs_pkdc_itemFundDgridDom" class="textCenter"">' +
+    var content = '<div style="width:100%;height: 100%;padding:5px 1px 5px 5px;box-sizing: border-box;">' +
+            '<div style="width:100%;height:100%;">' +
+                /*'<div align1="center" id="xs_pkdc_itemFundDgridDom" class1="textCenter" style="width:70%;height:100%;position: relative;border:1px solid green;display: inline-block;">' +
+                    /!*'<i id="xs_pkdc_itemFound_loading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: -25px;visibility: visible;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading">' +
+                    '</i>' +*!/
+                '</div>' +
+                '<div align1="center" id="xs_pkdc_itemFundForceDom" class1="textCenter" style="width:30%;height:100%;position: relative;border:1px solid green;display: inline-block;vertical-align: top;">' +
+                    /!*'<i id="xs_pkdc_itemFoundForce_loading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: -25px;visibility: visible;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading">' +
+                    '</i>' +*!/
+                '</div>' +*/
+        "<div id='xs_pkdc_itemFundC' style='position: relative; width:69%; height:100%; display: inline-block;overflow-y: auto; border1: 1px solid green;'>" +
+            "<div id='xs_pkdc_itemFundDgridDom' style='width:100%; height:100%;'>" +
                 '<i id="xs_pkdc_itemFound_loading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: -25px;visibility: visible;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading">' +
                 '</i>' +
+            "</div>" +
+        "</div>" +
+        "<div style='width: 30%; height:100%; display: inline-block;vertical-align: top;border1: 1px solid red;'>" +
+
+        "</div>" +
+
             '</div>' +
         '</div>';
-
-    XS.CommonUtil.openDialog("xs_pkdc_detailDialog", xs_pkdc_addrName + "-项目资金", "icon-man", content, false, true, false, "900","480",100,40,function(){},function(){
-        $("#xs_pkdc_itemFundDgridDom").datagrid({
-            rowStyler: function(){
-                return 'height:55px;';
-            }
-        });
-    },null,function(){
-        $("#xs_pkdc_itemFundDgridDom").datagrid({
-            rowStyler: function(){
-                return 'height:37px;';
-            }
-        });
+    XS.CommonUtil.openDialog("xs_pkdc_detailDialog", xs_pkdc_addrName + "-项目资金", "icon-man", content, false, true, false, 1000,480,null,40,function(){},function(){
+        var pager = $("#xs_pkdc_itemFundDgridDom").datagrid("getPager");
+        var pageOption = pager.pagination("options");
+        $('#xs_pkdc_itemFundDgridDom').datagrid(XS.Main.Pkjc.ItemFoundGridOpt(pageOption.pageNumber,10));
+        pager = $("#xs_pkdc_itemFundDgridDom").datagrid("getPager");
+        pager.pagination(XS.Main.Pkjc.ItemFoundPageOpt(pageOption.pageNumber));
+    },null,function()
+    {
+        var pager = $("#xs_pkdc_itemFundDgridDom").datagrid("getPager");
+        var pageOption = pager.pagination("options");
+        $('#xs_pkdc_itemFundDgridDom').datagrid(XS.Main.Pkjc.ItemFoundGridOpt(pageOption.pageNumber,10));
+        pager = $("#xs_pkdc_itemFundDgridDom").datagrid("getPager");
+        pager.pagination(XS.Main.Pkjc.ItemFoundPageOpt(pageOption.pageNumber));
     });
 
     $("#xs_pkdc_itemFound_loading").css({"visibility":"visible"});
@@ -1225,6 +1244,7 @@ XS.Main.Pkjc.clickItemFund = function(){
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryProjecFundByRegionid", data, function(json) {
         $("#xs_pkdc_itemFound_loading").css({"visibility":"hidden"});
         if(json && json.length > 0){
+            xs_pkdc_itemFundDgridJson = json;
             xs_pkdc_itemFoundJson = json;
 
             switch (json[0].REGIONID.length){
@@ -1241,34 +1261,10 @@ XS.Main.Pkjc.clickItemFund = function(){
                     break;
             }
             $("#xs_pkdc_detailDialog").dialog("setTitle",xs_pkdc_addrName + "-项目资金");
-            $('#xs_pkdc_itemFundDgridDom').datagrid({
-                data: XS.Main.Pkjc.itemFundPageData(json,1,10),
-                pagination: true,
-                pageSize: 10,
-                fit: true,
-                //fitColumns:true,
-                striped: true,
-                singleSelect: true,
-                rownumbers: false,
-                onClickRow:XS.Main.Pkjc.selectItemFoundRowData,
-                rowStyler: function(rowIndex,rowData){
-                    return 'height:37px;';
-                },
-                columns: XS.Main.Pkjc.itemFundGridColumns(xs_pkdc_itemFundGridField,'7%',[[0,'4%'],[2,'5%'],[3,'10%'],[4,'5%'],[5,'11%'],[6,'5%'],[7,'8%'],[8,'10%'],[9,'6%'],[11,'5%'],[12,'5%'],[13,'5%'],[14,'8%']])
-            });
+
+            $('#xs_pkdc_itemFundDgridDom').datagrid(XS.Main.Pkjc.ItemFoundGridOpt(1,10));
             var pager = $("#xs_pkdc_itemFundDgridDom").datagrid("getPager");
-            pager.pagination({
-                total:json.length,
-                showPageList: false,
-                onSelectPage:function (pageNumber, pageSize) {
-                    $("#xs_pkdc_itemFundDgridDom").datagrid("loadData", XS.Main.Pkjc.itemFundPageData(json,pageNumber,pageSize));
-                    pager.pagination('refresh', {
-                        showPageList: false,
-                        total:json.length,
-                        pageNumber:pageNumber
-                    });
-                }
-            });
+            pager.pagination(XS.Main.Pkjc.ItemFoundPageOpt(1));
         }else{
             $("#xs_pkdc_detailDialog").dialog("setTitle","项目资金");
             $('#xs_pkdc_itemFundDgridDom').append('<div style="-webkit-flex:1;flex:1;color:#ff0000;font-size: 40px;">暂无相关数据</div>');
@@ -1283,11 +1279,11 @@ XS.Main.Pkjc.clickItemFund = function(){
  * @param pageSize
  * @returns {Array}
  */
-XS.Main.Pkjc.itemFundPageData = function(json,pageNumber,pageSize){
+XS.Main.Pkjc.itemFundPageData = function(pageNumber,pageSize){
     var data = [];
-    for(var i=(pageNumber-1)*pageSize;i<pageNumber*pageSize && i<json.length;i++){
-        json[i].serialNo = i + 1;
-        data.push(json[i]);
+    for(var i=(pageNumber-1)*pageSize;i<pageNumber*pageSize && i<xs_pkdc_itemFundDgridJson.length;i++){
+        xs_pkdc_itemFundDgridJson[i].serialNo = i + 1;
+        data.push(xs_pkdc_itemFundDgridJson[i]);
     }
     return data;
 }
@@ -1671,16 +1667,56 @@ XS.Main.Pkjc.viAnaly54 = function(json,AnalysTabsChart){
     $("#" + AnalysTabsChart).append(contentHtml);
 }
 /**
- * 双击项目资金的行数据展示该项目的层级关系
- * @param rowIndex 行编号
- * @param rowData 行数据
+ * 创建项目资金的option对象
+ * @param json
+ * @param pageNumber
+ * @param pageSize
+ * @returns {{data: Array, pagination: boolean, pageSize: number, fit: boolean, striped: boolean, singleSelect: boolean, rownumbers: boolean, onClickRow: *, rowStyler: Function, columns: *[]}}
+ * @constructor
  */
-/*
-XS.Main.Pkjc.selectItemFoundRowData = function(rowIndex,rowData){
-    var content = '<div style="height: 100%;padding:5px;box-sizing: border-box;">' +
-            '<div id="xs_pkdc_itemFundRowDataTree" style="height: 100%;">' +
-            '</div>' +
-        '</div>';
-    XS.CommonUtil.openDialog("xs_pkdc_itemFundRowDataWin", rowData.PROJECID + "号项目详情", "icon-save", content, false, true, false, "700","380",null,90);
-
-}*/
+XS.Main.Pkjc.ItemFoundGridOpt = function(pageNumber,pageSize){
+    var opt =
+    {
+        data: XS.Main.Pkjc.itemFundPageData(pageNumber,pageSize),
+        pagination: true,
+        pageSize: 10,
+        fit: true,
+        striped: true,
+        singleSelect: true,
+        rownumbers: false,
+        onClickRow:XS.Main.Pkjc.selectItemFoundRowData,
+        rowStyler: function(rowIndex,rowData){
+            var xs_pkdc_itemFundDomHeight = $("#xs_pkdc_itemFundC").css("height");
+            console.log(xs_pkdc_itemFundDomHeight);
+            var xs_pkdc_itemFundDomHeight = parseInt(xs_pkdc_itemFundDomHeight);
+            return 'height:' + (Math.floor(xs_pkdc_itemFundDomHeight/10)-6) + "px";
+        },
+        columns: XS.Main.Pkjc.itemFundGridColumns(xs_pkdc_itemFundGridField,'7%',[[0,'4%'],[1,'8%'],[2,'5%'],[3,'10%'],[4,'5%'],[5,'11%'],[6,'6%'],[7,'8%'],[8,'10%'],[9,'6%'],[11,'5%'],[12,'5%'],[13,'5%'],[14,'8%']])
+    };
+    return opt;
+}
+/**
+ * 创建项目资金分页option对象
+ * @param pageNumber
+ * @param pageSize
+ * @returns {{total: Number, showPageList: boolean, onSelectPage: Function}}
+ * @constructor
+ */
+XS.Main.Pkjc.ItemFoundPageOpt = function(pageNum){
+    var pager = $("#xs_pkdc_itemFundDgridDom").datagrid("getPager");
+    var opt =
+    {
+        total:xs_pkdc_itemFundDgridJson.length,
+        showPageList: false,
+        pageNumber:pageNum,
+        onSelectPage:function (pageNumber, pageSize) {
+            $("#xs_pkdc_itemFundDgridDom").datagrid("loadData", XS.Main.Pkjc.itemFundPageData(pageNumber,pageSize));
+            pager.pagination('refresh', {
+                showPageList: false,
+                total:xs_pkdc_itemFundDgridJson.length,
+                pageNumber:pageNumber
+            });
+        }
+    };
+    return opt;
+}
