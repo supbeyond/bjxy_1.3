@@ -1179,7 +1179,7 @@ XS.Main.povertyTimer = function(){
 
     var content ='全市脱贫:'+
         '<span style="color:#00bbee">'+dday+"</span>天"+
-        '<span style="color:#00bbee">'+dhour+"</span>小时"+
+        '<span style="color:#00bbee">'+dhour+"</span>时"+
         '<span style="color:#00bbee">'+dm+"</span>分"+
         '<span style="color:#00bbee">'+ds+"</span>秒";
     $("#xs_rt_btn_timer").empty().append(content);

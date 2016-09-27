@@ -211,7 +211,6 @@ XS.Main.Poor.showPic = function(id, name){
 }
 
 //贫困户--视频播放
-var xs_poor_video_rotate = 0;
 XS.Main.Poor.playVideo = function(id,name){
     xs_poor_video_rotate = 0;
     var data = {pdid: id};
@@ -235,7 +234,7 @@ XS.Main.Poor.playVideo = function(id,name){
                 return;
             }else
             {
-                XS.Main.Poor.showVideo2Path(name, obj.Path);
+               XS.Main.Poor.showVideo2Path(name, obj.Path);
             }
         }else
         {
@@ -317,12 +316,158 @@ XS.Main.Poor.showVideo2Path = function(title, path){
         modal:true,
         width:750,
         height:640,
-        resizable:true,
+        resizable:false,
         iconCls:"icon-man",
         cache: false,
         content:content,
         onClose:function(){
-            videojs("xs_main_detail").pause();
+            videojs('xs_main_detail').pause();
+        }
+    }).dialog('open');
+}
+
+XS.Main.Poor.showVideo2Path1 = function(title, path, left ,dw, dh, vw, vh, modal){
+    if(!dw){
+        var dw = 750;
+    }
+    if(!dh){
+        var dh = 640;
+    }
+    if(!vw){
+        var vw = 600;
+    }
+    if(!vh){
+        var vh = 600;
+    }
+    var xs_poor_video_rotate1 = 0;
+    var content =
+        '<link rel="stylesheet" href="../base/other/video/video-js.min.css">'+
+        '<script src="../base/other/video/video.min.js"></script>'+
+        '<div style="background-color: #000000;width: 100%;height: 100%; position: relative"><video id="xs_poor_video1" class="video-js vjs-default-skin" controls preload="none" width='+vw+' height='+vh+' style="margin: auto;" poster="../img/vedio_poster.png" data-setup="{}">';
+    if(path.indexOf(".3gp")>0||path.indexOf(".ogg")>0||path.indexOf(".ogv")>0){
+        content += '<source src="'+path+'" type="video/ogg">';
+    }else if(path.indexOf(".mp4")>0){
+        content += '<source src="'+path+'" type="video/mp4">';
+    }else if(path.indexOf(".webm")>0){
+        content += '<source src="'+path+'" type="video/webm">';
+    }else{
+        content += '<source src="'+path+'">';
+    }
+    content += '</video>';
+    // content += "<div id=\"xs_poor_video_down\" xs_path="+obj.Path+"><img src=\"../base/easyui/themes/extend-icons/arrow/arrow_down.png\" style=\"margin-left: 4px;margin-top: 4px;\"></div>";
+    content += "<div class=\"xs_poor_video_down\" id=\"xs_poor_video_down1\" xs_path="+path+"><i class='fa fa-arrow-down fa-1x' style=\"margin-left: 7px;margin-top: 7px;\"></i></div>";
+    content += '</div>';
+    content += '<script>$(function(){try{videojs("xs_poor_video1").play();}catch(e){} $("#xs_poor_video_down1").click(function(){window.open($(this).attr("xs_path"));});});</script>';
+
+    try{
+        $('#xs_main_detail_1').dialog("close");
+    }catch (e){};
+    if(document.getElementById("xs_main_detail_1")){
+        $('#xs_main_detail_1').remove();
+    }
+    var divTag = "<div id='xs_main_detail_1'></div>";
+    $("#xs_mainC").append(divTag);
+
+    var $_dl = $('#xs_main_detail_1');
+    $_dl.dialog({
+        title: title,
+        closed: true,
+        tools:[
+            {
+                /*iconCls:'e_icon-arrow_rotate_clockwise',*/
+                iconCls:'xs_poor_rotate',
+                handler:function(){
+                    var deg = 90*((++xs_poor_video_rotate1)%4);
+                    $("#xs_poor_video1").css({
+                        "transform": "rotate("+deg+"deg)"
+                    });
+                }
+            }
+        ],
+        maximizable:false,
+        modal:modal?true:false,
+        left:left,
+        width:dw,
+        height:dh,
+        resizable:false,
+        iconCls:"icon-man",
+        cache: false,
+        content:content,
+        onClose:function(){
+            videojs('xs_main_detail_1').pause();
+        }
+    }).dialog('open');
+}
+
+XS.Main.Poor.showVideo2Path2 = function(title, path, left ,dw, dh, vw, vh, modal){
+    if(!dw){
+        var dw = 750;
+    }
+    if(!dh){
+        var dh = 640;
+    }
+    if(!vw){
+        var vw = 600;
+    }
+    if(!vh){
+        var vh = 600;
+    }
+    var xs_poor_video_rotate1 = 0;
+    var content =
+        '<link rel="stylesheet" href="../base/other/video/video-js.min.css">'+
+        '<script src="../base/other/video/video.min.js"></script>'+
+        '<div style="background-color: #000000;width: 100%;height: 100%; position: relative"><video id="xs_poor_video2" class="video-js vjs-default-skin" controls preload="none" width='+vw+' height='+vh+' style="margin: auto;" poster="../img/vedio_poster.png" data-setup="{}">';
+    if(path.indexOf(".3gp")>0||path.indexOf(".ogg")>0||path.indexOf(".ogv")>0){
+        content += '<source src="'+path+'" type="video/ogg">';
+    }else if(path.indexOf(".mp4")>0){
+        content += '<source src="'+path+'" type="video/mp4">';
+    }else if(path.indexOf(".webm")>0){
+        content += '<source src="'+path+'" type="video/webm">';
+    }else{
+        content += '<source src="'+path+'">';
+    }
+    content += '</video>';
+    // content += "<div id=\"xs_poor_video_down\" xs_path="+obj.Path+"><img src=\"../base/easyui/themes/extend-icons/arrow/arrow_down.png\" style=\"margin-left: 4px;margin-top: 4px;\"></div>";
+    content += "<div class=\"xs_poor_video_down\" id=\"xs_poor_video_down2\" xs_path="+path+"><i class='fa fa-arrow-down fa-1x' style=\"margin-left: 7px;margin-top: 7px;\"></i></div>";
+    content += '</div>';
+    content += '<script>$(function(){try{videojs("xs_poor_video2").play();}catch(e){} $("#xs_poor_video_down2").click(function(){window.open($(this).attr("xs_path"));});});</script>';
+
+    try{
+        $('#xs_main_detail_2').dialog("close");
+    }catch (e){};
+    if(document.getElementById("xs_main_detail_2")){
+        $('#xs_main_detail_2').remove();
+    }
+    var divTag = "<div id='xs_main_detail_2'></div>";
+    $("#xs_mainC").append(divTag);
+
+    var $_dl = $('#xs_main_detail_2');
+    $_dl.dialog({
+        title: title,
+        closed: true,
+        tools:[
+            {
+                /*iconCls:'e_icon-arrow_rotate_clockwise',*/
+                iconCls:'xs_poor_rotate',
+                handler:function(){
+                    var deg = 90*((++xs_poor_video_rotate1)%4);
+                    $("#xs_poor_video2").css({
+                        "transform": "rotate("+deg+"deg)"
+                    });
+                }
+            }
+        ],
+        maximizable:false,
+        modal:modal?true:false,
+        left:left,
+        width:dw,
+        height:dh,
+        resizable:false,
+        iconCls:"icon-man",
+        cache: false,
+        content:content,
+        onClose:function(){
+            videojs('xs_main_detail_2').pause();
         }
     }).dialog('open');
 }
@@ -459,6 +604,7 @@ XS.Main.Poor.show45State = function(id,name){
     },function(e){XS.CommonUtil.hideLoader();});
 }
 
+//----------------------------------------扶贫搬迁---------------------------------------------------
 //扶贫搬迁
 var xs_poor_elementsLayer = null; //dom图层
 var xs_poor_chartDom = null;
@@ -594,7 +740,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
 
         xs_poor_echartObj = echarts.init(xs_poor_chartDom);
 
-        xs_poor_echartObj.on('click', function (params)
+        xs_poor_echartObj.on('click', function (params) //点击流动图
         {
            // console.log(params);
             //XS.LogUtil.log("level="+level+"parentId="+parentId);
@@ -670,17 +816,16 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                     }
                 }else
                 { //点击的点--下一级
-                    if(params.data.xs_level >=XS.Main.ZoneLevel.village){
+                    if(params.data.xs_level >=XS.Main.ZoneLevel.village)
+                    {
                         //显示扶贫搬户的信息
                         var lat = "";
                         var lon = "";
-                        var title = "";
+                        var title = "搬迁户基本信息";
                         if(params.data.value==0){
-                            title = "原居地信息";
                             lat = params.data.xs_info.flat;
                             lon = params.data.xs_info.flon;
                         }else{
-                            title = "现居地信息";
                             lat = params.data.xs_info.tlat;
                             lon = params.data.xs_info.tlon;
                         }
@@ -690,33 +835,82 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                             "<a id='xs_poor_preloc_picBtn' href='javascript:void(0);' style='width: 80px; margin: 5px;margin-bottom: 0px;'>图片</a>" +
                             "<a id='xs_poor_preloc_videoBtn' href='javascript:void(0);'  style='width: 80px; margin: 5px;margin-bottom: 0px;'>视频</a>" +
                             '</div>' +
-                            '<div id="xs_poor_preloc_detail_tab" style="width:250px; padding: 2px;box-sizing: border-box;"></div>';
+                            '<div id="xs_poor_preloc_detail_tab" style="width:200px; padding: 2px;box-sizing: border-box;"></div>';
 
                         XS.CommonUtil.openDialog("xs_main_detail_1", title, "icon-man", content, false, false, false, null, null,xy.x+15,xy.y+5,function(){
                         });
 
                         $('#xs_poor_preloc_picBtn').linkbutton({iconCls:'e_icon-picture'});
                         $('#xs_poor_preloc_videoBtn').linkbutton({iconCls:'e_icon-film'});
-                        $('#xs_poor_preloc_picBtn').click(function(){
-                            var pathArr = [];
-                            if(params.data.value==0){
-                                pathArr.push("../test/s_01.jpg");
-                                pathArr.push("../test/s_02.jpg");
-                                pathArr.push("../test/s_03.jpg");
-                            }else{
-                                pathArr.push("../test/e_01.jpg");
-                                pathArr.push("../test/e_02.jpg");
+                        $('#xs_poor_preloc_picBtn').click(function()
+                        {//查看搬迁前后图片展示
+                            var bpathArr = []; //前
+                            var cpathArr = []; //后
+
+                            bpathArr.push("../test/s_01.jpg");
+                            bpathArr.push("../test/s_02.jpg");
+                            bpathArr.push("../test/s_03.jpg");
+
+                            cpathArr.push("../test/e_01.jpg");
+                            cpathArr.push("../test/e_02.jpg");
+
+                            var content =
+                                '<div style="width: 100%; height: 100%;box-sizing: border-box;background-color:#000;">';
+
+                            content += '<div style="width: 49%; height:99%;display: inline-block;box-sizing: border-box;"><div id="xs_poor_galleria_b" style="width: 100%; height:100%;color:#777;">';
+                            for(var i in bpathArr)
+                            {
+                                var path = bpathArr[i];
+                                if(path.indexOf(".jpg")>0 || path.indexOf(".JPG")>0 || path.indexOf(".jpeg")>0){
+                                    content +=
+                                        '<a href="'+path+'">'+
+                                        '<img'+
+                                        ' src="'+path+'"'+
+                                        ' data-big=""'+
+                                        ' data-title=""'+
+                                        ' data-description=""'+
+                                        ' style="width: 100px; height: 100px;"'+
+                                        '>'+
+                                        '</a>';
+                                }
                             }
-                            XS.Main.Poor.showPic2Paths(obj.name, pathArr);
+                            content += '</div></div>';
+                            content += '<div style="width: 2%; height:99%;display: inline-block;box-sizing: border-box;"><div style="width: 1px; height: 100%;background-color: #505050;"></div></div>';
+
+                            content += '<div style="width: 49%; height:99%;display: inline-block;box-sizing: border-box;"><div id="xs_poor_galleria_c" style="width: 100%; height:100%;color:#777;">';
+                            for(var i in cpathArr)
+                            {
+                                var path = cpathArr[i];
+                                if(path.indexOf(".jpg")>0 || path.indexOf(".JPG")>0 || path.indexOf(".jpeg")>0){
+                                    content +=
+                                        '<a href="'+path+'">'+
+                                        '<img'+
+                                        ' src="'+path+'"'+
+                                        ' data-big=""'+
+                                        ' data-title=""'+
+                                        ' data-description=""'+
+                                        ' style="width: 100px; height: 100px;"'+
+                                        '>'+
+                                        '</a>';
+                                }
+                            }
+                            content += '</div></div>';
+
+                            content += '</div>';
+                            XS.CommonUtil.openDialog("xs_main_detail", "搬迁前后图片展示", "icon-man", content, false, false, true, 1200, 550);
+                            Galleria.run('#xs_poor_galleria_b');
+                            Galleria.run('#xs_poor_galleria_c');
+
+
+                           // XS.Main.Poor.showPic2Paths(obj.name, pathArr);
                         });
-                        $('#xs_poor_preloc_videoBtn').click(function(){
-                            var path = "";
-                            if(params.data.value==0){
-                                path = "../test/s.3gp";
-                            }else{
-                                path = "../test/e.mp4";
-                            }
-                            XS.Main.Poor.showVideo2Path(obj.name, path);
+                        $('#xs_poor_preloc_videoBtn').click(function()
+                        { //搬迁前后视频展示
+                            var bpath = "../test/s.3gp";
+                            var cpath = "../test/e.mp4";
+
+                            XS.Main.Poor.showVideo2Path1('搬迁前', bpath,(window.innerWidth/2.0-600),600,600,500,500);
+                            XS.Main.Poor.showVideo2Path2('搬迁后', cpath,(window.innerWidth/2.0),600,600,500,500);
                         });
 
                         //基本信息
@@ -730,7 +924,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                             {"name": "原居地", "value": obj.from},
                             {"name": "现现地", "value": obj.to},
                         ];
-                        $("#xs_poor_preloc_detail_tab").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 1, 30,"color:#00bbee",""));
+                        $("#xs_poor_preloc_detail_tab").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 1, 25,"color:#00bbee",""));
                     }else{
                         XS.Main.Poor.povertyRelocation(params.data.xs_level+1, params.data.xs_code);
                     }
@@ -867,11 +1061,11 @@ XS.Main.Poor.preloc_handleVill = function(level, parentId){
     if($("#xs_utfGridC").length>0) $("#xs_utfGridC").css("display","none");
     XS.CommonUtil.hideLoader();
     var testObj = [
-        {'name':'张三', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'镰刀湾村', 'flon':105.43084410858, 'flat':27.7626084993159, 'to':'青林村', 'tlon':105.40357648564, 'tlat':27.7557783311176},
-        {'name':'李四', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'煤冲村', 'flon':105.283967412228, 'flat':27.2141378668798, 'to':'核桃村', 'tlon':105.272751223953, 'tlat':27.2173935617529},
-        {'name':'王二', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'沙朗村', 'flon':105.34166954055, 'flat':27.2097694416046, 'to':'双堰村', 'tlon':105.286757418278, 'tlat':27.195028364937},
-        {'name':'赵七', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'常丰村', 'flon':105.427392355285, 'flat':27.1832865727689, 'to':'岔河村', 'tlon':105.364960147198, 'tlat':27.1834449228978},
-        {'name':'孙五', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'塘丰村', 'flon':105.396583630234, 'flat':27.1804027318534, 'to':'晨思村', 'tlon':105.351825839819, 'tlat':27.1919977053125}
+        {'name':'张三', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'镰刀湾村', 'flon':105.43084410858, 'flat':27.7626084993159, 'to':'青林村', 'tlon':105.40357648564, 'tlat':27.7557783311176, 'fpic':'','fv':'','tpic':'','tv':''},
+        {'name':'李四', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'煤冲村', 'flon':105.283967412228, 'flat':27.2141378668798, 'to':'核桃村', 'tlon':105.272751223953, 'tlat':27.2173935617529, 'fpic':'','fv':'','tpic':'','tv':''},
+        {'name':'王二', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'沙朗村', 'flon':105.34166954055, 'flat':27.2097694416046, 'to':'双堰村', 'tlon':105.286757418278, 'tlat':27.195028364937, 'fpic':'','fv':'','tpic':'','tv':''},
+        {'name':'赵七', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'常丰村', 'flon':105.427392355285, 'flat':27.1832865727689, 'to':'岔河村', 'tlon':105.364960147198, 'tlat':27.1834449228978, 'fpic':'','fv':'','tpic':'','tv':''},
+        {'name':'孙五', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'塘丰村', 'flon':105.396583630234, 'flat':27.1804027318534, 'to':'晨思村', 'tlon':105.351825839819, 'tlat':27.1919977053125, 'fpic':'','fv':'','tpic':'','tv':''}
     ];
     //1.搬迁人口列表
     var content =
