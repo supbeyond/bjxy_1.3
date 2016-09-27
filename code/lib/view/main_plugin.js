@@ -144,6 +144,15 @@ XS.Main.init = function(){
             xs_isToolHover = false;
         }
     );
+    $("#xs_tjfx_leftMenuC").hover(
+        function () {
+            xs_isToolHover = true;
+        },
+        function () {
+            xs_isToolHover = false;
+        }
+    );
+    //xs_tjfx_leftMenuC
     //右击-菜单
     $("#xs_Map").bind('contextmenu',function(e){
         e.preventDefault();
@@ -208,6 +217,7 @@ XS.Main.hideLeftToolBar = function(){
            // xs_isClosed = true;
             xs_isShowing = false;
             xs_isShowUtfGridTip = true;
+            $("#xs_tjfx_leftMenuC").menu("hide");
             $("#xs_tjfx_leftMenu").panel('close');
         });
     }

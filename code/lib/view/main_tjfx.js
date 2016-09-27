@@ -37,6 +37,8 @@ XS.Main.Tjfx.showToolMenu = function(){
     XS.Main.hiddenLayers();
     xs_isShowUtfGridTip = false;
     $("#xs_tjfx_leftMenu").panel('open');
+    $("#xs_tjfx_leftMenuC").css({"display":"block"});
+    $("#xs_tjfx_leftMenuC").menu();
     /*if($("#xs_tjfx_toolmenuC").length<=0){
         var content = '<div style="height: 130px;padding:5px;box-sizing: border-box;">' +
             '<div id="xs_tjfx_clickMeun" style="height: 100%;"</div>' +

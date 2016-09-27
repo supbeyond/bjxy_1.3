@@ -897,7 +897,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                             content += '</div></div>';
 
                             content += '</div>';
-                            XS.CommonUtil.openDialog("xs_main_detail", "搬迁前后图片展示", "icon-man", content, false, false, true, 1200, 550);
+                            XS.CommonUtil.openDialog("xs_main_detail", "搬迁前-后图片展示", "icon-man", content, false, false, true, 1200, 550);
                             Galleria.run('#xs_poor_galleria_b');
                             Galleria.run('#xs_poor_galleria_c');
 
