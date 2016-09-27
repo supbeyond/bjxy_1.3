@@ -207,6 +207,8 @@ XS.Main.hideLeftToolBar = function(){
         $("#xs_leftToolBarC").stop(true, false).animate({"left": -302}, 150, function(nsg){
            // xs_isClosed = true;
             xs_isShowing = false;
+            xs_isShowUtfGridTip = true;
+            $("#xs_tjfx_leftMenu").panel('close');
         });
     }
 }

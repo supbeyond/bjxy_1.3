@@ -35,7 +35,9 @@ XS.Main.Tjfx.showToolMenu = function(){
     XS.Main.hiddenDivTags();
     XS.Main.closeDialogs();
     XS.Main.hiddenLayers();
-    if($("#xs_tjfx_toolmenuC").length<=0){
+    xs_isShowUtfGridTip = false;
+    $("#xs_tjfx_leftMenu").panel('open');
+    /*if($("#xs_tjfx_toolmenuC").length<=0){
         var content = '<div style="height: 130px;padding:5px;box-sizing: border-box;">' +
             '<div id="xs_tjfx_clickMeun" style="height: 100%;"</div>' +
             '</div>';
@@ -49,7 +51,7 @@ XS.Main.Tjfx.showToolMenu = function(){
         });
     }else{
         $("#xs_tjfx_toolmenuC").dialog('open');
-    }
+    }*/
 }
 
 //加载县、乡、村features

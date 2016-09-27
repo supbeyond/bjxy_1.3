@@ -5,7 +5,8 @@
 var xs_pkdc_itemFoundForceOpt = {
     title : {
         text: '',
-        x:'center'
+        x:'center',
+        y:20
     },
     tooltip : {
         trigger: 'item',
@@ -21,6 +22,7 @@ var xs_pkdc_itemFoundForceOpt = {
     },
     legend: {
         x: 'left',
+        y:'bottom',
         data:[]
     },
     series : [
@@ -58,6 +60,7 @@ var xs_pkdc_itemFoundFJsonData = [[],[],[],[]];
 var xs_pkdc_itemFoundFJsonData_update = [[],[],[],[]];
 var xs_pkdc_itemFoundFIndex = -1;
 var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
+var xs_pkdc_itemFoundChart = null;
 
 /**
  * 双击项目资金的行数据展示该项目的层级关系
@@ -65,8 +68,19 @@ var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
  * @param rowData 行数据
  */
  XS.Main.Pkjc.selectItemFoundRowData = function(rowIndex,rowData){
+     xs_pkdc_itemFoundClickRow = rowData;
      //$("#xs_pkdc_detailDialog").dialog("close");
      var projectName = rowData.PROJECTNAME;
+   /*  var content = '<script id="echarts_all" src="../base/echart2/dist/echarts-all.js"></script>' +
+         '<div style="height: 100%;padding:5px;box-sizing: border-box;">' +
+        '<div id="xs_pkdc_itemFundRowDataTree" style="height: 100%;">' +
+             '<i id="xs_pkdc_itemFound_rowLoading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: -25px;visibility: visible;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading">' +
+             '</i>' +
+         '</div></div>';
+     XS.CommonUtil.openDialog("xs_pkdc_itemFundRowDataWin", projectName + "-项目资金", "icon-save", content, false, true, false, "900","480",null,70,function(){
+         //$("#xs_pkdc_detailDialog").dialog("open");
+         $("#xs_echartjs").empty().append('<script src="../base/echart/echarts.js"></script>');
+     });*/
      var content = '<script id="echarts_all" src="../base/echart2/dist/echarts-all.js"></script>' +
          '<div style="height: 100%;padding:5px;box-sizing: border-box;">' +
         '<div id="xs_pkdc_itemFundRowDataTree" style="height: 100%;">' +
@@ -80,8 +94,10 @@ var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
      xs_pkdc_itemFoundFJsonData = [[],[],[],[]];
      xs_pkdc_itemFoundFJsonData_update = [[],[],[],[]];
     var data = {regionid: xs_pkdc_currentStateCode};
+     $("#xs_pkdc_itemFound_rowLoading").css({"visibility":"visible"});
      XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryProjecFundByRegionidLike", data, function(json){
          if(json && json.length > 0){
+             $("#xs_pkdc_itemFound_rowLoading").css({"visibility":"hidden"});
              for(var i=0;i<json.length;i++){
                  if(json[i].FOUNDNUM == rowData.FOUNDNUM){
                     if(json[i].REGIONID.length == 4){
@@ -132,7 +148,7 @@ var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
                  return;
              }
              XS.Main.Pkjc.itemFoundNodesCreate(xs_pkdc_itemFoundFIndex);
-             xs_pkdc_itemFoundForceOpt.title.text = projectName + "资金流";
+             xs_pkdc_itemFoundForceOpt.title.text = projectName;
 
              xs_pkdc_itemFoundForceOpt.tooltip.formatter = function(params){
                  var region_id = params.data.region_id;
@@ -178,19 +194,31 @@ var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
              xs_pkdc_itemFoundForceOpt.series[0].nodes = xs_pkdc_itemFoundFNodes;
              xs_pkdc_itemFoundForceOpt.series[0].links = xs_pkdc_itemFoundFLinks;
 
-             var  echart = echarts.init(document.getElementById("xs_pkdc_itemFundRowDataTree"));
-             echart.setOption(xs_pkdc_itemFoundForceOpt);
-             $("#xs_pkdc_itemFound_loading").css({"visibility":"hidden"});
+             var  xs_pkdc_itemFoundChart = echarts.init(document.getElementById("xs_pkdc_itemFundRowDataTree"));
+             xs_pkdc_itemFoundChart.setOption(xs_pkdc_itemFoundForceOpt);
 
             //资金流节点  点击事件
-             echart.on("click",function(params){
+             xs_pkdc_itemFoundChart.on("click",function(params){
                  if(params.data.target)return;
-                 //$("#xs_pkdc_itemFundRowDataWin").dialog("close");
+                 //$("#xs_pkdc_detailDialog").dialog("close");
                  var content = '<div style="height: 100%;padding: 5px;box-sizing: border-box;width: 1000px;">' +
+                     '<div style="height: 100%; width: 900px;">' +
+                         '<div id="xs_pkdc_itemFundTree_click" style="height: 100%;"></div>' +
+                         '</div>' +
+                     '</div>' +
+                 '</div>';
+                /* XS.CommonUtil.openDialog("xs_pkdc_itemFundTreeClick_win", params.name + "-" + projectName, "icon-man", content, false, false, false, 450,400,null,70,function(){
+                     //$("#xs_pkdc_detailDialog").dialog("open");
+                 //'<div style="height: 100%;">' +
+                 '<div id="xs_pkdc_itemFundTree_click" style="height: 100%;border1: 1px solid green;"></div>' +
+                 //'<div id="xs_pkdc_itemFundTree_page" style="height: 10%;border1: 1px solid red;"></div>' +
+                 '</div></div>';
+                 XS.CommonUtil.openDialog("xs_pkdc_itemFundTreeClick_win", params.name + "-" + projectName, "icon-save", content, false, false, false, "900","480",null,100,function(){
+                     //$("#xs_pkdc_itemFundRowDataWin").dialog("open");
                  //'<div style="height: 100%;">' +
                  '<div id="xs_pkdc_itemFundTree_click" style="height: 100%;"></div>' +
                  //'<div id="xs_pkdc_itemFundTree_page" style="height: 10%;border1: 1px solid red;"></div>' +
-                 '</div>';
+                 '</div>';*/
                  XS.CommonUtil.openDialog("xs_pkdc_itemFundTreeClick_win", params.name + "-" + projectName, "icon-man", content, true, false, false, 500, 300,null,100,function(){
                      //$("#xs_pkdc_itemFundRowDataWin").dialog("open");
                  });
@@ -208,50 +236,18 @@ var xs_pkdc_itemFoundFRegion = xs_pkdc_currentStateCode;
                  console.log(nodeDataArr);
                  $('#xs_pkdc_itemFundTree_click').datagrid({
                      data: nodeDataArr,
-                     //pagination: true,
-                     //pageSize: 10,
                      fit: true,
-                     //fitColumns:true,
                      striped: true,
                      singleSelect: false,
                      rownumbers: false,
-                     //onClickRow:XS.Main.Pkjc.selectItemFoundRowData,
                      rowStyler: function(rowIndex,rowData){
                          return 'height:40px;';
                      },
-                     columns: XS.Main.Pkjc.itemFundGridColumns(xs_pkdc_itemFundGridField,'7%',[[0,'4%'],[2,'5%'],[3,'10%'],[4,'5%'],[5,'12%'],[6,'5%'],[7,'8%'],[8,'10%'],[9,'7%'],[11,'5%'],[12,'5%'],[13,'5%'],[14,'6%']])
+                     columns: XS.Main.Pkjc.itemFundGridColumns(xs_pkdc_itemFundGridField,'7%',[[0,'4%'],[4,'4%'],[9,'8%'],[10,'9%']])
                  });
-                 /*var nodeDataObj = [];
-                 for(var i in nodeDataArr){
-                     nodeDataObj.push([]);
-                     for(var j=1;j<xs_pkdc_itemFundGridField.length;j++){
-                         nodeDataObj[i].push({name:xs_pkdc_itemFundGridField[j][1],value:nodeDataArr[i][xs_pkdc_itemFundGridField[j][0]]});
-                     }
-                 }
-
-                 $("#xs_pkdc_itemFundTree_click").append(XS.Main.Poor.createTable(nodeDataObj[0], 2, 37, "color:#00bbee",""));
-                 $("#xs_pkdc_itemFundTree_page").pagination({
-                     total:nodeDataObj.length,
-                     showPageList: false,
-                     pageNumber:1,
-                     pageSize:1,
-                     pageList:[1],
-                     displayMsg:"项目: " + 1 + "  ",
-                     onSelectPage:function (pageNumber, pageSize) {
-                         $("#xs_pkdc_itemFundTree_click").empty().append(XS.Main.Poor.createTable(nodeDataObj[pageNumber-1], 2, 37, "color:#00bbee",""));
-                         $("#xs_pkdc_itemFundTree_page").pagination('refresh', {
-                             showPageList: false,
-                             total:nodeDataObj.length,
-                             pageNumber:pageNumber,
-                             pageSize:1,
-                             pageList:[1],
-                             displayMsg:"项目: " + pageNumber + "  ",
-                         });
-                     }
-                 });*/
              });
          }else{
-             $("#xs_pkdc_itemFound_loading").css({"visibility":"hidden"});
+             $("#xs_pkdc_itemFound_rowLoading").css({"visibility":"hidden"});
              XS.CommonUtil.showMsgDialog("", "获取数据失败！");
          }
      });
