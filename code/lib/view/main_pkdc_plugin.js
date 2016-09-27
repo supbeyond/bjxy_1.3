@@ -1252,10 +1252,10 @@ XS.Main.Pkjc.clickItemFund = function(){
         pager.pagination(XS.Main.Pkjc.ItemFoundPageOpt(pageOption.pageNumber));
     });
 
-    //$("#xs_pkdc_itemFound_rowLoading").css({"visibility":"visible"});
+    $("#xs_pkdc_itemFound_rowLoading").css({"visibility":"visible"});
     var data = {regionid:xs_pkdc_currentStateCode};
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryProjecFundByRegionid", data, function(json) {
-        //$("#xs_pkdc_itemFound_rowLoading").css({"visibility":"hidden"});
+        $("#xs_pkdc_itemFound_rowLoading").css({"visibility":"hidden"});
         if(json && json.length > 0){
             xs_pkdc_itemFundDgridJson = json;
             xs_pkdc_itemFoundJson = json;
@@ -1283,7 +1283,7 @@ XS.Main.Pkjc.clickItemFund = function(){
         }else{
             $("#xs_pkdc_detailDialog").dialog("setTitle","项目资金");
             $('#xs_pkdc_itemFundDgridDom').append('<div style="-webkit-flex:1;flex:1;color:#ff0000;font-size: 40px;">暂无相关数据</div>');
-            //$("#xs_pkdc_itemFound_rowLoading").css({"visibility":"hidden"});
+            $("#xs_pkdc_itemFound_rowLoading").css({"visibility":"hidden"});
         }
     });
 }
