@@ -71,26 +71,6 @@ var xs_pkdc_itemFoundChart = null;
      xs_pkdc_itemFoundClickRow = rowData;
      //$("#xs_pkdc_detailDialog").dialog("close");
      var projectName = rowData.PROJECTNAME;
-   /*  var content = '<script id="echarts_all" src="../base/echart2/dist/echarts-all.js"></script>' +
-         '<div style="height: 100%;padding:5px;box-sizing: border-box;">' +
-        '<div id="xs_pkdc_itemFundRowDataTree" style="height: 100%;">' +
-             '<i id="xs_pkdc_itemFound_rowLoading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: -25px;visibility: visible;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading">' +
-             '</i>' +
-         '</div></div>';
-     XS.CommonUtil.openDialog("xs_pkdc_itemFundRowDataWin", projectName + "-项目资金", "icon-save", content, false, true, false, "900","480",null,70,function(){
-         //$("#xs_pkdc_detailDialog").dialog("open");
-         $("#xs_echartjs").empty().append('<script src="../base/echart/echarts.js"></script>');
-     });*/
-     var content = '<script id="echarts_all" src="../base/echart2/dist/echarts-all.js"></script>' +
-         '<div style="height: 100%;padding:5px;box-sizing: border-box;">' +
-        '<div id="xs_pkdc_itemFundRowDataTree" style="height: 100%;">' +
-             '<i id="xs_pkdc_itemFound_rowLoading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: -25px;visibility: visible;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading">' +
-             '</i>' +
-         '</div></div>';
-     XS.CommonUtil.openDialog("xs_pkdc_itemFundRowDataWin", projectName + "-项目资金", "icon-man", content, false, true, false, 700,"480",null,70,function(){
-         //$("#xs_pkdc_detailDialog").dialog("open");
-         $("#xs_echartjs").empty().append('<script src="../base/echart/echarts.js"></script>');
-     });
      xs_pkdc_itemFoundFJsonData = [[],[],[],[]];
      xs_pkdc_itemFoundFJsonData_update = [[],[],[],[]];
     var data = {regionid: xs_pkdc_currentStateCode};
