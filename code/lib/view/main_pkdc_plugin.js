@@ -1220,21 +1220,21 @@ XS.Main.Pkjc.clickItemFund = function(){
                     "</div>" +
                 "</div>" +
                 "<div style='width: 50%; height:100%; display: inline-block;vertical-align1: top;overflow-y: auto;'>" +
-                    //"<div id='xs_pkdc_itemFundRowDataTreeC' style='width:400px; height:100%;border1: 1px solid green;'>" +
-                        '<div id="xs_pkdc_itemFundRowDataTree" style="height: 100%;width:400px; ">' +
+                    "<div id='xs_pkdc_itemFundRowDataTreeC' style='width:400px; height:100%;border1: 1px solid green;'>" +
+                        '<div id="xs_pkdc_itemFundRowDataTree" style="height: 100%;width:100%; ">' +
                             '<i id="xs_pkdc_itemFound_rowLoading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: -25px;visibility: hidden;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading">' +
                             '</i>' +
                         '</div>' +
-                    //'</div>' +
+                    '</div>' +
                 "</div>" +
             '</div>' +
         '</div>';
     XS.CommonUtil.openDialog("xs_pkdc_detailDialog", xs_pkdc_addrName + "-项目资金", "icon-man", content, false, true, false, 450,500,null,40,function(){
         $("#xs_echartjs").empty().append('<script src="../base/echart/echarts.js"></script>');
     },function(){
-        $("#xs_pkdc_itemFundRowDataTree").css("width","100%");
+        $("#xs_pkdc_itemFundRowDataTreeC").css("width","100%");
         //$("#xs_pkdc_itemFundRowDataTree").css("height","100%");
-        //xs_pkdc_itemFoundChart.resize();
+        xs_pkdc_itemFoundChart.resize();
         var pager = $("#xs_pkdc_itemFundDgridDom").datagrid("getPager");
         var pageOption = pager.pagination("options");
         $('#xs_pkdc_itemFundDgridDom').datagrid(XS.Main.Pkjc.ItemFoundGridOpt(pageOption.pageNumber,10));
@@ -1242,9 +1242,10 @@ XS.Main.Pkjc.clickItemFund = function(){
         pager.pagination(XS.Main.Pkjc.ItemFoundPageOpt(pageOption.pageNumber));
     },null,function()
     {
-        $("#xs_pkdc_itemFundRowDataTree").css("width","400px");
+        $("#xs_pkdc_itemFundRowDataTreeC").css("width","400px");
         //xs_pkdc_itemFoundChart.resize();
         //XS.Main.Pkjc.selectItemFoundRowData(xs_pkdc_itemFoundClickRow);
+        xs_pkdc_itemFoundChart.resize();
         var pager = $("#xs_pkdc_itemFundDgridDom").datagrid("getPager");
         var pageOption = pager.pagination("options");
         $('#xs_pkdc_itemFundDgridDom').datagrid(XS.Main.Pkjc.ItemFoundGridOpt(pageOption.pageNumber,10));
@@ -1749,7 +1750,10 @@ XS.Main.Pkjc.ItemFoundMaxCall = function(){
         xs_pkdc_AnalysTabsCInit.resize();
     }
 }
-
+/**
+ * 项目资金的窗口最小化回调函数
+ * @constructor
+ */
 XS.Main.Pkjc.ItemFoundMinCall = function(){
     $("#xs_pkdc_AnalysTabs").tabs({
         fit:false,
