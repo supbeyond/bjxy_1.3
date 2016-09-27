@@ -54,6 +54,36 @@
        <div onclick="exitFullScreen();">退出全屏</div>
    </div>
 
+    <div id="xs_tjfx_leftMenu" class="easyui-panel" style="position:absolute;width: 130px;left: 83px;top: 336px;" data-options="closed:true">
+        <div class="easyui-menu" data-options="inline:true">
+                    <div>
+                        <span>贫困指标</span>
+                        <div style="width:120px;">
+                            <div onclick="XS.Main.cRItem_Tjfx_Range(XS.Main.Tjfx.type.range_pkfsx);">贫困发生率</div>
+                            <div onclick="XS.Main.cRItem_Tjfx_Range(XS.Main.Tjfx.type.range_tpx);">脱贫率</div>
+                            <div onclick="XS.Main.cRItem_Tjfx_Range(XS.Main.Tjfx.type.range_wfx);">危房率</div>
+                            <div onclick="XS.Main.cRItem_Tjfx_Range(XS.Main.Tjfx.type.range_fpbqx);">扶贫搬迁率</div>
+                        </div>
+                    </div>
+                    <div>
+                        <span>四有五覆盖</span>
+                        <div style="width:120px;">
+                            <div onclick="XS.Main.Tjfx.Graph.graph(XS.Main.Tjfx.Graph.Type.bar.fourOf45);">四有</div>
+                            <div onclick="XS.Main.Tjfx.Graph.graph(XS.Main.Tjfx.Graph.Type.bar.fiveOf45);">五覆盖</div>
+                        </div>
+                    </div>
+                    <div>
+                        <span>五通四有</span>
+                        <div style="width:120px;">
+                            <div onclick="XS.Main.Tjfx.Graph.graph(XS.Main.Tjfx.Graph.Type.bar.fiveOf54);">五通</div>
+                            <div onclick="XS.Main.Tjfx.Graph.graph(XS.Main.Tjfx.Graph.Type.bar.fourOf54);">四有</div>
+                        </div>
+                    </div>
+                    <div onclick="XS.Main.Tjfx.Graph.graph(XS.Main.Tjfx.Graph.Type.pie);">土地信息</div>
+                    <div onclick="XS.Main.Tjfx.Graph.graph(XS.Main.Tjfx.Graph.Type.bar.social);">社会保障</div>
+        </div>
+    </div>
+
     <!-- 右上 时间差-->
     <div id="xs_rt_btn_timer"></div>
     <!-- 右下 工具按钮-->
