@@ -68,6 +68,7 @@ var xs_pkdc_itemFoundChart = null;
  * @param rowData 行数据
  */
  XS.Main.Pkjc.selectItemFoundRowData = function(rowIndex,rowData){
+     xs_pkdc_itemFoundChart = null;
      xs_pkdc_itemFoundClickRow = rowData;
      //$("#xs_pkdc_detailDialog").dialog("close");
      var projectName = rowData.PROJECTNAME;
@@ -77,7 +78,6 @@ var xs_pkdc_itemFoundChart = null;
      $("#xs_pkdc_itemFound_rowLoading").css({"visibility":"visible"});
      XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryProjecFundByRegionidLike", data, function(json){
          if(json && json.length > 0){
-             $("#xs_pkdc_itemFound_rowLoading").css({"visibility":"hidden"});
              for(var i=0;i<json.length;i++){
                  if(json[i].FOUNDNUM == rowData.FOUNDNUM){
                     if(json[i].REGIONID.length == 4){
@@ -174,8 +174,9 @@ var xs_pkdc_itemFoundChart = null;
              xs_pkdc_itemFoundForceOpt.series[0].nodes = xs_pkdc_itemFoundFNodes;
              xs_pkdc_itemFoundForceOpt.series[0].links = xs_pkdc_itemFoundFLinks;
 
-             var  xs_pkdc_itemFoundChart = echarts.init(document.getElementById("xs_pkdc_itemFundRowDataTree"));
+             xs_pkdc_itemFoundChart = echarts.init(document.getElementById("xs_pkdc_itemFundRowDataTree"));
              xs_pkdc_itemFoundChart.setOption(xs_pkdc_itemFoundForceOpt);
+             $("#xs_pkdc_itemFound_rowLoading").css({"visibility":"hidden"});
 
             //资金流节点  点击事件
              xs_pkdc_itemFoundChart.on("click",function(params){
@@ -187,18 +188,6 @@ var xs_pkdc_itemFoundChart = null;
                          '</div>' +
                      '</div>' +
                  '</div>';
-                /* XS.CommonUtil.openDialog("xs_pkdc_itemFundTreeClick_win", params.name + "-" + projectName, "icon-man", content, false, false, false, 450,400,null,70,function(){
-                     //$("#xs_pkdc_detailDialog").dialog("open");
-                 //'<div style="height: 100%;">' +
-                 '<div id="xs_pkdc_itemFundTree_click" style="height: 100%;border1: 1px solid green;"></div>' +
-                 //'<div id="xs_pkdc_itemFundTree_page" style="height: 10%;border1: 1px solid red;"></div>' +
-                 '</div></div>';
-                 XS.CommonUtil.openDialog("xs_pkdc_itemFundTreeClick_win", params.name + "-" + projectName, "icon-save", content, false, false, false, "900","480",null,100,function(){
-                     //$("#xs_pkdc_itemFundRowDataWin").dialog("open");
-                 //'<div style="height: 100%;">' +
-                 '<div id="xs_pkdc_itemFundTree_click" style="height: 100%;"></div>' +
-                 //'<div id="xs_pkdc_itemFundTree_page" style="height: 10%;border1: 1px solid red;"></div>' +
-                 '</div>';*/
                  XS.CommonUtil.openDialog("xs_pkdc_itemFundTreeClick_win", params.name + "-" + projectName, "icon-man", content, true, false, false, 500, 300,null,100,function(){
                      //$("#xs_pkdc_itemFundRowDataWin").dialog("open");
                  });
