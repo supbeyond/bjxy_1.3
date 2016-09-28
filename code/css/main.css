@@ -75,7 +75,7 @@ html, body{
 }
 
 /*---------------贫困户-video------------------------------*/
-#xs_poor_video_down{
+#xs_poor_video_down, .xs_poor_video_down{
     width: 25px;
     height: 25px;
     border-radius:12px;
@@ -85,7 +85,7 @@ html, body{
     background-color: #6e6e6e;
     cursor: pointer;
 }
-#xs_poor_video_down:hover{
+#xs_poor_video_down:hover, .xs_poor_video_down:hover{
     background-color: #5c5c5c;
 }
 
