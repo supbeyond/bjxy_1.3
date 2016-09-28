@@ -51,6 +51,7 @@ var xs_Password="";
 var xs_user_regionId = ""; //用户所属区域id
 var xs_user_regionLevel = -1; //用户所属区域级别
 var xs_user_Features = []; //缓存用户所属区域Features
+var xs_userZoneName = "毕节市"; //缓存用户所属区域名字
 
 var xs_MapInstance;
 
@@ -217,13 +218,27 @@ XS.Main.load = function(){
                         {
                             feature = result.recordsets[0].features[i];
                             var id = feature.data.AdminCode || feature.data.乡镇代码 || feature.data.OldID;
-                            if(xs_user_regionId == id){
+                            if(xs_user_regionId == id)
+                            {
                                 feature.style =  {
                                     strokeColor: "#00bbee",
                                     strokeWidth: 2,
                                     fill: false
                                 };
                                 xs_user_Features.push(feature);
+
+                                //xs_userZoneName
+                                switch (xs_user_regionLevel){
+                                    case XS.Main.ZoneLevel.county:
+                                        xs_userZoneName = feature.Name;
+                                        break;
+                                    case XS.Main.ZoneLevel.town:
+                                        xs_userZoneName = feature.乡镇名称;
+                                        break;
+                                    case XS.Main.ZoneLevel.village:
+                                        xs_userZoneName = feature.vd_name;
+                                        break;
+                                }
                             }
                         }
                         if(xs_user_Features.length<1){
