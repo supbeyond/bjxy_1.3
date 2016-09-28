@@ -308,7 +308,7 @@ XS.Main.Pkjc.showGaugeData = function(pop, ratio, family){
 
         //点击仪表盘指针事件处理
         xs_pkdc_GaugeChart.on('click', function (params) {
-            xs_pkdc_preNameArr = [];
+            xs_pkdc_preNameArr = [xs_userZoneName];
             xs_pkdc_direction = -1;
             xs_pkdc_preName = xs_userZoneName;
             xs_pkdc_currentName = xs_userZoneName;
@@ -525,7 +525,11 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
             if(xs_pkdc_direction == 0){
                 xs_pkdc_preNameArr.pop();
             }
-            xs_pkdc_preName = xs_pkdc_preNameArr.pop();
+            if(xs_pkdc_preNameArr.length == 1){
+                xs_pkdc_preName = xs_pkdc_preNameArr[0];
+            }else{
+                xs_pkdc_preName = xs_pkdc_preNameArr.pop();
+            }
             xs_pkdc_direction = 1;
             if(xs_pkdc_zoneLevel == XS.Main.ZoneLevel.village)
             {
@@ -633,7 +637,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
     if(xs_pkdc_preNameArr.length == 0){
         $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
     }else{
-        $("#xs_pkdc_backSuperBtn").linkbutton({text: "返回" + xs_pkdc_preName});
+        $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
     }
    // XS.Main.Pkjc.minInfoWinDialog();
 
@@ -679,43 +683,64 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                 }
             });
         }
-        var dataN = {pbno: id};
-        $("#xs_pkdc_msgWin_p").css("display", "block");
-        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTownsBaseInfoByareaId", dataN, function(json){
-            $("#xs_pkdc_msgWin_p").css("display", "none");
-            if(json && json.length>0){
-                xs_pkdc_cacheDataArr = json;
-                XS.Main.Pkjc.showCountyBar();
-            }
-        });
+        if(id != XS.Main.CacheZoneInfos.town.countyId){
+            var dataN = {pbno: id};
+            $("#xs_pkdc_msgWin_p").css("display", "block");
+            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTownsBaseInfoByareaId", dataN, function(json){
+                $("#xs_pkdc_msgWin_p").css("display", "none");
+                if(json && json.length>0){
+                    xs_pkdc_cacheDataArr = json;
+                    XS.Main.CacheZoneInfos.town.data = json;
+                    XS.Main.CacheZoneInfos.town.countyId = id;
+                    XS.Main.Pkjc.showCountyBar();
+                }
+            });
+        }else{
+            xs_pkdc_cacheDataArr = XS.Main.CacheZoneInfos.town.data;
+            XS.Main.Pkjc.showCountyBar();
+        }
     }else if(xs_pkdc_zoneLevel == XS.Main.ZoneLevel.town)
     {
-        var dataN = {pbno: id};
-        $("#xs_pkdc_msgWin_p").css("display", "block");
-        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryVillBaseByareaId", dataN, function(json){
-            $("#xs_pkdc_msgWin_p").css("display", "none");
-            if(json && json.length>0)
-            {
-                xs_pkdc_cacheDataArr = json;
-                XS.Main.Pkjc.showTownBar();
-            }
-        });
+        if(id != XS.Main.CacheZoneInfos.village.townId){
+            var dataN = {pbno: id};
+            $("#xs_pkdc_msgWin_p").css("display", "block");
+            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryVillBaseByareaId", dataN, function(json){
+                $("#xs_pkdc_msgWin_p").css("display", "none");
+                if(json && json.length>0)
+                {
+                    xs_pkdc_cacheDataArr = json;
+                    XS.Main.CacheZoneInfos.village.townId = id;
+                    XS.Main.CacheZoneInfos.village.data = json;
+                    XS.Main.Pkjc.showTownBar();
+                }
+            });
+        }else{
+            xs_pkdc_cacheDataArr = XS.Main.CacheZoneInfos.village.data;
+            XS.Main.Pkjc.showTownBar();
+        }
     }else if(xs_pkdc_zoneLevel == XS.Main.ZoneLevel.village)
     {
         $('#xs_pkdc_positionBtn').linkbutton({disabled:false});
         var xs_pkdc_village = '<table id="xs_pkdc_village" class="easyui-datagrid" style="width:100%;height:100%;"></table>';
         $("#xs_pkdc_msg_barC").append(xs_pkdc_village);
 
-        var dataN = {pbno: id,pageNo:1};
-        $("#xs_pkdc_msgWin_p").css("display", "block");
-        //http://61.159.185.196:7060/Service2.svc/QueryHousePeoByHidOfPage?pbno=52242810102&pageNo=1
-        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryHousePeoByHidOfPage", dataN, function(json){
-            $("#xs_pkdc_msgWin_p").css("display", "none");
-            if(json && json.length>0) {
-                xs_pkdc_cacheDataArr = json;
-                XS.Main.Pkjc.showHouseDataGrid();
-            }
-        });
+        if(id != XS.Main.CacheZoneInfos.poorH.villageId){
+            var dataN = {pbno: id,pageNo:1};
+            $("#xs_pkdc_msgWin_p").css("display", "block");
+            //http://61.159.185.196:7060/Service2.svc/QueryHousePeoByHidOfPage?pbno=52242810102&pageNo=1
+            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryHousePeoByHidOfPage", dataN, function(json){
+                $("#xs_pkdc_msgWin_p").css("display", "none");
+                if(json && json.length>0) {
+                    xs_pkdc_cacheDataArr = json;
+                    XS.Main.CacheZoneInfos.poorH.villageId = id;
+                    XS.Main.CacheZoneInfos.poorH.data = json;
+                    XS.Main.Pkjc.showHouseDataGrid();
+                }
+            });
+        }else{
+            xs_pkdc_cacheDataArr = XS.Main.CacheZoneInfos.poorH.data;
+            XS.Main.Pkjc.showHouseDataGrid();
+        }
     }
 
 }
@@ -764,8 +789,7 @@ XS.Main.Pkjc.showCity = function(){
     }
     var xs_pkdc_BarChart = echarts.init(document.getElementById("xs_pkdc_msg_barC"), "shine");
     xs_pkdc_BarChart.on("click",function(params) {
-        xs_pkdc_direction = 0;
-        xs_pkdc_preNameArr.push(xs_pkdc_preName);
+        //xs_pkdc_direction = 0;
         xs_pkdc_BarChartDataIndex = params.dataIndex;
         xs_pkdc_preName = xs_pkdc_currentName;
         xs_pkdc_preNameArr.push(xs_pkdc_preName);
