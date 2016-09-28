@@ -230,13 +230,13 @@ XS.Main.load = function(){
                                 //xs_userZoneName
                                 switch (xs_user_regionLevel){
                                     case XS.Main.ZoneLevel.county:
-                                        xs_userZoneName = feature.Name;
+                                        xs_userZoneName = feature.data.Name;
                                         break;
                                     case XS.Main.ZoneLevel.town:
-                                        xs_userZoneName = feature.乡镇名称;
+                                        xs_userZoneName = feature.data.乡镇名称;
                                         break;
                                     case XS.Main.ZoneLevel.village:
-                                        xs_userZoneName = feature.vd_name;
+                                        xs_userZoneName = feature.data.vd_name;
                                         break;
                                 }
                             }
