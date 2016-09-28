@@ -631,9 +631,6 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
     //-------------------------加载一次 结束-----------------------------------
 
     $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/*, width:1020,height:600*/}).window('open');
-    console.log(xs_pkdc_preNameArr);
-    console.log(xs_pkdc_preName);
-    console.log(xs_userZoneName);
     if(xs_pkdc_preNameArr.length == 0){
         $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
     }else{
@@ -665,12 +662,12 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                 if(json && json.length>0){
                     XS.Main.CacheZoneInfos.county = json;
                     xs_pkdc_cacheDataArr = json;
-                    XS.Main.Pkjc.showCity();
+                    XS.Main.Pkjc.showBar("CBI_ID","CBI_NAME","cps_poor_hhnum","cps_poor_pop","cps_Poverty_rate");
                 }
             });
         }else{
             xs_pkdc_cacheDataArr = XS.Main.CacheZoneInfos.county;
-            XS.Main.Pkjc.showCity();
+            XS.Main.Pkjc.showBar("CBI_ID","CBI_NAME","cps_poor_hhnum","cps_poor_pop","cps_Poverty_rate");
         }
     }else if(xs_pkdc_zoneLevel == XS.Main.ZoneLevel.county)
     {
@@ -692,12 +689,12 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                     xs_pkdc_cacheDataArr = json;
                     XS.Main.CacheZoneInfos.town.data = json;
                     XS.Main.CacheZoneInfos.town.countyId = id;
-                    XS.Main.Pkjc.showCountyBar();
+                    XS.Main.Pkjc.showBar("TOWB_ID","TOWB_NAME","TOWB_HouseNum","TOWB_PeopleNum","tpl_PoorRate");
                 }
             });
         }else{
             xs_pkdc_cacheDataArr = XS.Main.CacheZoneInfos.town.data;
-            XS.Main.Pkjc.showCountyBar();
+            XS.Main.Pkjc.showBar("TOWB_ID","TOWB_NAME","TOWB_HouseNum","TOWB_PeopleNum","tpl_PoorRate");
         }
     }else if(xs_pkdc_zoneLevel == XS.Main.ZoneLevel.town)
     {
@@ -711,12 +708,12 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                     xs_pkdc_cacheDataArr = json;
                     XS.Main.CacheZoneInfos.village.townId = id;
                     XS.Main.CacheZoneInfos.village.data = json;
-                    XS.Main.Pkjc.showTownBar();
+                    XS.Main.Pkjc.showBar("VBI__ID","VBI_NAME","VBI_HouseNum","VBI_PeopleNum","VillPoorRate");
                 }
             });
         }else{
             xs_pkdc_cacheDataArr = XS.Main.CacheZoneInfos.village.data;
-            XS.Main.Pkjc.showTownBar();
+            XS.Main.Pkjc.showBar("VBI__ID","VBI_NAME","VBI_HouseNum","VBI_PeopleNum","VillPoorRate");
         }
     }else if(xs_pkdc_zoneLevel == XS.Main.ZoneLevel.village)
     {
@@ -771,14 +768,21 @@ XS.Main.Pkjc.onSelectedRowHandler = function(rowIndex, rowData){
     XS.Main.Poor.showPoor(xs_pkdc_cacheDataArr[rowIndex].hid);
 }
 
-//显示市级的下层bar
-XS.Main.Pkjc.showCity = function(){
-    var json = XS.Main.CacheZoneInfos.county;
+/**
+ * 显示市级的下层bar
+ * @param regionId
+ * @param regionName
+ * @param poorH
+ * @param poorP
+ * @param poorRate
+ */
+XS.Main.Pkjc.showBar = function(regionId,regionName,poorH,poorP,poorRate){
+    var json = xs_pkdc_cacheDataArr;
     for(var i=0;i<json.length;i++){
-        xs_pkdc_categoryData.push(json[i].CBI_NAME);
-        xs_pkdc_barChartData.poorHSeries.push(json[i].cps_poor_hhnum);
-        xs_pkdc_barChartData.poorPSeries.push(json[i].cps_poor_pop);
-        xs_pkdc_poorOccurRate.push(json[i].cps_Poverty_rate);
+        xs_pkdc_categoryData.push(json[i][regionName]);
+        xs_pkdc_barChartData.poorHSeries.push(json[i][poorH]);
+        xs_pkdc_barChartData.poorPSeries.push(json[i][poorP]);
+        xs_pkdc_poorOccurRate.push(json[i][poorRate]);
     }
 
     var gridN = xs_pkdc_categoryData.length;
@@ -795,7 +799,7 @@ XS.Main.Pkjc.showCity = function(){
         xs_pkdc_preNameArr.push(xs_pkdc_preName);
         xs_pkdc_currentName = params.name;
         xs_pkdc_zoneLevel = xs_pkdc_zoneLevel+1;
-        XS.Main.Pkjc.showInfoWin(xs_pkdc_zoneLevel, xs_pkdc_currentStateCode, XS.Main.CacheZoneInfos.county[xs_pkdc_BarChartDataIndex].CBI_ID);
+        XS.Main.Pkjc.showInfoWin(xs_pkdc_zoneLevel, xs_pkdc_currentStateCode, xs_pkdc_cacheDataArr[xs_pkdc_BarChartDataIndex][regionId]);
     });
     // 使用配置项和数据显示贫困户及贫困人口的柱状图表。
     XS.Main.Pkjc.barOption.grid.height = gridN * 39;
@@ -812,96 +816,6 @@ XS.Main.Pkjc.showCity = function(){
         }
         xs_pkdc_BarChartDataIndex = params.dataIndex;
         XS.Main.Pkjc.showOccurRatioPie(xs_pkdc_categoryData[xs_pkdc_BarChartDataIndex],xs_pkdc_poorOccurRate[xs_pkdc_BarChartDataIndex]);
-    });
-}
-
-//显示县级的下层bar
-XS.Main.Pkjc.showCountyBar = function(){
-    var json = xs_pkdc_cacheDataArr;
-    for(var i=0;i<json.length;i++){
-        xs_pkdc_categoryData.push(json[i].TOWB_NAME);
-        xs_pkdc_barChartData.poorHSeries.push(json[i].TOWB_HouseNum);
-        xs_pkdc_barChartData.poorPSeries.push(json[i].TOWB_PeopleNum);
-    }
-
-    var gridN = xs_pkdc_categoryData.length;
-    if(gridN > 10){
-        $("#xs_pkdc_msg_barC").css("height",gridN * 39 + 90);
-    }else{
-        $("#xs_pkdc_msg_barC").css("height","100%");
-    }
-
-    var xs_pkdc_BarChart = echarts.init(document.getElementById("xs_pkdc_msg_barC"), "shine");
-    xs_pkdc_BarChart.on("click",function(params) {
-        xs_pkdc_direction = 0;
-        xs_pkdc_BarChartDataIndex = params.dataIndex;
-        xs_pkdc_preName = xs_pkdc_currentName;
-        xs_pkdc_preNameArr.push(xs_pkdc_preName);
-        xs_pkdc_currentName = params.name;
-        xs_pkdc_zoneLevel = xs_pkdc_zoneLevel+1;
-        XS.Main.Pkjc.showInfoWin(xs_pkdc_zoneLevel, xs_pkdc_currentStateCode, xs_pkdc_cacheDataArr[xs_pkdc_BarChartDataIndex].TOWB_ID);
-    });
-
-    // 使用配置项和数据显示贫困户及贫困人口的柱状图表。
-    XS.Main.Pkjc.barOption.grid.height = gridN * 39;
-    XS.Main.Pkjc.barOption.yAxis.data = xs_pkdc_categoryData;
-    XS.Main.Pkjc.barOption.series[0].data = xs_pkdc_barChartData.poorHSeries;
-    XS.Main.Pkjc.barOption.series[1].data = xs_pkdc_barChartData.poorPSeries;
-
-    xs_pkdc_BarChart.setOption(XS.Main.Pkjc.barOption);
-    XS.Main.Pkjc.showOccurRatioPie(xs_pkdc_categoryData[0],Math.random()*100);
-
-    xs_pkdc_BarChart.on("mouseover",function(params) {
-        if (xs_pkdc_BarChartDataIndex == params.dataIndex) {
-            return;
-        }
-        xs_pkdc_BarChartDataIndex = params.dataIndex;
-        XS.Main.Pkjc.showOccurRatioPie(xs_pkdc_categoryData[xs_pkdc_BarChartDataIndex],Math.random()*100);
-    });
-}
-
-//显示镇级的下层bar
-XS.Main.Pkjc.showTownBar = function(){
-    var json = xs_pkdc_cacheDataArr;
-    for(var i=0;i<json.length;i++){
-        xs_pkdc_categoryData.push(json[i].VBI_NAME);
-        xs_pkdc_barChartData.poorHSeries.push(json[i].VBI_HouseNum);
-        xs_pkdc_barChartData.poorPSeries.push(json[i].VBI_PeopleNum);
-    }
-
-    //动态设置xs_pkdc_msg_barC的height
-    var gridN = xs_pkdc_categoryData.length;
-    if(gridN > 10){
-        $("#xs_pkdc_msg_barC").css("height",gridN * 39 + 90);
-    }else{
-        $("#xs_pkdc_msg_barC").css("height","100%");
-    }
-    var xs_pkdc_BarChart = echarts.init(document.getElementById("xs_pkdc_msg_barC"), "shine");
-    xs_pkdc_BarChart.on("click",function(params) {
-        xs_pkdc_direction = 0;
-        xs_pkdc_BarChartDataIndex = params.dataIndex;
-        xs_pkdc_preName = xs_pkdc_currentName;
-        xs_pkdc_preNameArr.push(xs_pkdc_preName);
-        xs_pkdc_currentName = params.name;
-        xs_pkdc_zoneLevel = xs_pkdc_zoneLevel+1;
-        XS.Main.Pkjc.showInfoWin(xs_pkdc_zoneLevel, xs_pkdc_currentStateCode, xs_pkdc_cacheDataArr[xs_pkdc_BarChartDataIndex].VBI__ID);
-    });
-
-    // 使用配置项和数据显示贫困户及贫困人口的柱状图表。
-    XS.Main.Pkjc.barOption.grid.height = gridN * 39;
-    XS.Main.Pkjc.barOption.yAxis.data = xs_pkdc_categoryData;
-    XS.Main.Pkjc.barOption.series[0].data = xs_pkdc_barChartData.poorHSeries;
-    XS.Main.Pkjc.barOption.series[1].data = xs_pkdc_barChartData.poorPSeries;
-
-    xs_pkdc_BarChart.setOption(XS.Main.Pkjc.barOption);
-    XS.Main.Pkjc.showOccurRatioPie(xs_pkdc_categoryData[0],Math.random()*100);
-
-    xs_pkdc_BarChart.on("mouseover",function(params) {
-        if (xs_pkdc_BarChartDataIndex == params.dataIndex) {
-            return;
-        }
-        xs_pkdc_BarChartDataIndex = params.dataIndex;
-        XS.Main.Pkjc.showOccurRatioPie(xs_pkdc_categoryData[xs_pkdc_BarChartDataIndex],Math.random()*100);
     });
 }
 
