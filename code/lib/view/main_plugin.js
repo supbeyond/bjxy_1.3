@@ -26,7 +26,8 @@ XS.Main.CacheZoneInfos = { //缓存行政区域信息
     city:[],
     county:[],
     town:{countyId:"", data:[]},
-    village:{townId:"", data:[]}
+    village:{townId:"", data:[]},
+    poorH:{villageId:"",data:[]}
 };
 
 //行政区域级别
