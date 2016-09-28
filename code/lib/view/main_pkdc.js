@@ -271,6 +271,11 @@ var xs_pkdc_poorOccurRate = [];
 var xs_pkdc_PopRate = 0; //贫困人口比例1-10
 var xs_pkdc_HuRate = 0; //贫困户比例
 
+var xs_pkdc_preName = "";//保存上一级的区域名称
+var xs_pkdc_currentName = xs_userZoneName;//保存下一级的区域名称
+var xs_pkdc_preNameArr = [];//保存已浏览的上一级区域名称
+var xs_pkdc_direction = -1;
+
 //点击左工具栏--贫困洞察事件处理
 XS.Main.Pkjc.pkdc = function(){
     XS.Main.hiddenLayers();
@@ -303,8 +308,11 @@ XS.Main.Pkjc.showGaugeData = function(pop, ratio, family){
 
         //点击仪表盘指针事件处理
         xs_pkdc_GaugeChart.on('click', function (params) {
-            if($("#xs_utfGridC").length>0) $("#xs_utfGridC").css("display","none");
+            xs_pkdc_preNameArr = [];
+            xs_pkdc_direction = -1;
             xs_pkdc_preName = xs_userZoneName;
+            xs_pkdc_currentName = xs_userZoneName;
+            if($("#xs_utfGridC").length>0) $("#xs_utfGridC").css("display","none");
             //XS.LogUtil.log(params);
             //显示下一级贫困信息窗口
             if(!xs_currentZoneFuture)
@@ -411,7 +419,6 @@ var xs_pkdc_currentStateCode = -1; //当前ID
 var xs_pkdc_superStateCode = -1; //上一级Id
 var xs_pkdc_cacheDataArr = []; //数据缓存
 var xs_pkdc_zoneLevel = -1;
-var xs_pkdc_preName = "";//保存上一级的区域名称
 //点击仪表盘显示下级信息窗口 superId:通过查找当前的区域的信息，id 通过当前的ID查找下一级的信息
 XS.Main.Pkjc.showInfoWin = function(level, superId, id){
    // XS.LogUtil.log($("#xs_pkdc_msgWin"));
@@ -465,8 +472,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         $('#xs_pkdc_itemRelocate').linkbutton({iconCls:'xs_pkdc_family',iconAlign:'top',size:'large',width:80,height:64});
 
         //返回上一级
-        //$('#xs_pkdc_backSuperBtn').linkbutton({iconCls:'icon-back'});
-        $('#xs_pkdc_backSuperBtn').linkbutton();
+        $('#xs_pkdc_backSuperBtn').linkbutton({iconCls:'icon-back'});
         //定位
         $('#xs_pkdc_positionBtn').linkbutton({iconCls:'icon-main_position'});
         //扶贫意见
@@ -515,6 +521,12 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         //返回上一级事件处理
         $("#xs_pkdc_backSuperBtn").click(function()
         {
+            xs_pkdc_currentName = xs_pkdc_preName;
+            if(xs_pkdc_direction == 0){
+                xs_pkdc_preNameArr.pop();
+            }
+            xs_pkdc_preName = xs_pkdc_preNameArr.pop();
+            xs_pkdc_direction = 1;
             if(xs_pkdc_zoneLevel == XS.Main.ZoneLevel.village)
             {
                 switch (xs_user_regionLevel){
@@ -614,8 +626,15 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
     }
     //-------------------------加载一次 结束-----------------------------------
 
-    $('#xs_pkdc_msgWin').window({"title":xs_pkdc_preName + "-贫困洞察"/*, width:1020,height:600*/}).window('open');
-    $("#xs_pkdc_backSuperBtn").linkbutton({text: "返回" + xs_pkdc_preName});
+    $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/*, width:1020,height:600*/}).window('open');
+    console.log(xs_pkdc_preNameArr);
+    console.log(xs_pkdc_preName);
+    console.log(xs_userZoneName);
+    if(xs_pkdc_preNameArr.length == 0){
+        $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
+    }else{
+        $("#xs_pkdc_backSuperBtn").linkbutton({text: "返回" + xs_pkdc_preName});
+    }
    // XS.Main.Pkjc.minInfoWinDialog();
 
     if(!xs_pkdc_PieChart){
@@ -676,7 +695,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryVillBaseByareaId", dataN, function(json){
             $("#xs_pkdc_msgWin_p").css("display", "none");
             if(json && json.length>0)
-            {console.log(json);
+            {
                 xs_pkdc_cacheDataArr = json;
                 XS.Main.Pkjc.showTownBar();
             }
@@ -698,6 +717,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
             }
         });
     }
+
 }
 
 //点击左贫困柱Bar图时更新右贫困率饼图
@@ -744,8 +764,12 @@ XS.Main.Pkjc.showCity = function(){
     }
     var xs_pkdc_BarChart = echarts.init(document.getElementById("xs_pkdc_msg_barC"), "shine");
     xs_pkdc_BarChart.on("click",function(params) {
-        xs_pkdc_preName = params.name;
+        xs_pkdc_direction = 0;
+        xs_pkdc_preNameArr.push(xs_pkdc_preName);
         xs_pkdc_BarChartDataIndex = params.dataIndex;
+        xs_pkdc_preName = xs_pkdc_currentName;
+        xs_pkdc_preNameArr.push(xs_pkdc_preName);
+        xs_pkdc_currentName = params.name;
         xs_pkdc_zoneLevel = xs_pkdc_zoneLevel+1;
         XS.Main.Pkjc.showInfoWin(xs_pkdc_zoneLevel, xs_pkdc_currentStateCode, XS.Main.CacheZoneInfos.county[xs_pkdc_BarChartDataIndex].CBI_ID);
     });
@@ -785,8 +809,11 @@ XS.Main.Pkjc.showCountyBar = function(){
 
     var xs_pkdc_BarChart = echarts.init(document.getElementById("xs_pkdc_msg_barC"), "shine");
     xs_pkdc_BarChart.on("click",function(params) {
-        xs_pkdc_preName = params.name;
+        xs_pkdc_direction = 0;
         xs_pkdc_BarChartDataIndex = params.dataIndex;
+        xs_pkdc_preName = xs_pkdc_currentName;
+        xs_pkdc_preNameArr.push(xs_pkdc_preName);
+        xs_pkdc_currentName = params.name;
         xs_pkdc_zoneLevel = xs_pkdc_zoneLevel+1;
         XS.Main.Pkjc.showInfoWin(xs_pkdc_zoneLevel, xs_pkdc_currentStateCode, xs_pkdc_cacheDataArr[xs_pkdc_BarChartDataIndex].TOWB_ID);
     });
@@ -827,8 +854,11 @@ XS.Main.Pkjc.showTownBar = function(){
     }
     var xs_pkdc_BarChart = echarts.init(document.getElementById("xs_pkdc_msg_barC"), "shine");
     xs_pkdc_BarChart.on("click",function(params) {
-        xs_pkdc_preName = params.name;
+        xs_pkdc_direction = 0;
         xs_pkdc_BarChartDataIndex = params.dataIndex;
+        xs_pkdc_preName = xs_pkdc_currentName;
+        xs_pkdc_preNameArr.push(xs_pkdc_preName);
+        xs_pkdc_currentName = params.name;
         xs_pkdc_zoneLevel = xs_pkdc_zoneLevel+1;
         XS.Main.Pkjc.showInfoWin(xs_pkdc_zoneLevel, xs_pkdc_currentStateCode, xs_pkdc_cacheDataArr[xs_pkdc_BarChartDataIndex].VBI__ID);
     });
