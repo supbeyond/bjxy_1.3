@@ -31,7 +31,7 @@ XS.Main.Pkjc.gaugeOption = {
         bottom:0
     },
     toolbox: {
-        show: false
+        show : false
     },
     series: [
         {
@@ -60,7 +60,12 @@ XS.Main.Pkjc.gaugeOption = {
                 }
             },
             title: {
-               show:false
+                show: false,
+                top:'bottom',
+                textStyle: {
+                    color: '#59798E',
+                    fontSize: 8
+                }
             },
             data: [{value: 25, name: '贫困发生率'}]
         },
@@ -100,7 +105,12 @@ XS.Main.Pkjc.gaugeOption = {
                 width: 5
             },
             title: {
-                show:false
+                show: false,
+                top:'bottom',
+                textStyle: {
+                    color: '#ccc',
+                    fontSize: 8
+                }
             },
             data: [{value: 0, name: '贫困人口'}]
         },
@@ -140,7 +150,12 @@ XS.Main.Pkjc.gaugeOption = {
                 width: 5
             },
             title: {
-                show:false
+                show: false,
+                top:'bottom',
+                textStyle: {
+                    color: '#ccc',
+                    fontSize: 8
+                }
             },
             data: [{value: 0, name: '贫困户'}]
         }
@@ -277,9 +292,9 @@ XS.Main.Pkjc.showGaugeData = function(pop, ratio, family){
     if(!xs_pkdc_GaugeChart)
     {
         var gaugeTag = "<div id='xs_pkdc_gaugeC' style='z-index: 998;'>" +
-            "<div id='xs_pkdc_gauge_bg1' style='width: 104px; height: 104px; position: absolute; top: 98px; right: 300px; z-index: 998;background: #15144a; border-radius: 53px;'></div>"+
-            "<div id='xs_pkdc_gauge_bg2' style='width: 136px; height: 136px; position: absolute; top: 78px; right: 152px; z-index: 998;background: #ffffff; border-radius: 68px;'></div>"+
-            "<div id='xs_pkdc_gauge_bg3' style='width: 104px; height: 104px; position: absolute; top: 98px; right: 36px; z-index: 998;background: #123c66; border-radius: 53px;'></div>"+
+            "<div id='xs_pkdc_gauge_bg1' style='width: 104px; height: 104px; position: absolute; top: 98px; right: 300px; z-index: 998;background: #15144a; border-radius: 53px;color: #59798E;font-size: 10px;line-height: 150px;text-align: center;'>人口</div>"+
+            "<div id='xs_pkdc_gauge_bg2' style='width: 136px; height: 136px; position: absolute; top: 78px; right: 152px; z-index: 998;background: #ffffff; border-radius: 68px;color: #59798E;font-size: 10px;line-height: 100px;text-align: center;'>贫困率</div>"+
+            "<div id='xs_pkdc_gauge_bg3' style='width: 104px; height: 104px; position: absolute; top: 98px; right: 36px; z-index: 998;background: #123c66; border-radius: 53px;color: #59798E;font-size: 10px;line-height: 147px;text-align: center;'>户数</div>"+
             "<div id='xs_pkdc_gauge' style='width: 440px; height: 300px; position: absolute; top: 0px; right: 0px; z-index: 998; border: 0px;'></div>" +
             "</div>";
 
@@ -410,17 +425,17 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
     {
         var winTag =
         "<div id='xs_pkdc_msgWin' style='width: 1000px; height: 600px;'>" +
-            "<div  id='xs_pkdc_msgC' style=' width: 100%; height: 80%; border-bottom: 1px solid #f1f1f1;'>" +
+            "<div  id='xs_pkdc_msgC' style=' width: /*100%*/400px; height: 80%; border-bottom: 1px solid #f1f1f1;'>" +
                 "<div id='xs_pkdc_mgsLeft' style='position: relative; width:70%; height:100%; display: inline-block;overflow-y: auto; border-right: 1px solid #f1f1f1;'>" +
-                    "<div id='xs_pkdc_msg_barC'  style='width: 100%; height:100%;'></div>" +
+                    "<div id='xs_pkdc_msg_barC'  style='width: /*100%*/400px; height:100%;'></div>" +
                 "</div>" +
                 "<div style='width: 28%; height:100%; display: inline-block;vertical-align: top;'>" +
-                    "<div id='xs_pkdc_linkButtonC' style='width: 100%; height: 20%;'>" +
-                        "<a id='xs_pkdc_backSuperBtn' href='javascript:void(0);' style='width: 80px; margin: 5px;'>上一级</a>" +
-                        "<a id='xs_pkdc_positionBtn' href='javascript:void(0);'  style='width: 80px; margin: 5px;'>定位</a>" +
-                        "<a id='xs_pkdc_poorAdviceBtn' href='javascript:void(0);'  style='width: 80px; margin: 5px;'>扶贫意见</a>" +
+                    "<div id='xs_pkdc_linkButtonC' style='width: /*100%*/200px; height: 20%;'>" +
+                        "<a id='xs_pkdc_backSuperBtn' href='javascript:void(0);' style='width: 80px; margin: 5px;display: block;'>上一级</a>" +
+                        "<a id='xs_pkdc_positionBtn' href='javascript:void(0);'  style='width: 80px; margin: 5px;display: block;'>定位</a>" +
+                        "<a id='xs_pkdc_poorAdviceBtn' href='javascript:void(0);'  style='width: 80px; margin: 5px;margin-top: 0px;margin-bottom: 20px;'>扶贫意见</a>" +
                     "</div>" +
-                    "<div id='xs_pkdc_msg_pieC'  style='width: 100%; height: 80%;'></div>" +
+                    "<div id='xs_pkdc_msg_pieC'  style='width: /*100%*/200px; height: 80%;'></div>" +
                 "</div>" +
             "</div>" +
             "<div style='width: 100%; height: 4%;'></div>" +
@@ -429,7 +444,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                     "<a id='xs_pkdc_details' href='javascript:void(0);'  style='background: #304655;margin-bottom: 8px;color: #ffffff;'>详情</a>" +
                     "<a id='xs_pkdc_dataAnalysis' href='javascript:void(0);'  style='background: #304655;margin:0% 8%;margin-bottom: 8px;color: #ffffff;'>数据分析</a>" +
                     "<a id='xs_pkdc_dutyMonitor' href='javascript:void(0);'  style='background: #304655;color: #ffffff;margin-bottom: 8px;'>责任监控</a>" +
-                    "<a id='xs_pkdc_taskMonitor' href='javascript:void(0);'  style='background: #304655;margin:0% 8%;margin-bottom: 8px;color: #ffffff;'>任务监控</a>" +
+                    "<a id='xs_pkdc_taskMonitor' href='javascript:void(0);'  style='background: #304655;margin:0% 8%;margin-left:0px; margin-bottom: 8px;color: #ffffff;'>任务监控</a>" +
                     "<a id='xs_pkdc_itemFund' href='javascript:void(0);'  style='background: #304655;margin-right:8%; margin-bottom: 8px;color: #ffffff;'>项目资金</a>" +
                     "<a id='xs_pkdc_itemRelocate' href='javascript:void(0);'  style='background: #304655;margin-bottom: 8px;color: #ffffff;'>扶贫搬迁</a>" +
                 "</div>" +
@@ -460,16 +475,16 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
             iconCls:'icon-man',
             collapsible: false,
             minimizable: false,
-            maximizable: true,
+            maximizable: false,
             resizable:true,
             closable: true,
-            width:1020,
+            width:400,
             height:600,
-            left:20,
-            top:30,
+            left:0,
+            top:null,
             tools:[
                 {
-                    iconCls:'e_icon-min',
+                   /* iconCls:'e_icon-min',
                     handler:function(){
                         var width = 0;
                         if(!xs_pkdc_isWinMin){
@@ -482,7 +497,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                         $('#xs_pkdc_msgWin').window('resize',
                             {width:width}
                         );
-                    }
+                    }*/
                 }
             ],
             onClose:function(){
@@ -585,7 +600,8 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
     }
     //-------------------------加载一次 结束-----------------------------------
 
-    $('#xs_pkdc_msgWin').window({"title":"贫困洞察", width:1020,height:600}).window('open');
+    $('#xs_pkdc_msgWin').window({"title":"贫困洞察"/*, width:1020,height:600*/}).window('open');
+   // XS.Main.Pkjc.minInfoWinDialog();
     if(!xs_pkdc_PieChart){
         xs_pkdc_PieChart = echarts.init(document.getElementById("xs_pkdc_msg_pieC"));
     }
@@ -1282,11 +1298,11 @@ XS.Main.Pkjc.clickClusterCallback = function(f){
 
 //最小化信息窗口
 XS.Main.Pkjc.minInfoWinDialog = function(){
-    if(!xs_pkdc_isWinMin){
+   /* if(!xs_pkdc_isWinMin){
         $('#xs_pkdc_msgWin').window('resize',
             {width:400}
         );
         xs_pkdc_isWinMin = true;
-    }
+    }*/
 }
 

@@ -225,6 +225,7 @@ XS.Main.hideLeftToolBar = function(){
 
 //右击-菜单点击事件
 XS.Main.RightClickMenuHandler = function(name){
+    XS.CommonUtil.closeDialog("xs_main_fmenu_dialog");
     if(name == 'exit'){
         XS.Login.logout();
     }
@@ -987,6 +988,8 @@ XS.Main.clickMapCallback = function(mouseEvent){
             xs_currentZoneLevel = level;
             //查询信息
             XS.CommonUtil.hideLoader();
+
+            XS.Main.showFunMenu();
         }else{
             XS.CommonUtil.hideLoader();
         }
@@ -1197,10 +1200,76 @@ XS.Main.povertyTimer = function(){
     $("#xs_rt_btn_timer").empty().append(content);
 }
 
+//点击行政区域弹出功能窗口
+XS.Main.showFunMenu = function(x, y){
+   // var xy = XS.GeometryUtil.getPixelFromGeoXY(lon, lat, xs_MapInstance.getMapObj());
+    if(!document.getElementById("xs_fmenu"))
+    {
+        var tjfxTag =
+            '<div id="xs_fmenu" style="width:120px;">'+
+                '<div>'+
+                    '<span>贫困指标</span>'+
+                    '<div>'+
+                        '<div onclick="XS.Main.cRItem_Tjfx_Range(XS.Main.Tjfx.type.range_pkfsx);">贫困发生率</div>'+
+                        '<div onclick="XS.Main.cRItem_Tjfx_Range(XS.Main.Tjfx.type.range_tpx);">脱贫率</div>'+
+                        '<div onclick="XS.Main.cRItem_Tjfx_Range(XS.Main.Tjfx.type.range_wfx);">危房率</div>'+
+                        '<div onclick="XS.Main.cRItem_Tjfx_Range(XS.Main.Tjfx.type.range_fpbqx);">扶贫搬迁率</div>'+
+                    '</div>'+
+                '</div>'+
+                '<div class="menu-sep"></div>'+
+                '<div>'+
+                    '<span>四有五覆盖</span>'+
+                    '<div>'+
+                        '<div onclick="XS.Main.Tjfx.Graph.graph(XS.Main.Tjfx.Graph.Type.bar.fourOf45);">四有</div>'+
+                        '<div onclick="XS.Main.Tjfx.Graph.graph(XS.Main.Tjfx.Graph.Type.bar.fiveOf45);">五覆盖</div>'+
+                    '</div>'+
+                '</div>'+
+                '<div class="menu-sep"></div>'+
+                '<div>'+
+                    '<span>五通四有</span>'+
+                    '<div>'+
+                        '<div onclick="XS.Main.Tjfx.Graph.graph(XS.Main.Tjfx.Graph.Type.bar.fiveOf54);">五通</div>'+
+                        '<div onclick="XS.Main.Tjfx.Graph.graph(XS.Main.Tjfx.Graph.Type.bar.fourOf54);">四有</div>'+
+                    '</div>'+
+                '</div>'+
+                '<div class="menu-sep"></div>'+
+                '<div onclick="XS.Main.Tjfx.Graph.graph(XS.Main.Tjfx.Graph.Type.pie);">土地信息</div>'+
+                '<div onclick="XS.Main.Tjfx.Graph.graph(XS.Main.Tjfx.Graph.Type.bar.social);">社会保障</div>'+
+            '</div>';
+        $("#xs_mainC").append(tjfxTag);
+    }
+    var content =
+        '<div style="background-color: #eee; box-sizing: border-box; padding:5px;">' +
+        '<div style="box-sizing: border-box; margin-bottom: 5px;">' +
+        "<a id='xs_f_pkdcBtn' href='javascript:void(0);' style='width: 80px;margin-right:5px;display: inline-block;'>贫困洞察</a>" +
+        "<a id='xs_f_zrjcBtn' href='javascript:void(0);'  style='width: 80px;'>责任监控</a>" +
+        '</div>'+
+        '<div style="box-sizing: border-box;">' +
+        "<a id='xs_f_rwjcBtn' href='javascript:void(0);'  style='width: 80px; margin-right:5px; display: inline-block;'>任务监控</a>" +
+        "<a id='xs_f_tjfxBtn' href='javascript:void(0);'  class='easyui-menubutton' data-options='menu:\"#xs_fmenu\"' style='width: 80px;'>统计分析</a>"+
+        "<div>";
+    XS.CommonUtil.openDialog("xs_main_fmenu_dialog", "功能菜单", "", content, false, false, false,null, null,(window.innerWidth/2.0+50),(window.innerHeight/2.0+50));
+
+    $('#xs_f_pkdcBtn').linkbutton({});
+    $('#xs_f_zrjcBtn').linkbutton({});
+    $('#xs_f_rwjcBtn').linkbutton({});
+
+    $('#xs_f_pkdcBtn').click(function(){
+        XS.Main.RightClickMenuHandler('pkdc');
+    });
+    $('#xs_f_zrjcBtn').click(function(){
+        XS.Main.RightClickMenuHandler('zrjk');
+    });
+    $('#xs_f_rwjcBtn').click(function(){
+        XS.Main.RightClickMenuHandler('rwjk');
+    });
+}
+
 
 //************************处理点击鼠标右键选中菜单选项处理函数************************************
 //分段专题图 贫困发生率 脱贫率
 XS.Main.cRItem_Tjfx_Range = function(type){
+    XS.CommonUtil.closeDialog("xs_main_fmenu_dialog");
     if(xs_currentZoneFuture != null){
         xs_tjfx_range_centerPoint = xs_currentZoneFuture.geometry.getBounds().getCenterLonLat();
         XS.Main.Tjfx.range(xs_currentZoneLevel-1, xs_superZoneCode, type);

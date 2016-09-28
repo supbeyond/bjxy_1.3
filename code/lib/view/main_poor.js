@@ -907,7 +907,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                         $('#xs_poor_preloc_videoBtn').click(function()
                         { //搬迁前后视频展示
                             var bpath = "../test/s.3gp";
-                            var cpath = "../test/e.mp4";
+                            var cpath = "../test/s.3gp";
 
                             XS.Main.Poor.showVideo2Path1('搬迁前', bpath,(window.innerWidth/2.0-600),600,600,500,500);
                             XS.Main.Poor.showVideo2Path2('搬迁后', cpath,(window.innerWidth/2.0),600,600,500,500);
