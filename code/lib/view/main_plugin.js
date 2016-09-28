@@ -1082,6 +1082,8 @@ XS.Main.depClearMap = function() {
     clearInterval(xs_pkjc_IntervalId);
     xs_tasker_labelLayer.removeAllFeatures();
     xs_tasker_animatorVectorLayer.removeAllFeatures();
+
+    XS.Main.Poor.clearRelocationLayer();
 }
 
 //意见反馈

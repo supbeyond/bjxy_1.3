@@ -30,6 +30,7 @@ XS.Main.Tjfx.range = function(level, parentId, type){
     xs_isShowUtfGridTip = false;
     XS.Main.hiddenDivTags();
     XS.Main.Tjfx.removeLayer();
+    XS.Main.Poor.clearRelocationLayer();
 
     //添加标签专题图
     var strategy = new SuperMap.Strategy.GeoText();

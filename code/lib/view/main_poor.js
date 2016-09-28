@@ -713,6 +713,7 @@ var xs_poor_echart_option =
  */
 XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
     XS.Main.hiddenLayers();
+    if($("#xs_utfGridC").length>0) $("#xs_utfGridC").css("display","none");
 
     xs_clickMapType = XS.Main.clickMapType.poor_povertyrelocation;
     xs_poor_isELayerVisible = false;
