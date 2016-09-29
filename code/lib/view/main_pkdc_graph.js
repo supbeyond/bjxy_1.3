@@ -56,6 +56,8 @@ var xs_tjfx_graph_maxValue = 0;
 XS.Main.Tjfx.Graph.graph = function(type){
     XS.Main.Pkjc.closeInfoDialog();
     XS.Main.Poor.clearRelocationLayer();
+    xs_isShowUtfGridTip = false;
+    XS.Main.hiddenDivTags();
     XS.CommonUtil.closeDialog("xs_main_fmenu_dialog");
     if(xs_currentZoneFuture != null){
         xs_tjfx_range_centerPoint = xs_currentZoneFuture.geometry.getBounds().getCenterLonLat();

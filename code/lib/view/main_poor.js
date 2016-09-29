@@ -31,6 +31,7 @@ XS.Main.Poor.showPoors = function(objArr){
 
 //点击聚散点--查看贫困户的基本信息
 XS.Main.Poor.clickClusterCallback = function(obj){
+    xs_isShowUtfGridTip = false;
     if(obj.xt_ctype==XS.Main.ClusterPointerStyle.poor_info_obj){
         XS.Main.Poor.showPoorInfo(obj);
     }else if(obj.xt_ctype==XS.Main.ClusterPointerStyle.poor_info_id){

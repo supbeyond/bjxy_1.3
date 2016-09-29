@@ -626,7 +626,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         $("#xs_pkdc_taskMonitor").click(function(){
             XS.Main.Pkjc.closeInfoDialog();
             XS.Main.Poor.clearRelocationLayer();
-            XS.Main.Pkjc.clickTaskMonitor(xs_pkdc_zoneLevel, xs_pkdc_currentStateCode);
+            XS.Main.Pkjc.clickTaskMonitor(xs_pkdc_zoneLevel, xs_pkdc_currentStateCode,xs_pkdc_currentName);
         });
         //项目资金点击
         $('#xs_pkdc_itemFund').click(function(){
@@ -1126,7 +1126,7 @@ XS.Main.Pkjc.clickDutyChain = function(zoneLevel, stateCode){
  * @param zoneLevel 区域级别
  * @param zoneCode 行政区域ID
  */
-XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode){
+XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode, zoneName){
     XS.Main.Pkjc.minInfoWinDialog();
     XS.Main.Pkjc.closeInfoDialog();
     if(XS.StrUtil.isEmpty(zoneCode)){
@@ -1162,7 +1162,7 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode){
             '</div>';
         content += '</div>';
     //id, title, iconCls, content, resizable, maximizable, modal, width, height, left, top, closeCallback, maximizeCallback, minimizeCallback
-    XS.CommonUtil.openDialog("xs_main_detail", "任务监控", "icon-man", content, false, true, false, 350, 600,0,null,function(){
+    XS.CommonUtil.openDialog("xs_main_detail", zoneName + "-任务监控", "icon-man", content, false, true, false, 350, 600,0,null,function(){
         if(xs_animatorVectorLayer != null){
             xs_MapInstance.getMapObj().removeLayer(xs_animatorVectorLayer);
             xs_animatorVectorLayer = null;

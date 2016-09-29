@@ -216,7 +216,7 @@ XS.Main.hideLeftToolBar = function(){
         $("#xs_leftToolBarC").stop(true, false).animate({"left": -302}, 150, function(nsg){
            // xs_isClosed = true;
             xs_isShowing = false;
-            xs_isShowUtfGridTip = true;
+          //  xs_isShowUtfGridTip = true;
             $("#xs_tjfx_leftMenuC").menu("hide");
             $("#xs_tjfx_leftMenu").panel('close');
         });
@@ -239,14 +239,23 @@ XS.Main.RightClickMenuHandler = function(name){
         if(xs_currentZoneFuture != null){
             XS.Main.Pkjc.clickDutyChain(xs_currentZoneLevel, xs_currentZoneCode);
         }else{
-            XS.CommonUtil.showMsgDialog("","请先选中区域");
+          //  XS.CommonUtil.showMsgDialog("","请先选中区域");
+            XS.Main.Pkjc.clickDutyChain(xs_user_regionLevel,xs_user_regionId);
         }
     }
     else if(name == 'rwjk'){
         if(xs_currentZoneFuture != null){
-            XS.Main.Pkjc.clickTaskMonitor(xs_currentZoneLevel, xs_currentZoneCode);
+            XS.Main.Pkjc.clickTaskMonitor(xs_currentZoneLevel, xs_currentZoneCode, xs_currentZoneName);
         }else{
-            XS.CommonUtil.showMsgDialog("","请先选中区域");
+          //  XS.CommonUtil.showMsgDialog("","请先选中区域");
+            XS.Main.Pkjc.clickTaskMonitor(xs_user_regionLevel,xs_user_regionId,xs_userZoneName);
+        }
+    }else if(name == 'sjfx'){
+        if(xs_currentZoneFuture != null){
+            //XS.Main.Pkjc.clickAnalysis(xs_pkdc_zoneLevel,xs_pkdc_currentStateCode);
+            XS.Main.Pkjc.clickAnalysis(xs_currentZoneLevel,xs_currentZoneCode);
+        }else{
+            XS.Main.Pkjc.clickAnalysis(xs_user_regionLevel,xs_user_regionId);
         }
     }
 }
@@ -314,7 +323,7 @@ var xs_utfGridOption = {
         x: "center",
         text: "",
         textStyle: {
-            color: "#ff0000",
+            color: "#2f4554",
             fontSize: 15
         }
     },
@@ -327,7 +336,7 @@ var xs_utfGridOption = {
         },
         axisLabel: {
             textStyle: {
-                color: "#0000ff"
+                color: "#2f4554"
             }
         }
     },
@@ -336,7 +345,7 @@ var xs_utfGridOption = {
             type : 'value',
             axisLabel: {
                 textStyle: {
-                    color: "#0000ff"
+                    color: "#2f4554"
                 }
             }
         }
@@ -742,7 +751,7 @@ XS.Main.utfGridLayerMoveCallbackUpdataData = function(level, x, y, name,THus, po
         title: {
             text: name,
             textStyle:{
-                color:"#0000ff"
+               /* color:"#0000ff"*/
             }
         },
         tooltip: {
@@ -755,7 +764,8 @@ XS.Main.utfGridLayerMoveCallbackUpdataData = function(level, x, y, name,THus, po
                 type:"bar",
                 itemStyle:{
                     normal:{
-                        color:"#2f4554"
+                       /* color:"#2f4554"*/
+                        color:"#00bbee"
                     }
                 },
                 data: [THus-poorHus,TPups-poorPups],
@@ -767,7 +777,8 @@ XS.Main.utfGridLayerMoveCallbackUpdataData = function(level, x, y, name,THus, po
                 type:"bar",
                 itemStyle:{
                     normal:{
-                        color:"#c23531"
+                       /* color:"#c23531"*/
+                        color:"#ff0000"
                     }
                 },
                 data: [poorHus,poorPups],

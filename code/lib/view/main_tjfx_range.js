@@ -19,7 +19,6 @@ var xs_tjfx_range_centerPoint = null;
 var xs_tjfx_zoneLevel = -1;
 XS.Main.Tjfx.range = function(level, parentId, type){
     XS.Main.Pkjc.closeInfoDialog();
-    xs_isShowUtfGridTip = true;
     xs_currentZoneLevel = level;
     xs_tjfx_zoneLevel = level;
     xs_superZoneCode = -1;
