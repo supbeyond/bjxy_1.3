@@ -46,6 +46,7 @@
     }
     //加载类库资源文件
     function loadLibs() {
+        
         inputCSS("./base/easyui/themes/material/easyui.css");
         inputCSS("./base/easyui/themes/icon.css");
         inputCSS("./base/easyui/themes/extend-icon.css");
