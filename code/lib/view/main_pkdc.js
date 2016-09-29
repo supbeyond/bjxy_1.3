@@ -5,7 +5,6 @@ XS.Main.Pkjc={};
 
 $(function(){
 });
-
 //贫困洞察仪表盘Option
 XS.Main.Pkjc.gaugeOption = {
     tooltip: {

@@ -12,7 +12,6 @@ var xs_currentZoneFuture = null; //保存当前被选中的行政Future
 var xs_clickMapFutureId = -1; //保存当前被选中的行政FutureID
 var xs_currentZoneLevel = -1; //记录当前行政等级
 var xs_isMapClickTypeNone = false; //判断单击地图是否是的类型为None
-
 //行政区域点中样式
 var xs_stateZoneStyle = {
     strokeColor: "#00bbee",

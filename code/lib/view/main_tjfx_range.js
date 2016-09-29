@@ -5,7 +5,6 @@
 
 //记录中心点 --
 var xs_tjfx_range_centerPoint = null;
-
 //贫困发生率率统计
 /*
     贫困发生率
