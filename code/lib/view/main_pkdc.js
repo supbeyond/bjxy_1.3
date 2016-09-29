@@ -614,7 +614,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         $('#xs_pkdc_dataAnalysis').click(function(){
             XS.Main.Pkjc.closeInfoDialog();
             XS.Main.Poor.clearRelocationLayer();
-            XS.Main.Pkjc.clickAnalysis(xs_pkdc_zoneLevel);
+            XS.Main.Pkjc.clickAnalysis(xs_pkdc_zoneLevel,xs_pkdc_currentStateCode);
         });
         //责任监控
         $("#xs_pkdc_dutyMonitor").click(function(){
@@ -644,17 +644,29 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
     //-------------------------加载一次 结束-----------------------------------
     switch (xs_pkdc_zoneLevel){
         case XS.Main.ZoneLevel.city:{
-            xs_pkdc_preName = xs_userZoneName;
-            xs_pkdc_currentName = xs_userZoneName;
+            xs_pkdc_preName = "毕节市";
+            xs_pkdc_currentName = "毕节市";
             break;
         }
         case XS.Main.ZoneLevel.county:{
-            xs_pkdc_preName = xs_userZoneName;
-            if(xs_pkdc_zoneLevel == xs_user_regionLevel){
+            /*if(xs_pkdc_zoneLevel == xs_user_regionLevel){
+                if(XS.Main.CacheZoneInfos.county.length<1)
+                {
+                    var data = {pbno: superId};
+                    $("#xs_pkdc_msgWin_p").css("display", "block");
+                    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryCountyBaseInfoByareaId", data, function(json){
+                        $("#xs_pkdc_msgWin_p").css("display", "none");
+                        if(json && json.length>0){
+                            XS.Main.CacheZoneInfos.county = json;
+                        }
+                    });
+                }
+                xs_pkdc_preName = xs_userZoneName;
                 xs_pkdc_currentName = xs_userZoneName;
             }else{
+                xs_pkdc_preName = xs_userZoneName;
                 XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.county,"","","CBI_ID","CBI_NAME");
-            }
+            }*/
             break;
         }
         case XS.Main.ZoneLevel.town:{
