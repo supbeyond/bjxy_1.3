@@ -689,7 +689,7 @@ XS.Main.Pkjc.clickDetail = function(level){
     }
 }
 // 数据分析点击函数
-XS.Main.Pkjc.clickAnalysis = function(level){
+XS.Main.Pkjc.clickAnalysis = function(level,currentCode){
     xs_pkdc_AnalysTabsCInit = null;
     xs_pkdc_AnalysTabsChartArr = [];
     XS.Main.Pkjc.minInfoWinDialog();
@@ -707,7 +707,7 @@ XS.Main.Pkjc.clickAnalysis = function(level){
         selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab",0);
         selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box;border-right1: 1px solid green;;"></div>');
 
-        var data = {pd_id:xs_pkdc_currentStateCode};
+        var data = {pd_id:currentCode};
         $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
         XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryUnSafeWaterBycount", data, function(json) {
             $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
@@ -756,7 +756,7 @@ XS.Main.Pkjc.clickAnalysis = function(level){
                 $("#xs_pkdc_AnalysTabsChart").remove();
                 selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab",index);
                 selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box"></div>');
-                data = {pd_id:xs_pkdc_currentStateCode,pid:xs_pkdc_currentStateCode};
+                data = {pd_id:currentCode,pid:currentCode};
                 $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
                     $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
@@ -853,7 +853,7 @@ XS.Main.Pkjc.clickAnalysis = function(level){
             '</div>';
         $("#xs_pkdc_AnalysTabs").css({boxSizing: "border-box"});
         for(var i=0;i<XS.Main.CacheZoneInfos.county.length;i++){
-            if(XS.Main.CacheZoneInfos.county[i].CBI_ID == xs_pkdc_currentStateCode){
+            if(XS.Main.CacheZoneInfos.county[i].CBI_ID == currentCode){
                 xs_pkdc_addrName = XS.Main.CacheZoneInfos.county[i].CBI_NAME;
                 XS.CommonUtil.openDialog("xs_pkdc_detailDialog", xs_pkdc_addrName + "-贫困数据分析", "icon-man", content, false, true, false, 400,600,30,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
             }
@@ -862,7 +862,7 @@ XS.Main.Pkjc.clickAnalysis = function(level){
         var selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", 0);
         selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box;"></div>');
         //文化程度
-        var data = {pid: xs_pkdc_currentStateCode};
+        var data = {pid: currentCode};
         $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
         XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryGroupbyeduById", data, function (json) {
             $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
@@ -902,7 +902,7 @@ XS.Main.Pkjc.clickAnalysis = function(level){
                 selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", index);
                 selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box"></div>');
 
-                data = {cid:xs_pkdc_currentStateCode,pd_id:xs_pkdc_currentStateCode,pid:xs_pkdc_currentStateCode};
+                data = {cid:currentCode,pd_id:currentCode,pid:currentCode};
                 $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
                     $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
@@ -977,7 +977,7 @@ XS.Main.Pkjc.clickAnalysis = function(level){
             XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",false,true,800,545,70,40) +
             '</div>';
         XS.CommonUtil.openDialog("xs_pkdc_detailDialog", xs_pkdc_addrName + "-贫困数据分析", "icon-man", content, false, true, false, 400,600,30,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
-        data = {pd_id:xs_pkdc_currentStateCode};
+        data = {pd_id:currentCode};
         XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTownsBaseInfoById", data, function(json) {
             xs_pkdc_addrName = json.TOWB_NAME;
             $("#xs_pkdc_AnalysTabsChart").dialog("setTitle",xs_pkdc_addrName + "-数据分析");
@@ -986,7 +986,7 @@ XS.Main.Pkjc.clickAnalysis = function(level){
         var selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", 0);
         selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box;"></div>');
         //文化程度
-        var data = {pid:xs_pkdc_currentStateCode};
+        var data = {pid:currentCode};
         $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
         XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryGroupbyeduById", data, function(json) {
             $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
@@ -1029,7 +1029,7 @@ XS.Main.Pkjc.clickAnalysis = function(level){
                 selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", index);
                 selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box"></div>');
 
-                data = {pd_id:xs_pkdc_currentStateCode,pid:xs_pkdc_currentStateCode,cid:xs_pkdc_currentStateCode};
+                data = {pd_id:currentCode,pid:currentCode,cid:currentCode};
                 $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
                     $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
@@ -1105,7 +1105,7 @@ XS.Main.Pkjc.clickAnalysis = function(level){
             XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",false,true,800,545,70,40) +
             '</div>';
         XS.CommonUtil.openDialog("xs_pkdc_detailDialog", xs_pkdc_addrName + "-贫困数据分析", "icon-man", content, false, true, false, 400,600,30,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
-        data = {pd_id:xs_pkdc_currentStateCode};
+        data = {pd_id:currentCode};
         XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryVillBaseById", data, function(json) {
             xs_pkdc_addrName = json.VBI_NAME;
             $("#xs_pkdc_AnalysTabsChart").dialog("setTitle",xs_pkdc_addrName + "-贫困数据分析");
@@ -1114,7 +1114,7 @@ XS.Main.Pkjc.clickAnalysis = function(level){
         var selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", 0);
         selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box;"></div>');
         //文化程度
-        var data = {pid:xs_pkdc_currentStateCode};
+        var data = {pid:currentCode};
         $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
         XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryGroupbyeduById", data, function(json) {
             $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
@@ -1157,7 +1157,7 @@ XS.Main.Pkjc.clickAnalysis = function(level){
                 selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", index);
                 selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box"></div>');
 
-                data = {pd_id:xs_pkdc_currentStateCode,pid:xs_pkdc_currentStateCode,cid:xs_pkdc_currentStateCode,vid:xs_pkdc_currentStateCode};
+                data = {pd_id:currentCode,pid:currentCode,cid:currentCode,vid:currentCode};
                 $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
                     $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
