@@ -8,7 +8,7 @@ $(function(){
     xs_user_regionId = sessionStorage.getItem("regionid");
 
     if(XS.StrUtil.isEmpty(xs_Username)||XS.StrUtil.isEmpty(xs_Password)){
-        window.location.href = window.location.toString().substring(0,window.location.toString().lastIndexOf("/")+1) +"index.html";
+        window.location.href = window.location.toString().substring(0,window.location.toString().lastIndexOf("/view")+1) +"index.html";
         return;
     }
     $(window).keyup(function(e){
