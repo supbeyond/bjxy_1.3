@@ -649,7 +649,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
             break;
         }
         case XS.Main.ZoneLevel.county:{
-            /*if(xs_pkdc_zoneLevel == xs_user_regionLevel){
+            if(xs_pkdc_zoneLevel == xs_user_regionLevel){
                 if(XS.Main.CacheZoneInfos.county.length<1)
                 {
                     var data = {pbno: superId};
@@ -658,32 +658,158 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                         $("#xs_pkdc_msgWin_p").css("display", "none");
                         if(json && json.length>0){
                             XS.Main.CacheZoneInfos.county = json;
+                            XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.county,"","","CBI_ID","CBI_NAME");
+                            xs_pkdc_preName = xs_pkdc_currentName;
                         }
                     });
+                }else{
+                    XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.county,"","","CBI_ID","CBI_NAME");
+                    xs_pkdc_preName = xs_pkdc_currentName;
                 }
-                xs_pkdc_preName = xs_userZoneName;
-                xs_pkdc_currentName = xs_userZoneName;
             }else{
-                xs_pkdc_preName = xs_userZoneName;
-                XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.county,"","","CBI_ID","CBI_NAME");
-            }*/
+                xs_pkdc_preName = "毕节市";
+                if(XS.Main.CacheZoneInfos.county.length<1)
+                {
+                    var data = {pbno: superId};
+                    $("#xs_pkdc_msgWin_p").css("display", "block");
+                    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryCountyBaseInfoByareaId", data, function(json){
+                        $("#xs_pkdc_msgWin_p").css("display", "none");
+                        if(json && json.length>0){
+                            XS.Main.CacheZoneInfos.county = json;
+                            XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.county,"","","CBI_ID","CBI_NAME");
+                        }
+                    });
+                }else{
+                    XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.county,"","","CBI_ID","CBI_NAME");
+                }
+            }
             break;
         }
         case XS.Main.ZoneLevel.town:{
             if(xs_pkdc_zoneLevel == xs_user_regionLevel){
-                xs_pkdc_preName = xs_userZoneName;
-                xs_pkdc_currentName = xs_userZoneName;
+                if(superId != XS.Main.CacheZoneInfos.town.countyId){
+                    var dataN = {pbno: superId};
+                    $("#xs_pkdc_msgWin_p").css("display", "block");
+                    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTownsBaseInfoByareaId", dataN, function(json){
+                        $("#xs_pkdc_msgWin_p").css("display", "none");
+                        if(json && json.length>0){
+                            XS.Main.CacheZoneInfos.town.data = json;
+                            XS.Main.CacheZoneInfos.town.countyId = superId;
+                            XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.town.data,"","","TOWB_ID","TOWB_NAME");
+                            xs_pkdc_preName = xs_pkdc_currentName;
+                        }
+                    });
+                }else{
+                    XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.town.data,"","","TOWB_ID","TOWB_NAME");
+                    xs_pkdc_preName = xs_pkdc_currentName;
+                }
             }else{
-                XS.Main.Pkjc.preAndCurrentName(XS.Main.CacheZoneInfos.county,XS.Main.CacheZoneInfos.town.data,"CBI_ID","CBI_NAME","TOWB_ID","TOWB_NAME");
+                if(XS.Main.CacheZoneInfos.county.length<1)
+                {
+                    var data = {pbno: xs_cityID};
+                    $("#xs_pkdc_msgWin_p").css("display", "block");
+                    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryCountyBaseInfoByareaId", data, function(json){
+                        $("#xs_pkdc_msgWin_p").css("display", "none");
+                        if(json && json.length>0){
+                            XS.Main.CacheZoneInfos.county = json;
+                            if(superId != XS.Main.CacheZoneInfos.town.countyId){
+                                var dataN = {pbno: superId};
+                                $("#xs_pkdc_msgWin_p").css("display", "block");
+                                XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTownsBaseInfoByareaId", dataN, function(json){
+                                    $("#xs_pkdc_msgWin_p").css("display", "none");
+                                    if(json && json.length>0){
+                                        XS.Main.CacheZoneInfos.town.data = json;
+                                        XS.Main.CacheZoneInfos.town.countyId = superId;
+                                        XS.Main.Pkjc.preAndCurrentName(XS.Main.CacheZoneInfos.county,XS.Main.CacheZoneInfos.town.data,"CBI_ID","CBI_NAME","TOWB_ID","TOWB_NAME");
+                                    }
+                                });
+                            }else{
+                                XS.Main.Pkjc.preAndCurrentName(XS.Main.CacheZoneInfos.county,XS.Main.CacheZoneInfos.town.data,"CBI_ID","CBI_NAME","TOWB_ID","TOWB_NAME");
+                            }
+                        }
+                    });
+                }else{
+                    if(superId != XS.Main.CacheZoneInfos.town.countyId){
+                        var dataN = {pbno: superId};
+                        $("#xs_pkdc_msgWin_p").css("display", "block");
+                        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTownsBaseInfoByareaId", dataN, function(json){
+                            $("#xs_pkdc_msgWin_p").css("display", "none");
+                            if(json && json.length>0){
+                                XS.Main.CacheZoneInfos.town.data = json;
+                                XS.Main.CacheZoneInfos.town.countyId = superId;
+                                XS.Main.Pkjc.preAndCurrentName(XS.Main.CacheZoneInfos.county,XS.Main.CacheZoneInfos.town.data,"CBI_ID","CBI_NAME","TOWB_ID","TOWB_NAME");
+                            }
+                        });
+                    }else{
+                        XS.Main.Pkjc.preAndCurrentName(XS.Main.CacheZoneInfos.county,XS.Main.CacheZoneInfos.town.data,"CBI_ID","CBI_NAME","TOWB_ID","TOWB_NAME");
+                    }
+                }
             }
             break;
         }
         case XS.Main.ZoneLevel.village:{
             if(xs_pkdc_zoneLevel == xs_user_regionLevel){
-                xs_pkdc_preName = xs_userZoneName;
-                xs_pkdc_currentName = xs_userZoneName;
+                if(superId != XS.Main.CacheZoneInfos.village.townId){
+                    var dataN = {pbno: superId};
+                    $("#xs_pkdc_msgWin_p").css("display", "block");
+                    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryVillBaseByareaId", dataN, function(json){
+                        $("#xs_pkdc_msgWin_p").css("display", "none");
+                        if(json && json.length>0)
+                        {
+                            XS.Main.CacheZoneInfos.village.townId = superId;
+                            XS.Main.CacheZoneInfos.village.data = json;
+                            XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.village.data,"","","VBI__ID","VBI_NAME");
+                            xs_pkdc_preName = xs_pkdc_currentName;
+                        }
+                    });
+                }else{
+                    XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.village.data,"","","VBI__ID","VBI_NAME");
+                    xs_pkdc_preName = xs_pkdc_currentName;
+                }
             }else{
-                XS.Main.Pkjc.preAndCurrentName(XS.Main.CacheZoneInfos.town.data,XS.Main.CacheZoneInfos.village.data,"TOWB_ID","TOWB_NAME","VBI__ID","VBI_NAME");
+                var countyId = Math.floor(superId/1000);
+                if(countyId != XS.Main.CacheZoneInfos.town.countyId){
+                    var dataN = {pbno: countyId};
+                    $("#xs_pkdc_msgWin_p").css("display", "block");
+                    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTownsBaseInfoByareaId", dataN, function(json){
+                        $("#xs_pkdc_msgWin_p").css("display", "none");
+                        if(json && json.length>0){
+                            XS.Main.CacheZoneInfos.town.data = json;
+                            XS.Main.CacheZoneInfos.town.countyId = countyId;
+                            if(superId != XS.Main.CacheZoneInfos.village.townId){
+                                var dataN = {pbno: superId};
+                                $("#xs_pkdc_msgWin_p").css("display", "block");
+                                XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryVillBaseByareaId", dataN, function(json){
+                                    $("#xs_pkdc_msgWin_p").css("display", "none");
+                                    if(json && json.length>0)
+                                    {
+                                        XS.Main.CacheZoneInfos.village.townId = superId;
+                                        XS.Main.CacheZoneInfos.village.data = json;
+                                        XS.Main.Pkjc.preAndCurrentName(XS.Main.CacheZoneInfos.town.data,XS.Main.CacheZoneInfos.village.data,"TOWB_ID","TOWB_NAME","VBI__ID","VBI_NAME");
+                                    }
+                                });
+                            }else{
+                                XS.Main.Pkjc.preAndCurrentName(XS.Main.CacheZoneInfos.town.data,XS.Main.CacheZoneInfos.village.data,"TOWB_ID","TOWB_NAME","VBI__ID","VBI_NAME");
+                            }
+                        }
+                    });
+                }else{
+                    if(superId != XS.Main.CacheZoneInfos.village.townId){
+                        var dataN = {pbno: superId};
+                        $("#xs_pkdc_msgWin_p").css("display", "block");
+                        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryVillBaseByareaId", dataN, function(json){
+                            $("#xs_pkdc_msgWin_p").css("display", "none");
+                            if(json && json.length>0)
+                            {
+                                XS.Main.CacheZoneInfos.village.townId = superId;
+                                XS.Main.CacheZoneInfos.village.data = json;
+                                XS.Main.Pkjc.preAndCurrentName(XS.Main.CacheZoneInfos.town.data,XS.Main.CacheZoneInfos.village.data,"TOWB_ID","TOWB_NAME","VBI__ID","VBI_NAME");
+                            }
+                        });
+                    }else{
+                        XS.Main.Pkjc.preAndCurrentName(XS.Main.CacheZoneInfos.town.data,XS.Main.CacheZoneInfos.village.data,"TOWB_ID","TOWB_NAME","VBI__ID","VBI_NAME");
+                    }
+                }
             }
             break;
         }
