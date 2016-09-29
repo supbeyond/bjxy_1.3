@@ -46,19 +46,19 @@
     }
     //加载类库资源文件
     function loadLibs() {
-        inputCSS("../base/easyui/themes/material/easyui.css");
-        inputCSS("../base/easyui/themes/icon.css");
-        inputCSS("../base/easyui/themes/extend-icon.css");
-        inputCSS("../base/easyui/themes/color.css");
-        inputCSS("../css/init.css");
-        inputCSS("../css/ui_loader.css");
+        inputCSS("./base/easyui/themes/material/easyui.css");
+        inputCSS("./base/easyui/themes/icon.css");
+        inputCSS("./base/easyui/themes/extend-icon.css");
+        inputCSS("./base/easyui/themes/color.css");
+        inputCSS("./css/init.css");
+        inputCSS("./css/ui_loader.css");
 
-        inputScript('../base/easyui/jquery.easyui-1.4.3.min.js',false);
-        inputScript('../base/easyui/locale/easyui-lang-zh_CN.min.js',false);
+        inputScript('./base/easyui/jquery.easyui-1.4.3.min.js',false);
+        inputScript('./base/easyui/locale/easyui-lang-zh_CN.min.js',false);
 
-        inputScript('../lib/StrUtil.js',false);
-        inputScript('../lib/view/CommonUtil.js',false);
-        inputScript('../lib/view/login.js',false);
+        inputScript('./lib/StrUtil.js',false);
+        inputScript('./lib/view/CommonUtil.js',false);
+        inputScript('./lib/view/login.js',false);
     }
     loadLibs();
 })();
@@ -79,6 +79,6 @@ $(function(){
 XS.Index = {};
 //加载主页
 XS.Index.loadMain = function(){
-    window.location.href = window.location.toString().substring(0,window.location.toString().lastIndexOf("/")+1) +"main.html";
+    window.location.href = window.location.toString().substring(0,window.location.toString().lastIndexOf("/")+1) +"view/main.html";
 }
 

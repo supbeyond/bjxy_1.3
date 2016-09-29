@@ -276,12 +276,61 @@ var xs_pkdc_currentName = xs_userZoneName;//保存下一级的区域名称
 //点击左工具栏--贫困洞察事件处理
 XS.Main.Pkjc.pkdc = function(){
     XS.Main.hiddenLayers();
+    XS.Main.closeDialogs("xs_main_detail");
+
+    xs_pkdc_zoneLevel = -1;
+    XS.Main.Poor.clearRelocationLayer();
+    XS.Main.clearMap();
+
     /*if(xs_currentZoneFuture==null){
         xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 0);
     }*/
     $("#xs_tjfx_range_Legend").remove();
     $("#xs_tjfx_graph_Legend").remove();
-    XS.Main.Pkjc.showGaugeData(0, 0, 0);
+
+    xs_pkdc_preName = xs_userZoneName;
+    xs_pkdc_currentName = xs_userZoneName;
+    if($("#xs_utfGridC").length>0) $("#xs_utfGridC").css("display","none");
+    //XS.LogUtil.log(params);
+    //显示下一级贫困信息窗口
+    if(!xs_currentZoneFuture)
+    {
+        switch (xs_user_regionLevel){
+            case XS.Main.ZoneLevel.city:
+                xs_currentZoneLevel = XS.Main.ZoneLevel.city;
+                xs_currentZoneName = "毕节市";
+                break;
+            case XS.Main.ZoneLevel.county:
+                xs_currentZoneLevel = XS.Main.ZoneLevel.county;
+                xs_clickMapFutureId = xs_user_regionId;
+                break;
+            case XS.Main.ZoneLevel.town:
+                xs_currentZoneLevel = XS.Main.ZoneLevel.town;
+                xs_clickMapFutureId = xs_user_regionId;
+                break;
+            case XS.Main.ZoneLevel.village:
+                xs_currentZoneLevel = XS.Main.ZoneLevel.village;
+                xs_clickMapFutureId = xs_user_regionId;
+                break;
+        }
+    }
+    if(xs_currentZoneLevel==XS.Main.ZoneLevel.city){
+        XS.Main.Pkjc.showInfoWin(XS.Main.ZoneLevel.city, -1, xs_cityID);
+    }else if(xs_currentZoneLevel==XS.Main.ZoneLevel.county){
+        XS.Main.Pkjc.showInfoWin(XS.Main.ZoneLevel.county, xs_cityID, xs_clickMapFutureId);
+    }else if(xs_currentZoneLevel==XS.Main.ZoneLevel.town){
+        if(xs_currentZoneFuture){
+            XS.Main.Pkjc.showInfoWin(XS.Main.ZoneLevel.town, xs_currentZoneFuture.data.县级代码, xs_clickMapFutureId);
+        }else{
+            XS.Main.Pkjc.showInfoWin(XS.Main.ZoneLevel.town, -1, xs_clickMapFutureId);
+        }
+    }else if(xs_currentZoneLevel==XS.Main.ZoneLevel.village){
+        if(xs_currentZoneFuture){
+            XS.Main.Pkjc.showInfoWin(XS.Main.ZoneLevel.village, xs_currentZoneFuture.data.Town_id, xs_clickMapFutureId);
+        }else{
+            XS.Main.Pkjc.showInfoWin(XS.Main.ZoneLevel.village, -1, xs_clickMapFutureId);
+        }
+    }
 }
 
 /**
@@ -304,49 +353,22 @@ XS.Main.Pkjc.showGaugeData = function(pop, ratio, family){
         xs_pkdc_GaugeChart = echarts.init(document.getElementById("xs_pkdc_gauge"), "shine");
 
         //点击仪表盘指针事件处理
-        xs_pkdc_GaugeChart.on('click', function (params) {
-            xs_pkdc_preName = xs_userZoneName;
-            xs_pkdc_currentName = xs_userZoneName;
-            if($("#xs_utfGridC").length>0) $("#xs_utfGridC").css("display","none");
-            //XS.LogUtil.log(params);
-            //显示下一级贫困信息窗口
-            if(!xs_currentZoneFuture)
-            {
-                switch (xs_user_regionLevel){
-                    case XS.Main.ZoneLevel.city:
-                        xs_currentZoneLevel = XS.Main.ZoneLevel.city;
-                        xs_currentZoneName = "毕节市";
-                        break;
-                    case XS.Main.ZoneLevel.county:
-                        xs_currentZoneLevel = XS.Main.ZoneLevel.county;
-                        xs_clickMapFutureId = xs_user_regionId;
-                        break;
-                    case XS.Main.ZoneLevel.town:
-                        xs_currentZoneLevel = XS.Main.ZoneLevel.town;
-                        xs_clickMapFutureId = xs_user_regionId;
-                        break;
-                    case XS.Main.ZoneLevel.village:
-                        xs_currentZoneLevel = XS.Main.ZoneLevel.village;
-                        xs_clickMapFutureId = xs_user_regionId;
-                        break;
-                }
-            }
-            if(xs_currentZoneLevel==XS.Main.ZoneLevel.city){
-                XS.Main.Pkjc.showInfoWin(XS.Main.ZoneLevel.city, -1, xs_cityID);
-            }else if(xs_currentZoneLevel==XS.Main.ZoneLevel.county){
-                XS.Main.Pkjc.showInfoWin(XS.Main.ZoneLevel.county, xs_cityID, xs_clickMapFutureId);
-            }else if(xs_currentZoneLevel==XS.Main.ZoneLevel.town){
-                if(xs_currentZoneFuture){
-                    XS.Main.Pkjc.showInfoWin(XS.Main.ZoneLevel.town, xs_currentZoneFuture.data.县级代码, xs_clickMapFutureId);
+        xs_pkdc_GaugeChart.on('click', function (params)
+        {
+            if(xs_pkdc_isShowInfoWin){
+                xs_pkdc_isShowInfoWin = false;
+                xs_isShowUtfGridTip = true;
+                XS.Main.Pkjc.closeInfoDialog();
+            }else{
+                if(xs_pkdc_isFirstShowInfoWin){
+                    XS.Main.Pkjc.pkdc();
                 }else{
-                    XS.Main.Pkjc.showInfoWin(XS.Main.ZoneLevel.town, -1, xs_clickMapFutureId);
+                    XS.Main.Poor.clearRelocationLayer();
+                    XS.Main.clearMap();
+                    XS.Main.closeDialogs("xs_main_detail");
+                    $('#xs_pkdc_msgWin').window('open');
                 }
-            }else if(xs_currentZoneLevel==XS.Main.ZoneLevel.village){
-                if(xs_currentZoneFuture){
-                    XS.Main.Pkjc.showInfoWin(XS.Main.ZoneLevel.village, xs_currentZoneFuture.data.Town_id, xs_clickMapFutureId);
-                }else{
-                    XS.Main.Pkjc.showInfoWin(XS.Main.ZoneLevel.village, -1, xs_clickMapFutureId);
-                }
+                xs_pkdc_isShowInfoWin = true;
             }
         });
     }
@@ -405,11 +427,12 @@ XS.Main.Pkjc.showGaugeData = function(pop, ratio, family){
 
 //关闭仪表盘
 XS.Main.Pkjc.closeGaugeData = function(){
-    $("#xs_pkdc_gaugeC").css("display", "none");
-    xs_pkdc_isGaugeClose = true;
+    /*$("#xs_pkdc_gaugeC").css("display", "none");
+    xs_pkdc_isGaugeClose = true;*/
 }
 
-var xs_pkdc_isWinMin = false; //判断当前窗口是否最小化
+var xs_pkdc_isShowInfoWin = false; //是否显示贫困洞察窗口
+var xs_pkdc_isFirstShowInfoWin = true; //是否第一次打开贫困洞察窗口
 var xs_pkdc_currentStateCode = -1; //当前ID
 var xs_pkdc_superStateCode = -1; //上一级Id
 var xs_pkdc_cacheDataArr = []; //数据缓存
@@ -417,6 +440,8 @@ var xs_pkdc_zoneLevel = -1;
 //点击仪表盘显示下级信息窗口 superId:通过查找当前的区域的信息，id 通过当前的ID查找下一级的信息
 XS.Main.Pkjc.showInfoWin = function(level, superId, id){
    // XS.LogUtil.log($("#xs_pkdc_msgWin"));
+    xs_pkdc_isShowInfoWin = true;
+    xs_pkdc_isFirstShowInfoWin = false;
     $("#xs_echartjs").empty().append('<script src="../base/echart/echarts.js"></script>');
 
     xs_pkdc_isWinMin = false;
@@ -507,9 +532,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                 }
             ],
             onClose:function(){
-                xs_pkdc_zoneLevel = -1;
-                XS.Main.Poor.clearRelocationLayer();
-                XS.Main.clearMap();
+                xs_pkdc_isShowInfoWin = false;
             }
         });
 
@@ -584,31 +607,37 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         });
         //详情点击
         $('#xs_pkdc_details').click(function(){
+            XS.Main.Pkjc.closeInfoDialog();
             XS.Main.Poor.clearRelocationLayer();
             XS.Main.Pkjc.clickDetail(xs_pkdc_zoneLevel);
         });
         //数据分析点击
         $('#xs_pkdc_dataAnalysis').click(function(){
+            XS.Main.Pkjc.closeInfoDialog();
             XS.Main.Poor.clearRelocationLayer();
             XS.Main.Pkjc.clickAnalysis(xs_pkdc_zoneLevel);
         });
         //责任监控
         $("#xs_pkdc_dutyMonitor").click(function(){
+            XS.Main.Pkjc.closeInfoDialog();
             XS.Main.Poor.clearRelocationLayer();
             XS.Main.Pkjc.clickDutyChain(xs_pkdc_zoneLevel, xs_pkdc_currentStateCode);
         });
         //任务监控
         $("#xs_pkdc_taskMonitor").click(function(){
+            XS.Main.Pkjc.closeInfoDialog();
             XS.Main.Poor.clearRelocationLayer();
             XS.Main.Pkjc.clickTaskMonitor(xs_pkdc_zoneLevel, xs_pkdc_currentStateCode);
         });
         //项目资金点击
         $('#xs_pkdc_itemFund').click(function(){
+            XS.Main.Pkjc.closeInfoDialog();
             XS.Main.Poor.clearRelocationLayer();
             XS.Main.Pkjc.clickItemFund();
         });
         //扶贫搬迁点击
         $("#xs_pkdc_itemRelocate").click(function(){
+            XS.Main.Pkjc.closeInfoDialog();
             XS.Main.Poor.clearRelocationLayer();
             XS.Main.Poor.povertyRelocation(xs_pkdc_zoneLevel, xs_pkdc_currentStateCode);
         });
@@ -962,6 +991,7 @@ XS.Main.Pkjc.clickDutyChain = function(zoneLevel, stateCode){
  */
 XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode){
     XS.Main.Pkjc.minInfoWinDialog();
+    XS.Main.Pkjc.closeInfoDialog();
     if(XS.StrUtil.isEmpty(zoneCode)){
         XS.CommonUtil.showMsgDialog("","请先选择区域");
         return;
@@ -995,7 +1025,7 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode){
             '</div>';
         content += '</div>';
     //id, title, iconCls, content, resizable, maximizable, modal, width, height, left, top, closeCallback, maximizeCallback, minimizeCallback
-    XS.CommonUtil.openDialog("xs_main_detail", "任务监控", "icon-man", content, false, true, false, 350, 600,100,null,function(){
+    XS.CommonUtil.openDialog("xs_main_detail", "任务监控", "icon-man", content, false, true, false, 350, 600,0,null,function(){
         if(xs_animatorVectorLayer != null){
             xs_MapInstance.getMapObj().removeLayer(xs_animatorVectorLayer);
             xs_animatorVectorLayer = null;
@@ -1004,6 +1034,7 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode){
         xs_clusterControl.deactivate();
         xs_vectorLayer.removeAllFeatures();
         XS.CommonUtil.closeDialog("xs_main_detail_1");
+        xs_isShowUtfGridTip = true;
     });
 
     //轨迹查询
@@ -1311,11 +1342,18 @@ XS.Main.Pkjc.clickClusterCallback = function(f){
 
 //最小化信息窗口
 XS.Main.Pkjc.minInfoWinDialog = function(){
-   /* if(!xs_pkdc_isWinMin){
-        $('#xs_pkdc_msgWin').window('resize',
-            {width:400}
-        );
-        xs_pkdc_isWinMin = true;
-    }*/
+    /* if(!xs_pkdc_isWinMin){
+     $('#xs_pkdc_msgWin').window('resize',
+     {width:400}
+     );
+     xs_pkdc_isWinMin = true;
+     }*/
 }
 
+//关闭贫困洞察Dialog
+XS.Main.Pkjc.closeInfoDialog = function(){
+    xs_isShowUtfGridTip = true;
+    if(document.getElementById("xs_pkdc_msgWin")){
+        $('#xs_pkdc_msgWin').window('close');
+    }
+}

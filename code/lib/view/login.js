@@ -65,5 +65,5 @@ XS.Login.logout = function(){
     sessionStorage.removeItem("password");
     //window.location.href = XS.Constants.host+"view/index.html";
     //window.location.href = XS.Constants.host+"view/index.html";
-    window.location.href = window.location.toString().substring(0,window.location.toString().lastIndexOf("/")+1) +"index.html";
+    window.location.href = window.location.toString().substring(0,window.location.toString().lastIndexOf("/view")+1) +"index.html";
 }

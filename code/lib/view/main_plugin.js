@@ -308,10 +308,10 @@ var xs_utfGridOption = {
 //属性矢量瓦片图层鼠标移动事件处理
 XS.Main.utfGridLayerMoveCallback = function (infoLookup, loc, pixel)
 {
+    $("#xs_utfGridC").css("display","none"); //关闭显示窗口
     if(!xs_isShowUtfGridTip){
         return;
     }
-    $("#xs_utfGridC").css("display","none");
     if (infoLookup) {
         var info;
         for (var idx in infoLookup)
@@ -399,9 +399,7 @@ XS.Main.utfGridLayerMoveCallback = function (infoLookup, loc, pixel)
     }
 };
 
-//CTV --County Town Village
-/**
- *
+/** CTV --County Town Village
  * @param level level:0--county ; 1--town; 2--village
  * @param pbno  父级区域ID
  * @param parentId 父级区域ID
@@ -1077,6 +1075,8 @@ XS.Main.clearMap = function(){
 //深度清理地图
 XS.Main.depClearMap = function() {
     XS.Main.clearMap();
+    XS.Main.closeDialogs("xs_main_detail");
+    XS.Main.Pkjc.closeInfoDialog();
     xs_currentZoneFuture = null;
     xs_vectorLayer.removeAllFeatures();
 

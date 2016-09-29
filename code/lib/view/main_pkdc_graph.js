@@ -55,6 +55,7 @@ var xs_tjfx_graph_maxValue = 0;
  * @param type 统计类型
  */
 XS.Main.Tjfx.Graph.graph = function(type){
+    XS.Main.Pkjc.closeInfoDialog();
     XS.Main.Poor.clearRelocationLayer();
     XS.CommonUtil.closeDialog("xs_main_fmenu_dialog");
     if(xs_currentZoneFuture != null){
