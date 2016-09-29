@@ -913,6 +913,7 @@ XS.Main.clickMapCallback = function(mouseEvent){
                     xs_currentZoneCode = feature.data.AdminCode;
                     xs_currentZoneName = feature.data.Name;
                     xs_superZoneCode = xs_cityID;
+                    xs_userZoneName = "毕节市";
                     break;
                 }
                 case XS.Main.ZoneLevel.town:
@@ -942,6 +943,7 @@ XS.Main.clickMapCallback = function(mouseEvent){
                     xs_currentZoneCode = feature.data.乡镇代码;
                     xs_currentZoneName = feature.data.乡镇名称;
                     xs_superZoneCode = feature.data.县级代码;
+                    xs_userZoneName = feature.data.县级代码;
                     break;
                 }
                 case XS.Main.ZoneLevel.village:
@@ -974,6 +976,7 @@ XS.Main.clickMapCallback = function(mouseEvent){
                     xs_currentZoneCode = feature.data.OldID;
                     xs_currentZoneName = feature.data.vd_name;
                     xs_superZoneCode = feature.data.Town_id;
+                    xs_userZoneName = feature.data.Town_name;
                     break;
                 }
             }
