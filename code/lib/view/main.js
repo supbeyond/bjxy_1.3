@@ -302,5 +302,6 @@ XS.Main.addLayers = function(){
 
     window.setInterval(XS.Main.hideLeftToolBar, 7000);
     window.setInterval(XS.Main.povertyTimer, 1000);
+    
     XS.Main.Pkjc.showGaugeData(0, 0, 0); //显示仪表盘
 }
