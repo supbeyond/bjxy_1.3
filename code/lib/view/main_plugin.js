@@ -253,7 +253,7 @@ XS.Main.RightClickMenuHandler = function(name){
 
 //县、镇、村属性矢量瓦片鼠标移动事件处理
 var xs_utfGridOption = {
-    tooltip: {
+    /*tooltip: {
         show: false
     },
     title : {
@@ -269,7 +269,7 @@ var xs_utfGridOption = {
             type : 'category',
             data: ['贫困人数','贫困户数'],
             axisLine: {
-                interval: 0
+                interval: 1
             },
             axisLabel: {
                 textStyle: {
@@ -301,7 +301,53 @@ var xs_utfGridOption = {
             data: [],
             barWidth: 30
         }
-    ]
+    ]*/
+    tooltip: {
+        show: false
+    },
+    legend: {
+        left:"center",
+        top:25,
+        data:[ '非贫困', '贫困']
+    },
+    title : {
+        x: "center",
+        text: "",
+        textStyle: {
+            color: "#ff0000",
+            fontSize: 15
+        }
+    },
+    backgroundColor: "#fff",
+    xAxis :{
+        type : 'category',
+        data: ['户数','人数'],
+        axisLine: {
+            interval: 1
+        },
+        axisLabel: {
+            textStyle: {
+                color: "#0000ff"
+            }
+        }
+    },
+    yAxis : [
+        {
+            type : 'value',
+            axisLabel: {
+                textStyle: {
+                    color: "#0000ff"
+                }
+            }
+        }
+    ],
+    grid: {
+        left: 70,
+        top: 60,
+        bottom: 30,
+        right: 10
+    },
+    series : []
 };
 
 //属性矢量瓦片图层鼠标移动事件处理
@@ -412,7 +458,9 @@ XS.Main.utfGridLayerMoveCallbackCTV = function(level, pbno, parentId, id, x, y){
 
     var cId = "";
     var cName = "";
+    var cTHu = ""
     var cHu = "";
+    var cTPop = ""
     var cPop = "";
 
     var isEquParentId = true; //equal
@@ -427,7 +475,9 @@ XS.Main.utfGridLayerMoveCallbackCTV = function(level, pbno, parentId, id, x, y){
 
             cId = "CBI_ID";
             cName = "CBI_NAME";
+            cTHu = "cps_hhnum";
             cHu = "cps_poor_hhnum";
+            cTPop = "cps_pop";
             cPop = "cps_poor_pop";
             break;
         case 1:
@@ -441,8 +491,10 @@ XS.Main.utfGridLayerMoveCallbackCTV = function(level, pbno, parentId, id, x, y){
 
             cId = "TOWB_ID";
             cName = "TOWB_NAME";
-            cHu = "TOWB_HouseNum";
-            cPop = "TOWB_PeopleNum";
+            cTHu = "TOWB_HouseNum";
+            cHu = "TOWB_PoorHouseNum";
+            cTPop = "TOWB_PeopleNum";
+            cPop = "TOWB_PoorPeopleNum";
             break;
         case 2:
             if(XS.Main.CacheZoneInfos.village.townId!=parentId){
@@ -455,8 +507,10 @@ XS.Main.utfGridLayerMoveCallbackCTV = function(level, pbno, parentId, id, x, y){
 
             cId = "VBI__ID";
             cName = "VBI_NAME";
-            cHu = "VBI_HouseNum";
-            cPop = "VBI_PeopleNum";
+            cTHu = "VBI_HouseNum";
+            cHu = "VBI_PoorHouseNum";
+            cTPop = "VBI_PeopleNum";
+            cPop = "VBI_PoorPeopleNum";
             break;
     }
     if(!isEquParentId)
@@ -492,7 +546,7 @@ XS.Main.utfGridLayerMoveCallbackCTV = function(level, pbno, parentId, id, x, y){
                     {
                         switch (xs_user_regionLevel){
                             case XS.Main.ZoneLevel.city:
-                                XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cHu], obj[cPop]);
+                                XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                                 //仪表盘显示
                                 if(!xs_pkdc_isGaugeClose){
                                     XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
@@ -501,14 +555,14 @@ XS.Main.utfGridLayerMoveCallbackCTV = function(level, pbno, parentId, id, x, y){
                             case XS.Main.ZoneLevel.county:
                                 if(level==0){ //显示县
                                     if(xs_user_regionId == id){
-                                        XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cHu], obj[cPop]);
+                                        XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                                         //仪表盘显示
                                         if(!xs_pkdc_isGaugeClose){
                                             XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
                                         }
                                     }
                                 }else{
-                                    XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cHu], obj[cPop]);
+                                    XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                                     //仪表盘显示
                                     if(!xs_pkdc_isGaugeClose){
                                         XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
@@ -518,14 +572,14 @@ XS.Main.utfGridLayerMoveCallbackCTV = function(level, pbno, parentId, id, x, y){
                             case XS.Main.ZoneLevel.town:
                                 if(level==1){ //显示乡
                                     if(xs_user_regionId == id){
-                                        XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cHu], obj[cPop]);
+                                        XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                                         //仪表盘显示
                                         if(!xs_pkdc_isGaugeClose){
                                             XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
                                         }
                                     }
                                 }else if(level==2){ //村
-                                    XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cHu], obj[cPop]);
+                                    XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                                     //仪表盘显示
                                     if(!xs_pkdc_isGaugeClose){
                                         XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
@@ -535,7 +589,7 @@ XS.Main.utfGridLayerMoveCallbackCTV = function(level, pbno, parentId, id, x, y){
                             case XS.Main.ZoneLevel.village:
                                 if(level==2){ //显示村
                                     if(xs_user_regionId == id){
-                                        XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cHu], obj[cPop]);
+                                        XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                                         //仪表盘显示
                                         if(!xs_pkdc_isGaugeClose){
                                             XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
@@ -569,7 +623,7 @@ XS.Main.utfGridLayerMoveCallbackCTV = function(level, pbno, parentId, id, x, y){
             {
                 switch (xs_user_regionLevel){
                     case XS.Main.ZoneLevel.city:
-                        XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cHu], obj[cPop]);
+                        XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                         //仪表盘显示
                         if(!xs_pkdc_isGaugeClose){
                             XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
@@ -578,14 +632,14 @@ XS.Main.utfGridLayerMoveCallbackCTV = function(level, pbno, parentId, id, x, y){
                     case XS.Main.ZoneLevel.county:
                         if(level==0){ //显示县
                             if(xs_user_regionId == id){
-                                XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cHu], obj[cPop]);
+                                XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                                 //仪表盘显示
                                 if(!xs_pkdc_isGaugeClose){
                                     XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
                                 }
                             }
                         }else{
-                            XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cHu], obj[cPop]);
+                            XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                             //仪表盘显示
                             if(!xs_pkdc_isGaugeClose){
                                 XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
@@ -595,14 +649,14 @@ XS.Main.utfGridLayerMoveCallbackCTV = function(level, pbno, parentId, id, x, y){
                     case XS.Main.ZoneLevel.town:
                         if(level==1){ //显示乡
                             if(xs_user_regionId == id){
-                                XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cHu], obj[cPop]);
+                                XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                                 //仪表盘显示
                                 if(!xs_pkdc_isGaugeClose){
                                     XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
                                 }
                             }
                         }else if(level==2){ //村
-                            XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cHu], obj[cPop]);
+                            XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                             //仪表盘显示
                             if(!xs_pkdc_isGaugeClose){
                                 XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
@@ -633,7 +687,7 @@ XS.Main.utfGridLayerMoveCallbackCTV = function(level, pbno, parentId, id, x, y){
 }
 
 //更新数据
-XS.Main.utfGridLayerMoveCallbackUpdataData = function(level, x, y, name, poorHus, poorPups){
+XS.Main.utfGridLayerMoveCallbackUpdataData = function(level, x, y, name,THus, poorHus, TPups, poorPups){
     /*if(x>20 && x < ($(window).width()-252) && y>20 && y < ($(window).height()-252)) {
         switch (level){
             case 0: //county
@@ -668,7 +722,7 @@ XS.Main.utfGridLayerMoveCallbackUpdataData = function(level, x, y, name, poorHus
     }*/
 
         $("#xs_utfGridC").css("display", "block");
-        xs_utfGridChart.setOption({
+        /*xs_utfGridChart.setOption({
             title: {
                 text: name
             },
@@ -683,7 +737,44 @@ XS.Main.utfGridLayerMoveCallbackUpdataData = function(level, x, y, name, poorHus
                     data: [poorPups,poorHus]
                 }
             ]
-        });
+        });*/
+    xs_utfGridChart.setOption({
+        title: {
+            text: name,
+            textStyle:{
+                color:"#0000ff"
+            }
+        },
+        tooltip: {
+            show: false
+        },
+        series: [
+            {
+                name: "非贫困",
+                stack: '总量',
+                type:"bar",
+                itemStyle:{
+                    normal:{
+                        color:"#2f4554"
+                    }
+                },
+                data: [THus-poorHus,TPups-poorPups],
+                barWidth: 30
+            },
+            {
+                name: "贫困",
+                stack: '总量',
+                type:"bar",
+                itemStyle:{
+                    normal:{
+                        color:"#c23531"
+                    }
+                },
+                data: [poorHus,poorPups],
+                barWidth: 30
+            }
+        ]
+    });
         //xs_utfGridChart.getDom().style.left = (x + 30) + "px";
         //xs_utfGridChart.getDom().style.top = (y + 30) + "px";
         //xs_utfGridChart.resize();
