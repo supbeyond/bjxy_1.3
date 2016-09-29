@@ -410,13 +410,13 @@ html, body{
     left: -160px;
     bottom: 5px;
     margin-left: 50%;
-    width: 320px;
+    width: 350px;
     /*height: 26px;*/
     overflow: hidden;
     background: transparent;
     font-size: 20px;
     font-weight: 900;
-    color: rgba(255, 255, 255, 0.8); /*00bbee  2531EE*/
+    color: rgba(149, 149, 149, 0.86); /*00bbee  2531EE*/
     text-shadow:
     2px -2px 2px #000000
 }
