@@ -252,8 +252,7 @@ XS.Main.load = function(){
                         xs_author_vectorLayer.setVisibility(true);
                         xs_author_vectorLayer.addFeatures(xs_user_Features);
                         xs_MapInstance.getMapObj().zoomToExtent(xs_user_Features[0].geometry.getBounds(),false);
-                        //查询信息
-                        XS.CommonUtil.hideLoader();
+
                     }else{
                         XS.CommonUtil.hideLoader();
                         XS.CommonUtil.showMsgDialog("","您所管辖的区域在地图不存在，请联系管理员！");
@@ -267,10 +266,6 @@ XS.Main.load = function(){
             }
             else{
                 XS.Main.addLayers();
-                var tout = setTimeout(function(){
-                    XS.CommonUtil.hideLoader();
-                    clearTimeout(tout);
-                }, 2000);
             }
         }
     });
@@ -299,6 +294,8 @@ XS.Main.addLayers = function(){
     xs_MapInstance.getMapObj().events.on({ "click": XS.Main.clickMapCallback});
     xs_MapInstance.getMapObj().events.on({ "zoomend": XS.Main.zoomedMapCallback});
     xs_MapInstance.getMapObj().events.on({ "moveend": XS.Main.movedMapCallback});
+
+    XS.Main.Ztree.load(xs_user_regionId,xs_user_regionLevel);
 
     window.setInterval(XS.Main.hideLeftToolBar, 7000);
     window.setInterval(XS.Main.povertyTimer, 1000);
