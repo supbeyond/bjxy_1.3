@@ -59,11 +59,11 @@ html, body{
     2px -2px 2px #000000
    /* ,-2px 2px 2px #808080;*/
 }
-
+/*左-功能列表*/
 #xs_leftToolBarC{
     z-index: 999;
     position: absolute;
-    left: -302px;
+    left: -120px;
     top: 150px;
     background: transparent;
     width: 110px;
@@ -384,7 +384,7 @@ html, body{
 .xs_rb_btn{
     position: absolute;
     right: 5px;
-    bottom: 100px;
+    bottom: 128px;
     width: 26px;
     height: 26px;
     overflow: hidden;
@@ -398,6 +398,9 @@ html, body{
 }
 .xs_rb_btn:hover{
     color: #0e92ee;
+}
+#xs_rb_btn_ztree{
+    bottom: 100px;
 }
 
 #xs_rb_btn_tools{
