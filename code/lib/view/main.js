@@ -80,9 +80,9 @@ XS.Main.load = function(){
     XS.CommonUtil.loadProgressCircleTag($(document.body), "xs_load_container");
     XS.CommonUtil.showLoader();
     //鼠标移动监听
-    $(document).mousemove(function(e){
+    $(window).mousemove(function(e){
         //console.log("X: " + e.pageX + ", Y: " + e.pageY);
-        if(e.pageX<1&& e.pageY>$(window).height()/2.0-400&&e.pageY<$(window).height()/2.0+400){
+        if(e.pageX<1&& e.pageY>$(window).height()/2.0-200&&e.pageY<$(window).height()/2.0+200){
             XS.Main.showLeftToolBar();
         }
     });

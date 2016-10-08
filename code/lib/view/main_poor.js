@@ -6,6 +6,7 @@ XS.Main.Poor = {};
 
 //通过用户ID查询户详细信息
 XS.Main.Poor.showPoor = function(id){
+    XS.Main.Poor.clearRelocationLayer();
     XS.CommonUtil.showLoader();
     var data = {Hid: id};
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTempHouseNinfoByHId", data, function (json) {
@@ -19,6 +20,7 @@ XS.Main.Poor.showPoor = function(id){
 
 //显示贫困用户
 XS.Main.Poor.showPoors = function(objArr){
+    XS.Main.Poor.clearRelocationLayer();
     if(objArr&&objArr.length>0){
         var jsonArr = [];
         for(var i in objArr){
@@ -1077,7 +1079,7 @@ XS.Main.Poor.preloc_handleVill = function(level, parentId){
     '</div>';
     content += '</div>';
     //id, title, iconCls, content, resizable, maximizable, modal, width, height, left, top, closeCallback, maximizeCallback, minimizeCallback
-    XS.CommonUtil.openDialog("xs_main_detail_relocation", "扶贫搬迁", "icon-man", content, false, true, false, 350, null,10,null,function(){
+    XS.CommonUtil.openDialog("xs_main_detail_relocation", "扶贫搬迁", "icon-man", content, false, true, false, 350, null,0,null,function(){
         if(xs_poor_detail_is_relocationdialog_open)
         {
             xs_poor_detail_is_relocationdialog_open = false;

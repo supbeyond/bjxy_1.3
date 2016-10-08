@@ -128,12 +128,12 @@ XS.Main.init = function(){
     $("#xs_leftToolPanel").panel(
         {
             href: 'main_leftToolContent.html',
-            title:'<i style="font-size: 16px;font-weight: bold;" class="fa fa-list-ul" aria-hidden="true"> 工具栏</i>',
+            title:'<i style="font-size: 16px;" class="fa fa-tasks" aria-hidden="true"> 工具栏</i>',
             /*iconCls:'icon-man',*/
-            tools:[{
-               /* iconCls:'icon-back',
-                handler:XS.Main.hideLeftToolBar*/
-            }]
+            tools:[/*{
+                iconCls:'icon-back',
+                handler:XS.Main.hideLeftToolBar
+            }*/]
         }
     );
     $("#xs_leftToolBarC").hover(
@@ -179,6 +179,24 @@ XS.Main.init = function(){
     {
         XS.Main.fulScreenSwitch(xs_rbbtn_isfullscreen,true);
     });
+
+    //右下-区域网格
+    $('#xs_rb_btn_ztree').tooltip({
+        position: 'left',
+        content: '<span style="color:#3f3f3f">区域网格</span>',
+        onShow: function(){
+            $(this).tooltip('tip').css({
+                backgroundColor: '#fff',
+                opacity:0.8,
+                borderColor: '#efefef'
+            });
+        }
+    });
+    $('#xs_rb_btn_ztree').click(function()
+    {
+        XS.Main.showLeftToolBar();
+    });
+
     //右下-工具栏
     $('#xs_rb_btn_tools').tooltip({
         position: 'left',
@@ -198,25 +216,24 @@ XS.Main.init = function(){
 }
 var xs_isShowing = false;
 var xs_isToolHover = false;
+var xs_isClosing = false;
 
 //滑出左工具菜单
 XS.Main.showLeftToolBar = function(){
-    if(!xs_isShowing){
+    if((!xs_isShowing)&&((!xs_isClosing))){
         xs_isShowing = true;
         $("#xs_leftToolBarC").stop(true, false).animate({"left": 0}, 200, function(msg){
-          //  xs_isShowing = false;
-          //  xs_isClosed = false;
+            xs_isShowing = false;
         });
     }
 }
 
 //隐藏左边工具菜单
 XS.Main.hideLeftToolBar = function(){
-    if(!xs_isToolHover&&xs_isShowing){
-        $("#xs_leftToolBarC").stop(true, false).animate({"left": -302}, 150, function(nsg){
-           // xs_isClosed = true;
-            xs_isShowing = false;
-          //  xs_isShowUtfGridTip = true;
+    if((!xs_isToolHover)&&(!xs_isShowing)&&(!xs_isClosing)){
+        xs_isClosing = true;
+        $("#xs_leftToolBarC").stop(true, false).animate({"left": -120}, 150, function(nsg){
+            xs_isClosing = false;
             $("#xs_tjfx_leftMenuC").menu("hide");
             $("#xs_tjfx_leftMenu").panel('close');
         });
@@ -557,25 +574,19 @@ XS.Main.utfGridLayerMoveCallbackCTV = function(level, pbno, parentId, id, x, y){
                             case XS.Main.ZoneLevel.city:
                                 XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                                 //仪表盘显示
-                                if(!xs_pkdc_isGaugeClose){
-                                    XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
-                                }
+                                XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
                                 break;
                             case XS.Main.ZoneLevel.county:
                                 if(level==0){ //显示县
                                     if(xs_user_regionId == id){
                                         XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                                         //仪表盘显示
-                                        if(!xs_pkdc_isGaugeClose){
-                                            XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
-                                        }
+                                        XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
                                     }
                                 }else{
                                     XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                                     //仪表盘显示
-                                    if(!xs_pkdc_isGaugeClose){
-                                        XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
-                                    }
+                                    XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
                                 }
                                 break;
                             case XS.Main.ZoneLevel.town:
@@ -583,16 +594,12 @@ XS.Main.utfGridLayerMoveCallbackCTV = function(level, pbno, parentId, id, x, y){
                                     if(xs_user_regionId == id){
                                         XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                                         //仪表盘显示
-                                        if(!xs_pkdc_isGaugeClose){
-                                            XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
-                                        }
+                                        XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
                                     }
                                 }else if(level==2){ //村
                                     XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                                     //仪表盘显示
-                                    if(!xs_pkdc_isGaugeClose){
-                                        XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
-                                    }
+                                    XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
                                 }
                                 break;
                             case XS.Main.ZoneLevel.village:
@@ -600,9 +607,7 @@ XS.Main.utfGridLayerMoveCallbackCTV = function(level, pbno, parentId, id, x, y){
                                     if(xs_user_regionId == id){
                                         XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                                         //仪表盘显示
-                                        if(!xs_pkdc_isGaugeClose){
-                                            XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
-                                        }
+                                        XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
                                     }
                                 }
                                 break;
@@ -634,25 +639,19 @@ XS.Main.utfGridLayerMoveCallbackCTV = function(level, pbno, parentId, id, x, y){
                     case XS.Main.ZoneLevel.city:
                         XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                         //仪表盘显示
-                        if(!xs_pkdc_isGaugeClose){
-                            XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
-                        }
+                        XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
                         break;
                     case XS.Main.ZoneLevel.county:
                         if(level==0){ //显示县
                             if(xs_user_regionId == id){
                                 XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                                 //仪表盘显示
-                                if(!xs_pkdc_isGaugeClose){
-                                    XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
-                                }
+                                XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
                             }
                         }else{
                             XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                             //仪表盘显示
-                            if(!xs_pkdc_isGaugeClose){
-                                XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
-                            }
+                            XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
                         }
                         break;
                     case XS.Main.ZoneLevel.town:
@@ -660,16 +659,12 @@ XS.Main.utfGridLayerMoveCallbackCTV = function(level, pbno, parentId, id, x, y){
                             if(xs_user_regionId == id){
                                 XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                                 //仪表盘显示
-                                if(!xs_pkdc_isGaugeClose){
-                                    XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
-                                }
+                                XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
                             }
                         }else if(level==2){ //村
                             XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cTHu], obj[cHu], obj[cTPop], obj[cPop]);
                             //仪表盘显示
-                            if(!xs_pkdc_isGaugeClose){
-                                XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
-                            }
+                            XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
                         }
                         break;
                     case XS.Main.ZoneLevel.village:
@@ -677,9 +672,7 @@ XS.Main.utfGridLayerMoveCallbackCTV = function(level, pbno, parentId, id, x, y){
                             if(xs_user_regionId == id){
                                 XS.Main.utfGridLayerMoveCallbackUpdataData(level, x, y, obj[cName], obj[cHu], obj[cPop]);
                                 //仪表盘显示
-                                if(!xs_pkdc_isGaugeClose){
-                                    XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
-                                }
+                                XS.Main.Pkjc.showGaugeData(obj[cPop],rate,obj[cHu]);
                             }
                         }
                         break;
@@ -1092,7 +1085,7 @@ XS.Main.clickMapCallback = function(mouseEvent){
             //查询信息
             XS.CommonUtil.hideLoader();
 
-            XS.Main.showFunMenu();
+          //  XS.Main.showFunMenu();
         }else{
             XS.CommonUtil.hideLoader();
         }

@@ -279,7 +279,7 @@ XS.Main.Pkjc.pkdc = function(){
 
     xs_pkdc_zoneLevel = -1;
     XS.Main.Poor.clearRelocationLayer();
-    XS.Main.clearMap();
+    XS.Main.clearMap(); //清理地图
 
     /*if(xs_currentZoneFuture==null){
         xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 0);
@@ -330,6 +330,7 @@ XS.Main.Pkjc.pkdc = function(){
             XS.Main.Pkjc.showInfoWin(XS.Main.ZoneLevel.village, -1, xs_clickMapFutureId);
         }
     }
+    xs_currentZoneFuture = null;
 }
 
 /**
@@ -454,10 +455,10 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         var winTag =
         "<div id='xs_pkdc_msgWin' style='width: 1000px; height: 600px;'>" +
             "<div  id='xs_pkdc_msgC' style=' width: /*100%*/400px; height: 80%; border-bottom: 1px solid #f1f1f1;'>" +
-                "<div id='xs_pkdc_mgsLeft' style='position: relative; width:70%; height:100%; display: inline-block;overflow-y: auto; border-right: 1px solid #f1f1f1;'>" +
+                "<div id='xs_pkdc_mgsLeft' style='position: relative; width:75%; height:100%; display: inline-block;overflow-y: auto; border-right: 1px solid #f1f1f1;'>" +
                     "<div id='xs_pkdc_msg_barC'  style='width: /*100%*/400px; height:100%;'></div>" +
                 "</div>" +
-                "<div style='width: 28%; height:100%; display: inline-block;vertical-align: top;'>" +
+                "<div style='width: 24%; height:100%; display: inline-block;vertical-align: top;'>" +
 
                     "<div id='xs_pkdc_linkButtonC' style='width: /*100%*/200px; height: 20%;'>" +
                         "<a id='xs_pkdc_backSuperBtn' href='javascript:void(0);' style='width: 80px; margin: 5px;display: block;'>上一级</a>" +
@@ -471,12 +472,14 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
             "<div style='width: 100%; height: 4%;'></div>" +
             "<div  id='xs_pkdc_msg_tabC' style='width: 100%; height: 15%;'>" +
                 "<div  id='xs_pkdc_msg_btnC' style='width: 100%; height: 100%;text-align: center;'>" +
-                    "<a id='xs_pkdc_details' href='javascript:void(0);'  style='background: #304655;margin-bottom: 8px;color: #ffffff;'>详情</a>" +
-                    "<a id='xs_pkdc_dataAnalysis' href='javascript:void(0);'  style='background: #304655;margin:0% 8%;margin-bottom: 8px;color: #ffffff;'>数据分析</a>" +
-                    "<a id='xs_pkdc_dutyMonitor' href='javascript:void(0);'  style='background: #304655;color: #ffffff;margin-bottom: 8px;'>责任监控</a>" +
-                    "<a id='xs_pkdc_taskMonitor' href='javascript:void(0);'  style='background: #304655;margin:0% 8%;margin-left:0px; margin-bottom: 8px;color: #ffffff;'>任务监控</a>" +
-                    "<a id='xs_pkdc_itemFund' href='javascript:void(0);'  style='background: #304655;margin-right:8%; margin-bottom: 8px;color: #ffffff;'>项目资金</a>" +
-                    "<a id='xs_pkdc_itemRelocate' href='javascript:void(0);'  style='background: #304655;margin-bottom: 8px;color: #ffffff;'>扶贫搬迁</a>" +
+                    "<a id='xs_pkdc_details' href='javascript:void(0);'  style='background: #304655;margin-right: 5px; color: #ffffff;'>详情</a>" +
+                    "<a id='xs_pkdc_dataAnalysis' href='javascript:void(0);'  style='background: #304655;margin-right: 5px;color: #ffffff;'>数据分析</a>" +
+                    "<a id='xs_pkdc_dutyMonitor' href='javascript:void(0);'  style='background: #304655;margin-right: 5px;color: #ffffff;'>责任监控</a>" +
+                    "<a id='xs_pkdc_taskMonitor' href='javascript:void(0);'  style='background: #304655;color: #ffffff;'>任务监控</a>" +
+                    "<div style='margin-top: 5px;'>"+
+                    "<a id='xs_pkdc_itemFund' href='javascript:void(0);'  style='background: #304655;margin-left: -0px;color: #ffffff;'>项目资金</a>" +
+                    "<a id='xs_pkdc_itemRelocate' href='javascript:void(0);'  style='background: #304655;margin-left: 5px;color: #ffffff;'>扶贫搬迁</a>" +
+                    "</div>"+
                 "</div>" +
             "</div>" +
         "</div>";
@@ -508,28 +511,11 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
             maximizable: false,
             resizable:true,
             closable: true,
-            width:400,
-            height:600,
+            width:530,
+            height:630,
             left:0,
             top:null,
-            tools:[
-                {
-                   /* iconCls:'e_icon-min',
-                    handler:function(){
-                        var width = 0;
-                        if(!xs_pkdc_isWinMin){
-                            width = 400;
-                            xs_pkdc_isWinMin = true;
-                        }else{
-                            width = 1020;
-                            xs_pkdc_isWinMin = false;
-                        }
-                        $('#xs_pkdc_msgWin').window('resize',
-                            {width:width}
-                        );
-                    }*/
-                }
-            ],
+            tools:[],
             onClose:function(){
                 xs_pkdc_isShowInfoWin = false;
             }
@@ -591,12 +577,6 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         //定位事件处理
         $("#xs_pkdc_positionBtn").click(function(){
             XS.Main.Poor.clearRelocationLayer();
-            if(!xs_pkdc_isWinMin){
-                $('#xs_pkdc_msgWin').window('resize',
-                    {width:400}
-                );
-                xs_pkdc_isWinMin = true;
-            }
             XS.Main.Poor.showPoors(xs_pkdc_cacheDataArr);
         });
 
@@ -940,12 +920,6 @@ XS.Main.Pkjc.showOccurRatioPie = function(name, ratio){
 
 //选中贫困户事件处理
 XS.Main.Pkjc.onSelectedRowHandler = function(rowIndex, rowData){
-    if(!xs_pkdc_isWinMin){
-        $('#xs_pkdc_msgWin').window('resize',
-            {width:400}
-        );
-        xs_pkdc_isWinMin = true;
-    }
     XS.Main.Poor.showPoor(xs_pkdc_cacheDataArr[rowIndex].hid);
 }
 
@@ -1017,7 +991,7 @@ XS.Main.Pkjc.showHouseDataGrid = function(){
             {field: 'num', title: '家庭人数', width: '19%', resizable: false},
             {field: 'TotolSum', title: '年收入', width: '20%', resizable: false},
             {field: 'CertNo', title: '身份证', width: '20%', resizable: false},
-            {field: 'Altitude', title: '海拔', width: '20%', resizable: false}
+            {field: 'Altitude', title: '海拔', width: '10%', resizable: false}
         ]]
     });
     var pager = $("#xs_pkdc_village").datagrid("getPager");
@@ -1479,12 +1453,6 @@ XS.Main.Pkjc.clickClusterCallback = function(f){
 
 //最小化信息窗口
 XS.Main.Pkjc.minInfoWinDialog = function(){
-    /* if(!xs_pkdc_isWinMin){
-     $('#xs_pkdc_msgWin').window('resize',
-     {width:400}
-     );
-     xs_pkdc_isWinMin = true;
-     }*/
 }
 
 //关闭贫困洞察Dialog
