@@ -30,29 +30,21 @@ XS.Main.Tjfx.CacheZoneInfos = {
 };
 
 //展示左边统计工具栏
+var xs_tjfx_toolmenu_isShow = false;
 XS.Main.Tjfx.showToolMenu = function(){
     XS.Main.hiddenDivTags();
     XS.Main.closeDialogs();
     XS.Main.hiddenLayers();
-    xs_isShowUtfGridTip = false;
-    $("#xs_tjfx_leftMenu").panel('open');
-    $("#xs_tjfx_leftMenuC").css({"display":"block"});
-    $("#xs_tjfx_leftMenuC").menu();
-    /*if($("#xs_tjfx_toolmenuC").length<=0){
-        var content = '<div style="height: 130px;padding:5px;box-sizing: border-box;">' +
-            '<div id="xs_tjfx_clickMeun" style="height: 100%;"</div>' +
-            '</div>';
-        XS.CommonUtil.openDialog("xs_tjfx_toolmenuC", "统计分析", "icon-large-chart", content, true, false, false, 400, null, 112, 20, function(){
-            xs_isShowUtfGridTip = true;
-        });
-        $("#xs_tjfx_clickMeun").panel({
-            border:false,
-            fit:true,
-            href: 'main_tjfx_rightMeun.html'
-        });
+    if(xs_tjfx_toolmenu_isShow){
+        xs_tjfx_toolmenu_isShow = false;
+        $("#xs_tjfx_leftMenuC").menu("hide");
+        $("#xs_tjfx_leftMenu").panel('close');
     }else{
-        $("#xs_tjfx_toolmenuC").dialog('open');
-    }*/
+        xs_tjfx_toolmenu_isShow = true;
+        $("#xs_tjfx_leftMenu").panel('open');
+        $("#xs_tjfx_leftMenuC").css({"display":"block"});
+        $("#xs_tjfx_leftMenuC").menu();
+    }
 }
 
 //加载县、乡、村features

@@ -124,32 +124,52 @@ $(function(){
 var xs_rbbtn_isfullscreen = false; //是否是全屏
 //初始化数据
 XS.Main.init = function(){
+    $("#xs_leftToolBarC").css("left", window.outerWidth/2.0-196);
+    $("#xs_tjfx_leftMenu").css({
+        "left":window.outerWidth/2.0+66
+    });
     //左边工具栏
     $("#xs_leftToolPanel").panel(
         {
             href: 'main_leftToolContent.html',
-            title:'<i style="font-size: 16px;" class="fa fa-tasks" aria-hidden="true"> 工具栏</i>',
+            tools:[]
+        }
+    );
+    $("#xs_main_ztree").panel(
+        {
+            title:'<i style="font-size: 16px;" class="fa fa-list-ul" aria-hidden="true"> 区域列表</i>',
             /*iconCls:'icon-man',*/
-            tools:[/*{
-                iconCls:'icon-back',
-                handler:XS.Main.hideLeftToolBar
-            }*/]
+            tools:[]
         }
     );
     $("#xs_leftToolBarC").hover(
         function () {
-            xs_isToolHover = true;
+            $("#xs_utfGridC").css("display","none");
+            xs_btoolbar_isToolHover = true;
         },
         function () {
-            xs_isToolHover = false;
+            $("#xs_utfGridC").css("display","none");
+            xs_btoolbar_isToolHover = false;
         }
     );
     $("#xs_tjfx_leftMenuC").hover(
         function () {
-            xs_isToolHover = true;
+            $("#xs_utfGridC").css("display","none");
+            xs_btoolbar_isToolHover = true;
         },
         function () {
-            xs_isToolHover = false;
+            $("#xs_utfGridC").css("display","none");
+            xs_btoolbar_isToolHover = false;
+        }
+    );
+    $("#xs_leftZtreeC").hover(
+        function () {
+            $("#xs_utfGridC").css("display","none");
+            xs_lztree_isToolHover = true;
+        },
+        function () {
+            $("#xs_utfGridC").css("display","none");
+            xs_lztree_isToolHover = false;
         }
     );
     //xs_tjfx_leftMenuC
@@ -194,7 +214,11 @@ XS.Main.init = function(){
     });
     $('#xs_rb_btn_ztree').click(function()
     {
-        XS.Main.showLeftToolBar();
+        if(!xs_ztree_isInitedData){
+            XS.CommonUtil.showMsgDialog("","数据处理中...");
+            return;
+        }
+        XS.Main.showLeftZtree();
     });
 
     //右下-工具栏
@@ -211,34 +235,63 @@ XS.Main.init = function(){
     });
     $('#xs_rb_btn_tools').click(function()
     {
-        XS.Main.showLeftToolBar();
+        XS.Main.showBottomToolBar();
     });
 }
-var xs_isShowing = false;
-var xs_isToolHover = false;
-var xs_isClosing = false;
 
-//滑出左工具菜单
-XS.Main.showLeftToolBar = function(){
-    if((!xs_isShowing)&&((!xs_isClosing))){
-        xs_isShowing = true;
-        $("#xs_leftToolBarC").stop(true, false).animate({"left": 0}, 200, function(msg){
-            xs_isShowing = false;
+var xs_btoolbar_isShowing = false;
+var xs_btoolbar_isToolHover = false;
+var xs_btoolbar_isClosing = false;
+
+//滑出底工具菜单
+XS.Main.showBottomToolBar = function(){
+    if((!xs_btoolbar_isShowing)&&((!xs_btoolbar_isClosing))){
+        xs_btoolbar_isShowing = true;
+        $("#xs_utfGridC").css("display","none"); //关闭显示窗口
+        $("#xs_leftToolBarC").stop(true, false).animate({"bottom": 0}, 200, function(msg){
+            xs_btoolbar_isShowing = false;
         });
     }
 }
 
-//隐藏左边工具菜单
-XS.Main.hideLeftToolBar = function(){
-    if((!xs_isToolHover)&&(!xs_isShowing)&&(!xs_isClosing)){
-        xs_isClosing = true;
-        $("#xs_leftToolBarC").stop(true, false).animate({"left": -120}, 150, function(nsg){
-            xs_isClosing = false;
-            $("#xs_tjfx_leftMenuC").menu("hide");
-            $("#xs_tjfx_leftMenu").panel('close');
+//隐藏底边工具菜单
+XS.Main.hideBottomToolBar = function(){
+    if((!xs_btoolbar_isToolHover)&&(!xs_btoolbar_isShowing)&&(!xs_btoolbar_isClosing)){
+        xs_btoolbar_isClosing = true;
+        xs_tjfx_toolmenu_isShow = false;
+        $("#xs_tjfx_leftMenuC").menu("hide");
+        $("#xs_tjfx_leftMenu").panel('close');
+        $("#xs_leftToolBarC").stop(true, false).animate({"bottom": -100}, 150, function(nsg){
+            xs_btoolbar_isClosing = false;
         });
     }
 }
+
+var xs_lztree_isShowing = false;
+var xs_lztree_isToolHover = false;
+var xs_lztree_isClosing = false;
+
+//滑出左区域列表
+XS.Main.showLeftZtree = function(){
+    if((!xs_lztree_isShowing)&&((!xs_lztree_isClosing))){
+        xs_lztree_isShowing = true;
+        $("#xs_utfGridC").css("display","none"); //关闭显示窗口
+        $("#xs_leftZtreeC").stop(true, false).animate({"left": 0}, 200, function(msg){
+            xs_lztree_isShowing = false;
+        });
+    }
+}
+
+//隐藏左区域列表
+XS.Main.hideLeftZtree = function(){
+    if((!xs_lztree_isToolHover)&&(!xs_lztree_isShowing)&&(!xs_lztree_isClosing)){
+        xs_lztree_isClosing = true;
+        $("#xs_leftZtreeC").stop(true, false).animate({"left": -210}, 150, function(nsg){
+            xs_lztree_isClosing = false;
+        });
+    }
+}
+
 
 //右击-菜单点击事件
 XS.Main.RightClickMenuHandler = function(name){
@@ -1085,6 +1138,7 @@ XS.Main.clickMapCallback = function(mouseEvent){
             //查询信息
             XS.CommonUtil.hideLoader();
 
+            XS.Main.showBottomToolBar();
           //  XS.Main.showFunMenu();
         }else{
             XS.CommonUtil.hideLoader();

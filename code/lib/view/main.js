@@ -82,8 +82,13 @@ XS.Main.load = function(){
     //鼠标移动监听
     $(window).mousemove(function(e){
         //console.log("X: " + e.pageX + ", Y: " + e.pageY);
-        if(e.pageX<1&& e.pageY>$(window).height()/2.0-200&&e.pageY<$(window).height()/2.0+200){
-            XS.Main.showLeftToolBar();
+        if(e.pageY>($(window).height()-2)&& e.pageX>$(window).width()/2.0-400&&e.pageX<$(window).width()/2.0+400){
+            XS.Main.showBottomToolBar();
+        }
+        if(e.pageX<5&& e.pageY>$(window).height()/2.0-250&&e.pageY<$(window).height()/2.0+250){
+            if(xs_ztree_isInitedData){
+                XS.Main.showLeftZtree();
+            }
         }
     });
 
@@ -206,7 +211,7 @@ XS.Main.load = function(){
                 }
                 if(XS.StrUtil.isEmpty(layerName)){
                     XS.CommonUtil.showMsgDialog("","您的权限不够");
-                    XS.Index.logout();
+                    XS.Login.logout();
                     return;
                 }
                 //dataSourceName, dataSetName, attributeFilter, mapUrl, processCompleted, processFailed
@@ -244,7 +249,7 @@ XS.Main.load = function(){
                         if(xs_user_Features.length<1){
                             XS.CommonUtil.hideLoader();
                             XS.CommonUtil.showMsgDialog("","您所管辖的区域在地图不存在，请联系管理员！");
-                            XS.Index.logout();
+                            XS.Login.logout();
                             return;
                         }
                         XS.Main.addLayers();
@@ -256,12 +261,12 @@ XS.Main.load = function(){
                     }else{
                         XS.CommonUtil.hideLoader();
                         XS.CommonUtil.showMsgDialog("","您所管辖的区域在地图不存在，请联系管理员！");
-                        XS.Index.logout();
+                        XS.Login.logout();
                     }
                 },function(e){
                     XS.CommonUtil.hideLoader();
                     XS.CommonUtil.showMsgDialog("","地图服务异常");
-                    XS.Index.logout();
+                    XS.Login.logout();
                 });
             }
             else{
@@ -295,10 +300,15 @@ XS.Main.addLayers = function(){
     xs_MapInstance.getMapObj().events.on({ "zoomend": XS.Main.zoomedMapCallback});
     xs_MapInstance.getMapObj().events.on({ "moveend": XS.Main.movedMapCallback});
 
+
     XS.Main.Ztree.load(xs_user_regionId,xs_user_regionLevel);
 
-    window.setInterval(XS.Main.hideLeftToolBar, 7000);
+    window.setInterval(function(){
+        XS.Main.hideBottomToolBar();
+        XS.Main.hideLeftZtree();
+    }, 7000);
     window.setInterval(XS.Main.povertyTimer, 1000);
 
     XS.Main.Pkjc.showGaugeData(0, 0, 0); //显示仪表盘
+    XS.CommonUtil.hideLoader();
 }
