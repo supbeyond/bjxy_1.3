@@ -124,14 +124,18 @@ $(function(){
 var xs_rbbtn_isfullscreen = false; //是否是全屏
 //初始化数据
 XS.Main.init = function(){
-    $("#xs_leftToolBarC").css("left", window.outerWidth/2.0-196);
+    //xs_leftToolBarC
+    $("#xs_leftToolBarC").css("left", window.outerWidth/2.0-200);
     $("#xs_tjfx_leftMenu").css({
-        "left":window.outerWidth/2.0+66
+        "left":window.outerWidth/2.0+150
     });
     //左边工具栏
     $("#xs_leftToolPanel").panel(
         {
             href: 'main_leftToolContent.html',
+            style:{
+                borderWidth:0
+            },
             tools:[]
         }
     );
@@ -248,7 +252,7 @@ XS.Main.showBottomToolBar = function(){
     if((!xs_btoolbar_isShowing)&&((!xs_btoolbar_isClosing))){
         xs_btoolbar_isShowing = true;
         $("#xs_utfGridC").css("display","none"); //关闭显示窗口
-        $("#xs_leftToolBarC").stop(true, false).animate({"bottom": 0}, 200, function(msg){
+        $("#xs_leftToolBarC").stop(true, false).animate({"bottom": -10}, 200, function(msg){
             xs_btoolbar_isShowing = false;
         });
     }
@@ -323,9 +327,9 @@ XS.Main.RightClickMenuHandler = function(name){
     }else if(name == 'sjfx'){
         if(xs_currentZoneFuture != null){
             //XS.Main.Pkjc.clickAnalysis(xs_pkdc_zoneLevel,xs_pkdc_currentStateCode);
-            XS.Main.Pkjc.clickAnalysis(xs_currentZoneLevel,xs_currentZoneCode);
+            XS.Main.Pkjc.clickAnalysis(xs_currentZoneLevel,xs_currentZoneCode,xs_currentZoneName);
         }else{
-            XS.Main.Pkjc.clickAnalysis(xs_user_regionLevel,xs_user_regionId);
+            XS.Main.Pkjc.clickAnalysis(xs_user_regionLevel,xs_user_regionId,xs_userZoneName);
         }
     }
 }
@@ -996,14 +1000,11 @@ XS.Main.clickMapCallback = function(mouseEvent){
     var layerName = "";
     if(scale>300000){ //county
         layerName = "County_Code";
-       // xs_currentZoneLevel = XS.Main.ZoneLevel.county;
     }else if(scale<=300000&& scale>80000) //town
     {
         layerName = "Twon_Code";
-       // xs_currentZoneLevel = XS.Main.ZoneLevel.town;
     }else{ //village
         layerName = "Village_Code";
-      //  xs_currentZoneLevel = XS.Main.ZoneLevel.village;
     }
     var lonLat = xs_MapInstance.getMapObj().getLonLatFromPixel(mouseEvent.xy);
     var point = new SuperMap.Geometry.Point(lonLat.lon, lonLat.lat);
@@ -1137,9 +1138,20 @@ XS.Main.clickMapCallback = function(mouseEvent){
             xs_currentZoneLevel = level;
             //查询信息
             XS.CommonUtil.hideLoader();
-
             XS.Main.showBottomToolBar();
           //  XS.Main.showFunMenu();
+            //放大地图
+            switch (level){
+                case XS.Main.ZoneLevel.county:
+                    xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 5);
+                    break;
+                case XS.Main.ZoneLevel.town:
+                    xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 8);
+                    break;
+                case XS.Main.ZoneLevel.village:
+                    xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 10);
+                    break;
+            }
         }else{
             XS.CommonUtil.hideLoader();
         }
@@ -1417,6 +1429,34 @@ XS.Main.showFunMenu = function(x, y){
     $('#xs_f_rwjcBtn').click(function(){
         XS.Main.RightClickMenuHandler('rwjk');
     });
+}
+
+/**
+ * 调度指挥
+ */
+XS.Main.dispatchCommd = function(){
+    XS.Main.dispatchCommd_send(null, null);
+}
+
+/**
+ * 调度指挥发送指令
+ * @param receiver
+ * @param receiverID
+ */
+XS.Main.dispatchCommd_send = function(receiver, receiverID){
+    var content = '<div id="xs_dc_tab" class="easyui-tabs" style="width:400px; height: 500px;"></div>';
+    XS.CommonUtil.openDialog("xs_main_detail", "调度指挥", "icon-man", content, false, false, false,null, null,0);
+    $('#xs_dc_tab').tabs('add',{
+        title:'发送指令',
+        content:"<div id='xs_poor_detail_tab_tasker' style='padding: 5px; height: 100%; box-sizing: border-box;'></div>"
+    });
+    $('#xs_dc_tab').tabs('add',{
+        title:'指令清单',
+        content:"<div style='padding: 5px; height: 100%; box-sizing: border-box; padding-top: 10px;'>" +
+        "<div id='xs_poor_detail_tab_project' style='width: 100%; height: 100%; box-sizing: border-box;padding-bottom: 10px;'>" +
+        "</div>"
+    });
+    $('#xs_poor_detail_tab').tabs("select",0);
 }
 
 

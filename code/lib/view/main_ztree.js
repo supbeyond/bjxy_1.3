@@ -177,36 +177,6 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
                     "text":XS.Main.Ztree.zoneFeatuers.county[i-1].data.Name,
                     "children":[]
                 }
-                /*for(var j=1;j<=XS.Main.Ztree.zoneFeatuers.town.length;j++)
-                {
-                    //county_id
-                    if(XS.Main.Ztree.zoneFeatuers.town[j-1].data.县级代码 != countyId){
-                        continue;
-                    }
-                    var townId = XS.Main.Ztree.zoneFeatuers.town[j-1].data.乡镇代码;
-                    var townObj = {
-                        "id":parseInt(countyObj.id+''+j),
-                        "state":"closed",
-                        "text":XS.Main.Ztree.zoneFeatuers.town[j-1].data.乡镇名称,
-                        "children":[]
-                    }
-                    for(var k=1;k<=XS.Main.Ztree.zoneFeatuers.village.length;k++)
-                    {
-                        //Town_id
-                        if(XS.Main.Ztree.zoneFeatuers.village[k-1].data.Town_id != townId){
-                            continue;
-                        }
-                        var villObj = {
-                            "id":parseInt(townObj.id+''+k),
-                            "state":"closed",
-                            "text":XS.Main.Ztree.zoneFeatuers.village[k-1].data.vd_name,
-                            "children":[]
-                        }
-                        townObj.children.push(villObj);
-                    }
-                    countyObj.children.push(townObj);
-
-                } */
                 cityObj.children.push(countyObj);
             }
             data.push(cityObj);
@@ -235,20 +205,6 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
                     "text":XS.Main.Ztree.zoneFeatuers.town[i-1].data.乡镇名称,
                     "children":[]
                 }
-                /*for(var j=1;j<=XS.Main.Ztree.zoneFeatuers.village.length;j++)
-                {
-                    //Town_id
-                    if(XS.Main.Ztree.zoneFeatuers.village[j-1].data.Town_id != townId){
-                        continue;
-                    }
-                    var villObj = {
-                        "id":parseInt(townObj.id+''+j),
-                        "state":"closed",
-                        "text":XS.Main.Ztree.zoneFeatuers.village[j-1].data.vd_name,
-                        "children":[]
-                    }
-                    townObj.children.push(villObj);
-                }*/
                 countyObj.children.push(townObj);
             }
             data.push(countyObj);
@@ -290,29 +246,6 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
             break;
         }
     }
-    /*if(!document.getElementById("xs_main_ztreeC")) {
-        var winTag =
-            "<div id='xs_main_ztreeC' style='width: 300px; height: 500px;padding: 5px;'>" +
-                '<ul id="xs_main_ztree" ></ul>'+
-            "</div>";
-        $("#xs_MapContainer").append(winTag);
-    }*/
-    /*$('#xs_main_ztreeC').window({
-        modal:false,
-        title:"网格列表",
-        iconCls:'icon-man',
-        collapsible: false,
-        minimizable: false,
-        maximizable: false,
-        resizable:false,
-        closable: true,
-        width:250,
-        height:500,
-        left:0,
-        tools:[],
-        onClose:function(){
-        }
-    }).window('open');*/
     $('#xs_main_ztree').tree({
         data:data,
         lines:true,
@@ -362,6 +295,7 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
                                         var villObj = {
                                             "id":parseInt(node.id+''+(i+1)),
                                             xs_feature:feature,
+                                            xs_nlevel:3,
                                             "text":feature.data.vd_name
                                         }
                                         data.push(villObj);
@@ -398,6 +332,8 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
                                 }
                                 var villObj = {
                                     "id":parseInt(node.id+''+i),
+                                    xs_feature:XS.Main.Ztree.zoneFeatuers.village[i-1],
+                                    xs_nlevel:3,
                                     "text":XS.Main.Ztree.zoneFeatuers.village[i-1].data.vd_name
                                 }
                                 data.push(villObj);
@@ -415,8 +351,89 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
                 $('#xs_main_ztree').tree('expandTo', node.target)//.tree('select', node.target);
             }
         },
-        onClick:function(node){
-            //alert(node.text);  // alert node text property when clicked
+        onClick:function(node)
+        {
+            if(node)
+            {
+                //xs_feature:XS.Main.Ztree.zoneFeatuers.village[0],
+                var feature = node.xs_feature;
+                var sql = "SMID="+feature.data.SmID;
+                var layerName = "";
+                switch (node.xs_nlevel){
+                    case 0: //city
+                        xs_currentZoneLevel = node.xs_nlevel;
+                        xs_userZoneName = "毕节市";
+                        xs_superZoneCode = xs_cityID;
+                        XS.Main.showBottomToolBar();
+                        return;
+                    case 1: //county
+                        layerName = "County_Code";
+                        break;
+                    case 2: //town
+                        layerName = "Twon_Code";
+                        break;
+                    case 3: //village
+                        layerName = "Village_Code";
+                        break;
+                }
+                XS.CommonUtil.showLoader();
+                XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql, xs_MapInstance.bLayerUrl, function(queryEventArgs)
+                {
+                    var i, feature, result = queryEventArgs.result;
+                    if (result && result.recordsets&&result.recordsets[0].features.length>0)
+                    {
+                        feature = result.recordsets[0].features[0];
+                        var id = feature.data.AdminCode || feature.data.乡镇代码 || feature.data.OldID;
+                        switch (node.xs_nlevel)
+                        {
+                            case XS.Main.ZoneLevel.county:
+                            {
+                                xs_clickMapFutureId = feature.data.AdminCode;
+                                xs_currentZoneCode = feature.data.AdminCode;
+                                xs_currentZoneName = feature.data.Name;
+                                xs_superZoneCode = xs_cityID;
+                                xs_userZoneName = "毕节市";
+                                break;
+                            }
+                            case XS.Main.ZoneLevel.town:
+                            {
+                                xs_clickMapFutureId = feature.data.乡镇代码;
+                                xs_currentZoneCode = feature.data.乡镇代码;
+                                xs_currentZoneName = feature.data.乡镇名称;
+                                xs_superZoneCode = feature.data.县级代码;
+                                xs_userZoneName = feature.data.县级代码;
+                                break;
+                            }
+                            case XS.Main.ZoneLevel.village:
+                            {
+                                xs_clickMapFutureId = feature.data.OldID;
+                                xs_currentZoneCode = feature.data.OldID;
+                                xs_currentZoneName = feature.data.vd_name;
+                                xs_superZoneCode = feature.data.Town_id;
+                                xs_userZoneName = feature.data.Town_name;
+                                break;
+                            }
+                        }
+
+                        xs_MapInstance.getMapObj().zoomToExtent(feature.geometry.getBounds(),false);
+                        xs_currentZoneFuture = feature;
+                        feature.style = xs_stateZoneStyle;
+                        xs_zone_vectorLayer.removeAllFeatures();
+                        xs_zone_vectorLayer.addFeatures(feature);
+                        xs_isMapClickTypeNone = true;
+                        xs_currentZoneLevel = node.xs_nlevel;
+
+                        XS.CommonUtil.hideLoader();
+                        XS.Main.showBottomToolBar();
+                    }else{
+                        XS.CommonUtil.hideLoader();
+                        XS.CommonUtil.showMsgDialog("","查询失败");
+                    }
+                },function(e){
+                    XS.CommonUtil.hideLoader();
+                    XS.CommonUtil.showMsgDialog("","查询失败");
+                });
+            }
         }
     });
     xs_ztree_isInitedData = true;

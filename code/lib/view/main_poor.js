@@ -12,7 +12,7 @@ XS.Main.Poor.showPoor = function(id){
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTempHouseNinfoByHId", data, function (json) {
         XS.CommonUtil.hideLoader();
         if (json && json.length>0) {
-            xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(json[0].LONGITUDE, json[0].LATITUDE), 9);
+            xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(json[0].LONGITUDE, json[0].LATITUDE), 10);
             XS.Main.addVectorPoint2ClusterLayer(json, XS.Main.ClusterPointerStyle.poor_info_obj);
         }
     },function(e){XS.CommonUtil.hideLoader();});
@@ -26,7 +26,7 @@ XS.Main.Poor.showPoors = function(objArr){
         for(var i in objArr){
             jsonArr.push({LONGITUDE:objArr[i].Longitude, LATITUDE:objArr[i].Latitude, hid:objArr[i].hid, name:objArr[i].name});
         }
-        xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(objArr[0].Longitude, objArr[0].Latitude), 9);
+        xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(objArr[0].Longitude, objArr[0].Latitude), 10);
         XS.Main.addVectorPoint2ClusterLayer(jsonArr, XS.Main.ClusterPointerStyle.poor_info_id);
     }
 }
