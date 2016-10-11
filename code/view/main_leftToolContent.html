@@ -1,7 +1,7 @@
 <style>
-    #xs_leftToolBarC .panel-header{
+   /* #xs_leftToolBarC .panel-header{
         height: 25px;
-        border: 1px solid #00bbee;
+        border: 0px solid #00bbee;
     }
     #xs_leftToolBarC .panel-title{
         height: 25px;
@@ -9,7 +9,7 @@
         color: #ffffff;
         font-size: 13px;
         font-weight: bold;
-    }
+    }*/
     #xs_l_toolist div{
         display: inline-block;
         width: 80px;
@@ -18,11 +18,21 @@
         vertical-align: middle;
         padding: 0px;
         padding-top: 5px;
+        background: #263844;
+        color: #fff; /*00bbee  2531EE*/
+        /*text-shadow: -1px -1px 1px #000000;*/
+        border-color: #263844;
+        border-radius: 0px;
+        box-shadow: 2px 2px 10px 2px #000;
+    }
+
+    #xs_l_toolist div:hover{
+        background: #23343f !important;
     }
 </style>
-<div id="xs_l_toolist" style="background: transparent; width: 100%; height: 100%;">
-    <div href="#" onclick="XS.Main.Pkjc.pkdc();" class="easyui-linkbutton" data-options="iconCls:'icon-main_pkdc',iconAlign:'top',size:'large'" style="border-radius: 5px;margin-right: 5px;">贫困洞察</div>
-    <div href="#" onclick="XS.Main.RightClickMenuHandler('sjfx');" class="easyui-linkbutton" data-options="iconCls:'icon-main_sjcl',iconAlign:'top',size:'large'" style="border-radius: 5px;margin-right: 5px;">数据分析</div>
-    <div href="#" class="easyui-linkbutton" data-options="iconCls:'icon-main_gtzz',iconAlign:'top',size:'large'" style="border-radius: 5px;margin-right: 5px;">调试指挥</div>
-    <div href="#" onclick="XS.Main.Tjfx.showToolMenu();" class="easyui-linkbutton" data-options="iconCls:'icon-main_tjfx',iconAlign:'top',size:'large'" style="border-radius: 5px;">统计分析</div>
+<div id="xs_l_toolist" style="background: transparent;border-width: 0px; width: 100%; height: 100%;">
+    <div href="#" onclick="XS.Main.Pkjc.pkdc();" class="easyui-linkbutton" data-options="iconCls:'icon-main_pkdc',iconAlign:'top',size:'large'" style="margin-right: 20px;border-top-left-radius: 5px;">贫困洞察</div>
+    <div href="#" onclick="XS.Main.RightClickMenuHandler('sjfx');" class="easyui-linkbutton" data-options="iconCls:'icon-main_sjcl',iconAlign:'top',size:'large'" style="margin-right: 20px;">数据分析</div>
+    <div href="#" onclick="XS.Main.dispatchCommd();" class="easyui-linkbutton" data-options="iconCls:'icon-main_gtzz',iconAlign:'top',size:'large'" style="margin-right: 20px;">调试指挥</div>
+    <div href="#" onclick="XS.Main.Tjfx.showToolMenu();" class="easyui-linkbutton" data-options="iconCls:'icon-main_tjfx',iconAlign:'top',size:'large'" style="border-top-right-radius: 5px">统计分析</div>
 </div>
