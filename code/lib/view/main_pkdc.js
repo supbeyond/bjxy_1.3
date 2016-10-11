@@ -594,7 +594,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         $('#xs_pkdc_dataAnalysis').click(function(){
             XS.Main.Pkjc.closeInfoDialog();
             XS.Main.Poor.clearRelocationLayer();
-            XS.Main.Pkjc.clickAnalysis(xs_pkdc_zoneLevel,xs_pkdc_currentStateCode);
+            XS.Main.Pkjc.clickAnalysis(xs_pkdc_zoneLevel,xs_pkdc_currentStateCode,xs_pkdc_currentName);
         });
         //责任监控
         $("#xs_pkdc_dutyMonitor").click(function(){
@@ -950,6 +950,31 @@ XS.Main.Pkjc.onSelectedRowHandler = function(rowIndex, rowData){
     XS.Main.Poor.showPoor(xs_pkdc_cacheDataArr[rowIndex].hid);
 }
 /**
+ *
+ */
+/*XS.Main.Pkjc.requestTown = function(){
+    if(xs_pkdc_superStateCode != XS.Main.CacheZoneInfos.town.countyId){
+        var dataN = {pbno: superId};
+        $("#xs_pkdc_msgWin_p").css("display", "block");
+        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTownsBaseInfoByareaId", dataN, function(json){
+            $("#xs_pkdc_msgWin_p").css("display", "none");
+            if(json && json.length>0){
+                XS.Main.CacheZoneInfos.town.data = json;
+                XS.Main.CacheZoneInfos.town.countyId = superId;
+                XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.town.data,"","","TOWB_ID","TOWB_NAME");
+                xs_pkdc_preName = xs_pkdc_currentName;
+                $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/!*, width:1020,height:600*!/}).window('open');
+                $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
+            }
+        });
+    }else{
+        XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.town.data,"","","TOWB_ID","TOWB_NAME");
+        xs_pkdc_preName = xs_pkdc_currentName;
+        $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/!*, width:1020,height:600*!/}).window('open');
+        $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
+    }
+}*/
+/**
  * 通过父ID请求村级基本数据
  */
 XS.Main.Pkjc.requestVillage = function(){
@@ -982,12 +1007,6 @@ XS.Main.Pkjc.requestVillage = function(){
         $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/*, width:1020,height:600*/}).window('open');
         $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
     }
-}
-/**
- *
- */
-XS.Main.Pkjc.requestTown = function(){
-
 }
 /**
  * 显示市级的下层bar
