@@ -3,34 +3,66 @@
  */
     XS.Searchbox = {};
 XS.Searchbox.init = function(){
-    var xs_search_box = '<div id="xs_searchbox" class="easyui-panel"  style="background: transparent;border: 0px;">' +
-        '<div>' +
-        '<select id="xs_searchbox_type" style="width: 80px;height: 30px;display: inline-block;border1: 1px solid red;">' +
-        '<option value="区县">区县</option>' +
-        '<option value="乡镇">乡镇</option>' +
-        '<option value="行政村">行政村</option>' +
-        '<option value="姓名">姓名</option>' +
-        '<option value="身份证号">身份证号</option>' +
-        '<option value="电话">电话</option>' +
-        '</select>' +
-        '<input id="xs_searchbox_content" type="text" name="word" autocomplete="off" maxlength="256" style="width: 208px;height: 24px;display: inline-block;">' +
-        '<button id="xs_searchbox-button" data-title1="搜索" data-tooltip1="1" onclick="XS.Searchbox.searchbox();" style="width: 45px;height: 30px;display: inline-block;">搜索</button>' +
+    var xs_search_box = '<div id="xs_searchbox" class="easyui-panel">' +
+        '<div id="xs_searchbox_C">' +
+            '<select id="xs_searchbox_type">' +
+            '<option value="区县">区县</option>' +
+            '<option value="乡镇">乡镇</option>' +
+            '<option value="行政村">行政村</option>' +
+            '<option value="姓名">姓名</option>' +
+            '<option value="身份证号">身份证号</option>' +
+            '<option value="电话">电话</option>' +
+            '</select>' +
+            '<input id="xs_searchbox_content" autocomplete="off" placeholder="请输入对应类型的搜索内容" onkeyup="XS.Searchbox.getConKey();" onkeyup="XS.Searchbox.getConKey();">' +
+            '<div id="xs_searchbox_clear" class="easyui-panel" onclick="XS.Searchbox.clearCon();">' +
+                /*'<i id="xs_searchbox_loading" style="width: 30px;height: 30px;position: absolute;top1: 50%; left1: 50%;margin-left1: -25px;margin-top1: -25px;visibility1: hidden;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading">' +
+                '</i>' +*/
+            '</div>' +
+            '<button id="xs_searchbox_button" onclick="XS.Searchbox.searchbox();" title="搜索">搜索</button>' +
         '</div>' +
-            //'<div style="height: 2px;"></div>' +
-        '<div id="xs_searchbox_resultC" style="width: 337px;height1: 308px;margin-top: 1px;position: relative;left1: 1px;top1:1px;border1: 1px solid green;display: none;">' +
-        '<div id="xs_searchbox_result" style1="width: 212px;height1: 200px;"></div>' +
-        '</div>' +
-        '</div>';
+        '<div id="xs_searchbox_resultC"></div>' +
+    '</div>';
     $("#xs_searchbox_boxC").empty().append(xs_search_box);
 
+
+    $('#xs_searchbox_button').tooltip({
+        position: 'bottom'
+    });
     $("#xs_searchbox_content").keyup(function(e){
         if(e.keyCode == 13){
             XS.Searchbox.searchbox();
         }
     });
 }
-
+/**
+ * 输入框是否为空监测
+ */
+XS.Searchbox.getConKey = function(){
+    if(!XS.StrUtil.isEmpty($("#xs_searchbox_content").val())){
+        $("#xs_searchbox_clear").css({cursor:'pointer',background: 'url("../img/searchbox.png") no-repeat 0 -114px #fff'});
+        $('#xs_searchbox_clear').tooltip({
+            position: 'bottom',
+            content:'清除'
+        });
+    }else{
+        $("#xs_searchbox_clear").tooltip("destroy").css({cursor:'default',background:'#fff'});
+    }
+};
+/**
+ * 清除输入框的内容和搜索结果
+ */
+XS.Searchbox.clearCon = function(){
+    $("#xs_searchbox_content").val("");
+    $("#xs_searchbox_clear").tooltip("destroy").removeAttr('title').css({cursor:'default',background:'#fff'});
+    $("#xs_searchbox_resultC").animate({height:0},{duration: 1000 ,complete:function(){
+        $("#xs_searchbox_resultC").empty();
+    }})
+}
+/**
+ * 搜索按钮点击函数
+ */
 XS.Searchbox.searchbox = function(){
+    $("#xs_searchbox_content").select();
     var search_type = $("#xs_searchbox_type").val();
     var searchbox_content = $("#xs_searchbox_content").val();
     if(XS.StrUtil.isEmpty(searchbox_content)){
@@ -43,20 +75,18 @@ XS.Searchbox.searchbox = function(){
         if(json && json.length>0){
             xs_pkdc_cacheDataArr = json;
             console.log(json);
-            $("#xs_searchbox_resultC").css({display:"block"});
+            var xs_searchbox_resultCH = (json.length + 2) * 26;
+            console.log(xs_searchbox_resultCH);;
+            $("#xs_searchbox_resultC").empty().append('<div id="xs_searchbox_result"></div>');
+            $("#xs_searchbox_resultC").animate({height:xs_searchbox_resultCH},{duration: 1000 });
+            $("#xs_searchbox_clear").css({background: 'url("../img/searchbox.png") no-repeat -5px -38px #fff'});
             $('#xs_searchbox_result').datagrid({
                 data: json,
                 pagination: true,
-                //fit:true,
-                //pagePosition:"bottom",
-                //pageSize: 10,
-                //pageList: [20],
                 striped: true,
                 onSelect:XS.Main.Pkjc.onSelectedRowHandler,
                 singleSelect: true,
-                //loadingMessage:"Loading",
                 pageNumber: 1,
-                //loadMsg:"努力加载中...",
                 rownumbers: true,
                 columns: [[
                     {field: 'name', title: '户主姓名'},
@@ -86,14 +116,18 @@ XS.Searchbox.searchbox = function(){
                                 pageNumber:pageNumber
                             });
                         }else{
-                            $("#xs_searchbox_resultC").css({display:"none"});
+                            $("#xs_searchbox_resultC").animate({height:0},{duration: 1000,complete:function(){
+                                $("#xs_searchbox_resultC").empty();
+                            }});
                             XS.CommonUtil.showMsgDialog("","未找到相关数据");
                         }
                     });
                 }
             });
         }else{
-            $("#xs_searchbox_resultC").css({display:"none"});
+            $("#xs_searchbox_resultC").animate({height:0},{duration: 1000 ,complete:function(){
+                $("#xs_searchbox_resultC").empty();
+            }})
             XS.CommonUtil.showMsgDialog("","未找到相关数据");
         }
     });
