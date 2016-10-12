@@ -2,31 +2,33 @@
  * Created by GZXS on 2016/6/27.
  */
     XS.Searchbox = {};
-var xs_search_box = '<div id="xs_searchbox" class="easyui-panel"  style="background: transparent;border: 0px;">' +
+XS.Searchbox.init = function(){
+    var xs_search_box = '<div id="xs_searchbox" class="easyui-panel"  style="background: transparent;border: 0px;">' +
         '<div>' +
-            '<select id="xs_searchbox_type" style="width: 80px;height: 30px;display: inline-block;border1: 1px solid red;">' +
-                '<option value="区县">区县</option>' +
-                '<option value="乡镇">乡镇</option>' +
-                '<option value="行政村">行政村</option>' +
-                '<option value="姓名">姓名</option>' +
-                '<option value="身份证号">身份证号</option>' +
-                '<option value="电话">电话</option>' +
-            '</select>' +
-            '<input id="xs_searchbox_content" type="text" name="word" autocomplete="off" maxlength="256" style="width: 208px;height: 24px;display: inline-block;">' +
-            '<button id="xs_searchbox-button" data-title1="搜索" data-tooltip1="1" onclick="XS.Searchbox.searchbox();" style="width: 45px;height: 30px;display: inline-block;">搜索</button>' +
+        '<select id="xs_searchbox_type" style="width: 80px;height: 30px;display: inline-block;border1: 1px solid red;">' +
+        '<option value="区县">区县</option>' +
+        '<option value="乡镇">乡镇</option>' +
+        '<option value="行政村">行政村</option>' +
+        '<option value="姓名">姓名</option>' +
+        '<option value="身份证号">身份证号</option>' +
+        '<option value="电话">电话</option>' +
+        '</select>' +
+        '<input id="xs_searchbox_content" type="text" name="word" autocomplete="off" maxlength="256" style="width: 208px;height: 24px;display: inline-block;">' +
+        '<button id="xs_searchbox-button" data-title1="搜索" data-tooltip1="1" onclick="XS.Searchbox.searchbox();" style="width: 45px;height: 30px;display: inline-block;">搜索</button>' +
         '</div>' +
-        //'<div style="height: 2px;"></div>' +
+            //'<div style="height: 2px;"></div>' +
         '<div id="xs_searchbox_resultC" style="width: 337px;height1: 308px;margin-top: 1px;position: relative;left1: 1px;top1:1px;border1: 1px solid green;display: none;">' +
-            '<div id="xs_searchbox_result" style1="width: 212px;height1: 200px;"></div>' +
+        '<div id="xs_searchbox_result" style1="width: 212px;height1: 200px;"></div>' +
         '</div>' +
-    '</div>';
-$("#xs_searchbox_boxC").empty().append(xs_search_box);
+        '</div>';
+    $("#xs_searchbox_boxC").empty().append(xs_search_box);
 
-$("#xs_searchbox_content").keyup(function(e){
-    if(e.keyCode == 13){
-        XS.Searchbox.searchbox();
-    }
-});
+    $("#xs_searchbox_content").keyup(function(e){
+        if(e.keyCode == 13){
+            XS.Searchbox.searchbox();
+        }
+    });
+}
 
 XS.Searchbox.searchbox = function(){
     var search_type = $("#xs_searchbox_type").val();

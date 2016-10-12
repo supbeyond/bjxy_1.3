@@ -125,9 +125,10 @@ var xs_rbbtn_isfullscreen = false; //是否是全屏
 //初始化数据
 XS.Main.init = function(){
     //xs_leftToolBarC
+    //xs_tjfx_leftMenu
     $("#xs_leftToolBarC").css("left", window.outerWidth/2.0-200);
     $("#xs_tjfx_leftMenu").css({
-        "left":window.outerWidth/2.0+150
+        "left":window.outerWidth/2.0+135
     });
     //左边工具栏
     $("#xs_leftToolPanel").panel(
@@ -241,6 +242,8 @@ XS.Main.init = function(){
     {
         XS.Main.showBottomToolBar();
     });
+
+    XS.Searchbox.init();
 }
 
 var xs_btoolbar_isShowing = false;
