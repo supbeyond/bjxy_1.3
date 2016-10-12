@@ -449,3 +449,76 @@ html, body{
     text-shadow:
     2px -2px 2px #000000
 }
+/*-----------------------------搜索框-------------------------------------------------*/
+#xs_searchbox{
+    background: transparent;
+    border1: 1px solid green;
+    /*border: 0px;*/
+}
+#xs_searchbox_C{
+    box-sizing: border-box;
+}
+#xs_searchbox_type{
+    width: 80px;
+    height: 38px;
+    cursor: pointer;
+    display: inline-block;
+    border: 0px;
+    outline:none;
+    position: relative;
+    border-radius:2px 0 0 2px;
+    box-shadow:1px 2px 1px rgba(122,0,0,0.3);
+}
+#xs_searchbox_content{
+    width: 180px;
+    height: 36px;
+    display: inline-block;
+    border: 0px;
+    outline:none;
+    position: relative;
+    box-shadow:1px 2px 1px rgba(122,0,0,0.3);
+}
+#xs_searchbox_button{
+    width: 45px;
+    height: 38px;
+    cursor:pointer;
+    display: inline-block;
+    border: 0px;
+    position: relative;
+    border-radius:0 2px 2px 0;
+    box-shadow:1px 2px 1px rgba(122,0,0,0.3);
+}
+#xs_searchbox_resultC{
+    width: 337px;
+    height: auto;
+    margin-top: 1px;
+    position: relative;
+    left1: 1px;
+    top1:1px;
+    border1: 1px solid green;
+    display1: none;
+}
+#xs_searchbox_clear{
+    width: 30px;
+    height: 38px;
+    cursor: default;
+    display: inline-block;
+    position: relative;
+    top: 15px;
+    border1: 1px solid green;
+    background:#fff;
+    /*background: url("../img/searchbox.png") no-repeat 0 -114px #fff;*/
+    box-shadow:1px 2px 1px rgba(122,0,0,0.3);
+}
+/*
+#xs_searchbox_clearConResult{
+    width: 38px;
+    height: 38px;
+    cursor: pointer;
+    display: inline-block;
+    position: relative;
+    top: 15px;
+    border-left: 1px;
+    background: url("../img/searchbox.png") no-repeat 0 -38px #fff;
+    box-shadow:1px 2px 1px rgba(122,0,0,0.3);
+}*/
