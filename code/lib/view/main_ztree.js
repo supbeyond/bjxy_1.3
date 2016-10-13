@@ -62,6 +62,7 @@ XS.Main.Ztree.loadCounty = function (regId, ulevel)
             XS.CommonUtil.showMsgDialog("","加载数据失败！");
             XS.Login.logout();
         }
+        XS.Searchbox.init();
     }, function(e){
         XS.CommonUtil.hideLoader();
         XS.CommonUtil.showMsgDialog("","加载数据失败！");
@@ -100,6 +101,7 @@ XS.Main.Ztree.loadTown = function (regId, ulevel)
             XS.CommonUtil.showMsgDialog("","加载数据失败！");
             XS.Login.logout();
         }
+        XS.Searchbox.init();
     }, function(e){
         XS.CommonUtil.hideLoader();
         XS.CommonUtil.showMsgDialog("","加载数据失败！");
@@ -143,6 +145,7 @@ XS.Main.Ztree.loadVillage = function (regId, ulevel)
             XS.CommonUtil.showMsgDialog("","加载数据失败！");
             XS.Login.logout();
         }
+        XS.Searchbox.init();
     }, function(e){
         XS.CommonUtil.hideLoader();
         XS.CommonUtil.showMsgDialog("","加载数据失败！");
