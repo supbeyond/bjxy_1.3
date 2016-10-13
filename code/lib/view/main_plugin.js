@@ -1434,34 +1434,6 @@ XS.Main.showFunMenu = function(x, y){
     });
 }
 
-/**
- * 调度指挥
- */
-XS.Main.dispatchCommd = function(){
-    XS.Main.dispatchCommd_send(null, null);
-}
-
-/**
- * 调度指挥发送指令
- * @param receiver
- * @param receiverID
- */
-XS.Main.dispatchCommd_send = function(receiver, receiverID){
-    var content = '<div id="xs_dc_tab" class="easyui-tabs" style="width:400px; height: 500px;"></div>';
-    XS.CommonUtil.openDialog("xs_main_detail", "调度指挥", "icon-man", content, false, false, false,null, null,0);
-    $('#xs_dc_tab').tabs('add',{
-        title:'发送指令',
-        content:"<div id='xs_poor_detail_tab_tasker' style='padding: 5px; height: 100%; box-sizing: border-box;'></div>"
-    });
-    $('#xs_dc_tab').tabs('add',{
-        title:'指令清单',
-        content:"<div style='padding: 5px; height: 100%; box-sizing: border-box; padding-top: 10px;'>" +
-        "<div id='xs_poor_detail_tab_project' style='width: 100%; height: 100%; box-sizing: border-box;padding-bottom: 10px;'>" +
-        "</div>"
-    });
-    $('#xs_poor_detail_tab').tabs("select",0);
-}
-
 
 //************************处理点击鼠标右键选中菜单选项处理函数************************************
 //分段专题图 贫困发生率 脱贫率

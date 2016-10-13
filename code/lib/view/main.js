@@ -244,6 +244,8 @@ XS.Main.load = function(){
                                         xs_userZoneName = feature.data.vd_name;
                                         break;
                                 }
+                                xs_currentZoneName = xs_userZoneName;
+                                xs_currentZoneCode = xs_user_regionId;
                             }
                         }
                         if(xs_user_Features.length<1){
@@ -270,6 +272,8 @@ XS.Main.load = function(){
                 });
             }
             else{
+                xs_currentZoneName = xs_userZoneName;
+                xs_currentZoneCode = xs_user_regionId;
                 XS.Main.addLayers();
             }
         }

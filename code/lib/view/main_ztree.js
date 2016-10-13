@@ -306,7 +306,6 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
                                     //处理数据
                                     //getChildren
                                     XS.CommonUtil.hideLoader();
-                                    console.log(data);
                                    if(node.children&&node.children.length==0)
                                    {
                                        $('#xs_main_ztree').tree('append', {
@@ -404,7 +403,7 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
                                 xs_currentZoneCode = feature.data.乡镇代码;
                                 xs_currentZoneName = feature.data.乡镇名称;
                                 xs_superZoneCode = feature.data.县级代码;
-                                xs_userZoneName = feature.data.县级代码;
+                                xs_userZoneName = feature.data.县级名称;
                                 break;
                             }
                             case XS.Main.ZoneLevel.village:
@@ -425,6 +424,10 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
                         xs_zone_vectorLayer.addFeatures(feature);
                         xs_isMapClickTypeNone = true;
                         xs_currentZoneLevel = node.xs_nlevel;
+
+                        if(document.getElementById('xs_dcs_receiver')){
+                            $("#xs_dcs_receiver").textbox('setValue', xs_currentZoneName);
+                        }
 
                         XS.CommonUtil.hideLoader();
                         XS.Main.showBottomToolBar();
