@@ -457,35 +457,35 @@ html, body{
     /*border: 0px;*/
 }
 #xs_searchbox_C{
-    box-sizing1: border-box;
-    vertical-align1: top;
     height: 40px;
-    border1: 1px solid green;
     box-shadow:0px 2px 1px 1px rgba(122, 0, 0, 0.3);
 }
 #xs_searchbox_type{
     width: 80px;
     height: 100%;
+    font-size: 15px;
     cursor: pointer;
     display: inline-block;
     border: 0px;
     outline:none;
     position: relative;
     border-radius:2px 0 0 2px;
-    box-shadow1:1px 2px 1px 1px rgba(122, 0, 0, 0.3);
     vertical-align: top;
 }
 #xs_searchbox_content{
     width: 180px;
     height: 96%;
+    font-size: 15px;
     display: inline-block;
     border: 0px;
     border-left: 1px solid #eee;
     outline:none;
     padding-left:5px;
     position: relative;
-    box-shadow1:1px 2px 1px 1px rgba(122, 0, 0, 0.3);
     vertical-align: top;
+}
+#xs_searchbox_button:hover{
+    background:url("../img/searchbox.png") no-repeat 0 -76px #2F78E5;
 }
 #xs_searchbox_button{
     width: 57px;
@@ -496,7 +496,6 @@ html, body{
     position: relative;
     border-radius:0 2px 2px 0;
     background: url("../img/searchbox.png") no-repeat 0 -76px #3385ff;
-    box-shadow1:1px 2px 1px 1px rgba(122, 0, 0, 0.3);
     vertical-align: top;
 }
 #xs_searchbox_resultC{
@@ -563,13 +562,21 @@ html, body{
     left: 5%;
     top: 5px;
 }
-#xs_searchbox_baseInfPanel{
+.xs_searchbox_baseInfPanelC:hover{
+    background:#eee;
+}
+.xs_searchbox_baseInfPanelC{
+    width: 100%;
+    position: relative;
+    top: 15px;
+    margin-bottom: 15px;
+    cursor: pointer;
+}
+.xs_searchbox_baseInfPanel{
     width: 90%;
     height: auto;
     position: relative;
-    top: 15px;
-    left: 7%;
-    margin-bottom: 15px;
+    left: 5%;
     border-radius:5px;
     border: 1px solid green;
 }
