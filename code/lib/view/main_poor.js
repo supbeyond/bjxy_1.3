@@ -60,7 +60,7 @@ XS.Main.Poor.showPoorInfo = function(obj){
             '</div>' +
         '</div>';
     //id, title, iconCls, content, resizable, maximizable, modal, width, height, left, top, closeCallback, maximizeCallback, minimizeCallback
-    XS.CommonUtil.openDialog("xs_poor_info", obj.HHNAME, "icon-man", content, false, false, false, null, 225,850);
+    XS.CommonUtil.openDialog("xs_poor_info", obj.HHNAME, "icon-man", content, false, false, false, null, 225,window.outerWidth/2.0+20);
     var jsonObj = [
         {"name":"户编号","value":obj.PB_HHID},
         {"name":"户主姓名","value":obj.HHNAME},

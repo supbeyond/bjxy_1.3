@@ -14,6 +14,7 @@ XS.Main.Dispatchcmmd.tasker = {
         ],
     progress:
         [
+            {name:"暂停", icon:"../img/tasker/xs_progress_pause.png"},
             {name:"开始", icon:"../img/tasker/xs_progress_0.png"},
             {name:"1/8", icon:"../img/tasker/xs_progress_1.png"},
             {name:"1/4", icon:"../img/tasker/xs_progress_2.png"},
@@ -38,11 +39,12 @@ XS.Main.Dispatchcmmd.dispatchCommd = function(){
  * @param receiver
  * @param receiverID
  */
-var xs_dispatch_isadd = true; //记录是否为添加
+var xs_dispatch_state = 1; //记录任务的状态 0表示修改 1表修改
+var xs_acceptid = "";
 XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
-    xs_dispatch_isadd = true;
-    var content = '<div id="xs_dc_tab" class="easyui-tabs" style="width:400px; height: 500px;box-sizing: border-box;">'+
-        '<i id="xs_dc_loading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: 60px;z-index:5; visibility: hidden;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading"></i>'+
+    xs_dispatch_state = 1;
+    var content = '<div id="xs_dc_tab" class="easyui-tabs" style="width:410px; height: 530px;box-sizing: border-box;">'+
+        '<i id="xs_dc_loading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: 80px;z-index:5; visibility: hidden;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading"></i>'+
         '</div>';
 
     XS.CommonUtil.openDialog("xs_main_detail", "调度指挥", "icon-man", content, false, false, false,null, null,0);
@@ -70,27 +72,47 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
             '</tr>'+
             '<tr>' +
                 '<td>开始时间</td>' +
-                '<td ><input id="xs_dcs_ds" style="width: 120px;height: 25px;" class="easyui-datebox" data-options="formatter:XS.CommonUtil.dateFormatter,parser:XS.CommonUtil.dateParser"/></td>' +
+                '<td ><input id="xs_dcs_ds" style="width: 125px;height: 25px;" class="easyui-datetimebox" data-options=""/></td>' +
                 '<td>结束时间</td>' +
-                '<td ><input id="xs_dcs_dd" style="width: 120px;height: 25px;" class="easyui-datebox" data-options="formatter:XS.CommonUtil.dateFormatter,parser:XS.CommonUtil.dateParser"/></td>' +
+                '<td ><input id="xs_dcs_dd" style="width: 125px;height: 25px;" class="easyui-datetimebox" data-options=""/></td>' +
+            '</tr>'+
+            '<tr>' +
+                '<td>发送时间</td>' +
+                '<td ><input id="xs_dcs_dsender" style="width: 125px;height: 25px;" class="easyui-textbox" data-options="multiline:true"/></td>' +
+                '<td>完成时间</td>' +
+                '<td ><input id="xs_dcs_dfinish" style="width: 125px;height: 25px;" class="easyui-datetimebox" data-options=""/></td>' +
             '</tr>'+
             '<tr>' +
                 '<td>内容</td>' +
                 '<td colspan="3"><input id="xs_dcs_content" style="height:200px;width: 100%;" class="easyui-textbox" name="message" data-options="multiline:true"/></td>' +
             '</tr>'+
             '<tr>' +
-                '<td>紧急度</td>' +
-                '<td>' +
-                    '<select id="xs_dcs_level" style="height: 25px;width: 120px;" class="easyui-combobox">' +
+                '<td colspan="3">' +
+                    '<span>紧急度:</span>'+
+                        '<select id="xs_dcs_level" style="height: 25px;width: 60px;" class="easyui-combobox">' +
                         '<option value="1">特急</option>' +
                         '<option value="2">紧急</option>' +
                         '<option value="3">一般</option>' +
                         '<option value="4">不急</option>' +
+                        '</select>'+
+                    '<span style="margin-left: 5px;">进度:</span>'+
+                    '<select id="xs_dcs_progress" style="height: 25px;width: 80px;" class="easyui-combobox">' +
+                        '<option value="-2">未开始</option>' +
+                        '<option value="-1">暂停</option>' +
+                        '<option value="0">开始</option>' +
+                        '<option value="1">1/8</option>' +
+                        '<option value="2">1/4</option>' +
+                        '<option value="3">3/8</option>' +
+                        '<option value="4">1/2</option>' +
+                        '<option value="5">5/8</option>' +
+                        '<option value="6">3/4</option>' +
+                        '<option value="7">7/8</option>' +
+                        '<option value="8">完成</option>' +
                     '</select>'+
                 '</td>' +
-                '<td colspan="2" style="text-align: center;">' +
+                '<td  style="text-align: center;">' +
                     '<a id="xs_dcs_btn_send" style="display: inline-block;" class="easyui-linkbutton"><span style="width:50px; height: 25px; text-align: center;line-height: 25px;font-size: 15px;font-weight: bold; display: inline-block;">发送</span></a>' +
-                    '<a id="xs_dcs_btn_clear" style="display: inline-block;margin-left: 8px;" class="easyui-linkbutton"><span style="width:50px; height: 25px; text-align: center;line-height: 25px;font-size: 15px;font-weight: bold; display: inline-block;">清空</span></a>' +
+                    '<a id="xs_dcs_btn_clear" style="display: inline-block;margin-left: 5px;" class="easyui-linkbutton"><span style="width:50px; height: 25px; text-align: center;line-height: 25px;font-size: 15px;font-weight: bold; display: inline-block;">清空</span></a>' +
                 '</td>' +
         '</tr>'+
         '</table>'+
@@ -106,15 +128,15 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
         '</tr>'+
         '<tr>' +
         '<td>发送者</td>' +
-        '<td><input id="xs_dcl_sender" style="width: 120px; height: 25px;" class="easyui-textbox" type="text" data-options="multiline:true" value=""/></td>' +
+        '<td><input id="xs_dcl_sender" style="width: 125px; height: 25px;" class="easyui-textbox" type="text" data-options="multiline:true" value=""/></td>' +
         '<td>发送者ID</td>' +
-        '<td><input id="xs_dcl_senderid" style="width: 120px; height: 25px;" class="easyui-textbox" type="text" data-options="multiline:true" value=""/></td>' +
+        '<td><input id="xs_dcl_senderid" style="width: 125px; height: 25px;" class="easyui-textbox" type="text" data-options="multiline:true" value=""/></td>' +
         '</tr>'+
         '<tr>' +
         '<td>名称</td>' +
-        '<td><input id="xs_dcl_name" style="width: 120px;height: 30px;" class="easyui-textbox" type="text" data-options="multiline:true"/></td>' +
+        '<td><input id="xs_dcl_name" style="width: 125px;height: 30px;" class="easyui-textbox" type="text" data-options="multiline:true"/></td>' +
         '<td>类型</td>' +
-        '<td><input id="xs_dcl_type" style="width: 120px;height: 30px;" class="easyui-textbox" type="text" data-options="multiline:true"/></td>' +
+        '<td><input id="xs_dcl_type" style="width: 125px;height: 30px;" class="easyui-textbox" type="text" data-options="multiline:true"/></td>' +
         '</tr>'+
         '<tr>' +
         '<td>开始时间</td>' +
@@ -139,7 +161,7 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
         '<option value="4">不急</option>' +
         '</select>'+
         '</td>' +
-        '<td>完成度</td>' +
+        '<td>进度</td>' +
         '<td>'+
         '<select id="xs_dcl_progress" style="height: 25px;width: 120px;" class="easyui-combobox">' +
         '<option value="-3">--选择--</option>' +
@@ -160,7 +182,7 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
         '<tr>'+
         '<tr>'+
         '<td colspan="4">'+
-        '<div style="width: 100%;height: 265px;border: 1px solid #ff0000;box-sizing: border-box;margin-top: 5px;"></div>'+
+        '<div id="xs_dcl_dgC" style="width: 100%;height: 295px;box-sizing: border-box;margin-top: 2px;"></div>'+
         '</td>'+
         '</table>'+
         '</div>';
@@ -175,8 +197,11 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
     });
     //-----------------------------------------------------------
 
-    $("#xs_dcs_ds").datebox();
-    $("#xs_dcs_dd").datebox();
+    $("#xs_dcs_ds").datetimebox({showSeconds:false});
+    $("#xs_dcs_dd").datetimebox({showSeconds:false});
+
+    $("#xs_dcs_dsender").textbox("disable");
+    $("#xs_dcs_dfinish").datetimebox({showSeconds:false});
 
     $("#xs_dcs_sender").textbox({
         'disabled':true,
@@ -199,6 +224,7 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
     $("#xs_dcs_level").combobox({
         'panelHeight':85
     });
+    $("#xs_dcs_progress").combobox();
 
     //发送信息
     $("#xs_dcs_btn_send").linkbutton({'onClick':function()
@@ -207,58 +233,108 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
             var taskid = $("#xs_dcs_taskid").textbox('getValue');
             var taskname = $("#xs_dcs_name").textbox('getValue');
 
-            var senderid = xs_user_regionId;
-            var sendername = $("#xs_dcs_taskid").textbox('getValue');
+            var sendername = $("#xs_dcs_sender").textbox('getValue');
+            var senderid = $("#xs_dcs_senderid").textbox('getValue');
 
-            var acceptid = $("#xs_dcs_taskid").textbox('getValue');
-            var acceptname = $("#xs_dcs_taskid").textbox('getValue');
-            var tasktype = $("#xs_dcs_taskid").textbox('getValue');
-            var begindate = $("#xs_dcs_taskid").textbox('getValue');
-            var enddate = $("#xs_dcs_taskid").textbox('getValue');
-            var complete = $("#xs_dcs_taskid").textbox('getValue') //完成度
-            var competedate = $("#xs_dcs_taskid").textbox('getValue');
-            var gdate = $("#xs_dcs_taskid").textbox('getValue'); //录入日期
-            var content = $("#xs_dcs_taskid").textbox('getValue'); //录入日期
-            var importent = $("#xs_dcs_taskid").textbox('getValue'); //录入日期
-            var IsNew = "1"; // 0表示修改
+            var acceptid = xs_currentZoneCode;
+            var acceptname = $("#xs_dcs_receiver").textbox('getValue');
 
-            //发送消息
-            var data = {
+            var tasktype = $("#xs_dcs_type").textbox('getValue');
 
-            };
-            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QuerySysUserByRegionidAndOption", data, function (json) {
-                $("#xs_pkdc_task_loading").css({"visibility":"hidden"});
-                if(json && json.length>0)
-                {
-                    //{"__type":"SYS_USER:#WcfService2","SU_ACCOUNT":"18334276943","SU_CREATETIME":null,"SU_FLAGONLINE":"不在线",
-                    // "SU_ID":"","SU_ISLOCKED":0,"SU_LOGINCOUNTER":0,"SU_MEMO":"",
-                    // "SU_PASSWORD":null,"SU_REGIONID":"522401200","SU_TEL":"18334276943","SU_USERNAME":"梁仕城"}
-                    xs_pkdc_task_rdata = null;
-                    $("#xs_pkdc_task_tabC").empty().append('<table id="xs_pkdc_task_dg" class="easyui-datagrid" style="width:100%;height:100%;" title="任务人员列表"></table>');
-                    $('#xs_pkdc_task_dg').datagrid({
-                        data: json,
-                        pagination: true,
-                        pageSize: 15,
-                        pageList: [15,20,30],
-                        striped: true,
-                        onSelect:XS.Main.Pkjc.onTaskRowSelecte,
-                        singleSelect: true,
-                        rownumbers: true,
-                        columns: [[
-                            //{"__type":"SYS_USER:#WcfService2","SU_ACCOUNT":"18334276943","SU_CREATETIME":null,"SU_FLAGONLINE":"不在线",
-                            // "SU_ID":"","SU_ISLOCKED":0,"SU_LOGINCOUNTER":0,"SU_MEMO":"",
-                            // "SU_PASSWORD":null,"SU_REGIONID":"522401200","SU_TEL":"18334276943","SU_USERNAME":"梁仕城"}
-                            {field: 'SU_USERNAME', title: '姓名',width:'30%'},
-                            {field: 'SU_ACCOUNT', title: '手机号',width:'30%'},
-                            {field: 'SU_FLAGONLINE', title: '是否在线',width:'30%'}
-                        ]]
-                    });
-                    $("#xs_pkdc_task_dg").datagrid("getPager").pagination({displayMsg:""});
-                    $('#xs_pkdc_task_dg').datagrid('clientPaging');
-                }else{
-                    XS.CommonUtil.showMsgDialog("","该区域没有责任人");
+            var begindate = $("#xs_dcs_ds").textbox('getValue');
+            var enddate = $("#xs_dcs_dd").textbox('getValue');
+
+            var complete = $("#xs_dcs_progress").combobox('getValue') //完成度
+
+            var gdate = $("#xs_dcs_dsender").textbox('getValue'); //录入日期
+            var competedate = $("#xs_dcs_dfinish").textbox('getValue'); //完成时间
+
+            var content = $("#xs_dcs_content").textbox('getValue'); //内容
+
+            var importent = $("#xs_dcs_level").combobox('getValue'); //紧急度
+            var IsNew = xs_dispatch_state; //0表示修改 1表修改
+
+            //-----------------------------------------
+            if(xs_dispatch_state==1){ //添加
+                gdate = XS.DateUtil.getCurTime2Min();
+                taskid = new Date().getTime();
+            }else{ //修改
+            }
+
+            if(xs_dispatch_state==1){
+                if(XS.StrUtil.isEmpty(taskname)){
+                    XS.CommonUtil.showMsgDialog("","任务名称必填");
+                    return;
                 }
-            },function(e){$("#xs_pkdc_task_loading").css({visibility:"hidden"});});
+                if(XS.StrUtil.isEmpty(content)){
+                    XS.CommonUtil.showMsgDialog("","任务内容必填");
+                    return;
+                }
+                if(XS.StrUtil.isEmpty(acceptid)||XS.StrUtil.isEmpty(acceptname)){
+                    XS.CommonUtil.showMsgDialog("","接收者必填");
+                    return;
+                }
+                if(XS.StrUtil.isEmpty(begindate)){
+                    XS.CommonUtil.showMsgDialog("","开始时间必填");
+                    return;
+                }
+                if(XS.StrUtil.isEmpty(enddate)){
+                    XS.CommonUtil.showMsgDialog("","结束时间必填");
+                    return;
+                }
+                if(XS.StrUtil.isEmpty(enddate)){
+                    XS.CommonUtil.showMsgDialog("","结束时间必填");
+                    return;
+                }
+                if(XS.StrUtil.isEmpty(competedate)){
+                    XS.CommonUtil.showMsgDialog("","完成时间必填");
+                    return;
+                }
+
+                //发送消息
+                var data = {
+                    taskid:taskid,
+                    taskname:taskname,
+                    content:content,
+                    tasktype:tasktype,
+                    sendername:sendername,
+                    senderid:senderid,
+                    acceptid:acceptid,
+                    acceptname:acceptname,
+                    begindate:begindate,
+                    enddate:enddate,
+                    complete:complete,
+                    gdate:gdate,
+                    competedate:competedate,
+                    importent:importent,
+                    IsNew:IsNew
+                };
+            }else{
+                var data = {
+                    taskid:taskid,
+                    complete:complete,
+                    IsNew:IsNew
+                };
+            }
+            $("#xs_dc_loading").css({"visibility":"visible"});
+            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "AddTbTask", data, function (json) {
+                $("#xs_dc_loading").css({"visibility":"hidden"});
+                if(json)
+                {
+                    XS.CommonUtil.showMsgDialog("","发送成功");
+
+                    XS.Main.Dispatchcmmd.clearSearchTab();
+                    $("#xs_dcl_name").textbox('setValue',taskname);
+                    $("#xs_dcl_ds").textbox('setValue',begindate);
+                    $("#xs_dcl_dd").textbox('setValue',enddate);
+
+                    $('#xs_dc_tab').tabs("select",1);
+
+                    XS.Main.Dispatchcmmd.search();
+                }else{
+                    XS.CommonUtil.showMsgDialog("","发送失败");
+                }
+            },function(e){$("#xs_dc_loading").css({visibility:"hidden"});});
         }
         });
 
@@ -279,13 +355,180 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
     });
     $("#xs_dcl_name").textbox();
     $("#xs_dcl_type").textbox();
+
     $("#xs_dcl_level").combobox({
         'panelHeight':105
     });
     $("#xs_dcl_progress").combobox();
-    $("#xs_dcl_btn_search").linkbutton();
+    $("#xs_dcl_btn_search").linkbutton({
+        'onClick': function ()
+        {
+            XS.Main.Dispatchcmmd.search();
+        }
+    });
 
     $("#xs_dcl_receiver").textbox('setValue', xs_currentZoneName);
 
-  //  $('#xs_dc_tab').tabs("select",0);
+   $('#xs_dc_tab').tabs("select",0);
+}
+
+//任务查询
+var xs_dispatch_selectedData = null;
+XS.Main.Dispatchcmmd.search = function(){
+
+    xs_dispatch_selectedData = null;
+
+    var taskname = $("#xs_dcl_name").textbox('getValue');
+    var tasktype = $("#xs_dcl_type").textbox('getValue');
+
+    var sendname = $("#xs_dcl_sender").textbox('getValue');
+    var sendid = $("#xs_dcl_senderid").textbox('getValue');
+
+    var acceptid = xs_currentZoneCode;
+
+    var begindate = $("#xs_dcl_ds").textbox('getValue');
+    var enddate = $("#xs_dcl_dd").textbox('getValue');
+
+    var complete = $("#xs_dcl_progress").combobox('getValue') //完成度
+
+    var gdate = $("#xs_dcl_dsender").textbox('getValue'); //录入日期
+    var competedate = $("#xs_dcl_dfinish").textbox('getValue'); //完成时间
+
+    var importent = $("#xs_dcl_level").combobox('getValue'); //紧急度
+
+    var data = {
+        taskname:taskname,
+        tasktype:tasktype,
+        sendname:sendname,
+        sendid:sendid,
+        acceptid:acceptid,
+        begiontime:begindate,
+        endtime:enddate,
+        gdate:gdate,
+        completetime:competedate
+    };
+    if(complete != '-3'){
+        data.complete = complete;
+    }
+    if(importent != '-1'){
+        data.importent = importent;
+    }
+    $("#xs_dcl_dgC").empty();
+
+    $("#xs_dc_loading").css({"visibility":"visible"});
+    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTbTaskByALL", data, function (json) {
+        $("#xs_dc_loading").css({"visibility":"hidden"});
+        if(json && json.length>0)
+        {
+            for(var i in json){
+                var progress = parseInt(json[i].COMPLETE);
+                if(progress==-2){
+                    json[i].xs_progress_icon = '';
+                }else{
+                    json[i].xs_progress_icon = '<img src=\''+XS.Main.Dispatchcmmd.tasker.progress[progress+1].icon + '\'/>';
+                }
+            }
+            $("#xs_dcl_dgC").empty().append('<table id="xs_dcl_dg" class="easyui-datagrid" style="width:100%;height:100%;" title=""></table>');
+            $('#xs_dcl_dg').datagrid({
+                data: json,
+                pagination: true,
+                toolbar: [{
+                    iconCls: 'icon-edit',
+                    handler: function()
+                    {
+                        if(!xs_dispatch_selectedData){
+                            XS.CommonUtil.showMsgDialog("","请先选中需要处理的数据");
+                            return;
+                        }
+                    }
+                },'-',{
+                    iconCls: 'icon-remove',
+                    handler: function()
+                    {
+                        if(!xs_dispatch_selectedData){
+                            XS.CommonUtil.showMsgDialog("","请先选中需要处理的数据");
+                            return;
+                        }
+                    }
+                },'-',{
+                    iconCls: 'icon-search',
+                    handler: function()
+                    {
+                        if(!xs_dispatch_selectedData){
+                            XS.CommonUtil.showMsgDialog("","请先选中需要处理的数据");
+                            return;
+                        }
+                    }
+                }],
+                pageSize: 8,
+                pageList: [8,15,20],
+                striped: true,
+                onSelect:function(index, data){
+                    xs_dispatch_selectedData = data;
+                },
+                singleSelect: true,
+                rownumbers: true,
+                /**
+                 * ACCEPTID":"522401","AC
+                 * CEPTNAME":"七星关区",
+                 * "ACCEPTTYPE":"",
+                 * "BEGINDATE":"2016\/10\/15 19:59:00",
+                 * "COMPLETE":"-2","COMPLETEDATE":"2016\/10\/25 19:59:00",
+                 * "CONTENT":"2222","ENDDATE":"2016\/10\/15 19:59:00",
+                 * "GDATE":"2016\/10\/15 19:59:00",
+                 * "IMPORTENT":"1",
+                 * "SENDERID":"522401",
+                 * "SENDERNAME":"15286555007",
+                 * "TASKID":"1476532767913",
+                 * "TASKNAME":"22",
+                 * "TASKTTYPE":"22"
+                 */
+                columns: [[
+                    {field: 'ACCEPTID', title: '姓名',width:'30%'},
+                    {field: 'ACCEPTNAME', title: '手机号',width:'30%'},
+                    {field: 'ACCEPTTYPE', title: '是否在线',width:'17%'},
+                    {field: 'xs_progress_icon', title: '进度',width:'20%'},
+                ]]
+            });
+            $("#xs_dcl_dg").datagrid("getPager").pagination({displayMsg:""});
+            $('#xs_dcl_dg').datagrid('clientPaging');
+        }else{
+            XS.CommonUtil.showMsgDialog("","没有数据");
+        }
+    },function(e){$("#xs_dc_loading").css({visibility:"hidden"});});
+}
+
+//清空发送Tab 查询条件
+XS.Main.Dispatchcmmd.clearSenderTab = function(){
+    $("#xs_dcs_taskid").textbox('setValue',"");
+    $("#xs_dcs_name").textbox('setValue',"");
+
+    $("#xs_dcs_sender").textbox('setValue',xs_Username);
+    $("#xs_dcs_senderid").textbox('setValue',xs_user_regionId);
+
+    $("#xs_dcs_receiver").textbox('setValue',xs_currentZoneName);
+
+    $("#xs_dcs_type").textbox('setValue',"");
+    $("#xs_dcs_ds").textbox('setValue',"");
+    $("#xs_dcs_dd").textbox('setValue',"");
+    $("#xs_dcs_progress").combobox('setValue',"-2") //完成度
+    $("#xs_dcs_dsender").textbox('setValue',""); //录入日期
+    $("#xs_dcs_dfinish").textbox('setValue',""); //完成时间
+    $("#xs_dcs_content").textbox('setValue',""); //内容
+    $("#xs_dcs_level").combobox('setValue',"1"); //紧急度
+
+}
+//清空查询Tab 查询条件
+
+XS.Main.Dispatchcmmd.clearSearchTab = function(){
+    $("#xs_dcl_name").textbox('setValue',"");
+    $("#xs_dcl_type").textbox('setValue',"");
+    $("#xs_dcl_sender").textbox('setValue',"");
+    $("#xs_dcl_senderid").textbox('setValue',"");
+    $("#xs_dcl_ds").textbox('setValue',"");
+    $("#xs_dcl_dd").textbox('setValue',"");
+    $("#xs_dcl_progress").combobox('setValue',"-3") //完成度
+    $("#xs_dcl_dsender").textbox('setValue',""); //录入日期
+    $("#xs_dcl_dfinish").textbox('setValue',""); //完成时间
+    $("#xs_dcl_level").combobox('setValue',"-1"); //紧急度
 }
