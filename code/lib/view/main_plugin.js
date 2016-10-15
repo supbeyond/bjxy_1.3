@@ -243,7 +243,6 @@ XS.Main.init = function(){
         XS.Main.showBottomToolBar();
     });
 
-    XS.Searchbox.init();
 }
 
 var xs_btoolbar_isShowing = false;
