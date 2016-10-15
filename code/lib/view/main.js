@@ -306,7 +306,7 @@ XS.Main.addLayers = function(){
 
 
     XS.Main.Ztree.load(xs_user_regionId,xs_user_regionLevel);
-
+    XS.Searchbox.init();
     window.setInterval(function(){
         XS.Main.hideBottomToolBar();
         XS.Main.hideLeftZtree();
