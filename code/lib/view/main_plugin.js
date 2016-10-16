@@ -126,9 +126,9 @@ var xs_rbbtn_isfullscreen = false; //是否是全屏
 XS.Main.init = function(){
     //xs_leftToolBarC
     //xs_tjfx_leftMenu
-    $("#xs_leftToolBarC").css("left", window.outerWidth/2.0-200);
+    $("#xs_leftToolBarC").css("left", window.outerWidth/2.0-315);
     $("#xs_tjfx_leftMenu").css({
-        "left":window.outerWidth/2.0+135
+        "left":window.outerWidth/2.0+250
     });
     //左边工具栏
     $("#xs_leftToolPanel").panel(
@@ -254,7 +254,7 @@ XS.Main.showBottomToolBar = function(){
     if((!xs_btoolbar_isShowing)&&((!xs_btoolbar_isClosing))){
         xs_btoolbar_isShowing = true;
         $("#xs_utfGridC").css("display","none"); //关闭显示窗口
-        $("#xs_leftToolBarC").stop(true, false).animate({"bottom": -10}, 200, function(msg){
+        $("#xs_leftToolBarC").stop(true, false).animate({"bottom": -25}, 200, function(msg){
             xs_btoolbar_isShowing = false;
         });
     }
@@ -267,7 +267,7 @@ XS.Main.hideBottomToolBar = function(){
         xs_tjfx_toolmenu_isShow = false;
         $("#xs_tjfx_leftMenuC").menu("hide");
         $("#xs_tjfx_leftMenu").panel('close');
-        $("#xs_leftToolBarC").stop(true, false).animate({"bottom": -100}, 150, function(nsg){
+        $("#xs_leftToolBarC").stop(true, false).animate({"bottom": -150}, 150, function(nsg){
             xs_btoolbar_isClosing = false;
         });
     }
