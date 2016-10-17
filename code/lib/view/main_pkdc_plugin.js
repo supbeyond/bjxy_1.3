@@ -566,7 +566,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
                                 XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value, 2, 50);
                                 break;
                             case 1 ://基本统计
-                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value, 5, 0);
+                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value, 5, 40);
                                 $("#xs_pkdc_tabsContentBtn").css("display", "block");
                                 $("#xs_pkdc_tabsContentBtn1").linkbutton({text: "村、户及人口情况"});
                                 $("#xs_pkdc_tabsContentBtn2").linkbutton({text: "资助、务工及少数民族"});
@@ -590,7 +590,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
                                 XS.Main.Pkjc.tabsContentPie("公共设施分布情况", [0, 1, 2, 3, 4, 5, 6], "xs_pkdc_tabsContentPie", [], "");
                                 break;
                             case 3 ://生产生活
-                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value, 5, 0);
+                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value, 5, 40);
                                 XS.Main.Pkjc.dynScatterSeries("扶贫措施", [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "xs_pkdc_tabsContentPie", 100);
                                 break;
                         }
@@ -683,6 +683,8 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
 }
 // 数据分析点击函数
 XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
+    XS.Main.hiddenLayers();
+    XS.Main.clearMap();
     xs_pkdc_AnalysTabsCInit = null;
     xs_pkdc_AnalysTabsChartArr = [];
     XS.Main.Pkjc.minInfoWinDialog();

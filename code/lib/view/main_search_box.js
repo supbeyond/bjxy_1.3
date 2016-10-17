@@ -87,11 +87,6 @@ XS.Searchbox.searchbox = function(){
     $("#xs_xs_searchbox_content").select();
     xs_searchbox_type = $("#xs_searchbox_type").val();
     xs_searchbox_content = $("#xs_searchbox_content").val();
-    /*if(XS.StrUtil.isEmpty(xs_searchbox_content)){
-        XS.CommonUtil.showMsgDialog("","请输入需要搜索的内容");
-        $("#xs_searchbox_resultC").css({display:"none"});
-        return;
-    }*/
     $("#xs_searchbox_clear").tooltip("destroy").css({cursor:'default',background:'#fff'});
     $("#xs_searchbox_loadingC").css({display:"block"});
     var data = {};
@@ -175,6 +170,9 @@ XS.Searchbox.searchbox = function(){
             XS.CommonUtil.showMsgDialog("","请求失败");
     });
 };
+/**
+ * 姓名、身份证、电话搜索结果只有一条数据直接点位到地图
+ */
 XS.Searchbox.jsonsingle = function(){
             console.log(xs_pkdc_cacheDataArr);
             var xs_searchbox_resultE = '<div style="width: 100%;height: 100%;line-height: 100%;text-align: center;background: #FFFFDF;border-radius:0 0 2px 2px;">' +
@@ -191,6 +189,10 @@ XS.Searchbox.jsonsingle = function(){
             }});
             XS.Main.Pkjc.onSelectedRowHandler(0,xs_pkdc_cacheDataArr[0]);
 }
+/**
+ * 姓名、身份证、电话搜索结果
+ * @param json
+ */
 XS.Searchbox.poorH = function(json){
     $("#xs_searchbox_resultC").empty().append('<div id="xs_searchbox_result"></div>');
     var xs_searchbox_resultCH = (json.length + 2) * 26;
@@ -260,6 +262,11 @@ XS.Searchbox.poorH = function(json){
         }
     });
 }
+/**
+ * 姓名、身份证、电话搜索的行数据点击
+ * @param rowIndex
+ * @param rowData
+ */
 XS.Searchbox.selectRow = function(rowIndex, rowData){
     switch (xs_searchbox_type) {
         case '区县':
@@ -279,9 +286,16 @@ XS.Searchbox.selectRow = function(rowIndex, rowData){
         }
     }
 }
+/**
+ * 行政区域搜索结果的基本信息
+ * @param json
+ * @param regionId
+ * @param regionName
+ * @param fields
+ */
 XS.Searchbox.regionBaseInfo = function(json,regionId,regionName,fields){
-    //$("#xs_searchbox_resultC").animate({height:350},{duration: 1000 });*/
-    $("#xs_searchbox_resultC").empty().append('<div id="xs_searchbox_resultBaseInf" style1="width: 100%;height: 350px;background: #ffffdf;border: 1px solid green;"></div>');
+    //$("#xs_searchbox_resultC").animate({height:350},{duration: 1000 });
+    $("#xs_searchbox_resultC").empty().append('<div id="xs_searchbox_resultBaseInf"></div>');
     var xs_searchbox_resultBaseInfH = 15;
     for(var i in json) {
         switch (xs_user_regionLevel){
@@ -347,6 +361,10 @@ XS.Searchbox.regionBaseInfo = function(json,regionId,regionName,fields){
         XS.Searchbox.baseInfoClick();
     }
 }
+/**
+ * 搜索类型select
+ * @returns {string}
+ */
 XS.Searchbox.searchType = function(){
     var xs_searchbox_option = '<select id="xs_searchbox_type">';
     switch (xs_user_regionLevel){
@@ -375,6 +393,9 @@ XS.Searchbox.searchType = function(){
         '</select>';
     return xs_searchbox_option;
 }
+/**
+ * 搜索结果选项点击
+ */
 XS.Searchbox.baseInfoClick = function(){
     if($(".xs_searchbox_baseInfPanelC").length == 1){
         var regionId = $(".xs_searchbox_baseInfPanelC").attr("regionId");
@@ -431,6 +452,7 @@ XS.Searchbox.baseInfoClick = function(){
             xs_zone_vectorLayer.addFeatures(feature);
             xs_currentZoneName = regionName;
             xs_clickMapFutureId  = regionId;
+            xs_currentZoneCode =  regionId;
             xs_pkdc_isFirstShowInfoWin = true;
             switch (xs_searchbox_type){
                 case "区县":
