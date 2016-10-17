@@ -19,7 +19,7 @@ var xs_tjfx_range_centerPoint = null;
 var xs_tjfx_zoneLevel = -1;
 XS.Main.Tjfx.range = function(level, parentId, type){
     XS.Main.Pkjc.closeInfoDialog();
-    xs_currentZoneLevel = level;
+   // xs_currentZoneLevel = level;
     xs_tjfx_zoneLevel = level;
     xs_superZoneCode = -1;
 
@@ -371,7 +371,7 @@ XS.Main.Tjfx.range_addFeatures2Layer = function(featureArr, data, level){ // 0:c
     xs_labelLayer.addFeatures(geotextFeatures);
     xs_tjfx_themeLayer.addFeatures(features);
     xs_tjfx_themeLayer.setVisibility(true);
-    xs_currentZoneLevel += 1;
+    ///xs_currentZoneLevel += 1;
 }
 
 //鼠标在 脱贫率专题图 移动事件处理
@@ -629,16 +629,16 @@ XS.Main.Tjfx.range_themeLayerMouseOutCallback = function(event){
 XS.Main.Tjfx.range_themeLayerClickCallback = function(event){
     if(event.target && event.target.refDataID)
     {
-        xs_currentZoneLevel -= 1;
+      //  xs_currentZoneLevel -= 1;
         var feature = xs_tjfx_themeLayer.getFeatureById(event.target.refDataID);
         xs_tjfx_range_centerPoint = feature.geometry.getBounds().getCenterLonLat();
-        switch (xs_currentZoneLevel) {
+        switch (xs_tjfx_zoneLevel) {
             case XS.Main.ZoneLevel.city:
             {
                 xs_currentZoneFuture = null;
                 xs_superZoneCode = feature.data.AdminCode;
                 xs_clickMapType = XS.Main.clickMapType.tjfx_range;
-                XS.Main.Tjfx.range(xs_currentZoneLevel + 1, xs_superZoneCode, xs_tjfx_type);
+                XS.Main.Tjfx.range(xs_tjfx_zoneLevel + 1, xs_superZoneCode, xs_tjfx_type);
                 break;
             }
             case XS.Main.ZoneLevel.county:
@@ -646,7 +646,7 @@ XS.Main.Tjfx.range_themeLayerClickCallback = function(event){
                 xs_currentZoneFuture = null;
                 xs_superZoneCode = feature.data.乡镇代码;
                 xs_clickMapType = XS.Main.clickMapType.tjfx_range;
-                XS.Main.Tjfx.range(xs_currentZoneLevel + 1, xs_superZoneCode, xs_tjfx_type);
+                XS.Main.Tjfx.range(xs_tjfx_zoneLevel + 1, xs_superZoneCode, xs_tjfx_type);
                 break;
             }
             case XS.Main.ZoneLevel.town:

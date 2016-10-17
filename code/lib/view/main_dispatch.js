@@ -134,8 +134,8 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
         '<tr>' +
         '<td>名称</td>' +
         '<td><input id="xs_dcl_name" style="width: 125px;height: 30px;" class="easyui-textbox" type="text" data-options="multiline:true"/></td>' +
-        '<td>类型</td>' +
-        '<td><input id="xs_dcl_type" style="width: 125px;height: 30px;" class="easyui-textbox" type="text" data-options="multiline:true"/></td>' +
+        '<td>任务ID</td>' +
+        '<td><input id="xs_dcl_taskid" style="width: 125px;height: 30px;" class="easyui-textbox" type="text" data-options="multiline:true"/></td>' +
         '</tr>'+
         '<tr>' +
         '<td>开始时间</td>' +
@@ -259,8 +259,10 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
                 taskid = new Date().getTime();
             }
 
+            var action = "";
             if(xs_dispatch_state==1)
             {
+                action = "AddTbTask";
                 if(XS.StrUtil.isEmpty(taskname)){
                     XS.CommonUtil.showMsgDialog("","任务名称必填");
                     return;
@@ -310,6 +312,7 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
                 };
             }else
             {
+                action = "ModifyTbTask";
                 var data = {
                     taskid:taskid,
                     complete:complete,
@@ -317,7 +320,7 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
                 };
             }
             $("#xs_dc_loading").css({"visibility":"visible"});
-            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "AddTbTask", data, function (json) {
+            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json) {
                 $("#xs_dc_loading").css({"visibility":"hidden"});
                 if(json)
                 {
@@ -330,8 +333,9 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
 
                     XS.Main.Dispatchcmmd.clearSearchTab();
                     $("#xs_dcl_name").textbox('setValue',taskname);
-                    $("#xs_dcl_ds").textbox('setValue',begindate.replace(new RegExp("/","gm"),"-"));
-                    $("#xs_dcl_dd").textbox('setValue',enddate.replace(new RegExp("/","gm"),"-"));
+                    $("#xs_dcl_taskid").textbox('setValue',taskid);
+                   /* $("#xs_dcl_ds").textbox('setValue',begindate.replace(new RegExp("/","gm"),"-"));
+                    $("#xs_dcl_dd").textbox('setValue',enddate.replace(new RegExp("/","gm"),"-"));*/
 
                     $('#xs_dc_tab').tabs("select",1);
 
@@ -361,7 +365,7 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
         'disabled':true
     });
     $("#xs_dcl_name").textbox();
-    $("#xs_dcl_type").textbox();
+    $("#xs_dcl_taskid").textbox();
 
     $("#xs_dcl_level").combobox({
         'panelHeight':105
@@ -386,7 +390,7 @@ XS.Main.Dispatchcmmd.search = function(){
     xs_dispatch_selectedData = null;
 
     var taskname = $("#xs_dcl_name").textbox('getValue');
-    var tasktype = $("#xs_dcl_type").textbox('getValue');
+    var taskid = $("#xs_dcl_taskid").textbox('getValue');
 
     var sendname = $("#xs_dcl_sender").textbox('getValue');
     var sendid = $("#xs_dcl_senderid").textbox('getValue');
@@ -405,7 +409,7 @@ XS.Main.Dispatchcmmd.search = function(){
 
     var data = {
         taskname:taskname,
-        tasktype:tasktype,
+        tasktid:taskid,
         sendname:sendname,
         sendid:sendid,
         acceptid:acceptid,
@@ -510,6 +514,7 @@ XS.Main.Dispatchcmmd.search = function(){
                                         if(json)
                                         {
                                             XS.CommonUtil.showMsgDialog("","删除成功");
+                                            XS.Main.Dispatchcmmd.search();
                                         }else{
                                             XS.CommonUtil.showMsgDialog("","删除失败");
                                         }
@@ -643,7 +648,7 @@ XS.Main.Dispatchcmmd.clearSenderTab = function(){
 
 XS.Main.Dispatchcmmd.clearSearchTab = function(){
     $("#xs_dcl_name").textbox('setValue',"");
-    $("#xs_dcl_type").textbox('setValue',"");
+    $("#xs_dcl_taskid").textbox('setValue',"");
     $("#xs_dcl_sender").textbox('setValue',"");
     $("#xs_dcl_senderid").textbox('setValue',"");
     $("#xs_dcl_ds").textbox('setValue',"");

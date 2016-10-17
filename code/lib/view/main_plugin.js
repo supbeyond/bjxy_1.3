@@ -254,7 +254,7 @@ XS.Main.showBottomToolBar = function(){
     if((!xs_btoolbar_isShowing)&&((!xs_btoolbar_isClosing))){
         xs_btoolbar_isShowing = true;
         $("#xs_utfGridC").css("display","none"); //关闭显示窗口
-        $("#xs_leftToolBarC").stop(true, false).animate({"bottom": -25}, 200, function(msg){
+        $("#xs_leftToolBarC").stop(true, false).animate({"bottom": -30}, 200, function(msg){
             xs_btoolbar_isShowing = false;
         });
     }
@@ -338,55 +338,6 @@ XS.Main.RightClickMenuHandler = function(name){
 
 //县、镇、村属性矢量瓦片鼠标移动事件处理
 var xs_utfGridOption = {
-    /*tooltip: {
-        show: false
-    },
-    title : {
-        x: "center",
-        text: "",
-        textStyle: {
-            color: "#ff0000",
-            fontSize: 15
-        }
-    },
-    backgroundColor: "#fff",
-    xAxis :{
-            type : 'category',
-            data: ['贫困人数','贫困户数'],
-            axisLine: {
-                interval: 1
-            },
-            axisLabel: {
-                textStyle: {
-                    color: "#ff0000"
-                }
-            }
-        },
-    yAxis : [
-        {
-            type : 'value',
-            axisLabel: {
-                textStyle: {
-                    color: "#ff0000"
-                }
-            }
-        }
-    ],
-    grid: {
-        left: 60,
-        top: 50,
-        bottom: 30,
-        right: 10
-    },
-    series : [
-        {
-            color: "#ff0000",
-            name: "贫困程度",
-            type:"bar",
-            data: [],
-            barWidth: 30
-        }
-    ]*/
     tooltip: {
         show: false
     },
