@@ -1438,6 +1438,7 @@ XS.Main.showFunMenu = function(x, y){
 //分段专题图 贫困发生率 脱贫率
 XS.Main.cRItem_Tjfx_Range = function(type){
     XS.CommonUtil.closeDialog("xs_main_fmenu_dialog");
+    XS.Searchbox.clearCon();
     if(xs_currentZoneFuture != null){
         xs_tjfx_range_centerPoint = xs_currentZoneFuture.geometry.getBounds().getCenterLonLat();
         XS.Main.Tjfx.range(xs_currentZoneLevel-1, xs_superZoneCode, type);

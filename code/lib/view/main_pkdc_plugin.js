@@ -280,7 +280,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
     {
         //(titleAttr,tabsId,position,isFit,headerWidth,plain,width,height)
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.city.title,"xs_pkdc_detailTabs","top");
-        XS.CommonUtil.openDialog("main_detail", currentName + "-详情", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
         $("#xs_pkdc_detailTabs").tabs({tabWidth:121,tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
@@ -390,7 +390,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
     }else if(level == XS.Main.ZoneLevel.county)
     {
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.county.title,"xs_pkdc_detailTabs","top",false);
-        XS.CommonUtil.openDialog("main_detail", currentName + "-详情", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
         $("#xs_pkdc_detailTabs").tabs({tabWidth:106,tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
@@ -524,7 +524,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
     }else if(level == XS.Main.ZoneLevel.town)
     {
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.town.title,"xs_pkdc_detailTabs","top",false);
-        XS.CommonUtil.openDialog("main_detail", currentName + "-详情", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
         $("#xs_pkdc_detailTabs").tabs({tabWidth:215,tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
@@ -603,7 +603,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
     }else if(level == XS.Main.ZoneLevel.village)
     {
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.village.title,"xs_pkdc_detailTabs","top",false);
-        XS.CommonUtil.openDialog("main_detail", currentName + "-详情", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
         $("#xs_pkdc_detailTabs").tabs({tabWidth:215,tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
@@ -694,7 +694,7 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
                 XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",false,true,800,545,70,40) +
             '</div>';
         $("#xs_pkdc_AnalysTabs").css({boxSizing: "border-box"});
-        XS.CommonUtil.openDialog("main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
 
         selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab",0);
         selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box;border-right1: 1px solid green;;"></div>');
@@ -844,7 +844,7 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
                 XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",false,true,800,545,70,40) +
             '</div>';
         $("#xs_pkdc_AnalysTabs").css({boxSizing: "border-box"});
-        XS.CommonUtil.openDialog("main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
 
         var selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", 0);
         selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box;"></div>');
@@ -963,7 +963,7 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
         var content = '<div style="padding:  2px 2px 2px 0px;box-sizing: border-box;height: 100%;">' +
             XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",false,true,800,545,70,40) +
             '</div>';
-        XS.CommonUtil.openDialog("main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
 
         var selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", 0);
         selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box;"></div>');
@@ -1086,7 +1086,7 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
         var content = '<div style="padding: 2px 2px 2px 0px;box-sizing: border-box;height: 100%;">' +
             XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",false,true,800,545,70,40) +
             '</div>';
-        XS.CommonUtil.openDialog("main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
 
         var selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", 0);
         selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box;"></div>');
@@ -1237,7 +1237,7 @@ XS.Main.Pkjc.clickItemFund = function(currentName){
                 "</div>" +
             '</div>' +
         '</div>';
-    XS.CommonUtil.openDialog("main_detail", currentName + "-项目资金", "icon-man", content, false, true, false, 450,600,0,null,function(){
+    XS.CommonUtil.openDialog("xs_main_detail", currentName + "-项目资金", "icon-man", content, false, true, false, 450,600,0,null,function(){
         $("#xs_echartjs").empty().append('<script src="../base/echart/echarts.js"></script>');
     },function(){
         $("#xs_pkdc_itemFundRowDataTreeC").css("width","100%");

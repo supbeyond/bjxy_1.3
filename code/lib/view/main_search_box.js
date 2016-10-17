@@ -82,6 +82,8 @@ XS.Searchbox.clearCon = function(){
  * 搜索按钮点击函数
  */
 XS.Searchbox.searchbox = function(){
+    XS.Main.Poor.clearRelocationLayer();
+    XS.Main.clearMap();
     $("#xs_xs_searchbox_content").select();
     xs_searchbox_type = $("#xs_searchbox_type").val();
     xs_searchbox_content = $("#xs_searchbox_content").val();
@@ -422,26 +424,26 @@ XS.Searchbox.baseInfoClick = function(){
                     feature = result.recordsets[0].features[i];
                 }
             }
+            xs_MapInstance.getMapObj().zoomToExtent(feature.geometry.getBounds(),false);
             xs_currentZoneFuture = feature;
             feature.style = xs_stateZoneStyle;
             xs_zone_vectorLayer.removeAllFeatures();
             xs_zone_vectorLayer.addFeatures(feature);
-            xs_userZoneName = regionName;
-            xs_superZoneCode = regionId;
+            xs_currentZoneName = regionName;
             xs_clickMapFutureId  = regionId;
             xs_pkdc_isFirstShowInfoWin = true;
             switch (xs_searchbox_type){
                 case "区县":
+                    xs_superZoneCode = Math.floor(regionId/100);
                     xs_currentZoneLevel = XS.Main.ZoneLevel.county;
-                    xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 3);
                     break;
                 case "乡镇":
+                    xs_superZoneCode = Math.floor(regionId/1000);
                     xs_currentZoneLevel = XS.Main.ZoneLevel.town;
-                    xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 6);
                     break;
                 case "行政村":
+                    xs_superZoneCode = regionId.slice(0,9);
                     xs_currentZoneLevel = XS.Main.ZoneLevel.village;
-                    xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 10);
                     break;
             }
         }else{

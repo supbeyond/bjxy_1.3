@@ -188,7 +188,7 @@ var xs_pkdc_itemFoundChart = null;
                          '</div>' +
                      '</div>' +
                  '</div>';
-                 XS.CommonUtil.openDialog("xs_pkdc_itemFundTreeClick_win", params.name + "-" + projectName, "icon-man", content, true, false, false, 500, 300,null,100,function(){
+                 XS.CommonUtil.openDialog("xs_main_detail", params.name + "-" + projectName, "icon-man", content, true, false, false, 500, 300,null,100,function(){
                      //$("#xs_pkdc_itemFundRowDataWin").dialog("open");
                  });
 

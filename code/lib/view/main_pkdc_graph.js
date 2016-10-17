@@ -56,6 +56,7 @@ var xs_tjfx_graph_maxValue = 0;
 XS.Main.Tjfx.Graph.graph = function(type){
     XS.Main.Pkjc.closeInfoDialog();
     XS.Main.Poor.clearRelocationLayer();
+    XS.Searchbox.clearCon();
     xs_isShowUtfGridTip = false;
     XS.Main.hiddenDivTags();
     XS.CommonUtil.closeDialog("xs_main_fmenu_dialog");
@@ -647,6 +648,7 @@ XS.Main.Tjfx.Graph.addFeatures2Layer = function(featureArr, data, parentLevel){ 
     xs_tjfx_graph_themeLayer.addFeatures(features);
     xs_tjfx_graph_themeLayer.setVisibility(true);
     XS.CommonUtil.hideLoader();
+    xs_currentZoneLevel += 1;
 }
 /**
  * 专题图pie mousemove事件
@@ -915,6 +917,7 @@ XS.Main.Tjfx.Graph.createGraphLegendTag = function(){
 XS.Main.Tjfx.Graph.themeLayerClickCallback = function(event){
     if(event.target && event.target.refDataID)
     {
+        xs_currentZoneLevel -= 1;
         var feature = xs_tjfx_graph_themeLayer.getFeatureById(event.target.refDataID);
         xs_tjfx_range_centerPoint = feature.geometry.getBounds().getCenterLonLat();
 

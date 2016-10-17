@@ -633,7 +633,8 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
             break;
         }
         case XS.Main.ZoneLevel.county:{
-            if(xs_pkdc_zoneLevel == xs_user_regionLevel){
+            XS.Main.Pkjc.requestTown();
+            /*if(xs_pkdc_zoneLevel == xs_user_regionLevel){
                 if(XS.Main.CacheZoneInfos.county.length<1)
                 {
                     var data = {pbno: superId};
@@ -644,14 +645,14 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                             XS.Main.CacheZoneInfos.county = json;
                             XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.county,"","","CBI_ID","CBI_NAME");
                             xs_pkdc_preName = xs_pkdc_currentName;
-                            $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/*, width:1020,height:600*/}).window('open');
+                            $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/!*, width:1020,height:600*!/}).window('open');
                             $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
                         }
                     });
                 }else{
                     XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.county,"","","CBI_ID","CBI_NAME");
                     xs_pkdc_preName = xs_pkdc_currentName;
-                    $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/*, width:1020,height:600*/}).window('open');
+                    $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/!*, width:1020,height:600*!/}).window('open');
                     $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
                 }
             }else{
@@ -665,21 +666,21 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                         if(json && json.length>0){
                             XS.Main.CacheZoneInfos.county = json;
                             XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.county,"","","CBI_ID","CBI_NAME");
-                            $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/*, width:1020,height:600*/}).window('open');
+                            $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/!*, width:1020,height:600*!/}).window('open');
                             $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
                         }
                     });
                 }else{
                     XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.county,"","","CBI_ID","CBI_NAME");
-                    $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/*, width:1020,height:600*/}).window('open');
+                    $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/!*, width:1020,height:600*!/}).window('open');
                     $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
                 }
-            }
+            }*/
             break;
         }
         case XS.Main.ZoneLevel.town:{
             if(xs_pkdc_zoneLevel == xs_user_regionLevel){
-                if(superId != XS.Main.CacheZoneInfos.town.countyId){
+                /*if(superId != XS.Main.CacheZoneInfos.town.countyId){
                     var dataN = {pbno: superId};
                     $("#xs_pkdc_msgWin_p").css("display", "block");
                     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTownsBaseInfoByareaId", dataN, function(json){
@@ -689,16 +690,17 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                             XS.Main.CacheZoneInfos.town.countyId = superId;
                             XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.town.data,"","","TOWB_ID","TOWB_NAME");
                             xs_pkdc_preName = xs_pkdc_currentName;
-                            $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/*, width:1020,height:600*/}).window('open');
+                            $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/!*, width:1020,height:600*!/}).window('open');
                             $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
                         }
                     });
                 }else{
                     XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.town.data,"","","TOWB_ID","TOWB_NAME");
                     xs_pkdc_preName = xs_pkdc_currentName;
-                    $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/*, width:1020,height:600*/}).window('open');
+                    $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/!*, width:1020,height:600*!/}).window('open');
                     $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
-                }
+                }*/
+                XS.Main.Pkjc.requestTown();
             }else{
                 if(XS.Main.CacheZoneInfos.county.length<1)
                 {
@@ -708,7 +710,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                         $("#xs_pkdc_msgWin_p").css("display", "none");
                         if(json && json.length>0){
                             XS.Main.CacheZoneInfos.county = json;
-                            if(superId != XS.Main.CacheZoneInfos.town.countyId){
+                            /*if(superId != XS.Main.CacheZoneInfos.town.countyId){
                                 var dataN = {pbno: superId};
                                 $("#xs_pkdc_msgWin_p").css("display", "block");
                                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTownsBaseInfoByareaId", dataN, function(json){
@@ -717,19 +719,20 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                                         XS.Main.CacheZoneInfos.town.data = json;
                                         XS.Main.CacheZoneInfos.town.countyId = superId;
                                         XS.Main.Pkjc.preAndCurrentName(XS.Main.CacheZoneInfos.county,XS.Main.CacheZoneInfos.town.data,"CBI_ID","CBI_NAME","TOWB_ID","TOWB_NAME");
-                                        $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/*, width:1020,height:600*/}).window('open');
+                                        $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/!*, width:1020,height:600*!/}).window('open');
                                         $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
                                     }
                                 });
                             }else{
                                 XS.Main.Pkjc.preAndCurrentName(XS.Main.CacheZoneInfos.county,XS.Main.CacheZoneInfos.town.data,"CBI_ID","CBI_NAME","TOWB_ID","TOWB_NAME");
-                                $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/*, width:1020,height:600*/}).window('open');
+                                $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/!*, width:1020,height:600*!/}).window('open');
                                 $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
-                            }
+                            }*/
+                            XS.Main.Pkjc.requestTown();
                         }
                     });
                 }else{
-                    if(superId != XS.Main.CacheZoneInfos.town.countyId){
+                    /*if(superId != XS.Main.CacheZoneInfos.town.countyId){
                         var dataN = {pbno: superId};
                         $("#xs_pkdc_msgWin_p").css("display", "block");
                         XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTownsBaseInfoByareaId", dataN, function(json){
@@ -738,15 +741,16 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                                 XS.Main.CacheZoneInfos.town.data = json;
                                 XS.Main.CacheZoneInfos.town.countyId = superId;
                                 XS.Main.Pkjc.preAndCurrentName(XS.Main.CacheZoneInfos.county,XS.Main.CacheZoneInfos.town.data,"CBI_ID","CBI_NAME","TOWB_ID","TOWB_NAME");
-                                $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/*, width:1020,height:600*/}).window('open');
+                                $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/!*, width:1020,height:600*!/}).window('open');
                                 $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
                             }
                         });
                     }else{
                         XS.Main.Pkjc.preAndCurrentName(XS.Main.CacheZoneInfos.county,XS.Main.CacheZoneInfos.town.data,"CBI_ID","CBI_NAME","TOWB_ID","TOWB_NAME");
-                        $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/*, width:1020,height:600*/}).window('open');
+                        $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/!*, width:1020,height:600*!/}).window('open');
                         $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
-                    }
+                    }*/
+                    XS.Main.Pkjc.requestTown();
                 }
             }
             break;
@@ -936,7 +940,7 @@ XS.Main.Pkjc.showOccurRatioPie = function(name, ratio){
     XS.Main.Pkjc.pieOption.series[0].data[1].value =100-ratio;
 
     XS.Main.Pkjc.pieOption.title = {
-        top:220,
+        top:240,
         text: '贫困率(' + name +  ')',
         left: 'center'
     };
@@ -952,28 +956,128 @@ XS.Main.Pkjc.onSelectedRowHandler = function(rowIndex, rowData){
 /**
  *
  */
-/*XS.Main.Pkjc.requestTown = function(){
-    if(xs_pkdc_superStateCode != XS.Main.CacheZoneInfos.town.countyId){
-        var dataN = {pbno: superId};
+XS.Main.Pkjc.requestTown = function(){
+    var isCashEmpty = false;
+    var action = "";
+    switch (xs_pkdc_zoneLevel){
+        case XS.Main.ZoneLevel.city:
+        {
+
+            break;
+        }
+        case XS.Main.ZoneLevel.county:
+        {
+            isCashEmpty = XS.Main.CacheZoneInfos.county.length==0;
+            action = "QueryCountyBaseInfoByareaId";
+            break;
+        }
+        case XS.Main.ZoneLevel.town:
+        {
+            isCashEmpty = xs_pkdc_superStateCode==XS.Main.CacheZoneInfos.town.countyId;
+            action = "QueryTownsBaseInfoByareaId";
+            break;
+        }
+        case XS.Main.ZoneLevel.village:
+        {
+            isCashEmpty = xs_pkdc_superStateCode==XS.Main.CacheZoneInfos.village.townId;
+            action = "QueryVillBaseByareaId";
+            break;
+        }
+    }
+    if(isCashEmpty){
+        var dataN = {pbno: xs_pkdc_superStateCode};
         $("#xs_pkdc_msgWin_p").css("display", "block");
-        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTownsBaseInfoByareaId", dataN, function(json){
+        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, dataN, function(json){
             $("#xs_pkdc_msgWin_p").css("display", "none");
             if(json && json.length>0){
-                XS.Main.CacheZoneInfos.town.data = json;
-                XS.Main.CacheZoneInfos.town.countyId = superId;
-                XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.town.data,"","","TOWB_ID","TOWB_NAME");
-                xs_pkdc_preName = xs_pkdc_currentName;
-                $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/!*, width:1020,height:600*!/}).window('open');
+                switch (xs_pkdc_zoneLevel) {
+                    case XS.Main.ZoneLevel.city:
+                    {
+
+                        break;
+                    }
+                    case XS.Main.ZoneLevel.county:
+                    {
+                        XS.Main.CacheZoneInfos.county = json;
+                        XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.county,"","","CBI_ID","CBI_NAME");
+                        if(xs_pkdc_zoneLevel == xs_user_regionLevel){
+                            xs_pkdc_preName = xs_pkdc_currentName;
+                        }else{
+                            xs_pkdc_preName = "毕节市";
+                        }
+                        break;
+                    }
+                    case XS.Main.ZoneLevel.town:
+                    {
+                        XS.Main.CacheZoneInfos.town.data = json;
+                        XS.Main.CacheZoneInfos.town.countyId = xs_pkdc_superStateCode;
+                        if(xs_pkdc_zoneLevel == xs_user_regionLevel){
+                            XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.town.data,"","","TOWB_ID","TOWB_NAME");
+                            xs_pkdc_preName = xs_pkdc_currentName;
+                        }else{
+                            XS.Main.Pkjc.preAndCurrentName(XS.Main.CacheZoneInfos.county,XS.Main.CacheZoneInfos.town.data,"CBI_ID","CBI_NAME","TOWB_ID","TOWB_NAME");
+                        }
+                        break;
+                    }
+                    case XS.Main.ZoneLevel.village:
+                    {
+                        XS.Main.CacheZoneInfos.village.townId = xs_pkdc_superStateCode;
+                        XS.Main.CacheZoneInfos.village.data = json;
+                        if(xs_pkdc_zoneLevel == xs_user_regionLevel){
+                            XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.village.data,"","","VBI__ID","VBI_NAME");
+                            xs_pkdc_preName = xs_pkdc_currentName;
+                        }else{
+                            XS.Main.Pkjc.preAndCurrentName(XS.Main.CacheZoneInfos.town.data,XS.Main.CacheZoneInfos.village.data,"TOWB_ID","TOWB_NAME","VBI__ID","VBI_NAME");
+                        }
+                        break;
+                    }
+                }
+                $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/*, width:1020,height:600*/}).window('open');
                 $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
             }
         });
     }else{
-        XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.town.data,"","","TOWB_ID","TOWB_NAME");
-        xs_pkdc_preName = xs_pkdc_currentName;
-        $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/!*, width:1020,height:600*!/}).window('open');
+        switch (xs_pkdc_zoneLevel) {
+            case XS.Main.ZoneLevel.city:
+            {
+
+                break;
+            }
+            case XS.Main.ZoneLevel.county:
+            {
+                XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.county,"","","CBI_ID","CBI_NAME");
+                if(xs_pkdc_zoneLevel == xs_user_regionLevel){
+                    xs_pkdc_preName = xs_pkdc_currentName;
+                }else{
+                    xs_pkdc_preName = "毕节市";
+                }
+                break;
+            }
+            case XS.Main.ZoneLevel.town:
+            {
+                if(xs_pkdc_zoneLevel == xs_user_regionLevel){
+                    XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.town.data,"","","TOWB_ID","TOWB_NAME");
+                    xs_pkdc_preName = xs_pkdc_currentName;
+                }else{
+                    XS.Main.Pkjc.preAndCurrentName(XS.Main.CacheZoneInfos.county,XS.Main.CacheZoneInfos.town.data,"CBI_ID","CBI_NAME","TOWB_ID","TOWB_NAME");
+                }
+                break;
+            }
+            case XS.Main.ZoneLevel.village:
+            {
+                if(xs_pkdc_zoneLevel == xs_user_regionLevel){
+                    XS.Main.Pkjc.preAndCurrentName([],XS.Main.CacheZoneInfos.village.data,"","","VBI__ID","VBI_NAME");
+                    xs_pkdc_preName = xs_pkdc_currentName;
+                }else{
+                    XS.Main.Pkjc.preAndCurrentName(XS.Main.CacheZoneInfos.town.data,XS.Main.CacheZoneInfos.village.data,"TOWB_ID","TOWB_NAME","VBI__ID","VBI_NAME");
+                }
+                break;
+            }
+        }
+        $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"}).window('open');
         $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
     }
-}*/
+}
 /**
  * 通过父ID请求村级基本数据
  */

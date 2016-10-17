@@ -371,6 +371,7 @@ XS.Main.Tjfx.range_addFeatures2Layer = function(featureArr, data, level){ // 0:c
     xs_labelLayer.addFeatures(geotextFeatures);
     xs_tjfx_themeLayer.addFeatures(features);
     xs_tjfx_themeLayer.setVisibility(true);
+    xs_currentZoneLevel += 1;
 }
 
 //鼠标在 脱贫率专题图 移动事件处理
@@ -400,12 +401,12 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                     case XS.Main.ZoneLevel.city:
                     {
                         title = obj.CBI_NAME;
-                        jsonObj.push({"name":"贫困发生率","value":obj.cps_Poverty_rate});
-                        jsonObj.push({"name":"贫困人口","value":obj.cps_poor_pop});
-                        jsonObj.push({"name":"贫困户","value":obj.cps_poor_hhnum});
                         jsonObj.push({"name":"贫困镇","value":obj.CBI_PoorTOWNS_NUM});
                         jsonObj.push({"name":"贫困村","value":obj.CBI_PoorVILLAGE_NUM});
+                        jsonObj.push({"name":"贫困户","value":obj.cps_poor_hhnum});
                         jsonObj.push({"name":"总人口","value":obj.cps_pop});
+                        jsonObj.push({"name":"贫困人口","value":obj.cps_poor_pop});
+                        jsonObj.push({"name":"贫困发生率","value":obj.cps_Poverty_rate});
                         jsonObj.push({"name":"贫困类型","value":obj.CBI_type});
                         break;
                     }
@@ -418,23 +419,23 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                         // "TOWB_PoorHouseNum":0,"TOWB_PoorPeopleNum":0,"TOWB_VillNum":5,
                         // "Totolarea":0,"Totolvillnum":8,"tpl_PoorRate":0,"tpl_TownType":"",
                         // "tpl_arden_hhnum":0,"tpl_harden_mile":0,"tpl_team_num":0}
-                        jsonObj.push({"name":"贫困发生率","value":obj.tpl_PoorRate});
-                        jsonObj.push({"name":"贫困人口","value":obj.TOWB_PeopleNum});
-                        jsonObj.push({"name":"贫困户","value":obj.TOWB_HouseNum});
-                        jsonObj.push({"name":"贫困村","value":obj.TOWB_VillNum});
-                        jsonObj.push({"name":"村","value":obj.Totolvillnum});
                         jsonObj.push({"name":"面积","value":obj.Totolarea});
+                        jsonObj.push({"name":"村","value":obj.Totolvillnum});
+                        jsonObj.push({"name":"贫困村","value":obj.TOWB_VillNum});
+                        jsonObj.push({"name":"贫困户","value":obj.TOWB_HouseNum});
+                        jsonObj.push({"name":"贫困人口","value":obj.TOWB_PeopleNum});
+                        jsonObj.push({"name":"贫困发生率","value":obj.tpl_PoorRate});
                         break;
                     }
                     case XS.Main.ZoneLevel.town:
                     {
                         title = obj.VBI_NAME;
-                        jsonObj.push({"name":"贫困发生率","value":obj.VillPoorRate});
-                        jsonObj.push({"name":"贫困人口","value":obj.VBI_PeopleNum});
-                        jsonObj.push({"name":"贫困户","value":obj.VBI_HouseNum});
-                        jsonObj.push({"name":"贫困村","value":obj.VBI_AveIncome});
-                        jsonObj.push({"name":"海拔","value":obj.VBI_ALTITUDE});
                         jsonObj.push({"name":"面积","value":0});
+                        jsonObj.push({"name":"海拔","value":obj.VBI_ALTITUDE});
+                        jsonObj.push({"name":"贫困村","value":obj.VBI_AveIncome});
+                        jsonObj.push({"name":"贫困户","value":obj.VBI_HouseNum});
+                        jsonObj.push({"name":"贫困人口","value":obj.VBI_PeopleNum});
+                        jsonObj.push({"name":"贫困发生率","value":obj.VillPoorRate});
                         break;
                     }
                 }
@@ -444,11 +445,11 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                 // "OutPoorHNum":40181,"OutPoorPNum":159277,"OutPoorRate":54.425150349460909140163623560,
                 // "REGION_ID":522427,"REGION_Name":"威宁县"}
                 title = obj.REGION_Name;
+                jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
+                jsonObj.push({"name":"区域","value":obj.REGION_Name});
                 jsonObj.push({"name":"脱贫率","value":obj.OutPoorRate});
                 jsonObj.push({"name":"脱贫户数","value":obj.OutPoorHNum});
                 jsonObj.push({"name":"脱贫人数","value":obj.OutPoorPNum});
-                jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
-                jsonObj.push({"name":"区域","value":obj.REGION_Name});
                 break;
             case XS.Main.Tjfx.type.range_wfx:
                 switch (xs_tjfx_zoneLevel){
@@ -461,10 +462,10 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                          "REGION_Name": "七星关区"
                          }*/
                         title = obj.REGION_Name;
-                        jsonObj.push({"name":"危房率","value":obj.DangerHRate});
-                        jsonObj.push({"name":"危房户数","value":obj.DangerHnum});
                         jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
                         jsonObj.push({"name":"区域","value":obj.REGION_Name});
+                        jsonObj.push({"name":"危房率","value":obj.DangerHRate});
+                        jsonObj.push({"name":"危房户数","value":obj.DangerHnum});
                         break;
                     case XS.Main.ZoneLevel.county:
                         /*{
@@ -475,17 +476,17 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                             "REGION_Name": "市西街道"
                         }*/
                         title = obj.REGION_Name;
-                        jsonObj.push({"name":"危房率","value":obj.DangerHRate});
-                        jsonObj.push({"name":"危房户数","value":obj.DangerHnum});
                         jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
                         jsonObj.push({"name":"区域","value":obj.REGION_Name});
+                        jsonObj.push({"name":"危房率","value":obj.DangerHRate});
+                        jsonObj.push({"name":"危房户数","value":obj.DangerHnum});
                         break;
                     case XS.Main.ZoneLevel.town:
                         title = obj.REGION_Name;
-                        jsonObj.push({"name":"危房率","value":obj.DangerHRate});
-                        jsonObj.push({"name":"危房户数","value":obj.DangerHnum});
                         jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
                         jsonObj.push({"name":"区域","value":obj.REGION_Name});
+                        jsonObj.push({"name":"危房率","value":obj.DangerHRate});
+                        jsonObj.push({"name":"危房户数","value":obj.DangerHnum});
                         break;
                 }
                 break;
@@ -501,11 +502,11 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                          "REGION_Name": "七星关区"
                          }*/
                         title = obj.REGION_Name;
+                        jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
+                        jsonObj.push({"name":"区域","value":obj.REGION_Name});
                         jsonObj.push({"name":"扶贫搬迁率","value":obj.MoveRate});
                         jsonObj.push({"name":"搬迁户数","value":obj.MoveHnum});
                         jsonObj.push({"name":"搬迁人数","value":obj.MovePnum});
-                        jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
-                        jsonObj.push({"name":"区域","value":obj.REGION_Name});
                         break;
                     case XS.Main.ZoneLevel.county:
                         /*{
@@ -517,19 +518,19 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                          "REGION_Name": "昆寨乡"
                          }*/
                         title = obj.REGION_Name;
+                        jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
+                        jsonObj.push({"name":"区域","value":obj.REGION_Name});
                         jsonObj.push({"name":"扶贫搬迁率","value":obj.MoveRate});
                         jsonObj.push({"name":"搬迁户数","value":obj.MoveHnum});
                         jsonObj.push({"name":"搬迁人数","value":obj.MovePnum});
-                        jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
-                        jsonObj.push({"name":"区域","value":obj.REGION_Name});
                         break;
                     case XS.Main.ZoneLevel.town:
                         title = obj.REGION_Name;
+                        jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
+                        jsonObj.push({"name":"区域","value":obj.REGION_Name});
                         jsonObj.push({"name":"扶贫搬迁率","value":obj.MoveRate});
                         jsonObj.push({"name":"搬迁户数","value":obj.MoveHnum});
                         jsonObj.push({"name":"搬迁人数","value":obj.MovePnum});
-                        jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
-                        jsonObj.push({"name":"区域","value":obj.REGION_Name});
                         break;
                 }
                 break;
@@ -628,6 +629,7 @@ XS.Main.Tjfx.range_themeLayerMouseOutCallback = function(event){
 XS.Main.Tjfx.range_themeLayerClickCallback = function(event){
     if(event.target && event.target.refDataID)
     {
+        xs_currentZoneLevel -= 1;
         var feature = xs_tjfx_themeLayer.getFeatureById(event.target.refDataID);
         xs_tjfx_range_centerPoint = feature.geometry.getBounds().getCenterLonLat();
         switch (xs_currentZoneLevel) {
