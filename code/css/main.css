@@ -549,12 +549,9 @@ html, body{
 }
 #xs_searchbox_resultBaseInf{
     width: 100%;
-    height1: 350px;
-    background: #ffffdf;
-    border1: 1px solid green;
     box-sizing: border-box;
     overflow-y: auto;
-    border-radius: 0px 0px 2px 2px;
+    border-radius: 0px 0px 3px 3px;
 }
 #xs_searchbox_resultBaseInfC{
     width: 100%;
@@ -578,7 +575,7 @@ html, body{
     height: auto;
     position: relative;
     left: 5%;
-    border-radius:5px;
+    border-radius:3px;
     border: 1px solid green;
 }
 /*
