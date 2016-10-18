@@ -614,6 +614,10 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         });
         //任务监控
         $("#xs_pkdc_taskMonitor").click(function(){
+            if(xs_pkdc_currentStateCode== xs_cityID){
+                XS.CommonUtil.showMsgDialog("","毕节市太大，请先选择下级区县");
+                return;
+            }
             XS.Main.Pkjc.closeInfoDialog();
             XS.Main.Poor.clearRelocationLayer();
             XS.Main.Pkjc.clickTaskMonitor(xs_pkdc_zoneLevel, xs_pkdc_currentStateCode,xs_pkdc_currentName);
@@ -1143,19 +1147,19 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode, zoneName){
                     '<div data-options="name:\'name\'"><i style=" margin-right: 2px;" class="fa fa-male"></i>姓名</div>'+
                     '<div data-options="name:\'tele\'"><i style=" margin-right: 2px;" class="fa fa-phone"></i>电话</div>'+
                 '</div>';
-            content += '<div style="margin:5px 0px;"><label>起始:</label><input id="xs_pkdc_task_ds" style="width: 35%;" class="easyui-datebox" data-options="formatter:XS.CommonUtil.dateFormatter,parser:XS.CommonUtil.dateParser"/>';
-            content += '<label>&nbsp;终止:</label><input id="xs_pkdc_task_dd" style="width: 35%;" class="easyui-datebox" data-options="formatter:XS.CommonUtil.dateFormatter,parser:XS.CommonUtil.dateParser"/></div>';
+            content += '<div style="margin:5px 0px;"><label>起始:</label><input id="xs_pkdc_task_ds" style="width: 37%;" class="easyui-datebox" data-options="formatter:XS.CommonUtil.dateFormatter,parser:XS.CommonUtil.dateParser"/>';
+            content += '<label>&nbsp;终止:</label><input id="xs_pkdc_task_dd" style="width: 37%;" class="easyui-datebox" data-options="formatter:XS.CommonUtil.dateFormatter,parser:XS.CommonUtil.dateParser"/></div>';
             content += '<a href="javascript:0;" id="xs_pkdc_task_linebtn" style="width: 40%; margin-right: 5px;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;" class="fa fa-search"></i>轨迹</a>';
     /*content += '<a href="javascript:0;" id="xs_pkdc_task_taskbtn" style="width: 22%; margin-right: 5px;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;" class="fa fa-tasks"></i>任务</a>';
             content += '<a href="javascript:0;" id="xs_pkdc_task_alertbtn" style="width: 22%; margin-right: 5px;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;" class="fa fa-warning"></i>预警</a>';*/
             content += '<a href="javascript:0;" id="xs_pkdc_task_monitorbtn" style="width: 40%;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;"class="fa fa-map-marker"></i>动态</a>';
             content += '<div style="margin-top: 5px;position: relative;">' +
-            '<div id="xs_pkdc_task_tabC" style="width:100%;height:465px;"></div>' +
+            '<div id="xs_pkdc_task_tabC" style="width:100%;height:415px;"></div>' +
             '<i id="xs_pkdc_task_loading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: -25px;visibility: visible;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading"></i>'+
             '</div>';
         content += '</div>';
     //id, title, iconCls, content, resizable, maximizable, modal, width, height, left, top, closeCallback, maximizeCallback, minimizeCallback
-    XS.CommonUtil.openDialog("xs_main_detail", zoneName + "-任务监控", "icon-man", content, false, true, false, 350, 600,0,null,function(){
+    XS.CommonUtil.openDialog("xs_main_detail", zoneName + "-任务监控", "icon-man", content, false, true, false, 350, 550,0,null,function(){
         if(xs_animatorVectorLayer != null){
             xs_MapInstance.getMapObj().removeLayer(xs_animatorVectorLayer);
             xs_animatorVectorLayer = null;
@@ -1166,6 +1170,7 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode, zoneName){
         XS.CommonUtil.closeDialog("xs_main_detail_1");
         xs_isShowUtfGridTip = true;
     });
+    XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
 
     //轨迹查询
     $("#xs_pkdc_task_linebtn").click(XS.Main.Pkjc.task_queryLine);
@@ -1218,8 +1223,8 @@ XS.Main.Pkjc.reqTasker = function(regionid, type, value){
             $('#xs_pkdc_task_dg').datagrid({
                 data: json,
                 pagination: true,
-                pageSize: 15,
-                pageList: [15,20,30],
+                pageSize: 13,
+                pageList: [13,20,30],
                 striped: true,
                 onSelect:XS.Main.Pkjc.onTaskRowSelecte,
                 singleSelect: true,
@@ -1229,7 +1234,7 @@ XS.Main.Pkjc.reqTasker = function(regionid, type, value){
                     // "SU_ID":"","SU_ISLOCKED":0,"SU_LOGINCOUNTER":0,"SU_MEMO":"",
                     // "SU_PASSWORD":null,"SU_REGIONID":"522401200","SU_TEL":"18334276943","SU_USERNAME":"梁仕城"}
                     {field: 'SU_USERNAME', title: '姓名',width:'30%'},
-                    {field: 'SU_ACCOUNT', title: '手机号',width:'30%'},
+                    {field: 'SU_ACCOUNT', title: '手机号',width:'33%'},
                     {field: 'SU_FLAGONLINE', title: '是否在线',width:'30%'}
                 ]]
             });
