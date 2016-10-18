@@ -470,8 +470,8 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
             '<tr style="height: 430px;">' +
                 '<td>' +
                     "<div style='width: 100%;height: 430px;position: relative;'>"+
-                        "<div id='xs_pkdc_mgsLeft' style='width:100%; height:100%;overflow-y: scroll;overflow-x: auto;'>" +
-                            "<div id='xs_pkdc_msg_barC'  style='width: 560px; height:100%;'></div>" +
+                        "<div id='xs_pkdc_mgsLeft' style='width:100%; height:100%;overflow:auto;'>" +
+                            "<div id='xs_pkdc_msg_barC'  style='width: 560px;height: auto;'></div>" +
                         "</div>" +
                         "<div id='xs_pkdc_msg_pieC'  style='width: 200px; height: 200px;position: absolute;top: 80px;right: 80px;'></div>" +
                     "</div>"+
@@ -773,8 +773,8 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
     }else if(xs_pkdc_zoneLevel == XS.Main.ZoneLevel.village)
     {
         $('#xs_pkdc_positionBtn').linkbutton({disabled:false});
-        var xs_pkdc_village = '<table id="xs_pkdc_village" class="easyui-datagrid" style="width:100%;height:100%;"></table>';
-        $("#xs_pkdc_msg_barC").append(xs_pkdc_village);
+        var xs_pkdc_village = '<table id="xs_pkdc_village" class="easyui-datagrid" style="width:578px;height:100%;"></table>';
+        $("#xs_pkdc_msg_barC").empty().append(xs_pkdc_village);
 
         if(id != XS.Main.CacheZoneInfos.poorH.villageId){
             var dataN = {pbno: id,pageNo:1};
@@ -960,7 +960,7 @@ XS.Main.Pkjc.showBar = function(regionId,regionName,poorH,poorP,poorRate){
     }
 
     var gridN = xs_pkdc_categoryData.length;
-    if(gridN > 10){
+    if(gridN >=10){
         $("#xs_pkdc_msg_barC").css("height",gridN * 39 + 90);
     }else{
         $("#xs_pkdc_msg_barC").css("height","100%");
