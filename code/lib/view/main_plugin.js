@@ -1384,6 +1384,20 @@ XS.Main.showFunMenu = function(x, y){
     });
 }
 
+//注册当DIV hover时隐藏UTFGrid 提示窗口
+XS.Main.addDivHover2HiddenUTFGridTip = function(id){
+    if(document.getElementById(id)){
+        $("#"+id).hover(
+            function () {
+                $("#xs_utfGridC").css("display","none");
+            },
+            function () {
+                $("#xs_utfGridC").css("display","none");
+            }
+        );
+    }
+}
+
 
 //************************处理点击鼠标右键选中菜单选项处理函数************************************
 //分段专题图 贫困发生率 脱贫率

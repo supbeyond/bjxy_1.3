@@ -47,6 +47,7 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
         '</div>';
 
     XS.CommonUtil.openDialog("xs_main_detail", "调度指挥", "icon-man", content, false, false, false,null, null,0);
+    XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
 
     var tag_sender =
         '<div id="xs_dc_tab_sender" style="padding: 5px; height: 100%; box-sizing: border-box;">'+

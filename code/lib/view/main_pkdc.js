@@ -372,6 +372,8 @@ XS.Main.Pkjc.showGaugeData = function(pop, ratio, family){
                 xs_pkdc_isShowInfoWin = true;
             }
         });
+
+        XS.Main.addDivHover2HiddenUTFGridTip("xs_pkdc_gaugeC");
     }
     xs_pkdc_PopRate = 1;
     xs_pkdc_HuRate = 1;
@@ -628,6 +630,8 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
             XS.Main.Poor.clearRelocationLayer();
             XS.Main.Poor.povertyRelocation(xs_pkdc_zoneLevel, xs_pkdc_currentStateCode);
         });
+
+        XS.Main.addDivHover2HiddenUTFGridTip("xs_pkdc_msgWin");
     }
     //-------------------------加载一次 结束-----------------------------------
     $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/*, width:1020,height:600*/}).window('open');
