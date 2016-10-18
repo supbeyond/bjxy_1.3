@@ -533,25 +533,11 @@ html, body{
     left: 5%;
     top: 10%;
 }
-#xs_searchbox_success{
-    background: url("../img/successChange.png") no-repeat 0 0;
-    width: 18px;
-    height: 18px;
-    border: 0px;
-    display: inline-block;
-    vertical-align1:middle;
-    margin-right: 8px;
-}
-#xs_searchbox_successLable{
-    width: 100%;
-    height: 40px;
-    line-height: 40px;
-}
 #xs_searchbox_resultBaseInf{
     width: 100%;
+    background: #ffffff;
     box-sizing: border-box;
     overflow-y: auto;
-    border-radius: 0px 0px 3px 3px;
 }
 #xs_searchbox_resultBaseInfC{
     width: 100%;
@@ -560,7 +546,7 @@ html, body{
     left: 5%;
     top: 5px;
 }
-.xs_searchbox_baseInfPanelC:hover{
+.xs_searchbox_baseInfPanel:hover{
     background:#eee;
 }
 .xs_searchbox_baseInfPanelC{
@@ -568,25 +554,20 @@ html, body{
     position: relative;
     top: 15px;
     margin-bottom: 15px;
-    cursor: pointer;
 }
 .xs_searchbox_baseInfPanel{
     width: 90%;
     height: auto;
+    cursor: pointer;
     position: relative;
     left: 5%;
     border-radius:3px;
-    border: 1px solid green;
+    border: 1px solid #02BBEE;
 }
-/*
-#xs_searchbox_clearConResult{
-    width: 38px;
-    height: 38px;
-    cursor: pointer;
-    display: inline-block;
-    position: relative;
-    top: 15px;
-    border-left: 1px;
-    background: url("../img/searchbox.png") no-repeat 0 -38px #fff;
-    box-shadow:1px 2px 1px rgba(122,0,0,0.3);
-}*/
+#xs_searchbox_pager{
+    width: 100%;
+    height: 30px;
+    background: #fff;
+    border-top: 1px solid #808080;
+    border-radius: 0px 0px 2px 2px;
+}
