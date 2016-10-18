@@ -8,6 +8,11 @@ var xs_searchbox_townFields = [["ECOCROP","耕地面积(亩)"],["GROUPNUM","自�
     ["TOTALPOP","总人口"],["POORPOP","贫困人口"],["POVERTYRATE","贫困发生率(%)"]];
 var xs_searchbox_villFields = [["TOWN","所属(乡)镇"],["POVERT","贫困发生率(%)"],["POORTYPE","贫困类型"],["B5","耕地面积(亩)"],
     ["B2","总户数"],["B2A","贫困户"],["B3","总人口"],["B3A","贫困人口"]];
+var xs_searchbox_poorH = [["HHNAME","户主"],["PTYPE","农户属性"],["AGE","年龄"],["CARDID","身份证"],["POP","家庭人数"],
+    ["PHONE","联系方式"],["A27","住房面积"],["A33","年收入"],["A28","危房"],["A36","各类补贴"],
+    ["COUNTY","大方县"],["TOWN","乡镇"],["VILL","村"],["VGROUP","组"]];
+var xs_searchbox_replaceFields = [["ALTITUDE","Altitude"],["CARDID","CerNto"],["LATITUDE","Latitude"],["LONGITUDE","Longitude"],["MEMO","Memo"],
+    ["HGID","hguid"],["PB_HHID","hid"],["HHNAME","name"],["POP","num"]];
 
 var xs_search_cashData = [];
 var xs_searchbox_action = "";
@@ -71,6 +76,7 @@ XS.Searchbox.getConKey = function(){
  * 清除输入框的内容和搜索结果
  */
 XS.Searchbox.clearCon = function(){
+    $("#xs_searchbox_content").focus();
     xs_searchbox_isSearch = false;
     $("#xs_searchbox_content").val("");
     $("#xs_searchbox_clear").tooltip("destroy").css({cursor:'default',background:'#fff'});
@@ -121,6 +127,7 @@ XS.Searchbox.searchbox = function(){
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, xs_searchbox_action, data,function(json){
         $("#xs_searchbox_loadingC").css({display:"none"});
         if(json && json.length>0){
+            $("#xs_searchbox_content").select();
             xs_search_cashData = json;
             xs_searchbox_isSearch = true;
             console.log(json);
@@ -129,7 +136,7 @@ XS.Searchbox.searchbox = function(){
                 position: 'bottom',
                 content:'清除'
             });
-
+            $("#xs_searchbox_resultC").empty().append('<div id="xs_searchbox_resultBaseInf"></div>');
             switch (xs_searchbox_type){
                 case '区县':
                 {
@@ -150,7 +157,56 @@ XS.Searchbox.searchbox = function(){
                 case '身份证号':
                 case '电话':
                 {
-                    XS.Searchbox.poorH(json);
+                    XS.Searchbox.regionBaseInfo(json,"","",xs_searchbox_poorH);
+                    //$("#xs_searchbox_resultC").append('<div id="xs_searchbox_pager" style="width: 100%;height: 40px"></div>');
+
+                    var totalPageNum = json[0].TotolSum;
+                    $("#xs_searchbox_pager").pagination({
+                        total:totalPageNum,
+                        displayMsg:"共" + totalPageNum + "记录",
+                        showRefresh:false,
+                        showPageList: false,
+                        onSelectPage:function (pageNumber, pageSize) {
+
+                            $("#xs_searchbox_clear").tooltip("destroy").css({cursor:'default',background:'#fff'});
+                            $("#xs_searchbox_loadingC").css({display:"block"});
+                            var data = {type:xs_searchbox_type,value:xs_searchbox_content,pageNum:pageNumber,pageSize:pageSize,regionid:xs_user_regionId};
+                            //http://61.159.185.196:7060/Service2.svc/QueryHousePeoByHidOfPage?pbno=52242810102&pageNo=1
+                            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryHouseByValueAndType", data, function(nexJson){
+                                $("#xs_searchbox_loadingC").css({display:"none"});
+                                if(json && json.length>0){
+                                    $("#xs_searchbox_content").select();
+                                    $("#xs_searchbox_clear").css({cursor:'pointer',background: 'url("../img/searchbox.png") no-repeat -5px -38px #fff'});
+                                    $('#xs_searchbox_clear').tooltip({
+                                        position: 'bottom',
+                                        content:'清除'
+                                    });
+                                    xs_search_cashData = nexJson;
+                                    XS.Searchbox.regionBaseInfo(nexJson,"","",xs_searchbox_poorH);
+                                    $("#xs_searchbox_pager").pagination('refresh', {
+                                        total:totalPageNum,
+                                        displayMsg:"共" + totalPageNum + "记录",
+                                        showRefresh:false,
+                                        showPageList: false,
+                                        pageNumber:pageNumber
+                                    });
+                                }else{
+                                    $("#xs_searchbox_resultC").animate({height:0},{duration: 1000,complete:function(){
+                                        $("#xs_searchbox_resultC").empty();
+                                    }});
+                                    XS.Searchbox.getConKey();
+                                    XS.CommonUtil.showMsgDialog("","未找到相关数据");
+                                }
+                            },function(){
+                                $("#xs_searchbox_resultC").animate({height:0},{duration: 1000,complete:function(){
+                                    $("#xs_searchbox_resultC").empty();
+                                }});
+                                $("#xs_searchbox_loadingC").css({display:"none"});
+                                XS.Searchbox.getConKey();
+                                XS.CommonUtil.showMsgDialog("","请求失败");
+                            });
+                        }
+                    });
                     break;
                 }
             }
@@ -169,125 +225,9 @@ XS.Searchbox.searchbox = function(){
             XS.Searchbox.getConKey();
             XS.CommonUtil.showMsgDialog("","请求失败");
     });
-};
-/**
- * 姓名、身份证、电话搜索结果只有一条数据直接点位到地图
- */
-XS.Searchbox.jsonsingle = function(){
-            console.log(xs_pkdc_cacheDataArr);
-            var xs_searchbox_resultE = '<div style="width: 100%;height: 100%;line-height: 100%;text-align: center;background: #FFFFDF;border-radius:0 0 2px 2px;">' +
-                '<div id="xs_searchbox_success"></div>' +
-                '<span id="xs_searchbox_successLable">已定位到地图</span>' +
-            '</div>';
-            $("#xs_searchbox_resultC").empty().append(xs_searchbox_resultE);
-            $("#xs_searchbox_resultC").animate({height:40},{duration: 1000,complete:function(){
-                var timeout = window.setTimeout(function(){
-                    $("#xs_searchbox_resultC").animate({height:0},{duration: 1000 ,complete:function(){
-                        $("#xs_searchbox_resultC").empty();
-                    }});
-                },1000);
-            }});
-            XS.Main.Pkjc.onSelectedRowHandler(0,xs_pkdc_cacheDataArr[0]);
 }
 /**
- * 姓名、身份证、电话搜索结果
- * @param json
- */
-XS.Searchbox.poorH = function(json){
-    $("#xs_searchbox_resultC").empty().append('<div id="xs_searchbox_result"></div>');
-    var xs_searchbox_resultCH = (json.length + 2) * 26;
-    $("#xs_searchbox_resultC").animate({height:xs_searchbox_resultCH},{duration: 1000 });
-    $('#xs_searchbox_result').datagrid({
-        data: json,
-        pagination: true,
-        striped: true,
-        onSelect:XS.Searchbox.selectRow,
-        singleSelect: true,
-        pageNumber: 1,
-        rownumbers: true,
-        columns:[[
-            {field: 'name', title: '户主姓名',width:'20%'},
-            {field: 'CertNo', title: '身份证号',width:'38%'},
-            {field: 'hid', title: '户编号',width:'38%'}
-        ]]
-    });
-    if(json.length == 1){
-        XS.Searchbox.selectRow(0,json[0]);
-    }
-    var pager = $("#xs_searchbox_result").datagrid("getPager");
-    var totalPageNum = Math.ceil(json[0].TotolSum/10);
-    pager.pagination({
-        total:totalPageNum,
-        displayMsg:"共" + totalPageNum + "记录",
-        showRefresh:false,
-        showPageList: false,
-        onSelectPage:function (pageNumber, pageSize) {
-
-            $("#xs_searchbox_clear").tooltip("destroy").css({cursor:'default',background:'#fff'});
-            $("#xs_searchbox_loadingC").css({display:"block"});
-            var data = {type:xs_searchbox_type,value:xs_searchbox_content,pageNum:pageNumber,pageSize:pageSize,regionid:xs_user_regionId};
-            //http://61.159.185.196:7060/Service2.svc/QueryHousePeoByHidOfPage?pbno=52242810102&pageNo=1
-            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryHouseByValueAndType", data, function(json){
-                $("#xs_searchbox_loadingC").css({display:"none"});
-                if(json && json.length>0){
-                    $("#xs_searchbox_clear").css({cursor:'pointer',background: 'url("../img/searchbox.png") no-repeat -5px -38px #fff'});
-                    $('#xs_searchbox_clear').tooltip({
-                        position: 'bottom',
-                        content:'清除'
-                    });
-                    xs_search_cashData = json;
-                    $("#xs_searchbox_result").datagrid("loadData", json);
-                    pager.pagination('refresh', {
-                        total:totalPageNum,
-                        displayMsg:"共" + totalPageNum + "记录",
-                        showRefresh:false,
-                        showPageList: false,
-                        pageNumber:pageNumber
-                    });
-                }else{
-                    $("#xs_searchbox_resultC").animate({height:0},{duration: 1000,complete:function(){
-                        $("#xs_searchbox_resultC").empty();
-                    }});
-                    XS.Searchbox.getConKey();
-                    XS.CommonUtil.showMsgDialog("","未找到相关数据");
-                }
-            },function(){
-                $("#xs_searchbox_resultC").animate({height:0},{duration: 1000,complete:function(){
-                    $("#xs_searchbox_resultC").empty();
-                }});
-                $("#xs_searchbox_loadingC").css({display:"none"});
-                XS.Searchbox.getConKey();
-                XS.CommonUtil.showMsgDialog("","请求失败");
-            });
-        }
-    });
-}
-/**
- * 姓名、身份证、电话搜索的行数据点击
- * @param rowIndex
- * @param rowData
- */
-XS.Searchbox.selectRow = function(rowIndex, rowData){
-    switch (xs_searchbox_type) {
-        case '区县':
-        case '乡镇':
-        case '行政村':
-        {
-            //XS.Main.Pkjc.onSelectedRowHandler;
-            break;
-        }
-        case '姓名':
-        case '身份证号':
-        case '电话':
-        {
-            xs_pkdc_cacheDataArr = xs_search_cashData;
-            XS.Main.Pkjc.onSelectedRowHandler(rowIndex, rowData);
-            break;
-        }
-    }
-}
-/**
- * 行政区域搜索结果的基本信息
+ * 搜索结果的基本信息
  * @param json
  * @param regionId
  * @param regionName
@@ -295,7 +235,8 @@ XS.Searchbox.selectRow = function(rowIndex, rowData){
  */
 XS.Searchbox.regionBaseInfo = function(json,regionId,regionName,fields){
     //$("#xs_searchbox_resultC").animate({height:350},{duration: 1000 });
-    $("#xs_searchbox_resultC").empty().append('<div id="xs_searchbox_resultBaseInf"></div>');
+
+    $("#xs_searchbox_resultBaseInf").empty();
     var xs_searchbox_resultBaseInfH = 15;
     for(var i in json) {
         switch (xs_user_regionLevel){
@@ -319,6 +260,7 @@ XS.Searchbox.regionBaseInfo = function(json,regionId,regionName,fields){
             }
         }
         var baseInfData = [];
+        var titileName = json[i][regionName];
         for(var j in fields){
             if(fields[j][0] == "POVERT"){
                 if(xs_searchbox_type == "区县"){
@@ -327,20 +269,39 @@ XS.Searchbox.regionBaseInfo = function(json,regionId,regionName,fields){
                     baseInfData.push({name:fields[j][1],value:(json[i].B3/json[i].B3A).toFixed(2)});
                 }
             }else{
-                baseInfData.push({name:fields[j][1],value:json[i][fields[j][0]]});
+                if(XS.StrUtil.isEmpty(regionId) && XS.StrUtil.isEmpty(regionName) && j>9){
+                    titileName = "贫困户";
+                    var address = "";
+                    for(var k=10;k<fields.length;k++){
+                        address += json[i][fields[k][0]];
+                    }
+                    baseInfData.push({name:"家庭地址",value:address});
+                    break;
+                }else{
+                    baseInfData.push({name:fields[j][1],value:json[i][fields[j][0]]});
+                }
             }
         }
-        var xs_searchbox_baseInf = '<div class="xs_searchbox_baseInfPanelC" regionId="'+ json[i][regionId] + '" regionName="'+ json[i][regionName] + '">' +
-                '<div class="xs_searchbox_baseInfPanel">' +
-                    '<div style="width: 100%;height: 30px;line-height: 30px;background: #E0ECFF;">&nbsp;' + json[i][regionName] + '基本信息</div>' +
-                    '<div style="width: 90%;position: relative;top1: 2px;left: 5%;>' +
-                        XS.Main.Poor.createTable(baseInfData, 2, 30,"color:#00bbee","")
+        var xs_searchbox_baseInf = '';
+        if(!XS.StrUtil.isEmpty(regionId) && !XS.StrUtil.isEmpty(regionName)){
+            xs_searchbox_baseInf += '<div class="xs_searchbox_baseInfPanelC" regionId="' + json[i][regionId] + '" regionName="' + json[i][regionName] + '">';
+        }else{
+            for(var j in xs_searchbox_replaceFields){
+                xs_search_cashData[i][xs_searchbox_replaceFields[j][1]] = xs_search_cashData[i][xs_searchbox_replaceFields[j][0]];
+            }
+            xs_searchbox_baseInf += '<div class="xs_searchbox_baseInfPanelC" regionId="' + i + '">';
+        }
+        xs_searchbox_baseInf += '<div class="xs_searchbox_baseInfPanel">' +
+                    '<div style="width: 100%;height: 30px;line-height: 30px;background: #02BBEE;">&nbsp;' + titileName + '基本信息</div>' +
+                    '<div style="width: 92%;position: relative;top1: 2px;left: 4%;>' +
+                        XS.Main.Poor.createTable(baseInfData, 2, 30,"","color:#00bbee") +
                     '</div>' +
                 '</div>' +
             '</div>';
         $("#xs_searchbox_resultBaseInf").append(xs_searchbox_baseInf);
         xs_searchbox_resultBaseInfH += $(".xs_searchbox_baseInfPanel").outerHeight() + 15;
     }
+    console.log(xs_search_cashData);
     if($(".xs_searchbox_baseInfPanelC").length == 0){
         $("#xs_searchbox_resultC").animate({height:0},{duration: 1000 ,complete:function(){
             $("#xs_searchbox_resultC").empty();
@@ -349,11 +310,14 @@ XS.Searchbox.regionBaseInfo = function(json,regionId,regionName,fields){
         XS.CommonUtil.showMsgDialog("","未找到相关数据");
         return;
     }
-    if(xs_searchbox_resultBaseInfH < 350 ){
+    if(XS.StrUtil.isEmpty(regionId) && XS.StrUtil.isEmpty(regionName) && $("#xs_searchbox_pager").length == 0){
+        $("#xs_searchbox_resultC").append('<div id="xs_searchbox_pager" style1="width: 100%;height: 40px"></div>');
+    }
+    if(xs_searchbox_resultBaseInfH < 320 ){
         $("#xs_searchbox_resultBaseInf").height(xs_searchbox_resultBaseInfH);
-        $("#xs_searchbox_resultC").animate({height:xs_searchbox_resultBaseInfH},{duration: 1000 });
+        $("#xs_searchbox_resultC").animate({height:xs_searchbox_resultBaseInfH + 30},{duration: 1000 });
     }else{
-        $("#xs_searchbox_resultBaseInf").height(350);
+        $("#xs_searchbox_resultBaseInf").height(320);
         $("#xs_searchbox_resultC").animate({height:350},{duration: 1000 });
     }
     $(".xs_searchbox_baseInfPanelC").click(XS.Searchbox.baseInfoClick);
@@ -397,12 +361,19 @@ XS.Searchbox.searchType = function(){
  * 搜索结果选项点击
  */
 XS.Searchbox.baseInfoClick = function(){
+    var objectId = -1;
+    var regionName = "";
     if($(".xs_searchbox_baseInfPanelC").length == 1){
-        var regionId = $(".xs_searchbox_baseInfPanelC").attr("regionId");
-        var regionName = $(".xs_searchbox_baseInfPanelC").attr("regionName");
+        objectId = $(".xs_searchbox_baseInfPanelC").attr("regionId");
+        regionName = $(".xs_searchbox_baseInfPanelC").attr("regionName");
     }else{
-        var regionId = $(this).attr("regionId");
-        var regionName = $(this).attr("regionName");
+        objectId = $(this).attr("regionId");
+        regionName = $(this).attr("regionName");
+    }
+    if(!regionName){
+        xs_pkdc_cacheDataArr = xs_search_cashData;
+        XS.Main.Pkjc.onSelectedRowHandler(objectId, xs_search_cashData[objectId]);
+        return;
     }
     var layerName = "";
     var sql = "";
@@ -417,14 +388,14 @@ XS.Searchbox.baseInfoClick = function(){
         }
         case "乡镇":
         {
-            sql = "县级代码="+regionId.slice(0,6);
+            sql = "县级代码="+objectId.slice(0,6);
             layerName = "Twon_Code";
             regionIdStr = "乡镇代码";
             break;
         }
         case "行政村":
         {
-            sql = "Town_id="+regionId.slice(0,9);
+            sql = "Town_id="+objectId.slice(0,9);
             layerName = "Village_Code";
             regionIdStr = "OldID";
             break;
@@ -441,7 +412,7 @@ XS.Searchbox.baseInfoClick = function(){
             for (i = 0; i < features.length; i++)
             {
                 var data = features[i].data;
-                if(data[regionIdStr] == regionId){
+                if(data[regionIdStr] == objectId){
                     feature = result.recordsets[0].features[i];
                 }
             }
@@ -451,20 +422,20 @@ XS.Searchbox.baseInfoClick = function(){
             xs_zone_vectorLayer.removeAllFeatures();
             xs_zone_vectorLayer.addFeatures(feature);
             xs_currentZoneName = regionName;
-            xs_clickMapFutureId  = regionId;
-            xs_currentZoneCode =  regionId;
+            xs_clickMapFutureId  = objectId;
+            xs_currentZoneCode =  objectId;
             xs_pkdc_isFirstShowInfoWin = true;
             switch (xs_searchbox_type){
                 case "区县":
-                    xs_superZoneCode = Math.floor(regionId/100);
+                    xs_superZoneCode = Math.floor(objectId/100);
                     xs_currentZoneLevel = XS.Main.ZoneLevel.county;
                     break;
                 case "乡镇":
-                    xs_superZoneCode = Math.floor(regionId/1000);
+                    xs_superZoneCode = Math.floor(objectId/1000);
                     xs_currentZoneLevel = XS.Main.ZoneLevel.town;
                     break;
                 case "行政村":
-                    xs_superZoneCode = regionId.slice(0,9);
+                    xs_superZoneCode = objectId.slice(0,9);
                     xs_currentZoneLevel = XS.Main.ZoneLevel.village;
                     break;
             }
