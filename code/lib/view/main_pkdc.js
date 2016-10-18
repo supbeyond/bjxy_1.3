@@ -212,13 +212,14 @@ XS.Main.Pkjc.barOption = {
 //贫困发生率显示的option
 XS.Main.Pkjc.pieOption = {
     legend: {
+        show: true,
         data: ['贫困','非贫困'],
-        orient: 'vertical',
-        top: 50,
-        right: 10
+        /*orient:'vertical',*/
+        bottom: 15,
+        right:10
     },
     tooltip: {
-        show: true,
+        show: false,
         trigger: 'item',
         showContent: true,
         formatter: '{c}'
@@ -248,7 +249,7 @@ XS.Main.Pkjc.pieOption = {
                 name: '非贫困',
                 itemStyle: {
                     normal: {
-                        color: "#008000"
+                        color: "#00bbee"
                     }
                 }
             }]
@@ -453,35 +454,42 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
     if(!document.getElementById("xs_pkdc_msgWin"))
     {
         var winTag =
-        "<div id='xs_pkdc_msgWin' style='width: 1000px; height: 600px;'>" +
-            "<div  id='xs_pkdc_msgC' style=' width: /*100%*/400px; height: 80%; border-bottom: 1px solid #f1f1f1;'>" +
-                "<div id='xs_pkdc_mgsLeft' style='position: relative; width:75%; height:100%; display: inline-block;overflow-y: auto; border-right: 1px solid #f1f1f1;'>" +
-                    "<div id='xs_pkdc_msg_barC'  style='width: /*100%*/400px; height:100%;'></div>" +
-                "</div>" +
-                "<div style='width: 24%; height:100%; display: inline-block;vertical-align: top;'>" +
-
-                    "<div id='xs_pkdc_linkButtonC' style='width: /*100%*/200px; height: 20%;'>" +
-                        "<a id='xs_pkdc_backSuperBtn' href='javascript:void(0);' style='width: 80px; margin: 5px;display: block;'>上一级</a>" +
-                        "<a id='xs_pkdc_positionBtn' href='javascript:void(0);'  style='width: 80px; margin: 5px;display: block;'>定位</a>" +
-                        "<a id='xs_pkdc_poorAdviceBtn' href='javascript:void(0);'  style='width: 80px; margin: 5px;margin-top: 0px;margin-bottom: 20px;'>扶贫意见</a>" +
-
+        "<div id='xs_pkdc_msgWin' style='width: 100%; height: 100%;box-sizing: border-box;'>" +
+        '<table cellpadding="2" bordercolor="#DBDBDB" border="1" style="border-collapse: collapse;width: 100%; height: 100%;font-size: 13px;">' +
+            '<tr style="height: 30px;">' +
+                '<td>' +
+                    "<div id='xs_pkdc_linkButtonC' style='padding-top:2px;vertical-align: middle;'>" +
+                        "<a id='xs_pkdc_backSuperBtn' href='javascript:void(0);' style='width: 80px;height:25px; margin-left:5px; display: inline-block;'>上一级</a>" +
+                        "<a id='xs_pkdc_positionBtn' href='javascript:void(0);'  style='width: 80px;height:25px; margin-left:20px; display: inline-block;'>定位</a>" +
+                        "<a id='xs_pkdc_poorAdviceBtn' href='javascript:void(0);'  style='width: 80px;height:25px; margin-left:20px; '>扶贫意见</a>" +
                     "</div>" +
-                    "<div id='xs_pkdc_msg_pieC'  style='width: /*100%*/200px; height: 80%;'></div>" +
-                "</div>" +
-            "</div>" +
-            "<div style='width: 100%; height: 4%;'></div>" +
-            "<div  id='xs_pkdc_msg_tabC' style='width: 100%; height: 15%;'>" +
-                "<div  id='xs_pkdc_msg_btnC' style='width: 100%; height: 100%;text-align: center;'>" +
-                    "<a id='xs_pkdc_details' href='javascript:void(0);'  style='background: #304655;margin-right: 5px; color: #ffffff;'>详情</a>" +
-                    "<a id='xs_pkdc_dataAnalysis' href='javascript:void(0);'  style='background: #304655;margin-right: 5px;color: #ffffff;'>数据分析</a>" +
-                    "<a id='xs_pkdc_dutyMonitor' href='javascript:void(0);'  style='background: #304655;margin-right: 5px;color: #ffffff;'>责任监控</a>" +
-                    "<a id='xs_pkdc_taskMonitor' href='javascript:void(0);'  style='background: #304655;color: #ffffff;'>任务监控</a>" +
-                    "<div style='margin-top: 5px;'>"+
-                    "<a id='xs_pkdc_itemFund' href='javascript:void(0);'  style='background: #304655;margin-left: -0px;color: #ffffff;'>项目资金</a>" +
-                    "<a id='xs_pkdc_itemRelocate' href='javascript:void(0);'  style='background: #304655;margin-left: 5px;color: #ffffff;'>扶贫搬迁</a>" +
+                '</td>' +
+            '</tr>'+
+            '<tr style="height: 430px;">' +
+                '<td>' +
+                    "<div style='width: 100%;height: 430px;position: relative;'>"+
+                        "<div id='xs_pkdc_mgsLeft' style='width:100%; height:100%;overflow-y: scroll;overflow-x: auto;'>" +
+                            "<div id='xs_pkdc_msg_barC'  style='width: 560px; height:100%;'></div>" +
+                        "</div>" +
+                        "<div id='xs_pkdc_msg_pieC'  style='width: 200px; height: 200px;position: absolute;top: 80px;right: 80px;'></div>" +
                     "</div>"+
-                "</div>" +
-            "</div>" +
+                '</td>' +
+            '</tr>'+
+            '<tr style="height: 70px;">' +
+                '<td>' +
+                    "<div  id='xs_pkdc_msg_tabC' style='width: 100%; height: 100%;'>" +
+                        "<div  id='xs_pkdc_msg_btnC' style='width: 100%; height: 100%;text-align: center;padding-top: 5px;'>" +
+                            "<a id='xs_pkdc_details' href='javascript:void(0);'  style='background: #304655;margin-right: 1px; color: #ffffff;'>详情</a>" +
+                            "<a id='xs_pkdc_dataAnalysis' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;color: #ffffff;'>数据分析</a>" +
+                            "<a id='xs_pkdc_dutyMonitor' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;color: #ffffff;'>责任监控</a>" +
+                            "<a id='xs_pkdc_taskMonitor' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;color: #ffffff;'>任务监控</a>" +
+                            "<a id='xs_pkdc_itemFund' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;;color: #ffffff;'>项目资金</a>" +
+                            "<a id='xs_pkdc_itemRelocate' href='javascript:void(0);'  style='background: #304655;color: #ffffff;'>扶贫搬迁</a>" +
+                        "</div>" +
+                    "</div>" +
+                '</td>' +
+            '</tr>'+
+        "</table>" +
         "</div>";
         $("#xs_MapContainer").append(winTag);
 
@@ -509,10 +517,10 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
             collapsible: false,
             minimizable: false,
             maximizable: false,
-            resizable:true,
+            resizable:false,
             closable: true,
-            width:530,
-            height:630,
+            width:600,
+            height:600,
             left:0,
             top:null,
             tools:[],
@@ -793,7 +801,8 @@ XS.Main.Pkjc.showOccurRatioPie = function(name, ratio){
     XS.Main.Pkjc.pieOption.title = {
         top:240,
         text: '贫困率(' + name +  ')',
-        left: 'center'
+        left: 'center',
+        show:false
     };
     // 使用配置项和数据显示贫困发生率的饼图。
     xs_pkdc_PieChart.setOption(XS.Main.Pkjc.pieOption);
