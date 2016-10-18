@@ -57,6 +57,7 @@ XS.Main.Tjfx.Graph.graph = function(type){
     XS.Main.Pkjc.closeInfoDialog();
     XS.Main.Poor.clearRelocationLayer();
     XS.Searchbox.clearCon();
+    XS.CommonUtil.closeDialog("xs_main_detail");
     xs_isShowUtfGridTip = false;
     XS.Main.hiddenDivTags();
     XS.CommonUtil.closeDialog("xs_main_fmenu_dialog");
