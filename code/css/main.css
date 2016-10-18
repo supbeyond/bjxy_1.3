@@ -473,6 +473,7 @@ html, body{
     border-radius:2px 0 0 2px;
     vertical-align: top;
 }
+
 #xs_searchbox_content{
     width: 180px;
     height: 96%;
@@ -486,7 +487,7 @@ html, body{
     vertical-align: top;
 }
 #xs_searchbox_button:hover{
-    background:url("../img/searchbox.png") no-repeat 0 -76px #2F78E5;
+    background:url("../img/searchbox.png") no-repeat 0 -76px #00aedd;
 }
 #xs_searchbox_button{
     width: 57px;
@@ -496,7 +497,7 @@ html, body{
     border: 0px;
     position: relative;
     border-radius:0 2px 2px 0;
-    background: url("../img/searchbox.png") no-repeat 0 -76px #3385ff;
+    background: url("../img/searchbox.png") no-repeat 0 -76px #00bbee;
     vertical-align: top;
 }
 #xs_searchbox_resultC{
@@ -527,11 +528,15 @@ html, body{
     border-left: 1px solid #eee;
 }
 #xs_searchbox_loading{
-    font-size: 20px;
-    color: #808080;
-    position: absolute;
-    left: 5%;
-    top: 10%;
+    text-align: center;
+    font-size: 16px;
+    color: #00bbee;
+    padding: 5px;
+    /*position: absolute;*/
+   /* left: 5%;
+    top: 10%;*/
+
+    /*border: 1px solid #ff0000;*/
 }
 #xs_searchbox_resultBaseInf{
     width: 100%;
