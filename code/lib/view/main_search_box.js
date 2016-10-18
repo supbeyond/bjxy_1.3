@@ -24,10 +24,10 @@ XS.Searchbox.init = function(){
     var xs_search_box = '<div id="xs_searchbox" class="easyui-panel">' +
         '<div id="xs_searchbox_C">' +
             XS.Searchbox.searchType() +
-            '<input id="xs_searchbox_content" autocomplete="off" placeholder="&nbsp;请输入查询内容" onkeydown1="XS.Searchbox.getConKey();">' +
+            '<input id="xs_searchbox_content" autocomplete="off" placeholder="&nbsp;行政区、贫困户信息查询" onkeydown1="XS.Searchbox.getConKey();">' +
             '<div id="xs_searchbox_clear" class="easyui-panel" onclick="XS.Searchbox.clearCon();">' +
                 '<div id="xs_searchbox_loadingC">' +
-                    '<i id="xs_searchbox_loading" class="fa fa-circle-thin  fa-pulse fa-3x fa-fw xs_loading">' +
+                    '<i id="xs_searchbox_loading" class="fa <!--fa-circle-thin--> fa-spinner fa-pulse fa-3x fa-fw xs_loading">' +
                     '</i>' +
                 '</div>' +
             '</div>' +
