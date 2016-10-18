@@ -24,7 +24,7 @@ XS.Searchbox.init = function(){
     var xs_search_box = '<div id="xs_searchbox" class="easyui-panel">' +
         '<div id="xs_searchbox_C">' +
             XS.Searchbox.searchType() +
-            '<input id="xs_searchbox_content" autocomplete="off" placeholder="&nbsp;类型搜索 空即搜索全部" onkeyup="XS.Searchbox.getConKey();" onkeyup="XS.Searchbox.getConKey();">' +
+            '<input id="xs_searchbox_content" autocomplete="off" placeholder="&nbsp;请输入查询内容" onkeydown1="XS.Searchbox.getConKey();">' +
             '<div id="xs_searchbox_clear" class="easyui-panel" onclick="XS.Searchbox.clearCon();">' +
                 '<div id="xs_searchbox_loadingC">' +
                     '<i id="xs_searchbox_loading" class="fa fa-circle-thin  fa-pulse fa-3x fa-fw xs_loading">' +
@@ -44,6 +44,8 @@ XS.Searchbox.init = function(){
     $("#xs_searchbox_content").keyup(function(e){
         if(e.keyCode == 13){
             XS.Searchbox.searchbox();
+        }else{
+            XS.Searchbox.getConKey();
         }
     });
 }
@@ -130,7 +132,6 @@ XS.Searchbox.searchbox = function(){
             $("#xs_searchbox_content").select();
             xs_search_cashData = json;
             xs_searchbox_isSearch = true;
-            console.log(json);
             $("#xs_searchbox_clear").css({cursor:'pointer',background: 'url("../img/searchbox.png") no-repeat -5px -38px #fff'});
             $('#xs_searchbox_clear').tooltip({
                 position: 'bottom',
@@ -301,7 +302,6 @@ XS.Searchbox.regionBaseInfo = function(json,regionId,regionName,fields){
         $("#xs_searchbox_resultBaseInf").append(xs_searchbox_baseInf);
         xs_searchbox_resultBaseInfH += $(".xs_searchbox_baseInfPanel").outerHeight() + 15;
     }
-    console.log(xs_search_cashData);
     if($(".xs_searchbox_baseInfPanelC").length == 0){
         $("#xs_searchbox_resultC").animate({height:0},{duration: 1000 ,complete:function(){
             $("#xs_searchbox_resultC").empty();
