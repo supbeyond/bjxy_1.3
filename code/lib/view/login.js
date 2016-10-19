@@ -45,7 +45,7 @@ XS.Login.login = function(){
             //加载主页
             XS.Index.loadMain();
         }else{
-            $("#xs_msg").append("用户名或密码有误！");
+            $("#xs_msg").empty().append("用户名或密码有误！");
         }
     }, function(XMLHttpRequest, status){
         if(status && status=='timeout'){ //超时,status还有success,error等值的情况

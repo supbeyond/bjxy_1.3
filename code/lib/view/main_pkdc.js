@@ -23,6 +23,11 @@ XS.Main.Pkjc.gaugeOption = {
             return "";
         }
     },
+    title:{
+        textStyle: {
+            color: '#ff0000'
+        }
+    },
     grid:{
         left:0,
         right:0,
@@ -40,6 +45,14 @@ XS.Main.Pkjc.gaugeOption = {
             min: 0,
             max: 100,
             splitNumber: 5,
+            detail: {
+                show: true,
+                offsetCenter: [0, '40%'],
+                textStyle: {
+                    fontSize: 22,
+                    color:"#00bbee"
+                }
+            },
             radius: '50%',
             axisLine: {
                 lineStyle: {
@@ -62,7 +75,7 @@ XS.Main.Pkjc.gaugeOption = {
                 show: false,
                 top:'bottom',
                 textStyle: {
-                    color: '#59798E',
+                    color: '#ff0000',
                     fontSize: 8
                 }
             },
@@ -77,10 +90,10 @@ XS.Main.Pkjc.gaugeOption = {
             max: 10,
             splitNumber: 10,
             detail: {
-                show: true,
+                show: false,
                 offsetCenter: [0, '60%'],
                 textStyle: {
-                    fontSize: 12
+                    fontSize: 15
                 }
             },
             axisLine: {
@@ -122,7 +135,7 @@ XS.Main.Pkjc.gaugeOption = {
             max: 10,
             splitNumber: 10,
             detail: {
-                show: true,
+                show: false,
                 offsetCenter: [0, '60%'],
                 textStyle: {
                     fontSize: 12
@@ -344,9 +357,11 @@ XS.Main.Pkjc.showGaugeData = function(pop, ratio, family){
     if(!xs_pkdc_GaugeChart)
     {
         var gaugeTag = "<div id='xs_pkdc_gaugeC' style='z-index: 998;'>" +
-            "<div id='xs_pkdc_gauge_bg1' style='width: 104px; height: 104px; position: absolute; top: 98px; right: 300px; z-index: 998;background: #15144a; border-radius: 53px;color: #59798E;font-size: 10px;line-height: 150px;text-align: center;'>人口</div>"+
-            "<div id='xs_pkdc_gauge_bg2' style='width: 136px; height: 136px; position: absolute; top: 78px; right: 152px; z-index: 998;background: #ffffff; border-radius: 68px;color: #59798E;font-size: 10px;line-height: 100px;text-align: center;'>贫困率</div>"+
-            "<div id='xs_pkdc_gauge_bg3' style='width: 104px; height: 104px; position: absolute; top: 98px; right: 36px; z-index: 998;background: #123c66; border-radius: 53px;color: #59798E;font-size: 10px;line-height: 147px;text-align: center;'>户数</div>"+
+            "<div id='xs_pkdc_gauge_bg1' style='width: 104px; height: 104px; position: absolute; top: 97px; right: 300px; z-index: 998;background: #15144a; border-radius: 53px;color: #00bbee;font-size: 10px;line-height: 150px;text-align: center;'>人口</div>"+
+            "<div id='xs_pkdc_gauge_bg1_pop' style='width: 104px; height: 15px;line-height: 15px;text-align: center; position: absolute; top: 178px; right: 300px; z-index: 999;color: #00bbee;font-size: 10px;text-align: center;'></div>"+
+            "<div id='xs_pkdc_gauge_bg2' style='width: 136px; height: 136px; position: absolute; top: 78px; right: 152px; z-index: 998;background: #ffffff; border-radius: 68px;color: #ff0000;font-size: 13px;line-height: 100px;text-align: center;'>贫困率</div>"+
+            "<div id='xs_pkdc_gauge_bg3' style='width: 104px; height: 104px; position: absolute; top: 98px; right: 36px; z-index: 998;background: #123c66; border-radius: 53px;color: #00c400;font-size: 10px;line-height: 147px;text-align: center;'>户数</div>"+
+            "<div id='xs_pkdc_gauge_bg3_hub' style='width: 104px; height: 15px;line-height: 15px;text-align: center; position: absolute; top: 178px; right: 36px; z-index: 999;color: #00bbee;font-size: 10px;text-align: center;'></div>"+
             "<div id='xs_pkdc_gauge' style='width: 440px; height: 300px; position: absolute; top: 0px; right: 0px; z-index: 998; border: 0px;'></div>" +
             "</div>";
 
@@ -377,6 +392,9 @@ XS.Main.Pkjc.showGaugeData = function(pop, ratio, family){
     }
     xs_pkdc_PopRate = 1;
     xs_pkdc_HuRate = 1;
+
+   var bpop = pop;
+   var bfamily = family;
 
    if(pop>10&&pop<=100){
         pop = pop/10;
@@ -422,6 +440,9 @@ XS.Main.Pkjc.showGaugeData = function(pop, ratio, family){
     XS.Main.Pkjc.gaugeOption.series[0].data[0].value = new Number(ratio).toFixed(2); //发生率 0-100
     XS.Main.Pkjc.gaugeOption.series[1].data[0].value = pop; //贫困人口 0-10
     XS.Main.Pkjc.gaugeOption.series[2].data[0].value = family; //贫困户 0-10
+
+    $("#xs_pkdc_gauge_bg1_pop").empty().append(bpop+"");
+    $("#xs_pkdc_gauge_bg3_hub").empty().append(bfamily+"");
 
     $("#xs_pkdc_gaugeC").css("display", "block");
     xs_pkdc_GaugeChart.setOption(XS.Main.Pkjc.gaugeOption);
@@ -640,6 +661,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
     //-------------------------加载一次 结束-----------------------------------
     $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/*, width:1020,height:600*/}).window('open');
     $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
+    $("#xs_pkdc_msg_pieC").css("display","block");
     switch (xs_pkdc_zoneLevel){
         case XS.Main.ZoneLevel.city:{
             xs_pkdc_preName = "毕节市";
@@ -674,6 +696,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
             break;
         }
         case XS.Main.ZoneLevel.village:{
+            $("#xs_pkdc_msg_pieC").css("display","none");
             if(xs_pkdc_zoneLevel == xs_user_regionLevel){
                 XS.Main.Pkjc.reqCurrAndPreName();
             }else{
