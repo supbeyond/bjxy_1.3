@@ -1010,11 +1010,11 @@ XS.Main.Pkjc.showHouseDataGrid = function(){
         loadMsg:"努力加载中...",
         rownumbers: true,
         columns: [[
-            {field: 'name', title: '姓名', width: '19%', resizable: false},
-            {field: 'num', title: '家庭人数', width: '19%', resizable: false},
-            {field: 'TotolSum', title: '年收入', width: '20%', resizable: false},
-            {field: 'CertNo', title: '身份证', width: '20%', resizable: false},
-            {field: 'Altitude', title: '海拔', width: '10%', resizable: false}
+            {field: 'name', title: '姓名', width: '16%', resizable: false},
+            {field: 'num', title: '家庭人数', width: '16%', resizable: false},
+            {field: 'TotolSum', title: '年收入', width: '16%', resizable: false},
+            {field: 'CertNo', title: '身份证', width: '30%', resizable: false},
+            {field: 'Altitude', title: '海拔', width: '16%', resizable: false}
         ]]
     });
     var pager = $("#xs_pkdc_village").datagrid("getPager");

@@ -191,6 +191,7 @@ var xs_pkdc_itemFoundChart = null;
                  XS.CommonUtil.openDialog("xs_main_detail", params.name + "-" + projectName, "icon-man", content, true, false, false, 500, 300,null,100,function(){
                      //$("#xs_pkdc_itemFundRowDataWin").dialog("open");
                  });
+                 XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
 
                  var nodeDataArr = [];
                  var index = params.data.depth + xs_pkdc_itemFoundFIndex;
@@ -202,7 +203,7 @@ var xs_pkdc_itemFoundChart = null;
                          num ++;
                      }
                  }
-                 console.log(nodeDataArr);
+
                  $('#xs_pkdc_itemFundTree_click').datagrid({
                      data: nodeDataArr,
                      fit: true,
