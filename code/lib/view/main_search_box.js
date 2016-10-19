@@ -9,8 +9,8 @@ var xs_searchbox_townFields = [["ECOCROP","耕地面积(亩)"],["GROUPNUM","自�
 var xs_searchbox_villFields = [["TOWN","所属(乡)镇"],["POVERT","贫困发生率(%)"],["POORTYPE","贫困类型"],["B5","耕地面积(亩)"],
     ["B2","总户数"],["B2A","贫困户"],["B3","总人口"],["B3A","贫困人口"]];
 var xs_searchbox_poorH = [["HHNAME","户主"],["PTYPE","农户属性"],["AGE","年龄"],["CARDID","身份证"],["POP","家庭人数"],
-    ["PHONE","联系方式"],["A27","住房面积"],["A33","年收入"],["A28","危房"],["A36","各类补贴"],
-    ["COUNTY","大方县"],["TOWN","乡镇"],["VILL","村"],["VGROUP","组"]];
+    ["PHONE","联系方式"],["A27","住房面积"],["A33","年收入"],["A28","危房"],["A36","各类补贴"],["ISARMYFAMILY","军烈属"],
+    ["MAIN_REASON","致贫原因"],["COUNTY","大方县"],["TOWN","乡镇"],["VILL","村"],["VGROUP","组"]];
 var xs_searchbox_replaceFields = [["ALTITUDE","Altitude"],["CARDID","CerNto"],["LATITUDE","Latitude"],["LONGITUDE","Longitude"],["MEMO","Memo"],
     ["HGID","hguid"],["PB_HHID","hid"],["HHNAME","name"],["POP","num"]];
 
@@ -270,16 +270,22 @@ XS.Searchbox.regionBaseInfo = function(json,regionId,regionName,fields){
                     baseInfData.push({name:fields[j][1],value:(json[i].B3/json[i].B3A).toFixed(2)});
                 }
             }else{
-                if(XS.StrUtil.isEmpty(regionId) && XS.StrUtil.isEmpty(regionName) && j>9){
+                if(XS.StrUtil.isEmpty(regionId) && XS.StrUtil.isEmpty(regionName) && j>11){
                     titileName = "贫困户";
                     var address = "";
-                    for(var k=10;k<fields.length;k++){
+                    for(var k=12;k<fields.length;k++){
                         address += json[i][fields[k][0]];
                     }
                     baseInfData.push({name:"家庭地址",value:address});
                     break;
                 }else{
-                    baseInfData.push({name:fields[j][1],value:json[i][fields[j][0]]});
+                    if(fields[j][0] == "AGE"){
+                        var poorHBirthYear = json[i].CARDID.slice(6,10);
+                        var currentYear = new Date().getFullYear();
+                        baseInfData.push({name:fields[j][1],value:currentYear-poorHBirthYear});
+                    }else{
+                        baseInfData.push({name:fields[j][1],value:json[i][fields[j][0]]});
+                    }
                 }
             }
         }
