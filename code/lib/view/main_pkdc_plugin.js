@@ -190,7 +190,7 @@ XS.Main.Pkjc.DetailPieOpt= {
     },
     legend: {
         top:30,
-        itemGap:0,
+        itemGap:5,
         itemHeight:10,
         data: []
     },
@@ -204,7 +204,7 @@ XS.Main.Pkjc.DetailPieOpt= {
             name: '详情',
             type: 'pie',
             radius: '55%',
-            center: ['50%', '70%'],
+            center: ['50%', '60%'],
             label: {
                 normal: {
                     show: false
@@ -263,7 +263,6 @@ var xs_pkdc_AnalysTabsChartArr = [];
 var xs_pkdc_detailTabsIndex = -1;
 var xs_pkdc_detailPieMinW = 0;
 var xs_pkdc_detailPieMinH = 0;
-var xs_pkdc_detailDomW = 0;
 var xs_pkdc_detailDomH = 0;
 
 //详情点击函数
@@ -271,8 +270,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
     xs_pkdc_AnalysTabsChartArr = [];
     xs_pkdc_detailTabsIndex = -1;
     xs_pkdc_AnalysTabsCInit = null;
-    xs_pkdc_detailDomW = 850;
-    xs_pkdc_detailDomH = 502;
+    xs_pkdc_detailDomH = 524;
     XS.Main.Pkjc.minInfoWinDialog();
     var jsonObj = null;
     var data = null;
@@ -280,7 +278,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
     {
         //(titleAttr,tabsId,position,isFit,headerWidth,plain,width,height)
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.city.title,"xs_pkdc_detailTabs","top");
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
         $("#xs_pkdc_detailTabs").tabs({tabWidth:121,tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
@@ -289,7 +287,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
         XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryCityBasicStatByFId", data, function(json) {
             $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
             if(json) {
-                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.city.tabs[0].name, XS.Main.Pkjc.detailKV.city.tabs[0].value, 5, 40);
+                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.city.tabs[0].name, XS.Main.Pkjc.detailKV.city.tabs[0].value, 3, 35);
                 //土地信息的pie显示
                 XS.Main.Pkjc.tabsContentPie("国有土地分布图", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "xs_pkdc_tabsContentPie", [], "");
             }else{
@@ -329,7 +327,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
                     $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
                     if(json) {
-                        XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.city.tabs[index].name, XS.Main.Pkjc.detailKV.city.tabs [index].value, 5, 40);
+                        XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.city.tabs[index].name, XS.Main.Pkjc.detailKV.city.tabs [index].value, 3, 35);
                         switch (index) {
                             case 0 ://土地信息
                                 //土地信息的pie显示
@@ -390,7 +388,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
     }else if(level == XS.Main.ZoneLevel.county)
     {
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.county.title,"xs_pkdc_detailTabs","top",false);
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
         $("#xs_pkdc_detailTabs").tabs({tabWidth:106,tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
@@ -463,7 +461,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
                     $("#xs_pkdc_pkBaseData_loading").css({"visibility": "hidden"});
                     if(json && (index==4|| json.length > 0)) {
-                        XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.county.tabs[index].name, XS.Main.Pkjc.detailKV.county.tabs[index].value, 5, 40);
+                        XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.county.tabs[index].name, XS.Main.Pkjc.detailKV.county.tabs[index].value, 3, 35);
                         switch (index) {
                             case 1 ://土地信息
                                 //土地信息的pie显示
@@ -524,7 +522,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
     }else if(level == XS.Main.ZoneLevel.town)
     {
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.town.title,"xs_pkdc_detailTabs","top",false);
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
         $("#xs_pkdc_detailTabs").tabs({tabWidth:215,tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
@@ -566,7 +564,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
                                 XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value, 2, 50);
                                 break;
                             case 1 ://基本统计
-                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value, 5, 40);
+                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value, 3, 35);
                                 $("#xs_pkdc_tabsContentBtn").css("display", "block");
                                 $("#xs_pkdc_tabsContentBtn1").linkbutton({text: "村、户及人口情况"});
                                 $("#xs_pkdc_tabsContentBtn2").linkbutton({text: "资助、务工及少数民族"});
@@ -586,11 +584,11 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
                                 });
                                 break;
                             case 2 ://公共服务
-                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value, 5, 40);
+                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value, 3, 35);
                                 XS.Main.Pkjc.tabsContentPie("公共设施分布情况", [0, 1, 2, 3, 4, 5, 6], "xs_pkdc_tabsContentPie", [], "");
                                 break;
                             case 3 ://生产生活
-                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value, 5, 40);
+                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value, 3, 35);
                                 XS.Main.Pkjc.dynScatterSeries("扶贫措施", [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "xs_pkdc_tabsContentPie", 100);
                                 break;
                         }
@@ -603,7 +601,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
     }else if(level == XS.Main.ZoneLevel.village)
     {
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.village.title,"xs_pkdc_detailTabs","top",false);
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
         $("#xs_pkdc_detailTabs").tabs({tabWidth:215,tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
@@ -645,11 +643,11 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
                                 XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.village.tabs[index].name, XS.Main.Pkjc.detailKV.village.tabs[index].value, 2, 50);
                                 break;
                             case 1://基本统计
-                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.village.tabs[index].name, XS.Main.Pkjc.detailKV.village.tabs[index].value, 5, 40);
+                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.village.tabs[index].name, XS.Main.Pkjc.detailKV.village.tabs[index].value, 3, 35);
                                 XS.Main.Pkjc.tabsContentPie("国有土地分布图", [5, 6, 7, 8, 9], "xs_pkdc_tabsContentPie", [], "");
                                 break;
                             case 2://人口信息
-                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.village.tabs[index].name, XS.Main.Pkjc.detailKV.village.tabs[index].value, 5, 30);
+                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.village.tabs[index].name, XS.Main.Pkjc.detailKV.village.tabs[index].value, 3, 30);
                                 $("#xs_pkdc_tabsContentBtn").css("display", "block");
                                 $("#xs_pkdc_tabsContentBtn1").linkbutton({text: "户、人口及资助情况"});
                                 $("#xs_pkdc_tabsContentBtn2").linkbutton({text: "健康、劳动力及参培"});
@@ -669,7 +667,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
                                 });
                                 break;
                             case 3://公共服务
-                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.village.tabs[index].name, XS.Main.Pkjc.detailKV.village.tabs[index].value, 5, 40);
+                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.village.tabs[index].name, XS.Main.Pkjc.detailKV.village.tabs[index].value, 3, 35);
                                 XS.Main.Pkjc.tabsContentPie("公共设施情况", [0, 1, 2, 3, 4], "xs_pkdc_tabsContentPie", [], "");
                                 break;
                         }
@@ -686,22 +684,25 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
     XS.Main.hiddenLayers();
     XS.Main.clearMap();
     xs_pkdc_AnalysTabsCInit = null;
+    xs_pkdc_isAnalysMax = false;
     xs_pkdc_AnalysTabsChartArr = [];
     XS.Main.Pkjc.minInfoWinDialog();
     var xs_pkdc_analyIndex = 0;
-    if(level == XS.Main.ZoneLevel.city)
+    if(level == XS.Main.ZoneLevel.city)//(titleAttr,tabsId,position,isFit,plain,width,height,headerWidth,tabHeight)
     {
         var tabTile = ["饮水分析","异地搬迁","培训分析","社会保障","危房情况","脱贫分析","致贫原因","文化程度"];
         var content = '<div id="xs_pkdc_AnalysTabsC" style="padding: 2px 2px 2px 0px;box-sizing: border-box;height: 100%;">' +
-                XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",false,true,800,545,70,40) +
+                XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",true,true,585,560,70,40) +
             '</div>';
         $("#xs_pkdc_AnalysTabs").css({boxSizing: "border-box"});
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 700,600,0,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
 
-        selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab",0);
-        selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box;border-right1: 1px solid green;;"></div>');
+       selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab",0);
+        selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChartC" style="width:100%;height: 100%;overflow-x: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;;">' +
+                '<div id="xs_pkdc_AnalysTabsChart" style="width:610px;height: 100%;overflow-x1: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;"></div>' +
+            '</div>');
 
-        var data = {pd_id:currentCode};
+         var data = {pd_id:currentCode};
         $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
         XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryUnSafeWaterBycount", data, function(json) {
             $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
@@ -709,7 +710,7 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
                 var xAxis = ['','category',[],true];
                 var series = [['未安全饮水人数','bar',0,[],null],['未安全饮水率','line',1,[],false]];
                 XS.Main.Pkjc.ananlyValueOfJson(json,[xAxis[2],series[0][3],series[1][3]],['REGION_Name','UnwaterNum','UnwaterRate'],'',[]);
-                XS.Main.Pkjc.ciAnalyOpt([5,'饮水分析'],['axis',['line',""]],[40,['未安全饮水人数','未安全饮水率']],[120,40,80,40],xAxis,
+                XS.Main.Pkjc.ciAnalyOpt([5,'饮水分析'],['axis',['line',""]],[40,['未安全饮水人数','未安全饮水率']],[120,40,60,30],xAxis,
                     [['人数','value'],['(%)','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
             }else{
                 $('#xs_pkdc_AnalysTabsChart').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
@@ -747,9 +748,15 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
                         action = "QueryGroupbyeduById";
                         break;
                 }
-                $("#xs_pkdc_AnalysTabsChart").remove();
+                $("#xs_pkdc_AnalysTabsChartC").remove();
                 selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab",index);
-                selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box"></div>');
+
+                selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChartC" style="width:100%;height: 100%;overflow-x: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;;">' +
+                    '<div id="xs_pkdc_AnalysTabsChart" style="width:610px;height: 100%;overflow-x1: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;"></div>' +
+                    '</div>');
+                if(xs_pkdc_isAnalysMax){
+                    $("#xs_pkdc_AnalysTabsChart").css({width:"100%"});
+                }
                 data = {pd_id:currentCode,pid:currentCode};
                 $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
@@ -788,7 +795,7 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
                                 var lineSeries = [['培训率','line',0,[],false],['省外务工率','line',0,[],false],['省内务工率','line',0,[],false]];
                                 XS.Main.Pkjc.ananlyValueOfJson(json,[yAxis[0][2],series[0][3],series[1][3],series[2][3],series[3][3],lineXAxis[2],lineSeries[0][3],lineSeries[1][3],lineSeries[2][3]],
                                     ['REGION_Name','InWorkNum','OutWorkNum','LaborNum','TrainNum','REGION_Name','TrainRate','OutWorkRate','InWorkRate'],'',[]);
-                                XS.Main.Pkjc.ciAnalyOpt([5,'培训分析'],['axis',['shadow']],legend,[90,40,80,20],['','value'],yAxis,[],[],series,"xs_pkdc_AnalysTabsChart1");
+                                XS.Main.Pkjc.ciAnalyOpt([5,'培训分析'],['axis',['shadow']],legend,[90,40,80,40],['','value'],yAxis,[],[],series,"xs_pkdc_AnalysTabsChart1");
                                 XS.Main.Pkjc.ciAnalyOpt([],['axis',['line']],[30,['培训率',"省外务工率","省内务工率"]],[60,40,40,30],lineXAxis,[['(%)','value']],[],[],lineSeries,"xs_pkdc_AnalysTabsChart2");
                                 break;
                             case 3 ://社会保障
@@ -843,13 +850,15 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
         xs_pkdc_AnalysTabsChartArr = [];
         var tabTile = ["文化程度", "致贫原因", "帮扶措施", "五通四有", "四有五覆盖"];
         var content = '<div style="padding: 2px 2px 2px 0px;box-sizing: border-box;height: 100%;">' +
-                XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",false,true,800,545,70,40) +
+                XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",true,true,800,545,70,40) +
             '</div>';
         $("#xs_pkdc_AnalysTabs").css({boxSizing: "border-box"});
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 700,600,0,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
 
         var selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", 0);
-        selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box;"></div>');
+        selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChartC" style="width:100%;height: 100%;overflow-x: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;;">' +
+            '<div id="xs_pkdc_AnalysTabsChart" style="width:610px;height: 100%;overflow-x1: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;"></div>' +
+            '</div>');
         //文化程度
         var data = {pid: currentCode};
         $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
@@ -887,10 +896,14 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
                         action = "QueryFourFiveByAreaId";
                         break;
                 }
-                $("#xs_pkdc_AnalysTabsChart").remove();
+                $("#xs_pkdc_AnalysTabsChartC").remove();
                 selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", index);
-                selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box"></div>');
-
+                selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChartC" style="width:100%;height: 100%;overflow-x1: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;;">' +
+                    '<div id="xs_pkdc_AnalysTabsChart" style="width:610px;height: 100%;overflow-x1: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;"></div>' +
+                    '</div>');
+                if(xs_pkdc_isAnalysMax){
+                    $("#xs_pkdc_AnalysTabsChart").css({width:"100%"});
+                }
                 data = {cid:currentCode,pd_id:currentCode,pid:currentCode};
                 $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
@@ -963,12 +976,14 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
         xs_pkdc_AnalysTabsChartArr = [];
         var tabTile = ["文化程度", "致贫原因", "帮扶措施", "五通四有", "四有五覆盖"];
         var content = '<div style="padding:  2px 2px 2px 0px;box-sizing: border-box;height: 100%;">' +
-            XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",false,true,800,545,70,40) +
+            XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",true,true,800,545,70,40) +
             '</div>';
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 700,600,0,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
 
         var selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", 0);
-        selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box;"></div>');
+        selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChartC" style="width:100%;height: 100%;overflow-x: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;;">' +
+            '<div id="xs_pkdc_AnalysTabsChart" style="width:610px;height: 100%;overflow-x1: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;"></div>' +
+            '</div>');
         //文化程度
         var data = {pid:currentCode};
         $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
@@ -1009,10 +1024,14 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
                         action = "QueryFourFiveByAreaId";
                         break;
                 }
-                $("#xs_pkdc_AnalysTabsChart").remove();
+                $("#xs_pkdc_AnalysTabsChartC").remove();
                 selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", index);
-                selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box"></div>');
-
+                selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChartC" style="width:100%;height: 100%;overflow-x1: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;;">' +
+                    '<div id="xs_pkdc_AnalysTabsChart" style="width:610px;height: 100%;overflow-x1: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;"></div>' +
+                    '</div>');
+                if(xs_pkdc_isAnalysMax){
+                    $("#xs_pkdc_AnalysTabsChart").css({width:"100%"});
+                }
                 data = {pd_id:currentCode,pid:currentCode,cid:currentCode};
                 $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
@@ -1086,12 +1105,14 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
         xs_pkdc_AnalysTabsChartArr = [];
         var tabTile = ["文化程度", "致贫原因", "帮扶措施", "五通四有", "四有五覆盖","脱贫进展"];
         var content = '<div style="padding: 2px 2px 2px 0px;box-sizing: border-box;height: 100%;">' +
-            XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",false,true,800,545,70,40) +
+            XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",true,true,800,545,70,40) +
             '</div>';
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 400,600,0,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 700,600,0,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
 
         var selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", 0);
-        selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box;"></div>');
+        selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChartC" style="width:100%;height: 100%;overflow-x: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;;">' +
+            '<div id="xs_pkdc_AnalysTabsChart" style="width:610px;height: 100%;overflow-x1: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;"></div>' +
+            '</div>');
         //文化程度
         var data = {pid:currentCode};
         $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
@@ -1132,10 +1153,14 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
                         action = "QueryFourFiveByAreaId";
                         break;
                 }
-                $("#xs_pkdc_AnalysTabsChart").remove();
+                $("#xs_pkdc_AnalysTabsChartC").remove();
                 selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", index);
-                selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChart" style="width:100%;height: 100%;box-sizing: border-box"></div>');
-
+                selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChartC" style="width:100%;height: 100%;overflow-x1: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;;">' +
+                    '<div id="xs_pkdc_AnalysTabsChart" style="width:610px;height: 100%;overflow-x1: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;"></div>' +
+                    '</div>');
+                if(xs_pkdc_isAnalysMax){
+                    $("#xs_pkdc_AnalysTabsChart").css({width:"100%"});
+                }
                 data = {pd_id:currentCode,pid:currentCode,cid:currentCode,vid:currentCode};
                 $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
@@ -1162,12 +1187,12 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
                                 XS.Main.Pkjc.ciAnalyOpt([5,'致贫原因'],['',[]],[],[],[],[],radar,[],series,"xs_pkdc_AnalysTabsChart",['rgba(0,0,255,1)']);
                                 break;
                             case 2 ://帮扶措施
-                                /*var legend = [40,["低保人数","参加培训人数","异地扶贫搬迁户","异地扶贫搬迁人数","危房改造户"]];
+                                var legend = [40,["低保人数","参加培训人数","异地扶贫搬迁户","异地扶贫搬迁人数","危房改造户"]];
                                 var xAxis = ['','category',legend[1],true];
                                 var series = [['帮扶措施','bar',0,[],null]];
                                 XS.Main.Pkjc.ananlyValueOfJson(json,[series[0][3],series[0][3],series[0][3],series[0][3],series[0][3]],
                                     ['cps_lowgaran_pop','cps_outpov_pop','cps_move_hhnum','cps_move_pop','cps_reconstru_hhnum'],'',[]);
-                                XS.Main.Pkjc.ciAnalyOpt([5,'帮扶措施'],['',[]],legend,[120,40,80,40],xAxis,[['人数','value']],[],[],series,"xs_pkdc_AnalysTabsChart");*/
+                                XS.Main.Pkjc.ciAnalyOpt([5,'帮扶措施'],['',[]],legend,[120,40,80,40],xAxis,[['人数','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
                                 break;
                             case 3 ://五通四有
                                 XS.Main.Pkjc.viAnaly54(json,"xs_pkdc_AnalysTabsChart");
@@ -1187,7 +1212,7 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
                                 XS.Main.Pkjc.ciAnalyOpt([5,'五通四有'],['axis',['line']],legend,[200,80,60,40],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);*/
                                 break;
                             case 4 ://四有五覆盖
-                               /* var field = ["CoMedicNum","EduHelpNum","ElectricSafeNum","HouseSafeNum","IndustyNum","InsureNum","WaterSafeNum","WorkSkillNum","YardHardNum","EnroadHardNum"];
+                                var field = ["CoMedicNum","EduHelpNum","ElectricSafeNum","HouseSafeNum","IndustyNum","InsureNum","WaterSafeNum","WorkSkillNum","YardHardNum","EnroadHardNum"];
                                 var xAxis = ['','category',["新合作医疗","教育帮扶","用电安全","住房安全","有产业支持","参加保险","饮水安全","劳动技能","院坝硬化","入户路硬化"]];
                                 var legend = [60,[],[]];
                                 XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
@@ -1199,7 +1224,7 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
                                         series[i][3].push(json[i][field[j]]);
                                     }
                                 }
-                                XS.Main.Pkjc.ciAnalyOpt([5,'四有五覆盖'],['axis','line'],legend,[250,80,80,40],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);*/
+                                XS.Main.Pkjc.ciAnalyOpt([5,'四有五覆盖'],['axis','line'],legend,[250,80,80,40],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
                                 break;
                             case 5 ://脱贫进展
 
@@ -1239,7 +1264,7 @@ XS.Main.Pkjc.clickItemFund = function(currentName){
                 "</div>" +
             '</div>' +
         '</div>';
-    XS.CommonUtil.openDialog("xs_main_detail", currentName + "-项目资金", "icon-man", content, false, true, false, 450,600,0,null,function(){
+    XS.CommonUtil.openDialog("xs_main_detail", currentName + "-项目资金", "icon-man", content, false, true, false, 600,600,0,null,function(){
         $("#xs_echartjs").empty().append('<script src="../base/echart/echarts.js"></script>');
     },function(){
         $("#xs_pkdc_itemFundRowDataTreeC").css("width","100%");
@@ -1346,9 +1371,11 @@ XS.Main.Pkjc.dataTable = function(json,nameArr,valueArr,columnNum,rowH){
 
      $("#xs_pkdc_tabsContent").empty().append(XS.Main.Poor.createTable(xs_pkdc_btnCliDatagridObj, columnNum, rowH,"color:#00bbee",""));
      $(".datagrid-wrap").css("width","auto");
-     var tabsContentDomH = $("#xs_pkdc_tabsContentDom").height();
 
-     var pieDomHeight = xs_pkdc_detailDomH - Math.ceil(xs_pkdc_btnCliDatagridObj.length/columnNum)*rowH - 5;
+     var tabsContentDomH = $("#xs_pkdc_tabsContentDom").outerHeight();
+
+
+     var pieDomHeight = tabsContentDomH - Math.ceil(xs_pkdc_btnCliDatagridObj.length/columnNum)*rowH;
      $("#xs_pkdc_tabsContentPie").css({height: pieDomHeight});
 
 }
@@ -1441,7 +1468,9 @@ XS.Main.Pkjc.dynScatterSeries = function(title,indexArr,domId,reduceMultiple){
         xs_pkdc_scatterSeries.data = [[(Math.random())*100,(Math.random())*100,xs_pkdc_btnCliDatagridObj[indexArr[i]].value,xs_pkdc_btnCliDatagridObj[indexArr[i]].name,reduceMultiple]];
         XS.Main.Pkjc.scatterOption.series.push(xs_pkdc_scatterSeries);
     }
-    echarts.init(document.getElementById(domId)).setOption(XS.Main.Pkjc.scatterOption);
+    xs_pkdc_AnalysTabsCInit = echarts.init(document.getElementById(domId));
+    xs_pkdc_AnalysTabsChartArr.push(xs_pkdc_AnalysTabsCInit);
+    xs_pkdc_AnalysTabsCInit.setOption(XS.Main.Pkjc.scatterOption);
 }
 /**
  * 根据选中的标签卡动态加载content
@@ -1451,15 +1480,14 @@ XS.Main.Pkjc.detailWindowTabs = function(index){
     xs_pkdc_detailTabsIndex = index;
     $("#xs_pkdc_tabsContentDom").remove();
     var selectTab = $("#xs_pkdc_detailTabs").tabs("getTab",index);//#FFF
-    selectTab.append('<div id="xs_pkdc_tabsContentDom" style="width:' + xs_pkdc_detailDomW + 'px;height:' + xs_pkdc_detailDomH + 'px;paddign:0px;border1:1px solid green;"></div>');
+    selectTab.append('<div id="xs_pkdc_tabsContentDom" style="width1:100% ;height:'+ xs_pkdc_detailDomH +'px;overflow: hidden;paddign:0px;border1:1px solid green;"></div>');
 
     $("#xs_pkdc_tabsContentDom").append('<div id="xs_pkdc_tabsContent" style="margin: 0px;"></div>');
     $("#xs_pkdc_tabsContentDom").append('<div id="xs_pkdc_tabsContentPie" style="margin:0px;border1:1px solid green;"></div>');
     $("#xs_pkdc_tabsContentPie").append('<div id="xs_pkdc_tabsContentBtn" style="display: none;height:10%;" align="right"></div>');
-    $("#xs_pkdc_tabsContentPie").append('<div id="xs_pkdc_tabsContPieDiv1" style="width:33%;height:88%;display: inline-block;"></div>');
-    $("#xs_pkdc_tabsContentPie").append('<div id="xs_pkdc_tabsContPieDiv2" style="width:33%;height:88%;display: inline-block;"></div>');
-    $("#xs_pkdc_tabsContentPie").append('<div id="xs_pkdc_tabsContPieDiv3" style="width:33%;height:88%;display: inline-block;"></div>');
-
+    $("#xs_pkdc_tabsContentPie").append('<div id="xs_pkdc_tabsContPieDiv1" style="width:50%;height:88%;display: inline-block;"></div>');
+    $("#xs_pkdc_tabsContentPie").append('<div id="xs_pkdc_tabsContPieDiv2" style="width:50%;height:88%;display: inline-block;"></div>');
+    //$("#xs_pkdc_tabsContentPie").append('<div id="xs_pkdc_tabsContPieDiv3" style="width:33%;height:88%;display: inline-block;"></div>');
     $("#xs_pkdc_tabsContentBtn").append('<a id="xs_pkdc_tabsContentBtn1" href="javascript:void(0);" style="background: #ffffff;margin-right: 10px;"></a>');
     $("#xs_pkdc_tabsContentBtn").append('<a id="xs_pkdc_tabsContentBtn2" href="javascript:void(0);" style="background: #ffffff;margin-right: 10px;"></a>');
     $("#xs_pkdc_tabsContentBtn1,#xs_pkdc_tabsContentBtn2").linkbutton();
@@ -1746,10 +1774,9 @@ XS.Main.Pkjc.detailMaxCall = function(){
         fit:true
     });
     $("#xs_pkdc_detailTabs").tabs("resize");
-    $("#xs_pkdc_tabsContentDom").css({width:selectTab.width(),height:selectTab.height()-5});
-    xs_pkdc_detailDomW  = selectTab.width();
-    xs_pkdc_detailDomH = selectTab.height()-5;
-    var pieDomHeight = xs_pkdc_detailDomH - $("#xs_pkdc_tabsContent").height()-5;
+    $("#xs_pkdc_tabsContentDom").css({width:selectTab.width(),height:selectTab.height()});
+    xs_pkdc_detailDomH = selectTab.height();
+    var pieDomHeight = xs_pkdc_detailDomH - $("#xs_pkdc_tabsContent").height();
     $("#xs_pkdc_tabsContentPie").css({height: pieDomHeight});
     if(xs_pkdc_AnalysTabsChartArr.length > 0){
         for(var i in xs_pkdc_AnalysTabsChartArr){
@@ -1761,16 +1788,15 @@ XS.Main.Pkjc.detailMaxCall = function(){
  * 详情的窗口最小化回调函数
  */
 XS.Main.Pkjc.detailMinCall = function(){
-    $("#xs_pkdc_tabsContentDom").css({width:"850px",height:"402px"});
+    $("#xs_pkdc_tabsContentDom").css({width:"100%",height:"524px"});
     var selectTab = $("#xs_pkdc_detailTabs").tabs("getTab",xs_pkdc_detailTabsIndex);
     $("#xs_pkdc_detailTabs").tabs({
         fit:false,
         height:xs_pkdc_detailPieMinH
     });
     $("#xs_pkdc_detailTabs").tabs("resize");
-    xs_pkdc_detailDomW  = 850;
-    xs_pkdc_detailDomH = 502;
-    var pieDomHeight = xs_pkdc_detailDomH - $("#xs_pkdc_tabsContent").height()-5;
+    xs_pkdc_detailDomH = 524;
+    var pieDomHeight = xs_pkdc_detailDomH - $("#xs_pkdc_tabsContent").height();
     $("#xs_pkdc_tabsContentPie").css({height: pieDomHeight});
     if(xs_pkdc_AnalysTabsChartArr.length > 0){
         for(var i in xs_pkdc_AnalysTabsChartArr){
@@ -1778,16 +1804,18 @@ XS.Main.Pkjc.detailMinCall = function(){
         }
     }
 }
+var xs_pkdc_isAnalysMax = false;
 /**
  * 项目资金的窗口最大化回调函数
  * @constructor
  */
 XS.Main.Pkjc.ItemFoundMaxCall = function(){
+    xs_pkdc_isAnalysMax = true;
     $("#xs_pkdc_AnalysTabs").tabs({
-        fit:true,
         headerWidth:100
     });
     $("#xs_pkdc_AnalysTabs").tabs("resize");
+    $("#xs_pkdc_AnalysTabsChart").css({width:"100%"});
     if(xs_pkdc_AnalysTabsChartArr.length == 1){
         xs_pkdc_AnalysTabsChartArr[0].resize();
     }else if(xs_pkdc_AnalysTabsChartArr.length == 2){
@@ -1800,14 +1828,13 @@ XS.Main.Pkjc.ItemFoundMaxCall = function(){
  * @constructor
  */
 XS.Main.Pkjc.ItemFoundMinCall = function(){
-    $("#xs_pkdc_AnalysTabs").tabs({
-        fit:false,
-        width:800,
-        height:545,
-        headerWidth:70
 
+    xs_pkdc_isAnalysMax = false;
+    $("#xs_pkdc_AnalysTabs").tabs({
+        headerWidth:70
     });
     $("#xs_pkdc_AnalysTabs").tabs("resize");
+    $("#xs_pkdc_AnalysTabsChart").css({width:"610px"});
     if(xs_pkdc_AnalysTabsChartArr.length == 1){
         xs_pkdc_AnalysTabsChartArr[0].resize();
     }else if(xs_pkdc_AnalysTabsChartArr.length == 2){
