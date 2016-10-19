@@ -357,7 +357,7 @@ XS.Main.Pkjc.showGaugeData = function(pop, ratio, family){
     if(!xs_pkdc_GaugeChart)
     {
         var gaugeTag = "<div id='xs_pkdc_gaugeC' style='z-index: 998;'>" +
-            "<div id='xs_pkdc_gauge_bg1' style='width: 104px; height: 104px; position: absolute; top: 97px; right: 300px; z-index: 998;background: #15144a; border-radius: 53px;color: #00bbee;font-size: 10px;line-height: 150px;text-align: center;'>人口</div>"+
+            "<div id='xs_pkdc_gauge_bg1' style='width: 104px; height: 104px; position: absolute; top: 97px; right: 300px; z-index: 998;background: #15144a; border-radius: 53px;color: #00c400;font-size: 10px;line-height: 150px;text-align: center;'>人口</div>"+
             "<div id='xs_pkdc_gauge_bg1_pop' style='width: 104px; height: 15px;line-height: 15px;text-align: center; position: absolute; top: 178px; right: 300px; z-index: 999;color: #00bbee;font-size: 10px;text-align: center;'></div>"+
             "<div id='xs_pkdc_gauge_bg2' style='width: 136px; height: 136px; position: absolute; top: 78px; right: 152px; z-index: 998;background: #ffffff; border-radius: 68px;color: #ff0000;font-size: 13px;line-height: 100px;text-align: center;'>贫困率</div>"+
             "<div id='xs_pkdc_gauge_bg3' style='width: 104px; height: 104px; position: absolute; top: 98px; right: 36px; z-index: 998;background: #123c66; border-radius: 53px;color: #00c400;font-size: 10px;line-height: 147px;text-align: center;'>户数</div>"+
