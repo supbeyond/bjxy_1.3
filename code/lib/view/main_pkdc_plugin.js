@@ -266,7 +266,7 @@ var xs_pkdc_detailPieMinH = 0;
 var xs_pkdc_detailDomH = 0;
 
 //详情点击函数
-XS.Main.Pkjc.clickDetail = function(level,currentName){
+XS.Main.Pkjc.clickDetail = function(level,currentName,currentId){
     xs_pkdc_AnalysTabsChartArr = [];
     xs_pkdc_detailTabsIndex = -1;
     xs_pkdc_AnalysTabsCInit = null;
@@ -399,7 +399,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
         var json = XS.Main.CacheZoneInfos.county;
         if(json && json.length>1) {
             for (var i = 0; i < json.length; i++) {
-                if (json[i].CBI_ID == xs_pkdc_currentStateCode) {
+                if (json[i].CBI_ID == currentId) {
                     jsonObj = [
                         {"name": "县区名称:", "value": json[i].CBI_NAME},
                         {"name": "县ID:", "value": json[i].CBI_ID},
@@ -418,7 +418,33 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
                 }
             }
         }else{
-            $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+            var data = {pbno: xs_cityID};
+            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryCountyBaseInfoByareaId", data, function(json){
+                if(json && json.length>0){
+                    XS.Main.CacheZoneInfos.county = json;
+                    for (var i = 0; i < json.length; i++) {
+                        if (json[i].CBI_ID == currentId) {
+                            jsonObj = [
+                                {"name": "县区名称:", "value": json[i].CBI_NAME},
+                                {"name": "县ID:", "value": json[i].CBI_ID},
+                                {"name": "乡镇数:", "value": json[i].CBI_TOWNS_NUM},
+                                {"name": "行政村数:", "value": json[i].CBI_VILLAGE_NUM},
+                                {"name": "面积:", "value": json[i].CBI_AREA},
+                                {
+                                    "name": "特色产业:",
+                                    "value": XS.StrUtil.isEmpty(json[i].CBI_MAIN_INDUSTRY) ? "" : json[i].CBI_MAIN_INDUSTRY
+                                }
+                            ];
+                            $("#xs_pkdc_tabsContent").empty().append(XS.Main.Poor.createTable(jsonObj, 2, 50, "color:#00bbee", ""));
+                            $("#xs_pkdc_tabsContentPie").css({display: 'none'});
+                            $(".datagrid-wrap").css("width", "auto");
+                            break;
+                        }
+                    }
+                }else{
+                    $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                }
+            });
         }
         $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
         $("#xs_pkdc_detailTabs").tabs({
@@ -460,7 +486,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
                 if(index==0){
                     return;
                 }
-                data = {cbsId:xs_pkdc_currentStateCode, pd_id:xs_pkdc_currentStateCode, casDate:xs_pkdc_currentStateCode,pid:xs_pkdc_currentStateCode};
+                data = {cbsId:currentId, pd_id:currentId, casDate:currentId,pid:currentId};
                 $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
                     $("#xs_pkdc_pkBaseData_loading").css({"visibility": "hidden"});
@@ -532,7 +558,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
         $("#xs_pkdc_detailTabs").tabs({tabWidth:215,tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
-        data = {pd_id:xs_pkdc_currentStateCode};
+        data = {pd_id:currentId};
         $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
         XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTownsBaseInfoById", data, function(json) {
             $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
@@ -560,7 +586,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
                         break;
                 }
                 XS.Main.Pkjc.detailWindowTabs(index);
-                data = {pd_id:xs_pkdc_currentStateCode, tid:xs_pkdc_currentStateCode};
+                data = {pd_id:currentId, tid:currentId};
                 $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
                     $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
@@ -613,7 +639,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
         $("#xs_pkdc_detailTabs").tabs({tabWidth:215,tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
-        data = {pd_id:xs_pkdc_currentStateCode};
+        data = {pd_id:currentId};
         $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
         XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryVillBaseById", data, function(json) {
             $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
@@ -641,7 +667,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName){
                         break;
                 }
                 XS.Main.Pkjc.detailWindowTabs(index);
-                data = {pd_id:xs_pkdc_currentStateCode,pid:xs_pkdc_currentStateCode};
+                data = {pd_id:currentId,pid:currentId};
                 $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
                     $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
