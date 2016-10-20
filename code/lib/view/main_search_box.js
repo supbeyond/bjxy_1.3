@@ -2,7 +2,7 @@
  * Created by GZXS on 2016/6/27.
  */
     XS.Searchbox = {};
-var xs_searchbox_countyFields = [["CITY","所属市"],["POVERT","贫困发生率(%)"],["C11","国土面积"],["C2","镇(乡)数"],["C4","行政村数"],
+var xs_searchbox_countyFields = [["CITY","所属市"],["C11","国土面积"],["POVERT","贫困发生率(%)"],["C2","镇(乡)数"],["C4","行政村数"],
     ["C4A","贫困村数"],["C6","总户数"],["C9","贫困户数"],["C7","总人口"],["C10","贫困人口"],["C1","贫困类型"]];
 var xs_searchbox_townFields = [["ECOCROP","耕地面积(亩)"],["GROUPNUM","自然村"],["TOTALHH","总户数"],["INPOORHOUSE","贫困户"],
     ["TOTALPOP","总人口"],["POORPOP","贫困人口"],["POVERTYRATE","贫困发生率(%)"]];
@@ -19,6 +19,9 @@ var xs_searchbox_action = "";
 var xs_searchbox_type = "";
 var xs_searchbox_content = "";
 var xs_searchbox_isSearch = false;
+var xs_searchbox_level = -1;
+var xs_searchbox_delay = false;
+var xs_searchbox_resultBaseInfH = 0;
 
 XS.Searchbox.init = function(){
     var xs_search_box = '<div id="xs_searchbox" class="easyui-panel">' +
@@ -101,18 +104,21 @@ XS.Searchbox.searchbox = function(){
     switch (xs_searchbox_type){
         case '区县':
         {
+            xs_searchbox_level = XS.Main.ZoneLevel.county;
             xs_searchbox_action = "QueryTempCountyBaseInfoByCname";
             data = {Cname:xs_searchbox_content};
             break;
         }
         case '乡镇':
         {
+            xs_searchbox_level = XS.Main.ZoneLevel.town;
             xs_searchbox_action = "QueryTempTownInfoByTname";
             data = {tname:xs_searchbox_content};
             break;
         }
         case '行政村':
         {
+            xs_searchbox_level = XS.Main.ZoneLevel.village;
             xs_searchbox_action = "QueryTempVillInfoByvName";
             data = {vname:xs_searchbox_content};
             break;
@@ -127,38 +133,34 @@ XS.Searchbox.searchbox = function(){
         }
     }
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, xs_searchbox_action, data,function(json){
-        $("#xs_searchbox_loadingC").css({display:"none"});
+        //$("#xs_searchbox_loadingC").css({display:"none"});
         if(json && json.length>0){
             $("#xs_searchbox_content").select();
             xs_search_cashData = json;
             xs_searchbox_isSearch = true;
-            $("#xs_searchbox_clear").css({cursor:'pointer',background: 'url("../img/searchbox.png") no-repeat -5px -38px #fff'});
-            $('#xs_searchbox_clear').tooltip({
-                position: 'bottom',
-                content:'清除'
-            });
             $("#xs_searchbox_resultC").empty().append('<div id="xs_searchbox_resultBaseInf"></div>');
+            xs_searchbox_resultBaseInfH = 15;
             switch (xs_searchbox_type){
                 case '区县':
                 {
-                    XS.Searchbox.regionBaseInfo(json,"CTID","COUNTY",xs_searchbox_countyFields);
+                    XS.Searchbox.regionBaseInfo(0,json,"CTID","COUNTY",xs_searchbox_countyFields);
                     break;
                 }
                 case '乡镇':
                 {
-                    XS.Searchbox.regionBaseInfo(json,"TID","REGISTOR",xs_searchbox_townFields);
+                    XS.Searchbox.regionBaseInfo(0,json,"TID","REGISTOR",xs_searchbox_townFields);
                     break;
                 }
                 case '行政村':
                 {
-                    XS.Searchbox.regionBaseInfo(json,"VID","VILL",xs_searchbox_villFields);
+                    XS.Searchbox.regionBaseInfo(0,json,"VID","VILL",xs_searchbox_villFields);
                     break;
                 }
                 case '姓名':
                 case '身份证号':
                 case '电话':
                 {
-                    XS.Searchbox.regionBaseInfo(json,"","",xs_searchbox_poorH);
+                    XS.Searchbox.regionBaseInfo(0,json,"","",xs_searchbox_poorH);
                     //$("#xs_searchbox_resultC").append('<div id="xs_searchbox_pager" style="width: 100%;height: 40px"></div>');
 
                     var totalPageNum = json[0].TotolSum;
@@ -212,6 +214,7 @@ XS.Searchbox.searchbox = function(){
                 }
             }
         }else{
+            $("#xs_searchbox_loadingC").css({display:"none"});
             $("#xs_searchbox_resultC").animate({height:0},{duration: 1000 ,complete:function(){
                 $("#xs_searchbox_resultC").empty();
             }});
@@ -234,12 +237,10 @@ XS.Searchbox.searchbox = function(){
  * @param regionName
  * @param fields
  */
-XS.Searchbox.regionBaseInfo = function(json,regionId,regionName,fields){
+XS.Searchbox.regionBaseInfo = function(i,json,regionId,regionName,fields){
     //$("#xs_searchbox_resultC").animate({height:350},{duration: 1000 });
 
-    $("#xs_searchbox_resultBaseInf").empty();
-    var xs_searchbox_resultBaseInfH = 15;
-    for(var i in json) {
+    if(!XS.StrUtil.isEmpty(regionId) && !XS.StrUtil.isEmpty(regionName)){
         switch (xs_user_regionLevel){
             case XS.Main.ZoneLevel.city:
             {
@@ -248,98 +249,78 @@ XS.Searchbox.regionBaseInfo = function(json,regionId,regionName,fields){
             case XS.Main.ZoneLevel.county:
             {
                 if(json[i][regionId].toString().slice(0,6) != xs_user_regionId){
-                    continue;
+                    if(i<json.length-1){
+                        XS.Searchbox.regionBaseInfo(i+1,json,regionId,regionName,fields);
+                    }
+                    return;
                 }
                 break;
             }
             case XS.Main.ZoneLevel.town:
             {
-                if(json[i].TOWNID != xs_user_regionId){
-                    continue;
+                if(json[i][regionId].toString().slice(0,9) != xs_user_regionId){
+                    if(i<json.length-1){
+                        XS.Searchbox.regionBaseInfo(i+1,json,regionId,regionName,fields);
+                    }
+                    return;
                 }
                 break;
             }
         }
-        var baseInfData = [];
-        var titileName = json[i][regionName];
-        for(var j in fields){
-            if(fields[j][0] == "POVERT"){
-                if(xs_searchbox_type == "区县"){
-                    baseInfData.push({name:fields[j][1],value:(json[i].C7/json[i].C10).toFixed(2)});
-                }else{
-                    baseInfData.push({name:fields[j][1],value:(json[i].B3/json[i].B3A).toFixed(2)});
-                }
+    }
+    var baseInfData = [];
+    var regionIdV = 0;
+    var regionNameV = "";
+    for(var j in fields){
+        if(fields[j][0] == "POVERT"){
+            if(xs_searchbox_type == "区县"){
+                baseInfData.push({name:fields[j][1],value:(json[i].C7/json[i].C10).toFixed(2)});
             }else{
-                if(XS.StrUtil.isEmpty(regionId) && XS.StrUtil.isEmpty(regionName) && j>11){
-                    titileName = "贫困户";
-                    var address = "";
-                    for(var k=12;k<fields.length;k++){
-                        address += json[i][fields[k][0]];
-                    }
-                    baseInfData.push({name:"家庭地址",value:address});
-                    break;
+                baseInfData.push({name:fields[j][1],value:(json[i].B3/json[i].B3A).toFixed(2)});
+            }
+        }else{
+            if(XS.StrUtil.isEmpty(regionId) && XS.StrUtil.isEmpty(regionName) && j>11){
+                regionNameV = "贫困户";
+                var address = "";
+                for(var k=12;k<fields.length;k++){
+                    address += json[i][fields[k][0]];
+                }
+                baseInfData.push({name:"家庭地址",value:address});
+                break;
+            }else{
+                if(fields[j][0] == "AGE"){
+                    var poorHBirthYear = json[i].CARDID.slice(6,10);
+                    var currentYear = new Date().getFullYear();
+                    baseInfData.push({name:fields[j][1],value:currentYear-poorHBirthYear});
                 }else{
-                    if(fields[j][0] == "AGE"){
-                        var poorHBirthYear = json[i].CARDID.slice(6,10);
-                        var currentYear = new Date().getFullYear();
-                        baseInfData.push({name:fields[j][1],value:currentYear-poorHBirthYear});
-                    }else{
-                        baseInfData.push({name:fields[j][1],value:json[i][fields[j][0]]});
-                    }
+                    baseInfData.push({name:fields[j][1],value:json[i][fields[j][0]]});
                 }
             }
         }
-        var xs_searchbox_baseInf = '';
-        var regionId = 0;
-        var regionName = "";
-        if(!XS.StrUtil.isEmpty(regionId) && !XS.StrUtil.isEmpty(regionName)){
-            regionId = json[i][regionId];
-            regionName = json[i][regionName];
-            xs_searchbox_baseInf += '<div class="xs_searchbox_baseInfPanelC" regionId="' + regionId + '" regionName="' + regionName + '">';
-        }else{
-            for(var j in xs_searchbox_replaceFields){
-                xs_search_cashData[i][xs_searchbox_replaceFields[j][1]] = xs_search_cashData[i][xs_searchbox_replaceFields[j][0]];
-            }
-            xs_searchbox_baseInf += '<div class="xs_searchbox_baseInfPanelC" regionId="' + i + '">';
-        }
-        xs_searchbox_baseInf += '<div class="xs_searchbox_baseInfPanel">' +
-                    '<div style="width: 100%;height: 30px;line-height: 30px;background: #02BBEE;">&nbsp;' + titileName + '基本信息</div>' +
-                    '<div style="width: 92%;position: relative;top1: 2px;left: 4%;>';
-        if(!XS.StrUtil.isEmpty(regionId) && !XS.StrUtil.isEmpty(regionName)){
-            xs_searchbox_baseInf += XS.Searchbox.createTable(baseInfData,30,"","color:#00bbee","乡镇",regionId,regionName);
-        }else{
-            xs_searchbox_baseInf += XS.Main.Poor.createTable(baseInfData, 2, 30,"","color:#00bbee");
-        }
-        xs_searchbox_baseInf += '</div></div></div>';
-        $("#xs_searchbox_resultBaseInf").append(xs_searchbox_baseInf);
-        xs_searchbox_resultBaseInfH += $(".xs_searchbox_baseInfPanel").outerHeight() + 15;
     }
-    if($(".xs_searchbox_baseInfPanelC").length == 0){
-        $("#xs_searchbox_resultC").animate({height:0},{duration: 1000 ,complete:function(){
-            $("#xs_searchbox_resultC").empty();
-        }});
-        XS.Searchbox.getConKey();
-        XS.CommonUtil.showMsgDialog("","未找到相关数据");
-        return;
-    }
-    if(XS.StrUtil.isEmpty(regionId) && XS.StrUtil.isEmpty(regionName) && $("#xs_searchbox_pager").length == 0){
-        $("#xs_searchbox_resultC").append('<div id="xs_searchbox_pager" style1="width: 100%;height: 40px"></div>');
-    }
-    if(xs_searchbox_resultBaseInfH < 320 ){
-        $("#xs_searchbox_resultBaseInf").height(xs_searchbox_resultBaseInfH);
-        $("#xs_searchbox_resultC").animate({height:xs_searchbox_resultBaseInfH + 30},{duration: 1000 });
+    var xs_searchbox_baseInf = '';
+    if(!XS.StrUtil.isEmpty(regionId) && !XS.StrUtil.isEmpty(regionName)){
+        regionIdV = json[i][regionId];
+        regionNameV = json[i][regionName];
+        xs_searchbox_baseInf += '<div class="xs_searchbox_baseInfPanelC" regionId="' + regionIdV + '" regionName="' + regionNameV + '">';
     }else{
-        $("#xs_searchbox_resultBaseInf").height(320);
-        $("#xs_searchbox_resultC").animate({height:350},{duration: 1000 });
+        for(var j in xs_searchbox_replaceFields){
+            xs_search_cashData[i][xs_searchbox_replaceFields[j][1]] = xs_search_cashData[i][xs_searchbox_replaceFields[j][0]];
+        }
+        xs_searchbox_baseInf += '<div class="xs_searchbox_baseInfPanelC" regionId="' + i + '">';
     }
-    $("#xs_searchbox_detail").click(function(){
-
-        XS.Main.Pkjc.clickDetail(xs_pkdc_zoneLevel,xs_pkdc_currentName);
-    });
-    /*$(".xs_searchbox_baseInfPanelC").click(XS.Searchbox.baseInfoClick);
-     if($(".xs_searchbox_baseInfPanelC").length == 1){
-     XS.Searchbox.baseInfoClick();
-     }*/
+    xs_searchbox_baseInf += '<div class="xs_searchbox_baseInfPanel">' +
+                '<div style="width: 100%;height: 30px;line-height: 30px;background: #02BBEE;">&nbsp;' + regionNameV + '基本信息</div>' +
+                '<div style="width: 92%;position: relative;top1: 2px;left: 4%;>';
+    if(!XS.StrUtil.isEmpty(regionId) && !XS.StrUtil.isEmpty(regionName)){
+        xs_searchbox_baseInf += XS.Searchbox.createTable(baseInfData,2,30,[[10,2]],"","color:#00bbee","乡镇",regionId,regionName,["xs_searchbox_tool"]);
+    }else{
+        xs_searchbox_baseInf += XS.Main.Poor.createTable(baseInfData, 2, 30,"","color:#00bbee");
+    }
+    xs_searchbox_baseInf += '</div></div></div>';
+    $("#xs_searchbox_resultBaseInf").append(xs_searchbox_baseInf);
+    xs_searchbox_resultBaseInfH += $(".xs_searchbox_baseInfPanel").outerHeight() + 15;
+    XS.Searchbox.tool(i,json,regionIdV,regionNameV,regionId,regionName,fields);
 }
 /**
  * 搜索类型select
@@ -466,49 +447,48 @@ XS.Searchbox.baseInfoClick = function(){
         XS.Login.logout();
     });
 }
-XS.Searchbox.createTable = function (objArr, rowH,nameCollStyle,valueCollStyle,nextName,regionId,regionName) {
+XS.Searchbox.createTable = function (objArr,colls, rowH,mergeColls,nameCollStyle,valueCollStyle,nextName,regionId,regionName,addRowIdArr) {
     var content =
         '<div class="datagrid-wrap panel-body panel-body-noheader" style="width: 100%; height: auto; margin-top: 5px;">'+
         '<div class="datagrid-body">'+
         '<table class="datagrid-btable" cellspacing="0" cellpadding="0" border="0" width="100%">'+
         '<tbody>';
+    var rowNum = 0;
+    var preRowNum = -1;
+    var alreadyColls = 0;
     for(var i=0;i<objArr.length;i++){
-            if(i%2==0){
-                var rcls = Math.ceil(i/4)-Math.floor(i/4)>0?"datagrid-row datagrid-row-alt":"datagrid-row";
-                content += '<tr  style="height: '+rowH+'px;" class="'+rcls+'">';
+        if(alreadyColls==colls){
+            alreadyColls = 0;
+            rowNum++;
+            content += '</tr>';
+        }
+        var rcls = rowNum%2 == 0?"datagrid-row":"datagrid-row datagrid-row-alt";
+        if(rowNum - preRowNum == 1){
+            content += '<tr  style="height: '+rowH+'px;" class="'+rcls+'">';
+        }
+        preRowNum = rowNum;
+        var isColspan = false;
+        for(var j in mergeColls){
+            if(mergeColls[j][0] == i && alreadyColls+mergeColls[j][1]<=colls && mergeColls[j][1]>1){
+                isColspan = true;
+                alreadyColls += mergeColls[j][1];
+                content += '<td  colspan="'+ mergeColls[j][1] +'"><div class="datagrid-cell" style="'+nameCollStyle+'">'+objArr[i].name+'</div></td>';
+                content += '<td colspan= "'+ mergeColls[j][1] +'"><div  class="datagrid-cell" style="'+valueCollStyle+'">'+objArr[i].value+'</div></td>';
+                break;
             }
-            if(i==10){
-                content += '<td  colspan="2"><div class="datagrid-cell" style="'+nameCollStyle+'">'+objArr[i].name+'</div></td>';
-                content += '<td colspan= "2"><div  class="datagrid-cell" style="'+valueCollStyle+'">'+objArr[i].value+'</div></td>';
-            }else{
-                content += '<td><div class="datagrid-cell" style="'+nameCollStyle+'">'+objArr[i].name+'</div></td>';
-                content += '<td><div  class="datagrid-cell" style="'+valueCollStyle+'">'+objArr[i].value+'</div></td>';
-            }
-            if(i%2==1 ||i==objArr.length-1 || i==10){
-                if(i==10){
-                    content += '</tr>';
-                    var rcls = Math.ceil(i/4)-Math.floor(i/4)>0?"datagrid-row":"datagrid-row datagrid-row-alt";
-                    content += '<tr  style="height: '+rowH+'px;" class="'+rcls+'">';
-                    if(regionId.length>9){
-                        content += '<td colspan="2" align="center">'+
-                            '<button class="xs_searchbox_detail">详情</button>' +
-                            '</td>';
-                    }else{
-                        content += '<td><div  class="datagrid-cell" style="'+nameCollStyle+'">'+nextName+'</div></td>';
-                        content += '<td align="center">' +
-                            '<select>' +
-                            '<option>fadsasff</option>'
-                        '</select>' +
-                        '</td>';
-                    }
-                    content += '<td colspan="2" align="center">'+
-                            '<button class="xs_searchbox_detail">详情</button>' +
-                        '</td>';
-                    content += '</tr>';
-                }else{
-                    content += '</tr>';
-                }
-            }
+        }
+        if(isColspan)continue;
+            content += '<td><div class="datagrid-cell" style="'+nameCollStyle+'">'+objArr[i].name+'</div></td>';
+            content += '<td><div  class="datagrid-cell" style="'+valueCollStyle+'">'+objArr[i].value+'</div></td>';
+            alreadyColls++;
+        if(i==objArr.length-1){
+            content += '</tr>';
+        }
+    }
+    for(var i in addRowIdArr){
+        rowNum++;
+        var rcls = rowNum%2==0?"datagrid-row":"datagrid-row datagrid-row-alt";
+        content += '<tr class="'+ addRowIdArr[i] +'" style="height: '+rowH+'px;" class="'+rcls+'"></tr>';
     }
     content +=
         '</tbody>'+
@@ -516,4 +496,120 @@ XS.Searchbox.createTable = function (objArr, rowH,nameCollStyle,valueCollStyle,n
         '</div>'+
         '</div>';
     return content;
+}
+XS.Searchbox.requestSelect = function(parent,obj,regionIdV,regionNameV){
+    var requestSelect = '<select><option value=-1>--请选择--</option>';
+    var action = "";
+    var nextField = [];
+    switch (xs_searchbox_type){
+        case "区县":
+        {
+            action = "QueryTownsBaseInfoByareaId";
+            nextField = ["TOWB_ID","TOWB_NAME"];
+        }
+        case "乡镇":
+        {
+            if(!action){
+                action = "QueryVillBaseByareaId";
+                nextField = ["VBI__ID","VBI_NAME"];
+            }
+            var dataN = {pbno: regionIdV};
+            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, dataN, function(json){
+                if(json && json.length>0){
+                    parent.empty();
+                    for(var i in json){
+                        requestSelect += '<option value="'+ json[i][nextField[0]] +'">' + json[i][nextField[1]] + '</option>';
+                    }
+                    requestSelect += '</select>';
+                        parent.append(requestSelect);
+                }
+            });
+            break;
+        }
+    }
+}
+XS.Searchbox.tool = function(i,json,regionIdV,regionNameV,regionId,regionName,fields){
+    var xs_searchbox_tool = "";
+    var nextRegion = "";
+    switch (xs_searchbox_type){
+        case "区县":
+        {
+            nextRegion = "乡镇";
+        }
+        case "乡镇":
+            {
+                if(!nextRegion){
+                    nextRegion = "行政村";
+                }
+                xs_searchbox_tool += '<td colspan="2" align="center">' +
+                        '<button class="xs_searchbox_detail" style="cursor: pointer;" regionId="'+regionIdV+'" regionName="'+ regionNameV+'">详情</button>' +
+                    '</td>';
+                xs_searchbox_tool += '<td><div class="datagrid-cell">'+nextRegion+'</div></td>' +
+                    '<td align="center"><select class="xs_searchbox_nextSeleect" regionId="'+regionIdV+'" regionName="'+ regionNameV+'">';
+                xs_searchbox_tool += '<option value=-1>--请选择--</option>';
+                xs_searchbox_tool += '</select></td>';
+                $(".xs_searchbox_tool:last").append(xs_searchbox_tool);
+                break;
+            }
+        case "行政村":
+            {
+                xs_searchbox_tool += '<td colspan="2" align="center">' +
+                        '<button class="xs_searchbox_detail" style="cursor: pointer;" regionId="'+regionIdV+'" regionName="'+ regionNameV+'">详情</button>' +
+                    '</td>'+
+                    '<td colspan="2" align="center">' +
+                        '<button style="cursor: pointer;">贫困户</button>' +
+                    '</td>';
+                $(".xs_searchbox_tool:last").append(xs_searchbox_tool);
+                break;
+            }
+    }
+    if(i<json.length-1){
+        XS.Searchbox.regionBaseInfo(i+1,json,regionId,regionName,fields);
+    }else{
+        XS.Searchbox.BaseInfPanel(regionId,regionName);
+        $("#xs_searchbox_loadingC").css({display:"none"});
+        $("#xs_searchbox_clear").css({cursor:'pointer',background: 'url("../img/searchbox.png") no-repeat -5px -38px #fff'});
+        $('#xs_searchbox_clear').tooltip({
+            position: 'bottom',
+            content:'清除'
+        });
+    }
+}
+XS.Searchbox.BaseInfPanel = function(regionId,regionName){
+    if($(".xs_searchbox_baseInfPanelC").length == 0){
+        $("#xs_searchbox_resultC").animate({height:0},{duration: 1000 ,complete:function(){
+            $("#xs_searchbox_resultC").empty();
+        }});
+        XS.Searchbox.getConKey();
+        XS.CommonUtil.showMsgDialog("","未找到相关数据");
+        return;
+    }
+    if(XS.StrUtil.isEmpty(regionId) && XS.StrUtil.isEmpty(regionName) && $("#xs_searchbox_pager").length == 0){
+        $("#xs_searchbox_resultC").append('<div id="xs_searchbox_pager" style1="width: 100%;height: 40px"></div>');
+    }
+    $("#xs_searchbox_resultBaseInf").css({display:'block'})
+    if(xs_searchbox_resultBaseInfH < 320 ){
+        $("#xs_searchbox_resultBaseInf").height(xs_searchbox_resultBaseInfH);
+        $("#xs_searchbox_resultC").animate({height:xs_searchbox_resultBaseInfH + 30},{duration: 1000 });
+    }else{
+        $("#xs_searchbox_resultBaseInf,#xs_searchbox_resultC").css({display:'block'});
+        $("#xs_searchbox_resultBaseInf").height(320);
+        $("#xs_searchbox_resultC").animate({height:350},{duration: 1000 });
+    }
+    $(".xs_searchbox_detail").click(function(){
+        var detailRegionId = $(this).attr("regionId");
+        var detailRegionName = $(this).attr("regionName");
+        XS.Main.Pkjc.clickDetail(xs_searchbox_level,detailRegionName,detailRegionId);
+    });
+    $(".xs_searchbox_nextSeleect").click(function(){
+        var parent = $(this).parent();
+        parent.empty();
+        var nextRegionId = $(this).attr("regionId");
+        var nextRegionName = $(this).attr("regionName");
+        XS.Searchbox.requestSelect(parent,$(this),nextRegionId,nextRegionName);
+    });
+    /*$(".xs_searchbox_baseInfPanelC").click(XS.Searchbox.baseInfoClick);
+     if($(".xs_searchbox_baseInfPanelC").length == 1){
+     XS.Searchbox.baseInfoClick();
+     }*/
 }
