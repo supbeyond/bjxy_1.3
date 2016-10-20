@@ -290,8 +290,12 @@ XS.Searchbox.regionBaseInfo = function(json,regionId,regionName,fields){
             }
         }
         var xs_searchbox_baseInf = '';
+        var regionId = 0;
+        var regionName = "";
         if(!XS.StrUtil.isEmpty(regionId) && !XS.StrUtil.isEmpty(regionName)){
-            xs_searchbox_baseInf += '<div class="xs_searchbox_baseInfPanelC" regionId="' + json[i][regionId] + '" regionName="' + json[i][regionName] + '">';
+            regionId = json[i][regionId];
+            regionName = json[i][regionName];
+            xs_searchbox_baseInf += '<div class="xs_searchbox_baseInfPanelC" regionId="' + regionId + '" regionName="' + regionName + '">';
         }else{
             for(var j in xs_searchbox_replaceFields){
                 xs_search_cashData[i][xs_searchbox_replaceFields[j][1]] = xs_search_cashData[i][xs_searchbox_replaceFields[j][0]];
@@ -300,11 +304,13 @@ XS.Searchbox.regionBaseInfo = function(json,regionId,regionName,fields){
         }
         xs_searchbox_baseInf += '<div class="xs_searchbox_baseInfPanel">' +
                     '<div style="width: 100%;height: 30px;line-height: 30px;background: #02BBEE;">&nbsp;' + titileName + '基本信息</div>' +
-                    '<div style="width: 92%;position: relative;top1: 2px;left: 4%;>' +
-                        XS.Main.Poor.createTable(baseInfData, 2, 30,"","color:#00bbee") +
-                    '</div>' +
-                '</div>' +
-            '</div>';
+                    '<div style="width: 92%;position: relative;top1: 2px;left: 4%;>';
+        if(!XS.StrUtil.isEmpty(regionId) && !XS.StrUtil.isEmpty(regionName)){
+            xs_searchbox_baseInf += XS.Searchbox.createTable(baseInfData,30,"","color:#00bbee","乡镇",regionId,regionName);
+        }else{
+            xs_searchbox_baseInf += XS.Main.Poor.createTable(baseInfData, 2, 30,"","color:#00bbee");
+        }
+        xs_searchbox_baseInf += '</div></div></div>';
         $("#xs_searchbox_resultBaseInf").append(xs_searchbox_baseInf);
         xs_searchbox_resultBaseInfH += $(".xs_searchbox_baseInfPanel").outerHeight() + 15;
     }
@@ -326,10 +332,14 @@ XS.Searchbox.regionBaseInfo = function(json,regionId,regionName,fields){
         $("#xs_searchbox_resultBaseInf").height(320);
         $("#xs_searchbox_resultC").animate({height:350},{duration: 1000 });
     }
-    $(".xs_searchbox_baseInfPanelC").click(XS.Searchbox.baseInfoClick);
-    if($(".xs_searchbox_baseInfPanelC").length == 1){
-        XS.Searchbox.baseInfoClick();
-    }
+    $("#xs_searchbox_detail").click(function(){
+
+        XS.Main.Pkjc.clickDetail(xs_pkdc_zoneLevel,xs_pkdc_currentName);
+    });
+    /*$(".xs_searchbox_baseInfPanelC").click(XS.Searchbox.baseInfoClick);
+     if($(".xs_searchbox_baseInfPanelC").length == 1){
+     XS.Searchbox.baseInfoClick();
+     }*/
 }
 /**
  * 搜索类型select
@@ -455,4 +465,55 @@ XS.Searchbox.baseInfoClick = function(){
         XS.CommonUtil.showMsgDialog("","加载数据失败！");
         XS.Login.logout();
     });
+}
+XS.Searchbox.createTable = function (objArr, rowH,nameCollStyle,valueCollStyle,nextName,regionId,regionName) {
+    var content =
+        '<div class="datagrid-wrap panel-body panel-body-noheader" style="width: 100%; height: auto; margin-top: 5px;">'+
+        '<div class="datagrid-body">'+
+        '<table class="datagrid-btable" cellspacing="0" cellpadding="0" border="0" width="100%">'+
+        '<tbody>';
+    for(var i=0;i<objArr.length;i++){
+            if(i%2==0){
+                var rcls = Math.ceil(i/4)-Math.floor(i/4)>0?"datagrid-row datagrid-row-alt":"datagrid-row";
+                content += '<tr  style="height: '+rowH+'px;" class="'+rcls+'">';
+            }
+            if(i==10){
+                content += '<td  colspan="2"><div class="datagrid-cell" style="'+nameCollStyle+'">'+objArr[i].name+'</div></td>';
+                content += '<td colspan= "2"><div  class="datagrid-cell" style="'+valueCollStyle+'">'+objArr[i].value+'</div></td>';
+            }else{
+                content += '<td><div class="datagrid-cell" style="'+nameCollStyle+'">'+objArr[i].name+'</div></td>';
+                content += '<td><div  class="datagrid-cell" style="'+valueCollStyle+'">'+objArr[i].value+'</div></td>';
+            }
+            if(i%2==1 ||i==objArr.length-1 || i==10){
+                if(i==10){
+                    content += '</tr>';
+                    var rcls = Math.ceil(i/4)-Math.floor(i/4)>0?"datagrid-row":"datagrid-row datagrid-row-alt";
+                    content += '<tr  style="height: '+rowH+'px;" class="'+rcls+'">';
+                    if(regionId.length>9){
+                        content += '<td colspan="2" align="center">'+
+                            '<button class="xs_searchbox_detail">详情</button>' +
+                            '</td>';
+                    }else{
+                        content += '<td><div  class="datagrid-cell" style="'+nameCollStyle+'">'+nextName+'</div></td>';
+                        content += '<td align="center">' +
+                            '<select>' +
+                            '<option>fadsasff</option>'
+                        '</select>' +
+                        '</td>';
+                    }
+                    content += '<td colspan="2" align="center">'+
+                            '<button class="xs_searchbox_detail">详情</button>' +
+                        '</td>';
+                    content += '</tr>';
+                }else{
+                    content += '</tr>';
+                }
+            }
+    }
+    content +=
+        '</tbody>'+
+        '</table>'+
+        '</div>'+
+        '</div>';
+    return content;
 }
