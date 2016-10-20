@@ -6,13 +6,15 @@ XS.Main.Poor = {};
 
 //通过用户ID查询户详细信息
 XS.Main.Poor.showPoor = function(id){
+    xs_markerLayer.clearMarkers();
+    xs_markerLayer.setVisibility(false);
     XS.Main.Poor.clearRelocationLayer();
     XS.CommonUtil.showLoader();
     var data = {Hid: id};
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTempHouseNinfoByHId", data, function (json) {
         XS.CommonUtil.hideLoader();
         if (json && json.length>0) {
-            xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(json[0].LONGITUDE, json[0].LATITUDE), 10);
+            xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(json[0].LONGITUDE, json[0].LATITUDE), 11);
             XS.Main.addVectorPoint2ClusterLayer(json, XS.Main.ClusterPointerStyle.poor_info_obj);
         }
     },function(e){XS.CommonUtil.hideLoader();});
@@ -20,14 +22,18 @@ XS.Main.Poor.showPoor = function(id){
 
 //显示贫困用户
 XS.Main.Poor.showPoors = function(objArr){
+    xs_markerLayer.clearMarkers();
+    xs_markerLayer.setVisibility(false);
     XS.Main.Poor.clearRelocationLayer();
     if(objArr&&objArr.length>0){
-        var jsonArr = [];
+        var dataArr = [];
         for(var i in objArr){
-            jsonArr.push({LONGITUDE:objArr[i].Longitude, LATITUDE:objArr[i].Latitude, hid:objArr[i].hid, name:objArr[i].name});
+            dataArr.push({LONGITUDE:objArr[i].Longitude, LATITUDE:objArr[i].Latitude, hid:objArr[i].hid, name:objArr[i].name});
         }
-        xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(objArr[0].Longitude, objArr[0].Latitude), 10);
-        XS.Main.addVectorPoint2ClusterLayer(jsonArr, XS.Main.ClusterPointerStyle.poor_info_id);
+        //xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(objArr[0].Longitude, objArr[0].Latitude), 11);
+        XS.Main.addVectorPoint2ClusterLayer(dataArr, XS.Main.ClusterPointerStyle.poor_info_id);
+
+     //   XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, iconH, type);
     }
 }
 

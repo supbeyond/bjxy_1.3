@@ -56,6 +56,8 @@ var xs_tjfx_graph_maxValue = 0;
 XS.Main.Tjfx.Graph.graph = function(type){
     XS.Main.Pkjc.closeInfoDialog();
     XS.Main.Poor.clearRelocationLayer();
+    xs_markerLayer.clearMarkers();
+    xs_markerLayer.setVisibility(false);
     XS.Searchbox.clearCon();
     XS.CommonUtil.closeDialog("xs_main_detail");
     xs_isShowUtfGridTip = false;

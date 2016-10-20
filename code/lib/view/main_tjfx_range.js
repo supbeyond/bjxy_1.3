@@ -29,6 +29,8 @@ XS.Main.Tjfx.range = function(level, parentId, type){
     xs_isShowUtfGridTip = false;
     XS.Main.hiddenDivTags();
     XS.Main.Tjfx.removeLayer();
+    xs_markerLayer.clearMarkers();
+    xs_markerLayer.setVisibility(false);
     XS.Main.Poor.clearRelocationLayer();
 
     //添加标签专题图

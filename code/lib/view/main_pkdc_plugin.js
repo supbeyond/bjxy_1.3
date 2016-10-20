@@ -281,7 +281,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId){
         XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
         XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
 
-        $("#xs_pkdc_detailTabs").tabs({tabWidth:121,tabHeight:35});
+        $("#xs_pkdc_detailTabs").tabs({/*tabWidth:80,*/tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
         data = {cbsId:xs_pkdc_currentStateCode};
@@ -393,7 +393,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId){
         XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
         XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
 
-        $("#xs_pkdc_detailTabs").tabs({tabWidth:106,tabHeight:35});
+        $("#xs_pkdc_detailTabs").tabs({/*tabWidth:106,*/tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
         var json = XS.Main.CacheZoneInfos.county;
@@ -555,7 +555,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId){
         XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
         XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
 
-        $("#xs_pkdc_detailTabs").tabs({tabWidth:215,tabHeight:35});
+        $("#xs_pkdc_detailTabs").tabs({/*tabWidth:215,*/tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
         data = {pd_id:currentId};
@@ -636,7 +636,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId){
         XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
         XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
 
-        $("#xs_pkdc_detailTabs").tabs({tabWidth:215,tabHeight:35});
+        $("#xs_pkdc_detailTabs").tabs({/*tabWidth:215,*/tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
         data = {pd_id:currentId};

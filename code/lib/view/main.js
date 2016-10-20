@@ -69,6 +69,7 @@ var xs_clusterLayer; //聚散图层
 
 var xs_animatorVectorLayer = null; //矢量动画图层
 var xs_markerLayer = null; //marker图层
+var xs_poorLabelLayer //显示贫困户标签图层
 
 var xs_labelLayer = null; //标签图层
 
@@ -159,6 +160,9 @@ XS.Main.load = function(){
         strokeColor:"#ff0000"
     };
     xs_tasker_labelLayer = new SuperMap.Layer.Vector("tasker_label",{strategies: [strategy]});
+
+    xs_markerLayer = new SuperMap.Layer.Markers("markerlayer",{});
+    xs_poorLabelLayer = new SuperMap.Layer.Vector("poor_label",{strategies: [strategy]});//显示贫困户标签图层
 
     ///-------------controller---------------------
     xs_utfGridController = new SuperMap.Control.UTFGrid({
@@ -293,10 +297,14 @@ XS.Main.addLayers = function(){
         xs_tasker_animatorVectorLayer,
         xs_tasker_labelLayer,
         xs_vectorLayer,
-        xs_clusterLayer,
+        xs_poorLabelLayer,
+        xs_markerLayer,
+        xs_clusterLayer
     ]);
     xs_tasker_animatorVectorLayer.setVisibility(false);
     xs_tasker_labelLayer.setVisibility(false);
+    xs_author_vectorLayer.setVisibility(false);
+    xs_markerLayer.setVisibility(false);
     xs_author_vectorLayer.setVisibility(false);
 
     xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 1);

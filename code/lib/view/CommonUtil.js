@@ -158,12 +158,13 @@ XS.CommonUtil.closeDialog = function(id){
 XS.CommonUtil.showMsgDialog = function(title, content){
     $.messager.show({
         title:XS.StrUtil.isEmpty(title)?"温馨提示":title,
+        closable: false,
         msg:content,
-        timeout:800,
+        timeout:700,
         showType:'fade',
          style:{
              right:'',
-                 bottom:''
+             bottom:''
          }
     });
 }
