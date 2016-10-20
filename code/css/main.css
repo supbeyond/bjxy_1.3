@@ -551,7 +551,7 @@ html, body{
     left: 5%;
     top: 5px;
 }
-.xs_searchbox_baseInfPanel:hover{
+.xs_searchbox_baseInfPanel1:hover{
     background:#eee;
 }
 .xs_searchbox_baseInfPanelC{
@@ -563,7 +563,7 @@ html, body{
 .xs_searchbox_baseInfPanel{
     width: 90%;
     height: auto;
-    cursor: pointer;
+    cursor1: pointer;
     position: relative;
     left: 5%;
     border-radius:3px;
