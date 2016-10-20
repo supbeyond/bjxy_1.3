@@ -619,7 +619,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         $('#xs_pkdc_details').click(function(){
             XS.Main.Pkjc.closeInfoDialog();
             XS.Main.Poor.clearRelocationLayer();
-            XS.Main.Pkjc.clickDetail(xs_pkdc_zoneLevel,xs_pkdc_currentName);
+            XS.Main.Pkjc.clickDetail(xs_pkdc_zoneLevel,xs_pkdc_currentName,xs_pkdc_currentStateCode);
         });
         //数据分析点击
         $('#xs_pkdc_dataAnalysis').click(function(){
