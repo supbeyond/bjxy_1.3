@@ -117,9 +117,9 @@ html, body{
 }
 
 /*-----------------------------统计分析--分段专题图-------------------------------------------------*/
-#xs_tjfx_range_Legend,#xs_tjfx_graph_Legend{
+#xs_tjfx_range_Legend,#xs_tjfx_graph_Legend,#xs_poor_legend{
     position: absolute;
-    right: 5px;
+    right: 35px;
     bottom: 5px;
     width: 250px;
     text-align: center;
@@ -131,7 +131,7 @@ html, body{
     z-index: 1000;
 }
 
-#xs_tjfx_range_Legend .legendTitle,#xs_tjfx_graph_Legend .legendTitle{
+#xs_tjfx_range_Legend .legendTitle,#xs_tjfx_graph_Legend .legendTitle,#xs_poor_legend .poorLegendTitle{
     background: #1E90FF;
 }
 #xs_tjfx_range_Legend .legendContent,#xs_tjfx_graph_Legend .legendContent{
@@ -142,17 +142,29 @@ html, body{
     display: block;
     overflow-y: auto;
 }
-#xs_tjfx_range_Legend .legendItemHeader,#xs_tjfx_graph_Legend .legendItemHeader{
+#xs_tjfx_range_Legend .legendItemHeader,#xs_tjfx_graph_Legend .legendItemHeader,#xs_poor_legend .poorLegendItemHeader{
     top: 5px;
     width: 100px;
     height: 5px;
     text-align: center;
 }
-#xs_tjfx_range_Legend .legendItemValue,#xs_tjfx_graph_Legend .legendItemValue{
+#xs_tjfx_range_Legend .legendItemValue,#xs_tjfx_graph_Legend .legendItemValue,#xs_poor_legend .poorLegendItemValue{
     top: 5px;
     width: 120px;
     text-align: center;
     height: 5px;
+}
+
+#xs_poor_legend .poorLegendContent{
+    font-size: 10px;
+    padding-left: 15px;
+    padding-right: 15px;
+    height: auto;
+    display: block;
+    overflow-y: auto;
+}
+#xs_poor_legend .poorLegendItemRow:hover{
+    background: #eee;
 }
 /*-----------------------------脱贫率-------------------------------------------------*/
 
