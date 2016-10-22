@@ -12,7 +12,7 @@ XS.Main.Tjfx.type = {
     range_pkfsx:0, //分段--贫困发生率
     range_tpx:1,   //分段--脱贫率
     range_wfx:2,   //分段--危房率
-    range_fpbqx:3   //分段--扶贫搬迁率
+    range_fpbqx:3,   //分段--扶贫搬迁率
 }
 
 //缓存行政区域Featuers

@@ -18,6 +18,8 @@ var xs_tjfx_range_centerPoint = null;
  */
 var xs_tjfx_zoneLevel = -1;
 XS.Main.Tjfx.range = function(level, parentId, type){
+    XS.Main.Poor.clearRelocationLayer();
+    XS.Main.clearMap();
     XS.Main.Pkjc.closeInfoDialog();
     XS.CommonUtil.closeDialog("xs_main_detail");
    // xs_currentZoneLevel = level;
@@ -32,6 +34,7 @@ XS.Main.Tjfx.range = function(level, parentId, type){
     xs_markerLayer.clearMarkers();
     xs_markerLayer.setVisibility(false);
     XS.Main.Poor.clearRelocationLayer();
+    xs_poorHLabelLayer.removeAllFeatures();
 
     //添加标签专题图
     var strategy = new SuperMap.Strategy.GeoText();

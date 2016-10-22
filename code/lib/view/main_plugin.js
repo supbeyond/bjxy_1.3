@@ -12,6 +12,7 @@ var xs_currentZoneFuture = null; //保存当前被选中的行政Future
 var xs_clickMapFutureId = -1; //保存当前被选中的行政FutureID
 var xs_currentZoneLevel = -1; //记录当前行政等级
 var xs_isMapClickTypeNone = false; //判断单击地图是否是的类型为None
+var xs_poorHLabelLayer = null;
 //行政区域点中样式
 var xs_stateZoneStyle = {
     strokeColor: "#00bbee",
@@ -120,6 +121,19 @@ $(function(){
     $("#xs_mainC").append(utfGridTag);
     xs_utfGridChart = echarts.init(document.getElementById('xs_utfGridC'));
     xs_utfGridChart.setOption(xs_utfGridOption);
+
+    var strategy = new SuperMap.Strategy.GeoText();
+    strategy.style = {
+        fontColor:"#00bbee",
+        fontSize:"8px",
+        fill: false,
+        fillColor: "#000000",
+        fillOpacity: 1,
+        stroke: false,
+        strokeColor:"#ff0000"
+    };
+    xs_poorHLabelLayer = new SuperMap.Layer.Vector("xs_poorHLabelLayer",{strategies: [strategy]});
+    xs_MapInstance.getMapObj().addLayer(xs_poorHLabelLayer);
 });
 
 var xs_rbbtn_isfullscreen = false; //是否是全屏
@@ -815,7 +829,7 @@ XS.Main.utfGridLayerMoveCallbackUpdataData = function(level, x, y, name,THus, po
 }
 
 //添加矢量点到聚散图层
-XS.Main.addVectorPoint2ClusterLayer = function(objArr, type){
+XS.Main.addVectorPoint2ClusterLayer = function(objArr, type,onlyReason){
     //XS.Main.clearMap();
     //XS.Main.Poor.clearRelocationLayer();
     xs_isShowUtfGridTip = false;
@@ -824,9 +838,35 @@ XS.Main.addVectorPoint2ClusterLayer = function(objArr, type){
     if(!(objArr&&objArr.length>0)){
         return;
     }
+
+    if(document.getElementById("xs_poor_legend")){
+        $("#xs_poor_legend").remove();
+    }
+    $("#xs_mainC").append(XS.Main.Poor.createPoorLegendTag(XS.Main.ZoneLevel.village));
+    $("#xs_poor_legend").css("display", "block");
+    $(".poorLegendItemRow").click(function(){
+        var onlyReasonClick = $(this).children()[0].innerHTML;
+
+        /*xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 11);
+        var centerPointer = feature.geometry.getBounds().getCenterLonLat();
+        //请求贫困户数据定位地图上去
+        var data = {pbno: xs_clickMapFutureId};
+        XS.CommonUtil.showLoader();
+        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryHousePeoByIdArea", data, function(json){
+            XS.CommonUtil.hideLoader();
+            if(json && json.length>0)
+            {
+                XS.Main.Poor.showPoors(json,centerPointer);
+            }
+        },function(e){XS.CommonUtil.hideLoader();});*/
+    });
+
     if(type == XS.Main.ClusterPointerStyle.poor_info_obj||type == XS.Main.ClusterPointerStyle.poor_info_id)
     {
         var features = [];
+        var geotextFeatures = [];
+
+        var yOff = -(1 / xs_MapInstance.getMapObj().getScale()) * 0.00000005;
         for(var i=0; i<objArr.length; i++)
         {
             var obj = objArr[i];
@@ -835,13 +875,22 @@ XS.Main.addVectorPoint2ClusterLayer = function(objArr, type){
             var feature = new SuperMap.Feature.Vector();
 
             feature.geometry = new SuperMap.Geometry.Point(obj.LONGITUDE, obj.LATITUDE);
+            var iconUrl = "";
 
+            for(var j in XS.Main.poorZonePicArr.poor){
+                if(XS.Main.poorZonePicArr.poor[j].name == obj.reason){
+                    iconUrl = XS.Main.poorZonePicArr.poor[j].value;
+                }
+            }
+            if(!iconUrl){
+                iconUrl = "../img/zone/fam/f_09.png";
+            }
             //105.16 , 27.07
             var style = {
                 pointRadius: 6,
                 graphic:true,
                 /*externalGraphic:"../base/map/theme/images/cluster4.png",*/
-                externalGraphic:"../img/icon/xs_poor_flag.png",
+                externalGraphic:iconUrl,
                 graphicWidth:20,
                 graphicHeight:20
             };
@@ -851,7 +900,23 @@ XS.Main.addVectorPoint2ClusterLayer = function(objArr, type){
             //标注点类型
             feature.info.xt_ctype = type;
             features.push(feature);
+
+            var name = "";
+            switch (type){
+                case XS.Main.ClusterPointerStyle.poor_info_obj:
+                    name = obj.HHNAME;
+                    break;
+                case XS.Main.ClusterPointerStyle.poor_info_id:
+                    name = obj.name;
+                    break;
+            }
+            var geoText = new SuperMap.Geometry.GeoText(obj.LONGITUDE, obj.LATITUDE - 0 - yOff, name);
+            var geotextFeature = new SuperMap.Feature.Vector(geoText);
+            geotextFeatures.push(geotextFeature);
         }
+
+        xs_poorHLabelLayer.removeAllFeatures();
+        xs_poorHLabelLayer.addFeatures(geotextFeatures);
         xs_clusterLayer.addFeatures(features);
     }else if(type == XS.Main.ClusterPointerStyle.pkdc_tasker){ //任务人监控
         xs_clusterLayer.addFeatures(objArr);
@@ -1096,22 +1161,23 @@ XS.Main.clickMapCallback = function(mouseEvent){
             switch (level){
                 case XS.Main.ZoneLevel.county:
                     xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 6);
-                    XS.Main.addTownVillPlevelMarker2Layer(level,xs_clickMapFutureId);
+                    XS.Main.addTownVillPlevelMarker2Layer(level,xs_clickMapFutureId,0);
                     break;
                 case XS.Main.ZoneLevel.town:
                     xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 9);
-                    XS.Main.addTownVillPlevelMarker2Layer(level, xs_clickMapFutureId);
+                    XS.Main.addTownVillPlevelMarker2Layer(level, xs_clickMapFutureId,0);
                     break;
                 case XS.Main.ZoneLevel.village:
                     xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 11);
+                    var centerPointer = feature.geometry.getBounds().getCenterLonLat();
                     //请求贫困户数据定位地图上去
-                    var data = {pbno: xs_clickMapFutureId,pageNo:1};
+                    var data = {pbno: xs_clickMapFutureId};
                     XS.CommonUtil.showLoader();
-                    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryHousePeoByHidOfPage", data, function(json){
+                    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryHousePeoByIdArea", data, function(json){
                         XS.CommonUtil.hideLoader();
                         if(json && json.length>0)
                         {
-                            XS.Main.Poor.showPoors(json);
+                            XS.Main.Poor.showPoors(json,centerPointer);
                         }
                     },function(e){XS.CommonUtil.hideLoader();});
                     break;
@@ -1153,27 +1219,27 @@ XS.Main.movedMapCallback = function(event){
 
 //行政区贫困等级图示示例集合
 XS.Main.poorZonePicArr = {
-    town:{
-        "一":"../img/zone/town/town_p1.png",
-        "二":"../img/zone/town/town_p2.png",
-        "三":"../img/zone/town/town_p3.png",
-        "其它":"../img/zone/town/town_pother.png"
-    },
-    vill:{
-        "贫困村":"../img/zone/vill/vill_p1.png",
-        "其它":"../img/zone/vill/vill_p5.png"
-    },
-    poor:{
-        "因病":"../img/zone/fam/f_01.png",
-        "因学":"../img/zone/fam/f_02.png",
-        "因灾":"../img/zone/fam/f_03.png",
-        "因残":"../img/zone/fam/f_04.png",
-        "缺技术":"../img/zone/fam/f_05.png",
-        "缺劳力":"../img/zone/fam/f_06.png",
-        "缺资金":"../img/zone/fam/f_07.png",
-        "缺土地":"../img/zone/fam/f_08.png",
-        "其它":"../img/zone/fam/f_09.png"
-    }
+    town:[
+        {name:"一",value:"../img/zone/town/town_p1.png"},
+        {name:"二",value:"../img/zone/town/town_p2.png"},
+        {name:"三",value:"../img/zone/town/town_p3.png"},
+        {name:"其它",value:"../img/zone/town/town_pother.png"}
+    ],
+    vill:[
+        {name:"贫困村",value:"../img/zone/vill/vill_p1.png"},
+        {name:"其它",value:"../img/zone/vill/vill_p5.png"}
+    ],
+    poor:[
+        {name:"因病",value:"../img/zone/fam/f_01.png"},
+        {name:"因学",value:"../img/zone/fam/f_02.png"},
+        {name:"因灾",value:"../img/zone/fam/f_03.png"},
+        {name:"因残",value:"../img/zone/fam/f_04.png"},
+        {name:"缺技术",value:"../img/zone/fam/f_05.png"},
+        {name:"缺劳力",value:"../img/zone/fam/f_06.png"},
+        {name:"缺资金",value:"../img/zone/fam/f_07.png"},
+        {name:"缺土地",value:"../img/zone/fam/f_08.png"},
+        {name:"其它",value:"../img/zone/fam/f_09.png"}
+    ]
 };
 /**
  * 添加乡、村两级贫困等级图标到Layer
@@ -1181,7 +1247,13 @@ XS.Main.poorZonePicArr = {
  * @param superId
  */
 var xs_main_makerLayerLevel = -1; //保存marker图层时缩放级别
-XS.Main.addTownVillPlevelMarker2Layer = function(superLevel, superId){
+XS.Main.addTownVillPlevelMarker2Layer = function(superLevel, superId,currentId){
+    if(document.getElementById("xs_poor_legend")){
+        $("#xs_poor_legend").remove();
+    }
+    $("#xs_mainC").append(XS.Main.Poor.createPoorLegendTag(superLevel));
+    $("#xs_poor_legend").css("display", "block");
+
     xs_main_makerLayerLevel = superLevel+1;
     var sql = "";
     var layerName = "";
@@ -1216,7 +1288,14 @@ XS.Main.addTownVillPlevelMarker2Layer = function(superLevel, superId){
                     id = feature.data.OldID;
                     action = "QueryVillBaseByareaId";
                 }
-                lonLatArr[id] = centerPoint;
+                if(currentId){
+                    if(id == currentId){
+                        lonLatArr[id] = centerPoint;
+                        break;
+                    }
+                }else{
+                    lonLatArr[id] = centerPoint;
+                }
             }
             //请求数据
             var data = {pbno:superId};
@@ -1250,19 +1329,34 @@ XS.Main.addTownVillPlevelMarker2Layer = function(superLevel, superId){
                             var iconUri = "";
                             if(XS.Main.ZoneLevel.county==superLevel)
                             {
-                                iconUri = XS.Main.poorZonePicArr.town[data[plevel]];
+                                for(var j in XS.Main.poorZonePicArr.town){
+                                    if(data[plevel] == XS.Main.poorZonePicArr.town[j].name){
+                                        iconUri = XS.Main.poorZonePicArr.town[j].value;
+                                    }
+                                }
                                 if(!iconUri){
-                                    iconUri = XS.Main.poorZonePicArr.town.其它;
+                                    iconUri = "../img/zone/town/town_pother.png";
                                 }
                                 data.xs_p_icon = iconUri;
                             }else{
-                                iconUri = XS.Main.poorZonePicArr.vill[data[plevel]];
+                                for(var j in XS.Main.poorZonePicArr.vill){
+                                    if(data[plevel] == XS.Main.poorZonePicArr.vill[j].name){
+                                        iconUri = XS.Main.poorZonePicArr.vill[j].value;
+                                    }
+                                }
                                 if(!iconUri){
-                                    iconUri = XS.Main.poorZonePicArr.vill.其它;
+                                    iconUri = "../img/zone/vill/vill_p1.png";
                                 }
                                 data.xs_p_icon = iconUri;
                             }
-                            dataArr.push(data);
+                            if(currentId){
+                                if(id == currentId){
+                                    dataArr.push(data);
+                                    break;
+                                }
+                            }else{
+                                dataArr.push(data);
+                            }
                         }
                     }
 
@@ -1306,10 +1400,13 @@ XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, 
                     //点击marker回调lonLat
                     xs_clickMapType = XS.Main.clickMapType.none;
                     var lonLat = marker.object.lonlat;
+                    var xy = xs_MapInstance.getMapObj().getPixelFromLonLat(lonLat);
+                    var ClickE = {xy:xy};
                     var data = marker.object.data;
                     switch (data.xs_type)
                     {
                         case XS.Main.ZoneLevel.town:
+                            XS.Main.clickMapCallback(ClickE);
                            XS.LogUtil.log(data);
                             xs_clickMapType = XS.Main.clickMapType.marker;
                             XS.Main.Pkjc.closeInfoDialog();
@@ -1317,6 +1414,7 @@ XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, 
                             XS.Main.Pkjc.clickDetail(type,data.TOWB_NAME,data.TOWB_ID);
                             break;
                         case XS.Main.ZoneLevel.village:
+                            XS.Main.clickMapCallback(ClickE);
                             xs_clickMapType = XS.Main.clickMapType.marker;
                             XS.Main.Pkjc.closeInfoDialog();
                             XS.Main.Poor.clearRelocationLayer();
@@ -1364,6 +1462,7 @@ XS.Main.hiddenLayers = function(){
     xs_poorLabelLayer.setVisibility(false);
 
     XS.Main.Tjfx.removeLayer();
+    xs_poorHLabelLayer.removeAllFeatures();
     xs_vectorLayer.removeAllFeatures();
     xs_isShowUtfGridTip = true;
    // xs_zone_vectorLayer.removeAllFeatures();

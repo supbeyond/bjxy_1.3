@@ -21,16 +21,38 @@ XS.Main.Poor.showPoor = function(id){
 }
 
 //显示贫困用户
-XS.Main.Poor.showPoors = function(objArr){
+XS.Main.Poor.showPoors = function(objArr,centerPointer){
     xs_markerLayer.clearMarkers();
     xs_markerLayer.setVisibility(false);
     XS.Main.Poor.clearRelocationLayer();
     if(objArr&&objArr.length>0){
         var dataArr = [];
         for(var i in objArr){
-            dataArr.push({LONGITUDE:objArr[i].Longitude, LATITUDE:objArr[i].Latitude, hid:objArr[i].hid, name:objArr[i].name});
+            var lng = 0;
+            var lat = 0;
+            if(!objArr[i].lng || !objArr[i].lat){
+                lng = centerPointer.lon + (Math.random()>0.5 ? 1 : -1) * Math.random() * 0.002;
+                lat = centerPointer.lat + (Math.random()>0.5 ? 1 : -1) * Math.random() * 0.002;
+            }else{
+                lng = objArr[i].lng;
+                lat = objArr[i].lat;
+            }
+            /*var isReason = false;
+            var reason = "";
+            for(var j in XS.Main.poorZonePicArr.poor){
+                if(XS.Main.poorZonePicArr.poor[j].name == objArr[i].reason){
+                    reason = objArr[i].reason;
+                    isReason = true;
+                    break;
+                }
+            }
+            if(isReason){
+                reason = "其他";
+            }*/
+            dataArr.push({LONGITUDE:lng, LATITUDE:lat, hid:objArr[i].id, name:objArr[i].name,reason:objArr[i].reason});
         }
         //xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(objArr[0].Longitude, objArr[0].Latitude), 11);
+
         XS.Main.addVectorPoint2ClusterLayer(dataArr, XS.Main.ClusterPointerStyle.poor_info_id);
 
      //   XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, iconH, type);
@@ -1625,5 +1647,54 @@ XS.Main.Poor.movedMapCallback = function(e){
         XS.Main.Poor.preloc_reSetOption(xs_poor_echart_option);
         xs_poor_echartObj.setOption(xs_poor_echart_option, {});
     }
+}
+
+//创建贫困图例
+XS.Main.Poor.createPoorLegendTag = function(level){
+    var tag = '<div id="xs_poor_legend">'+
+        '<div class="poorLegendTitle">'+
+        '<span>图例</span>'+
+        '</div>'+
+        '<div class="poorLegendContent">'+
+        '<table border="0" cellspacing="0" cellpadding="0">'+
+        '<tr style="border-bottom: 1px solid #02BBEE;">';
+        //XS.Main.Tjfx.pkfsx_legendItemHeaders.countytown[9] = '40% - 10000%';
+        if(level == XS.Main.ZoneLevel.county)
+        {
+            tag += '<td class="poorLegendItemHeader">贫困类型</td><td class="poorLegendItemValue">图标</td></tr>';
+            for(var i in XS.Main.poorZonePicArr.town){
+                tag += '<tr class1="poorLegendItemRow" style="border-bottom: 1px solid #02BBEE;">';
+                tag += '<td class="poorLegendItemHeader">'+XS.Main.poorZonePicArr.town[i].name+'</td>';
+                tag += '<td class="poorLegendItemValue" style1="background:url("'+XS.Main.poorZonePicArr.town[i].value+'") no-repeat 100px 0 #fff;>' +
+                    '<img style="width:25px;heigth:25px;" src="'+XS.Main.poorZonePicArr.town[i].value+'" alt=""/>' +
+                    '</td>';
+                tag += '</tr>';
+            }
+        }else if(level == XS.Main.ZoneLevel.town)
+        {
+            tag += '<td class="poorLegendItemHeader">贫困类型</td><td class="poorLegendItemValue">图标</td></tr>';
+            for(var i in XS.Main.poorZonePicArr.vill){
+                tag += '<tr class1="poorLegendItemRow" style="border-bottom: 1px solid #02BBEE;">';
+                tag += '<td class="poorLegendItemHeader">'+XS.Main.poorZonePicArr.vill[i].name+'</td>';
+                tag += '<td class="poorLegendItemValue" style1="background:url("'+XS.Main.poorZonePicArr.vill[i].value+'") no-repeat 100px 0 #fff;>' +
+                    '<img style="width:25px;heigth:25px;" src="'+XS.Main.poorZonePicArr.vill[i].value+'" alt=""/>' +
+                    '</td>';
+                tag += '</tr>';
+            }
+        }else if(level == XS.Main.ZoneLevel.village)
+        {
+            tag += '<td class="poorLegendItemHeader">贫困原因</td><td class="poorLegendItemValue">图标</td></tr>';
+            for(var i in XS.Main.poorZonePicArr.poor){
+                tag += '<tr class="poorLegendItemRow" style="border-bottom: 1px solid #02BBEE;">';
+                tag += '<td class="poorLegendItemHeader">'+XS.Main.poorZonePicArr.poor[i].name+'</td>';
+                tag += '<td class="poorLegendItemValue" style1="background:url("'+XS.Main.poorZonePicArr.poor[i].value+'") no-repeat 100px 0 #fff;>' +
+                    '<img style="width:18px;heigth:18px;" src="'+XS.Main.poorZonePicArr.poor[i].value+'" alt=""/>' +
+                    '</td>';
+                tag += '</tr>';
+            }
+        }
+    tag += '</table></div></div>';
+
+    return tag;
 }
 

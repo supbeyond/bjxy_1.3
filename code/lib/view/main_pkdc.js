@@ -659,7 +659,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         XS.Main.addDivHover2HiddenUTFGridTip("xs_pkdc_msgWin");
     }
     //-------------------------加载一次 结束-----------------------------------
-    $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/*, width:1020,height:600*/}).window('open');
+    $('#xs_pkdc_msgWin').window({"title":"贫困洞察"/*, width:1020,height:600*/}).window('open');
     $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
     $("#xs_pkdc_msg_pieC").css("display","block");
     switch (xs_pkdc_zoneLevel){
@@ -804,7 +804,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         $("#xs_pkdc_msg_barC").empty().append(xs_pkdc_village);
 
         if(id != XS.Main.CacheZoneInfos.poorH.villageId){
-            var dataN = {pbno: id,pageNo:1};
+            var dataN = {pbno: id,pageNo:1,pageSize:20};
             $("#xs_pkdc_msgWin_p").css("display", "block");
             //http://61.159.185.196:7060/Service2.svc/QueryHousePeoByHidOfPage?pbno=52242810102&pageNo=1
             XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryHousePeoByHidOfPage", dataN, function(json){
