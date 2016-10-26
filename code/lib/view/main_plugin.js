@@ -12,7 +12,7 @@ var xs_currentZoneFuture = null; //保存当前被选中的行政Future
 var xs_clickMapFutureId = -1; //保存当前被选中的行政FutureID
 var xs_currentZoneLevel = -1; //记录当前行政等级
 var xs_isMapClickTypeNone = false; //判断单击地图是否是的类型为None
-var xs_poorHLabelLayer = null;
+//var xs_poorHLabelLayer = null;
 //行政区域点中样式
 var xs_stateZoneStyle = {
     strokeColor: "#00bbee",
@@ -124,7 +124,7 @@ $(function(){
 
     var strategy = new SuperMap.Strategy.GeoText();
     strategy.style = {
-        fontColor:"#00bbee",
+        fontColor:"red",
         fontSize:"8px",
         fill: false,
         fillColor: "#000000",
@@ -132,8 +132,8 @@ $(function(){
         stroke: false,
         strokeColor:"#ff0000"
     };
-    xs_poorHLabelLayer = new SuperMap.Layer.Vector("xs_poorHLabelLayer",{strategies: [strategy]});
-    xs_MapInstance.getMapObj().addLayer(xs_poorHLabelLayer);
+    /*xs_poorHLabelLayer = new SuperMap.Layer.Vector("xs_poorHLabelLayer",{strategies: [strategy]});
+    xs_MapInstance.getMapObj().addLayer(xs_poorHLabelLayer);*/
 });
 
 var xs_rbbtn_isfullscreen = false; //是否是全屏
@@ -829,12 +829,13 @@ XS.Main.utfGridLayerMoveCallbackUpdataData = function(level, x, y, name,THus, po
 }
 
 //添加矢量点到聚散图层
-XS.Main.addVectorPoint2ClusterLayer = function(objArr, type,onlyReason){
+var xs_clickPoorLegendArr = [];
+XS.Main.addVectorPoint2ClusterLayer = function(objArr, type){
     //XS.Main.clearMap();
     //XS.Main.Poor.clearRelocationLayer();
     xs_isShowUtfGridTip = false;
-    xs_clusterLayer.destroyCluster();
-    xs_clusterControl.activate();
+    //xs_clusterLayer.destroyCluster();
+    //xs_clusterControl.activate();
     if(!(objArr&&objArr.length>0)){
         return;
     }
@@ -844,80 +845,94 @@ XS.Main.addVectorPoint2ClusterLayer = function(objArr, type,onlyReason){
     }
     $("#xs_mainC").append(XS.Main.Poor.createPoorLegendTag(XS.Main.ZoneLevel.village));
     $("#xs_poor_legend").css("display", "block");
-    $(".poorLegendItemRow").click(function(){
-        var onlyReasonClick = $(this).children()[0].innerHTML;
 
-        /*xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 11);
-        var centerPointer = feature.geometry.getBounds().getCenterLonLat();
-        //请求贫困户数据定位地图上去
-        var data = {pbno: xs_clickMapFutureId};
-        XS.CommonUtil.showLoader();
-        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryHousePeoByIdArea", data, function(json){
-            XS.CommonUtil.hideLoader();
-            if(json && json.length>0)
-            {
-                XS.Main.Poor.showPoors(json,centerPointer);
+    if(xs_clickPoorLegendArr.length == 0){
+        $(".poorLegendItemRow").css({background:"#eee"});
+        XS.Main.Poor.legendRowHover($(".poorLegendItemRow"),"#ddd","#eee");
+    }else if(xs_clickPoorLegendArr.length == 1){
+        for(var i in XS.Main.poorZonePicArr.poor){
+            if(XS.Main.poorZonePicArr.poor[i].name == xs_clickPoorLegendArr[0]){
+                $(".poorLegendItemRow").eq(i).css({background:"#eee"});
+                XS.Main.Poor.legendRowHover($(".poorLegendItemRow").eq(i),"#ddd","#eee");
+                break;
             }
-        },function(e){XS.CommonUtil.hideLoader();});*/
-    });
+        }
+    }
 
     if(type == XS.Main.ClusterPointerStyle.poor_info_obj||type == XS.Main.ClusterPointerStyle.poor_info_id)
     {
-        var features = [];
         var geotextFeatures = [];
-
-        var yOff = -(1 / xs_MapInstance.getMapObj().getScale()) * 0.00000005;
+        //var yOff = -(1 / xs_MapInstance.getMapObj().getScale()) * 0.00000001;
+        var dataArr = [];
         for(var i=0; i<objArr.length; i++)
         {
             var obj = objArr[i];
-           // var pixel = xs_MapInstance.getMapObj().getPixelFromLonLat(xs_MapInstance.getMapCenterPoint());
-
-            var feature = new SuperMap.Feature.Vector();
-
-            feature.geometry = new SuperMap.Geometry.Point(obj.LONGITUDE, obj.LATITUDE);
             var iconUrl = "";
-
             for(var j in XS.Main.poorZonePicArr.poor){
                 if(XS.Main.poorZonePicArr.poor[j].name == obj.reason){
                     iconUrl = XS.Main.poorZonePicArr.poor[j].value;
+                    break;
                 }
             }
-            if(!iconUrl){
-                iconUrl = "../img/zone/fam/f_09.png";
-            }
-            //105.16 , 27.07
-            var style = {
-                pointRadius: 6,
-                graphic:true,
-                /*externalGraphic:"../base/map/theme/images/cluster4.png",*/
-                externalGraphic:iconUrl,
-                graphicWidth:20,
-                graphicHeight:20
-            };
-            feature.style = style;
-           // feature.data = XS.Main.ClusterPointerStyle.poor;
-            feature.info = obj;
-            //标注点类型
-            feature.info.xt_ctype = type;
-            features.push(feature);
+            obj.xs_p_icon =  iconUrl;
+            dataArr.push(obj);
 
-            var name = "";
-            switch (type){
-                case XS.Main.ClusterPointerStyle.poor_info_obj:
-                    name = obj.HHNAME;
-                    break;
-                case XS.Main.ClusterPointerStyle.poor_info_id:
-                    name = obj.name;
-                    break;
-            }
-            var geoText = new SuperMap.Geometry.GeoText(obj.LONGITUDE, obj.LATITUDE - 0 - yOff, name);
+            var geoText = new SuperMap.Geometry.GeoText(obj.LONGITUDE, obj.LATITUDE, obj.name);
             var geotextFeature = new SuperMap.Feature.Vector(geoText);
             geotextFeatures.push(geotextFeature);
-        }
 
-        xs_poorHLabelLayer.removeAllFeatures();
-        xs_poorHLabelLayer.addFeatures(geotextFeatures);
-        xs_clusterLayer.addFeatures(features);
+        }
+        xs_poorLabelLayer.addFeatures(geotextFeatures);
+        xs_poorLabelLayer.setVisibility(true);
+        //xs_clusterLayer.addFeatures(features);
+        XS.Main.addMarkers2Layer(dataArr, "LONGITUDE", "LATITUDE", "xs_p_icon", 20, 20, 3);
+
+
+        var isFirstClick = true;
+        $(".poorLegendItemRow").click(function (e) {
+            var onlyReasonClick = $(this).children()[0].innerHTML;
+            if(isFirstClick){
+                isFirstClick = false;
+                if(xs_clickPoorLegendArr.length != 1){
+                    $(".poorLegendItemRow").css({background:"#fff"});
+                    XS.Main.Poor.legendRowHover($(".poorLegendItemRow"),"#ddd","#fff");
+                }
+            }
+            var isHaveReason = false;
+            for (var i in xs_clickPoorLegendArr) {
+                if (onlyReasonClick == xs_clickPoorLegendArr[i]) {
+                    isHaveReason = true;
+                    xs_clickPoorLegendArr.splice(i, 1);
+                    $(this).css({background:"#fff"});
+                    XS.Main.Poor.legendRowHover($(this),"#ddd","#fff");
+                    break;
+                }
+            }
+            if (!isHaveReason) {
+                xs_clickPoorLegendArr.push(onlyReasonClick);
+                $(this).css({background:"#eee"});
+                XS.Main.Poor.legendRowHover($(this),"#ddd","#eee");
+            }
+
+            var clickPoorLegendLabels = [];
+            var clickPoorLegendMarkers = [];
+            for (var i in xs_clickPoorLegendArr) {
+                for (var j in dataArr) {
+                    if (xs_clickPoorLegendArr[i] == dataArr[j].reason) {
+                        clickPoorLegendMarkers.push(dataArr[j]);
+
+                        var geoText = new SuperMap.Geometry.GeoText(dataArr[j].LONGITUDE, dataArr[j].LATITUDE, dataArr[j].name);
+                        var geotextFeature = new SuperMap.Feature.Vector(geoText);
+                        clickPoorLegendLabels.push(geotextFeature);
+                    }
+                }
+
+            }
+            xs_poorLabelLayer.removeAllFeatures();
+            xs_poorLabelLayer.addFeatures(clickPoorLegendLabels);
+            //xs_poorLabelLayer.setVisibility(true);
+            XS.Main.addMarkers2Layer(clickPoorLegendMarkers, "LONGITUDE", "LATITUDE", "xs_p_icon", 20, 20, 3);
+        });
     }else if(type == XS.Main.ClusterPointerStyle.pkdc_tasker){ //任务人监控
         xs_clusterLayer.addFeatures(objArr);
     }
@@ -926,7 +941,7 @@ XS.Main.addVectorPoint2ClusterLayer = function(objArr, type,onlyReason){
 //选择聚散点处理
 XS.Main.clusterControlCallback =
 {
-    over:function(f){
+    over:function(f){alert(1);
         if (!f.isCluster)
         { //当点击聚散点的时候不弹出信息窗口
             var name = "";
@@ -1002,6 +1017,12 @@ XS.Main.clusterControlCallback =
 
 //点击地图事件处理
 XS.Main.clickMapCallback = function(mouseEvent){
+    xs_poorLabelLayer.removeAllFeatures();
+    xs_markerLayer.clearMarkers();
+    xs_markerLayer.setVisibility(false);
+    XS.Main.Poor.clearRelocationLayer();
+    $("#xs_poor_legend").css("display", "none");
+
    // var lonLat = mapInstance.getMapObj().getLonLatFromPixel(mouseEvent.xy);
     //lonLat.lon, lonLat.lat
     //xs_zone_vectorLayer.removeAllFeatures();
@@ -1198,12 +1219,37 @@ XS.Main.zoomedMapCallback = function(e){
 
         if(scale>300000){ //county
            if(xs_main_makerLayerLevel>XS.Main.ZoneLevel.county){
-               xs_markerLayer.clearMarkers();
+               //xs_markerLayer.clearMarkers();
+               xs_markerLayer.setVisibility(false);
+               xs_poorLabelLayer.setVisibility(false);
+               $("#xs_poor_legend").css("display","none");
            }
         }else if(scale<=300000&& scale>80000) //town
         {
             if(xs_main_makerLayerLevel>XS.Main.ZoneLevel.town){
-                xs_markerLayer.clearMarkers();
+                //xs_markerLayer.clearMarkers();
+                xs_markerLayer.setVisibility(false);
+                xs_poorLabelLayer.setVisibility(false);
+                $("#xs_poor_legend").css("display","none");
+            }else{
+                xs_markerLayer.setVisibility(true);
+                $("#xs_poor_legend").css("display","block");
+            }
+        }else if(scale<=80000&& scale>30000)//vill
+        {
+            if(xs_main_makerLayerLevel>XS.Main.ZoneLevel.village){
+                xs_markerLayer.setVisibility(false);
+                xs_poorLabelLayer.setVisibility(false);
+                $("#xs_poor_legend").css("display","none");
+            }else{
+                xs_markerLayer.setVisibility(true);
+                $("#xs_poor_legend").css("display","block");
+            }
+        }else{
+            if(xs_main_makerLayerLevel==XS.Main.ZoneLevel.poor){
+                xs_markerLayer.setVisibility(true);
+                xs_poorLabelLayer.setVisibility(true);
+                $("#xs_poor_legend").css("display","block");
             }
         }
 
@@ -1254,7 +1300,14 @@ XS.Main.addTownVillPlevelMarker2Layer = function(superLevel, superId,currentId){
     $("#xs_mainC").append(XS.Main.Poor.createPoorLegendTag(superLevel));
     $("#xs_poor_legend").css("display", "block");
 
-    xs_main_makerLayerLevel = superLevel+1;
+    /*$("#xs_poor_legend").mouseover(function(e){
+     $("#xs_utfGridC").css("display","none");
+     });
+     $("#xs_poor_legend").mouseout(function(e){
+     $("#xs_utfGridC").css("display","block");
+     });*/
+    XS.Main.addDivHover2HiddenUTFGridTip("xs_poor_legend");
+
     var sql = "";
     var layerName = "";
     switch (superLevel){
@@ -1361,7 +1414,7 @@ XS.Main.addTownVillPlevelMarker2Layer = function(superLevel, superId,currentId){
                     }
 
                     //添加 marker图片
-                    XS.Main.addMarkers2Layer(dataArr, "xs_lon", "xs_lat", "xs_p_icon", 32, 32, superLevel+1);
+                    XS.Main.addMarkers2Layer(dataArr, "xs_lon", "xs_lat", "xs_p_icon", 32, 32, superLevel);
                 }
             },function(e){XS.CommonUtil.hideLoader();});
         }else{
@@ -1382,17 +1435,18 @@ XS.Main.addTownVillPlevelMarker2Layer = function(superLevel, superId,currentId){
  * @param iconH
  * @param type marker类型，用于触发事件时分类处理 @see XS.Main.ZoneLevel
  */
-XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, iconH, type){
+XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, iconH, superLevel){
     XS.CommonUtil.showLoader();
     xs_clusterLayer.destroyCluster();
     xs_markerLayer.clearMarkers();
     xs_markerLayer.setVisibility(true);
+    xs_main_makerLayerLevel = superLevel + 1;
 
     for(var i=0; i<dataArr.length; i++)
     {
         var data = dataArr[i];
         var marker = XS.MarkerUtil.createMarkerToLayer(xs_markerLayer, iconW, iconH, data[lonKey], data[latKey], data[iconUriKey]);
-        data.xs_type = type;
+        data.xs_type = superLevel;
         marker.data = data;
         marker.events.on(
          {
@@ -1405,20 +1459,28 @@ XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, 
                     var data = marker.object.data;
                     switch (data.xs_type)
                     {
+                        case XS.Main.ZoneLevel.county:
+                            XS.Main.clickMapCallback(ClickE);
+                            XS.LogUtil.log(data);
+                            xs_clickMapType = XS.Main.clickMapType.marker;
+                            XS.Main.Pkjc.closeInfoDialog();
+                            XS.Main.Poor.clearRelocationLayer();
+                            XS.Main.Pkjc.clickDetail(superLevel + 1,data.TOWB_NAME,data.TOWB_ID);
+                            break;
                         case XS.Main.ZoneLevel.town:
                             XS.Main.clickMapCallback(ClickE);
-                           XS.LogUtil.log(data);
                             xs_clickMapType = XS.Main.clickMapType.marker;
                             XS.Main.Pkjc.closeInfoDialog();
                             XS.Main.Poor.clearRelocationLayer();
-                            XS.Main.Pkjc.clickDetail(type,data.TOWB_NAME,data.TOWB_ID);
+                            XS.Main.Pkjc.clickDetail(superLevel + 1,data.VBI_NAME,data.VBI__ID);
                             break;
                         case XS.Main.ZoneLevel.village:
-                            XS.Main.clickMapCallback(ClickE);
                             xs_clickMapType = XS.Main.clickMapType.marker;
                             XS.Main.Pkjc.closeInfoDialog();
                             XS.Main.Poor.clearRelocationLayer();
-                            XS.Main.Pkjc.clickDetail(type,data.VBI_NAME,data.VBI__ID);
+
+                            $("#xs_clusterTipC").css({display: 'none'});
+                            XS.Main.Poor.clickClusterCallback(data);
                             break;
                     }
                 }
@@ -1444,6 +1506,7 @@ XS.Main.hiddenDivTags = function(){
     //统计分析--图表专题图Tip
     if($("#xs_tjfx_graph_themeTipC").length>0) $("#xs_tjfx_graph_themeTipC").css("display","none");
     if($("#xs_tjfx_graph_Legend").length>0) $("#xs_tjfx_graph_Legend").css("display", "none");
+    if($("#xs_poor_legend").length>0 && xs_main_makerLayerLevel == XS.Main.ZoneLevel.poor) $("#xs_poor_legend").css("display", "none");
     //XS.Main.Poor.clearRelocationLayer();
 
 }
@@ -1456,13 +1519,13 @@ XS.Main.closeDialogs = function(){
 
 //隐藏所有相关图层
 XS.Main.hiddenLayers = function(){
-
-    xs_markerLayer.clearMarkers();
-    xs_markerLayer.setVisibility(false);
-    xs_poorLabelLayer.setVisibility(false);
+    if(xs_main_makerLayerLevel == XS.Main.ZoneLevel.poor){
+        xs_markerLayer.clearMarkers();
+        xs_markerLayer.setVisibility(false);
+        xs_poorLabelLayer.setVisibility(false);
+    }
 
     XS.Main.Tjfx.removeLayer();
-    xs_poorHLabelLayer.removeAllFeatures();
     xs_vectorLayer.removeAllFeatures();
     xs_isShowUtfGridTip = true;
    // xs_zone_vectorLayer.removeAllFeatures();
@@ -1694,8 +1757,8 @@ XS.Main.addDivHover2HiddenUTFGridTip = function(id){
     if(document.getElementById(id)){
         $("#"+id).hover(
             function () {
-                $("#xs_utfGridC").css("display","none");
-            },
+            $("#xs_utfGridC").css("display","none");
+        },
             function () {
                 $("#xs_utfGridC").css("display","none");
             }

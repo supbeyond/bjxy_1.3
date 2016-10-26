@@ -5,16 +5,35 @@
 XS.Main.Poor = {};
 
 //通过用户ID查询户详细信息
-XS.Main.Poor.showPoor = function(id){
-    xs_markerLayer.clearMarkers();
-    xs_markerLayer.setVisibility(false);
-    XS.Main.Poor.clearRelocationLayer();
+XS.Main.Poor.showPoor = function(id,centerPointer){
     XS.CommonUtil.showLoader();
     var data = {Hid: id};
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTempHouseNinfoByHId", data, function (json) {
         XS.CommonUtil.hideLoader();
         if (json && json.length>0) {
+            json[0].xt_ctype =  XS.Main.ClusterPointerStyle.poor_info_obj;
+            json[0].name =  json[0].HHNAME;
+            json[0].reason =  json[0].MAIN_REASON;
+            json[0].hid =  json[0].PB_HHID;
+
+            if(!json[0].LONGITUDE || !json[0].LATITUDE){
+                json[0].LONGITUDE = centerPointer.lon + (Math.random()>0.5 ? 1 : -1) * Math.random() * 0.002;
+                json[0].LATITUDE = centerPointer.lat + (Math.random()>0.5 ? 1 : -1) * Math.random() * 0.002;
+            }
+
             xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(json[0].LONGITUDE, json[0].LATITUDE), 11);
+            var isEqual = false;
+            for(var i in XS.Main.poorZonePicArr.poor){
+                if(XS.Main.poorZonePicArr.poor[i].name == json[0].reason){
+                    isEqual = true;
+                    xs_clickPoorLegendArr = [json[0].reason];
+                    break;
+                }
+            }
+            if(!isEqual){
+                xs_clickPoorLegendArr = ['其它'];
+                json[0].reason = '其它';
+            }
             XS.Main.addVectorPoint2ClusterLayer(json, XS.Main.ClusterPointerStyle.poor_info_obj);
         }
     },function(e){XS.CommonUtil.hideLoader();});
@@ -37,22 +56,20 @@ XS.Main.Poor.showPoors = function(objArr,centerPointer){
                 lng = objArr[i].lng;
                 lat = objArr[i].lat;
             }
-            /*var isReason = false;
-            var reason = "";
+            var isEqual = false;
             for(var j in XS.Main.poorZonePicArr.poor){
                 if(XS.Main.poorZonePicArr.poor[j].name == objArr[i].reason){
-                    reason = objArr[i].reason;
-                    isReason = true;
+                    isEqual = true;
                     break;
                 }
             }
-            if(isReason){
-                reason = "其他";
-            }*/
-            dataArr.push({LONGITUDE:lng, LATITUDE:lat, hid:objArr[i].id, name:objArr[i].name,reason:objArr[i].reason});
+            if(!isEqual){
+                objArr[i].reason = '其它';
+            }
+            dataArr.push({LONGITUDE:lng, LATITUDE:lat, hid:objArr[i].id, name:objArr[i].name,reason:objArr[i].reason,xt_ctype:XS.Main.ClusterPointerStyle.poor_info_id});
         }
         //xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(objArr[0].Longitude, objArr[0].Latitude), 11);
-
+        xs_clickPoorLegendArr =[];
         XS.Main.addVectorPoint2ClusterLayer(dataArr, XS.Main.ClusterPointerStyle.poor_info_id);
 
      //   XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, iconH, type);
@@ -62,7 +79,7 @@ XS.Main.Poor.showPoors = function(objArr,centerPointer){
 //点击聚散点--查看贫困户的基本信息
 XS.Main.Poor.clickClusterCallback = function(obj){
     xs_isShowUtfGridTip = false;
-    if(obj.xt_ctype==XS.Main.ClusterPointerStyle.poor_info_obj){
+    /*if(obj.xt_ctype==XS.Main.ClusterPointerStyle.poor_info_obj){
         XS.Main.Poor.showPoorInfo(obj);
     }else if(obj.xt_ctype==XS.Main.ClusterPointerStyle.poor_info_id){
         XS.CommonUtil.showLoader();
@@ -73,7 +90,15 @@ XS.Main.Poor.clickClusterCallback = function(obj){
                 XS.Main.Poor.showPoorInfo(json[0]);
             }
         },function(e){XS.CommonUtil.hideLoader();});
-    }
+    }*/
+    XS.CommonUtil.showLoader();
+    var data = {Hid: obj.hid};
+    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTempHouseNinfoByHId", data, function (json) {
+        XS.CommonUtil.hideLoader();
+        if (json && json.length>0) {
+            XS.Main.Poor.showPoorInfo(json[0]);
+        }
+    },function(e){XS.CommonUtil.hideLoader();});
 }
 
 //显示户基本信息
@@ -88,7 +113,7 @@ XS.Main.Poor.showPoorInfo = function(obj){
             '</div>' +
         '</div>';
     //id, title, iconCls, content, resizable, maximizable, modal, width, height, left, top, closeCallback, maximizeCallback, minimizeCallback
-    XS.CommonUtil.openDialog("xs_poor_info", obj.HHNAME, "icon-man", content, false, false, false, null, 225,window.outerWidth/2.0+20);
+    XS.CommonUtil.openDialog("xs_poor_info", obj.HHNAME, "icon-man", content, false, false, false, null, 225,window.outerWidth/2.0);
     var jsonObj = [
         {"name":"户编号","value":obj.PB_HHID},
         {"name":"户主姓名","value":obj.HHNAME},
@@ -1651,12 +1676,17 @@ XS.Main.Poor.movedMapCallback = function(e){
 
 //创建贫困图例
 XS.Main.Poor.createPoorLegendTag = function(level){
+    xs_poor_legendbegoreH = 0;
+    xs_poor_isLegendClickSingle = true;
+
     var tag = '<div id="xs_poor_legend">'+
         '<div class="poorLegendTitle">'+
         '<span>图例</span>'+
+        '<a href="javascript:void(0)" id="xs_poor_legendCollap" onclick="XS.Main.Poor.legendCollapse();"></a>' +
+        '<a href="javascript:void(0)" id="xs_poor_legendClose" onclick="XS.Main.Poor.legendClose();"></a>' +
         '</div>'+
         '<div class="poorLegendContent">'+
-        '<table border="0" cellspacing="0" cellpadding="0">'+
+        '<table id="xs_poor_legendTab" border="0" cellspacing="0" cellpadding="0">'+
         '<tr style="border-bottom: 1px solid #02BBEE;">';
         //XS.Main.Tjfx.pkfsx_legendItemHeaders.countytown[9] = '40% - 10000%';
         if(level == XS.Main.ZoneLevel.county)
@@ -1696,5 +1726,53 @@ XS.Main.Poor.createPoorLegendTag = function(level){
     tag += '</table></div></div>';
 
     return tag;
+}
+var xs_poor_legendbegoreH = 0;
+var xs_poor_isLegendClickSingle = true;
+
+//图例展开和收缩事件
+XS.Main.Poor.legendCollapse = function(){
+    if(xs_poor_isLegendClickSingle){
+        xs_poor_isLegendClickSingle = false;
+        xs_poor_legendbegoreH = $(".poorLegendContent").outerHeight();
+        $(".poorLegendContent").animate({height:0},{duration: 300 });
+        $("#xs_poor_legendCollap").css({background: 'url("../img/panel_tools.png") no-repeat -32px 0'});
+
+        $("#xs_poor_legendCollap").hover(
+            function(){
+                $(this).css({background: 'url("../img/panel_tools.png") no-repeat -32px 0 #eee'});
+            },function(){
+                $(this).css({background: 'url("../img/panel_tools.png") no-repeat -32px 0'});
+            }
+        );
+    }else{
+        xs_poor_isLegendClickSingle = true;
+        $(".poorLegendContent").animate({height:xs_poor_legendbegoreH},{duration: 300 });
+        $("#xs_poor_legendTab").css({width: "220px"});
+        $("#xs_poor_legendCollap").css({background: 'url("../img/panel_tools.png") no-repeat -32px -16px'});
+
+        $("#xs_poor_legendCollap").hover(
+            function(){
+                $(this).css({background: 'url("../img/panel_tools.png") no-repeat -32px -16px #eee'});
+            },function(){
+                $(this).css({background: 'url("../img/panel_tools.png") no-repeat -32px -16px'});
+            }
+        );
+    }
+}
+//关闭图例事件
+XS.Main.Poor.legendClose = function(){
+    $("#xs_poor_legend").remove();
+}
+//鼠标在贫困户图例中移动事件
+XS.Main.Poor.legendRowHover = function(rowObjs,overColor,outColor){
+    rowObjs.hover(
+        function(){
+            $(this).css({background:overColor});
+        },
+        function(){
+            $(this).css({background:outColor});
+        }
+    );
 }
 

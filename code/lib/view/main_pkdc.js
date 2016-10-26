@@ -842,7 +842,9 @@ XS.Main.Pkjc.showOccurRatioPie = function(name, ratio){
 
 //选中贫困户事件处理
 XS.Main.Pkjc.onSelectedRowHandler = function(rowIndex, rowData){
-    XS.Main.Poor.showPoor(xs_pkdc_cacheDataArr[rowIndex].hid);
+    xs_pkdc_cacheDataArr = [];
+    xs_pkdc_cacheDataArr.push(rowData);
+    XS.Searchbox.baseInfoClick(XS.Main.ZoneLevel.poor,rowData.vid,"贫困户",0);
 }
 /**
  * 获取当前级别的和上一级的name
@@ -1035,7 +1037,7 @@ XS.Main.Pkjc.showHouseDataGrid = function(){
         columns: [[
             {field: 'name', title: '姓名', width: '16%', resizable: false},
             {field: 'num', title: '家庭人数', width: '16%', resizable: false},
-            {field: 'TotolSum', title: '年收入', width: '16%', resizable: false},
+            {field: 'income', title: '年收入', width: '16%', resizable: false},
             {field: 'CertNo', title: '身份证', width: '30%', resizable: false},
             {field: 'Altitude', title: '海拔', width: '16%', resizable: false}
         ]]

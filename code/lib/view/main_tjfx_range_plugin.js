@@ -191,20 +191,24 @@ XS.Main.Tjfx.range_createRangeStyleGroups = function(type, level){
     return styleGroups;
 }
 
-//创建分段专题 图例
+//创建图例
 XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
+    xs_poor_legendbegoreH = 0;
+    xs_poor_isLegendClickSingle = true;
+
     var tag = '<div id="xs_tjfx_range_Legend">'+
             '<div class="legendTitle">'+
             '<span>图例</span>'+
+            '<a href="javascript:void(0)" id="xs_poor_legendCollap" onclick="XS.Main.Poor.legendCollapse1();"></a>' +
+            '<a href="javascript:void(0)" id="xs_poor_legendClose" onclick="XS.Main.Poor.legendClose1();"></a>' +
             '</div>'+
-            '<div class="legendContent">'+
-            '<table>'+
-            '<tr>';
+            '<div class="legendContent">';
     switch (type)
     {
         case XS.Main.Tjfx.type.range_pkfsx:
         {
-            tag += '<td class="legendItemHeader">贫困发生率</td><td class="legendItemValue">颜色</td></tr>';
+            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">'+
+                '<tr><td class="legendItemHeader">贫困发生率</td><td class="legendItemValue">颜色</td></tr>';
 
             if(level == XS.Main.ZoneLevel.city){
                 for(var i in XS.Main.Tjfx.pkfsx_legendItemHeaders.city){
@@ -225,7 +229,8 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
         }
         case XS.Main.Tjfx.type.range_tpx:
         {
-            tag += '<td class="legendItemHeader">脱贫率</td><td class="legendItemValue">颜色</td></tr>';
+            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">'+
+                '<tr><td class="legendItemHeader">脱贫率</td><td class="legendItemValue">颜色</td></tr>';
 
             var len = XS.Main.Tjfx.range_styleGroups_color.length;
             for(var i in XS.Main.Tjfx.pkfsx_legendItemHeaders.countytown){
@@ -239,7 +244,8 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
         case XS.Main.Tjfx.type.range_wfx:
         {
             //XS.Main.Tjfx.pkfsx_legendItemHeaders.countytown[9] = '40% - 10000%';
-            tag += '<td class="legendItemHeader">危房率</td><td class="legendItemValue">颜色</td></tr>';
+            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">'+
+                '<tr><td class="legendItemHeader">危房率</td><td class="legendItemValue">颜色</td></tr>';
 
             var len = XS.Main.Tjfx.range_styleGroups_color.length;
             for(var i in XS.Main.Tjfx.pkfsx_legendItemHeaders.countytown){
@@ -253,7 +259,8 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
         case XS.Main.Tjfx.type.range_fpbqx:
         {
             //XS.Main.Tjfx.pkfsx_legendItemHeaders.countytown[9] = '40% - 10000%';
-            tag += '<td class="legendItemHeader">扶贫搬迁率</td><td class="legendItemValue">颜色</td></tr>';
+            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">'+
+                '<tr><td class="legendItemHeader">扶贫搬迁率</td><td class="legendItemValue">颜色</td></tr>';
 
             var len = XS.Main.Tjfx.range_styleGroups_color.length;
             for(var i in XS.Main.Tjfx.pkfsx_legendItemHeaders.countytown){
@@ -268,4 +275,40 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
     tag += '</table></div></div>';
 
     return tag;
+}
+
+
+//图例展开和收缩事件
+XS.Main.Poor.legendCollapse1 = function(){
+    if(xs_poor_isLegendClickSingle){
+        xs_poor_isLegendClickSingle = false;
+        xs_poor_legendbegoreH = $(".legendContent").outerHeight();
+        $(".legendContent").animate({height:0},{duration: 300 });
+        $("#xs_poor_legendCollap").css({background: 'url("../img/panel_tools.png") no-repeat -32px 0'});
+
+        $("#xs_poor_legendCollap").hover(
+            function(){
+                $(this).css({background: 'url("../img/panel_tools.png") no-repeat -32px 0 #eee'});
+            },function(){
+                $(this).css({background: 'url("../img/panel_tools.png") no-repeat -32px 0'});
+            }
+        );
+    }else{
+        xs_poor_isLegendClickSingle = true;
+        $(".legendContent").animate({height:xs_poor_legendbegoreH},{duration: 300 });
+        $("#xs_poor_legendTab").css({width: "220px"});
+        $("#xs_poor_legendCollap").css({background: 'url("../img/panel_tools.png") no-repeat -32px -16px'});
+
+        $("#xs_poor_legendCollap").hover(
+            function(){
+                $(this).css({background: 'url("../img/panel_tools.png") no-repeat -32px -16px #eee'});
+            },function(){
+                $(this).css({background: 'url("../img/panel_tools.png") no-repeat -32px -16px'});
+            }
+        );
+    }
+}
+//关闭图例事件
+XS.Main.Poor.legendClose1 = function(){
+    $("#xs_tjfx_range_Legend").remove();
 }
