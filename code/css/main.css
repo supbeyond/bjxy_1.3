@@ -132,13 +132,48 @@ html, body{
 }
 
 #xs_tjfx_range_Legend .legendTitle,#xs_tjfx_graph_Legend .legendTitle,#xs_poor_legend .poorLegendTitle{
+    line-height: 24px;
+    height: 24px;
     background: #1E90FF;
+    /*background: url("../img/panel_tools.png") no-repeat -32px -16px #1E90FF;*/
 }
-#xs_tjfx_range_Legend .legendContent,#xs_tjfx_graph_Legend .legendContent{
+#xs_poor_legendCollap:hover{
+    background: url("../img/panel_tools.png") no-repeat -32px -16px #eee;
+    border-radius:2px;
+    opacity: 1;
+}
+#xs_poor_legendCollap{
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    opacity: 0.8;
+    position: absolute;
+    margin-top: 4px;
+    right: 20px;
+    /*padding-left: 16px;*/
+    background: url("../img/panel_tools.png") no-repeat -32px -16px;
+}
+#xs_poor_legendClose:hover{
+    background: url("../img/panel_tools.png") no-repeat -16px 0 #ff0000;
+    border-radius:2px;
+    opacity: 1;
+}
+#xs_poor_legendClose{
+    width: 16px;
+    height: 16px;
+    display: inline-block;
+    opacity: 0.8;
+    position: absolute;
+    margin-top: 4px;
+    right: 4px;
+    /*padding-left: 16px;*/
+    background: url("../img/panel_tools.png") no-repeat -16px 0px;
+}
+#xs_tjfx_range_Legend .legendContent,#xs_tjfx_graph_Legend .legendContent,#xs_poor_legend .poorLegendContent{
     font-size: 10px;
     padding-left: 15px;
     padding-right: 15px;
-    height: 200px;
+    height: auto;
     display: block;
     overflow-y: auto;
 }
@@ -155,16 +190,17 @@ html, body{
     height: 5px;
 }
 
-#xs_poor_legend .poorLegendContent{
+/*#xs_poor_legend .poorLegendContent{
     font-size: 10px;
     padding-left: 15px;
     padding-right: 15px;
     height: auto;
     display: block;
     overflow-y: auto;
-}
+}*/
 #xs_poor_legend .poorLegendItemRow:hover{
-    background: #eee;
+    cursor: pointer;
+    background: #ddd;
 }
 /*-----------------------------脱贫率-------------------------------------------------*/
 
