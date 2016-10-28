@@ -117,7 +117,7 @@ html, body{
 }
 
 /*-----------------------------统计分析--分段专题图-------------------------------------------------*/
-#xs_tjfx_range_Legend,#xs_tjfx_graph_Legend,#xs_poor_legend{
+#xs_tjfx_range_Legend{
     position: absolute;
     right: 35px;
     bottom: 5px;
@@ -131,7 +131,7 @@ html, body{
     z-index: 1000;
 }
 
-#xs_tjfx_range_Legend .legendTitle,#xs_tjfx_graph_Legend .legendTitle,#xs_poor_legend .poorLegendTitle{
+#xs_tjfx_range_Legend .legendTitle{
     line-height: 24px;
     height: 24px;
     background: #1E90FF;
@@ -169,7 +169,7 @@ html, body{
     /*padding-left: 16px;*/
     background: url("../img/panel_tools.png") no-repeat -16px 0px;
 }
-#xs_tjfx_range_Legend .legendContent,#xs_tjfx_graph_Legend .legendContent,#xs_poor_legend .poorLegendContent{
+#xs_tjfx_range_Legend .legendContent{
     font-size: 10px;
     padding-left: 15px;
     padding-right: 15px;
@@ -177,13 +177,13 @@ html, body{
     display: block;
     overflow-y: auto;
 }
-#xs_tjfx_range_Legend .legendItemHeader,#xs_tjfx_graph_Legend .legendItemHeader,#xs_poor_legend .poorLegendItemHeader{
+#xs_tjfx_range_Legend .legendItemHeader{
     top: 5px;
     width: 100px;
     height: 5px;
     text-align: center;
 }
-#xs_tjfx_range_Legend .legendItemValue,#xs_tjfx_graph_Legend .legendItemValue,#xs_poor_legend .poorLegendItemValue{
+#xs_tjfx_range_Legend .legendItemValue{
     top: 5px;
     width: 120px;
     text-align: center;
