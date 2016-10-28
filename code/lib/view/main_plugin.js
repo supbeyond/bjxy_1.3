@@ -840,11 +840,11 @@ XS.Main.addVectorPoint2ClusterLayer = function(objArr, type){
         return;
     }
 
-    if(document.getElementById("xs_poor_legend")){
-        $("#xs_poor_legend").remove();
+    if(document.getElementById("xs_tjfx_range_Legend")){
+        $("#xs_tjfx_range_Legend").remove();
     }
-    $("#xs_mainC").append(XS.Main.Poor.createPoorLegendTag(XS.Main.ZoneLevel.village));
-    $("#xs_poor_legend").css("display", "block");
+    $("#xs_mainC").append(XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.village));
+    $("#xs_tjfx_range_Legend").css("display", "block");
 
     if(xs_clickPoorLegendArr.length == 0){
         $(".poorLegendItemRow").css({background:"#eee"});
@@ -1017,11 +1017,12 @@ XS.Main.clusterControlCallback =
 
 //点击地图事件处理
 XS.Main.clickMapCallback = function(mouseEvent){
+    if(xs_tjfx_themeLayer || xs_tjfx_graph_themeLayer)return;
     xs_poorLabelLayer.removeAllFeatures();
     xs_markerLayer.clearMarkers();
     xs_markerLayer.setVisibility(false);
     XS.Main.Poor.clearRelocationLayer();
-    $("#xs_poor_legend").css("display", "none");
+    $("#xs_tjfx_range_Legend").css("display", "none");
 
    // var lonLat = mapInstance.getMapObj().getLonLatFromPixel(mouseEvent.xy);
     //lonLat.lon, lonLat.lat
@@ -1222,7 +1223,9 @@ XS.Main.zoomedMapCallback = function(e){
                //xs_markerLayer.clearMarkers();
                xs_markerLayer.setVisibility(false);
                xs_poorLabelLayer.setVisibility(false);
-               $("#xs_poor_legend").css("display","none");
+               if(!xs_tjfx_themeLayer && !xs_tjfx_graph_themeLayer){
+                   $("#xs_tjfx_range_Legend").css("display","none");
+               }
            }
         }else if(scale<=300000&& scale>80000) //town
         {
@@ -1230,26 +1233,30 @@ XS.Main.zoomedMapCallback = function(e){
                 //xs_markerLayer.clearMarkers();
                 xs_markerLayer.setVisibility(false);
                 xs_poorLabelLayer.setVisibility(false);
-                $("#xs_poor_legend").css("display","none");
+                if(!xs_tjfx_themeLayer && !xs_tjfx_graph_themeLayer){
+                    $("#xs_tjfx_range_Legend").css("display","none");
+                }
             }else{
                 xs_markerLayer.setVisibility(true);
-                $("#xs_poor_legend").css("display","block");
+                $("#xs_tjfx_range_Legend").css("display","block");
             }
         }else if(scale<=80000&& scale>30000)//vill
         {
             if(xs_main_makerLayerLevel>XS.Main.ZoneLevel.village){
                 xs_markerLayer.setVisibility(false);
                 xs_poorLabelLayer.setVisibility(false);
-                $("#xs_poor_legend").css("display","none");
+                if(!xs_tjfx_themeLayer && !xs_tjfx_graph_themeLayer){
+                    $("#xs_tjfx_range_Legend").css("display","none");
+                }
             }else{
                 xs_markerLayer.setVisibility(true);
-                $("#xs_poor_legend").css("display","block");
+                $("#xs_tjfx_range_Legend").css("display","block");
             }
         }else{
             if(xs_main_makerLayerLevel==XS.Main.ZoneLevel.poor){
                 xs_markerLayer.setVisibility(true);
                 xs_poorLabelLayer.setVisibility(true);
-                $("#xs_poor_legend").css("display","block");
+                $("#xs_tjfx_range_Legend").css("display","block");
             }
         }
 
@@ -1294,19 +1301,13 @@ XS.Main.poorZonePicArr = {
  */
 var xs_main_makerLayerLevel = -1; //保存marker图层时缩放级别
 XS.Main.addTownVillPlevelMarker2Layer = function(superLevel, superId,currentId){
-    if(document.getElementById("xs_poor_legend")){
-        $("#xs_poor_legend").remove();
+    if(document.getElementById("xs_tjfx_range_Legend")){
+        $("#xs_tjfx_range_Legend").remove();
     }
-    $("#xs_mainC").append(XS.Main.Poor.createPoorLegendTag(superLevel));
-    $("#xs_poor_legend").css("display", "block");
+    $("#xs_mainC").append(XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,superLevel));
+    $("#xs_tjfx_range_Legend").css("display", "block");
 
-    /*$("#xs_poor_legend").mouseover(function(e){
-     $("#xs_utfGridC").css("display","none");
-     });
-     $("#xs_poor_legend").mouseout(function(e){
-     $("#xs_utfGridC").css("display","block");
-     });*/
-    XS.Main.addDivHover2HiddenUTFGridTip("xs_poor_legend");
+    XS.Main.addDivHover2HiddenUTFGridTip("xs_tjfx_range_Legend");
 
     var sql = "";
     var layerName = "";
@@ -1502,11 +1503,11 @@ XS.Main.hiddenDivTags = function(){
     //统计分析--分段专题图Tip
     if($("#xs_tjfx_range_themeTipC").length>0) $("#xs_tjfx_tpx_themeTipC").css("display","none");
     if($("#xs_tjfx_range_Legend").length>0) $("#xs_tjfx_range_Legend").css("display", "none");
-    if($("#xs_tjfx_graph_Legend").length>0) $("#xs_tjfx_graph_Legend").css("display", "block");
+    //if($("#xs_tjfx_graph_Legend").length>0) $("#xs_tjfx_graph_Legend").css("display", "block");
     //统计分析--图表专题图Tip
     if($("#xs_tjfx_graph_themeTipC").length>0) $("#xs_tjfx_graph_themeTipC").css("display","none");
     if($("#xs_tjfx_graph_Legend").length>0) $("#xs_tjfx_graph_Legend").css("display", "none");
-    if($("#xs_poor_legend").length>0 && xs_main_makerLayerLevel == XS.Main.ZoneLevel.poor) $("#xs_poor_legend").css("display", "none");
+    //if($("#xs_poor_legend").length>0 && xs_main_makerLayerLevel == XS.Main.ZoneLevel.poor) $("#xs_poor_legend").css("display", "none");
     //XS.Main.Poor.clearRelocationLayer();
 
 }

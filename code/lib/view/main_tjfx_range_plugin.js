@@ -191,6 +191,8 @@ XS.Main.Tjfx.range_createRangeStyleGroups = function(type, level){
     return styleGroups;
 }
 
+var xs_poor_legendbegoreH = 0;
+var xs_poor_isLegendClickSingle = true;
 //创建图例
 XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
     xs_poor_legendbegoreH = 0;
@@ -270,6 +272,127 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
                 tag += '</tr>';
             }
             break;
+        }
+        case XS.Main.Tjfx.type.pie:
+        {
+            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">'+
+                '<tr><td class="legendItemHeader">土地信息</td><td class="legendItemValue">颜色</td></tr>';
+
+            for(var i in XS.Main.Tjfx.Graph.axisXLabels[0]){
+                tag += '<tr>';
+                tag += '<td class="legendItemHeader">'+XS.Main.Tjfx.Graph.axisXLabels[0][i]+'</td>';
+                tag += "<td class='legendItemValue' style='background: "+XS.Main.Tjfx.range_styleGroups_color[i]+"'"+"></td>";
+                tag += '</tr>';
+            }
+            break;
+        }
+        case XS.Main.Tjfx.type.bar.social:
+        {
+            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">'+
+                '<tr><td class="legendItemHeader">社会保障</td><td class="legendItemValue">颜色</td></tr>';
+
+            for(var i in XS.Main.Tjfx.Graph.axisXLabels[1]){
+                tag += '<tr>';
+                tag += '<td class="legendItemHeader">'+XS.Main.Tjfx.Graph.axisXLabels[1][i]+'</td>';
+                tag += '<td class="legendItemValue" style="background: -WebKit-linear-gradient( top,'
+                    + XS.Main.Tjfx.Graph.barGradient[i][0] + ',' + XS.Main.Tjfx.Graph.barGradient[i][1] + ');"></td>';
+                tag += '</tr>';
+            }
+            break;
+        }
+        case XS.Main.Tjfx.type.bar.fourOf45:
+        {
+            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">'+
+                '<tr><td class="legendItemHeader">四有五覆盖(四有)</td><td class="legendItemValue">颜色</td></tr>';
+
+            for(var i in XS.Main.Tjfx.Graph.axisXLabels[2]){
+                tag += '<tr>';
+                tag += '<td class="legendItemHeader">'+XS.Main.Tjfx.Graph.axisXLabels[2][i]+'</td>';
+                tag += '<td class="legendItemValue" style="background: -WebKit-linear-gradient( top,'
+                    + XS.Main.Tjfx.Graph.barGradient[i][0] + ',' + XS.Main.Tjfx.Graph.barGradient[i][1] + ');"></td>';
+                tag += '</tr>';
+            }
+            break;
+        }
+        case XS.Main.Tjfx.type.bar.fiveOf45:
+        {
+            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">'+
+                '<tr><td class="legendItemHeader">四有五覆盖(五覆盖)</td><td class="legendItemValue">颜色</td></tr>';
+
+            for(var i in XS.Main.Tjfx.Graph.axisXLabels[3]){
+                tag += '<tr>';
+                tag += '<td class="legendItemHeader">'+XS.Main.Tjfx.Graph.axisXLabels[3][i]+'</td>';
+                tag += '<td class="legendItemValue" style="background: -WebKit-linear-gradient( top,'
+                    + XS.Main.Tjfx.Graph.barGradient[i][0] + ',' + XS.Main.Tjfx.Graph.barGradient[i][1] + ');"></td>';
+                tag += '</tr>';
+            }
+            break;
+        }
+        case XS.Main.Tjfx.type.bar.fiveOf54:
+        {
+            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">'+
+                '<tr><td class="legendItemHeader">五通四有(五通)</td><td class="legendItemValue">颜色</td></tr>';
+
+            for(var i in XS.Main.Tjfx.Graph.axisXLabels[4]){
+                tag += '<tr>';
+                tag += '<td class="legendItemHeader">'+XS.Main.Tjfx.Graph.axisXLabels[4][i]+'</td>';
+                tag += '<td class="legendItemValue" style="background: -WebKit-linear-gradient( top,'
+                    + XS.Main.Tjfx.Graph.barGradient[i][0] + ',' + XS.Main.Tjfx.Graph.barGradient[i][1] + ');"></td>';
+                tag += '</tr>';
+            }
+            break;
+        }
+        case XS.Main.Tjfx.type.bar.fourOf54:
+        {
+            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">'+
+                '<tr><td class="legendItemHeader">五通四有(四有)</td><td class="legendItemValue">颜色</td></tr>';
+
+            for(var i in XS.Main.Tjfx.Graph.axisXLabels[2]){
+                tag += '<tr>';
+                tag += '<td class="legendItemHeader">'+XS.Main.Tjfx.Graph.axisXLabels[5][i]+'</td>';
+                tag += '<td class="legendItemValue" style="background: -WebKit-linear-gradient( top,'
+                    + XS.Main.Tjfx.Graph.barGradient[i][0] + ',' + XS.Main.Tjfx.Graph.barGradient[i][1] + ');"></td>';
+                tag += '</tr>';
+            }
+            break;
+        }
+        case XS.Main.Tjfx.type.poorType:
+        {
+            tag += '<table id="xs_poor_legendTab" border="0" cellspacing="0" cellpadding="0"><tr>';
+            if(level == XS.Main.ZoneLevel.county)
+            {
+                tag += '<td class="legendItemHeader">贫困类型</td><td class="poorLegendItemValue">图标</td></tr>';
+                for(var i in XS.Main.poorZonePicArr.town){
+                    tag += '<tr>';
+                    tag += '<td class="legendItemHeader">'+XS.Main.poorZonePicArr.town[i].name+'</td>';
+                    tag += '<td class="legendItemValue" style1="background:url("'+XS.Main.poorZonePicArr.town[i].value+'") no-repeat 100px 0 #fff;>' +
+                        '<img style="width:25px;heigth:25px;" src="'+XS.Main.poorZonePicArr.town[i].value+'" alt=""/>' +
+                        '</td>';
+                    tag += '</tr>';
+                }
+            }else if(level == XS.Main.ZoneLevel.town)
+            {
+                tag += '<td class="legendItemHeader">贫困类型</td><td class="poorLegendItemValue">图标</td></tr>';
+                for(var i in XS.Main.poorZonePicArr.vill){
+                    tag += '<tr>';
+                    tag += '<td class="legendItemHeader">'+XS.Main.poorZonePicArr.vill[i].name+'</td>';
+                    tag += '<td class="legendItemValue" style1="background:url("'+XS.Main.poorZonePicArr.vill[i].value+'") no-repeat 100px 0 #fff;>' +
+                        '<img style="width:25px;heigth:25px;" src="'+XS.Main.poorZonePicArr.vill[i].value+'" alt=""/>' +
+                        '</td>';
+                    tag += '</tr>';
+                }
+            }else if(level == XS.Main.ZoneLevel.village)
+            {
+                tag += '<td class="legendItemHeader">贫困原因</td><td class="poorLegendItemValue">图标</td></tr>';
+                for(var i in XS.Main.poorZonePicArr.poor){
+                    tag += '<tr class="poorLegendItemRow">';
+                    tag += '<td class="legendItemHeader">'+XS.Main.poorZonePicArr.poor[i].name+'</td>';
+                    tag += '<td class="legendItemValue" style1="background:url("'+XS.Main.poorZonePicArr.poor[i].value+'") no-repeat 100px 0 #fff;>' +
+                        '<img style="width:18px;heigth:18px;" src="'+XS.Main.poorZonePicArr.poor[i].value+'" alt=""/>' +
+                        '</td>';
+                    tag += '</tr>';
+                }
+            }
         }
     }
     tag += '</table></div></div>';

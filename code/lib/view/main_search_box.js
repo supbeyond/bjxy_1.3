@@ -389,7 +389,7 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
     xs_markerLayer.clearMarkers();
     xs_markerLayer.setVisibility(false);
     XS.Main.Poor.clearRelocationLayer();
-    $("#xs_poor_legend").css("display", "none");
+    $("#xs_tjfx_range_Legend").css("display", "none");
 
     if(regionName == '贫困户' && xs_pkdc_cacheDataArr[poorHIndex].LONGITUDE && xs_pkdc_cacheDataArr[poorHIndex].LATITUDE){
         XS.Main.Poor.showPoor(xs_pkdc_cacheDataArr[poorHIndex].hid,null);
@@ -547,6 +547,12 @@ XS.Searchbox.createTable = function (objArr,colls, rowH,mergeColls,nameCollStyle
         '</div>';
     return content;
 }
+/**
+ * 点击区域选择框动态请求下级数据
+ * @param obj
+ * @param regionIdV
+ * @param regionNameV
+ */
 XS.Searchbox.requestSelect = function(obj,regionIdV,regionNameV){
     var requestSelect = '<option value="-1">--请选择--</option>';
     var action = "";
@@ -578,6 +584,16 @@ XS.Searchbox.requestSelect = function(obj,regionIdV,regionNameV){
         }
     }
 }
+/**
+ * 向搜索结果的信息表中添加所需按钮或下拉框
+ * @param i
+ * @param json
+ * @param regionIdV
+ * @param regionNameV
+ * @param regionId
+ * @param regionName
+ * @param fields
+ */
 XS.Searchbox.tool = function(i,json,regionIdV,regionNameV,regionId,regionName,fields){
     var xs_searchbox_tool = "";
     var nextRegion = "";
@@ -627,6 +643,12 @@ XS.Searchbox.tool = function(i,json,regionIdV,regionNameV,regionId,regionName,fi
         });
     }
 }
+/**
+ * 给搜索结果的信息表添加样式及各种事件
+ * @param regionId
+ * @param regionName
+ * @constructor
+ */
 XS.Searchbox.BaseInfPanel = function(regionId,regionName){
     if($(".xs_searchbox_baseInfPanelC").length == 0){
         $("#xs_searchbox_resultC").animate({height:0},{duration: 1000 ,complete:function(){

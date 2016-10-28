@@ -1727,8 +1727,7 @@ XS.Main.Poor.createPoorLegendTag = function(level){
 
     return tag;
 }
-var xs_poor_legendbegoreH = 0;
-var xs_poor_isLegendClickSingle = true;
+/*
 
 //图例展开和收缩事件
 XS.Main.Poor.legendCollapse = function(){
@@ -1776,3 +1775,4 @@ XS.Main.Poor.legendRowHover = function(rowObjs,overColor,outColor){
     );
 }
 
+*/

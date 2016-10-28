@@ -435,7 +435,7 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                     case XS.Main.ZoneLevel.town:
                     {
                         title = obj.VBI_NAME;
-                        jsonObj.push({"name":"面积","value":0});
+                        jsonObj.push({"name":"面积","value":obj.VillArea});
                         jsonObj.push({"name":"海拔","value":obj.VBI_ALTITUDE});
                         jsonObj.push({"name":"贫困村","value":obj.VBI_AveIncome});
                         jsonObj.push({"name":"贫困户","value":obj.VBI_HouseNum});

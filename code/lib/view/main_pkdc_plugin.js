@@ -227,16 +227,18 @@ XS.Main.Pkjc.scatterOption = {
         text: ''
     },
     legend: {
-        right: 0,
+        top:30,
+        right1: 0,
         itemGap: 0,
         height: 250,
-        orient: 'vertical',
+        orient1: 'vertical',
         data: []
     },
     grid: {
+        top:110,
         bottom: 30,
         left: 30,
-        right: 160
+        right: 30
     },
     xAxis: {
         splitLine: {

@@ -2,11 +2,6 @@
  * Created by Administrator on 2016/9/8.
  */
 XS.Main.Tjfx.Graph = {};
-//统计类型
-    XS.Main.Tjfx.Graph.Type = {
-    pie:0, //图表pie--土地信息
-    bar:{social:1,fourOf45:2,fiveOf45:3,fiveOf54:4,fourOf54:5} //图表bar--社会保障
-}
 
 //缓存行政区域Featuers
 XS.Main.Tjfx.Graph.featuersArr = {
@@ -48,6 +43,7 @@ var xs_tjfx_graph_graphType = "";
 var xs_tjfx_graph_themeFields = [];
 var xs_tjfx_graph_chartsSetting = null;
 var xs_tjfx_graph_maxValue = 0;
+var xs_tjfx_graph_zoneLevel = 0;
 
 /**
  * 统计专题图
@@ -90,7 +86,8 @@ XS.Main.Tjfx.Graph.graph = function(type){
  */
 XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
     xs_isShowUtfGridTip = false;
-    xs_currentZoneLevel = parentLevel;
+    //xs_currentZoneLevel = parentLevel;
+    xs_tjfx_graph_zoneLevel = parentLevel;
     xs_tjfx_zoneLevel = parentLevel;
     xs_tjfx_graph_type =  type;
 
@@ -103,7 +100,7 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
     var color = XS.Main.Tjfx.range_styleGroups_color;
 
     switch (type){
-        case XS.Main.Tjfx.Graph.Type.pie:
+        case XS.Main.Tjfx.type.pie:
         {
             xs_tjfx_graph_graphType = "Pie";
             xs_tjfx_graph_themeFields = XS.Main.Tjfx.Graph.filed[0];
@@ -122,31 +119,31 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
             };
             break;
         }
-        case  XS.Main.Tjfx.Graph.Type.bar.social:
+        case  XS.Main.Tjfx.type.bar.social:
         {
             XS.Main.Tjfx.Graph.themeParam("Bar",XS.Main.Tjfx.Graph.filed[1],[0, 100],[22,15,5,5],[10,10,10],
                 ["100", "75", "50","25", "0"],XS.Main.Tjfx.Graph.axisXLabels[1],150);
             break;
         }
-        case  XS.Main.Tjfx.Graph.Type.bar.fourOf45:
+        case  XS.Main.Tjfx.type.bar.fourOf45:
         {
             XS.Main.Tjfx.Graph.themeParam("Bar",XS.Main.Tjfx.Graph.filed[2],[0, 10000],[40,15,5,5],[10,20,10],
                 ["12000", "9000", "6000","3000", "0"],XS.Main.Tjfx.Graph.axisXLabels[2],260);
             break;
         }
-        case  XS.Main.Tjfx.Graph.Type.bar.fiveOf45:
+        case  XS.Main.Tjfx.type.bar.fiveOf45:
         {
             XS.Main.Tjfx.Graph.themeParam("Bar",XS.Main.Tjfx.Graph.filed[3],[0, 40000],[40,15,5,5],[15,20,15],
                 ["40000", "30000", "20000","10000", "0"],XS.Main.Tjfx.Graph.axisXLabels[3],320);
             break;
         }
-        case  XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
+        case  XS.Main.Tjfx.type.bar.fiveOf54:
         {
             XS.Main.Tjfx.Graph.themeParam("Bar",XS.Main.Tjfx.Graph.filed[4],[0, 200],[22,15,5,5],[15,30,15],
                 ["200", "150", "100","50", "0"],XS.Main.Tjfx.Graph.axisXLabels[4],380);
             break;
         }
-        case  XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+        case  XS.Main.Tjfx.type.bar.fourOf54:
         {
             XS.Main.Tjfx.Graph.themeParam("Bar",XS.Main.Tjfx.Graph.filed[5],[0, 40],[22,15,5,5],[10,20,10],
                 ["40", "30", "20","10", "0"],XS.Main.Tjfx.Graph.axisXLabels[5],250);
@@ -164,33 +161,12 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
     xs_tjfx_graph_themeLayer.setOpacity(0.9);
     xs_tjfx_graph_themeLayer.isOverLay = true;
 
-    if(document.getElementById("xs_tjfx_graph_Legend")){
-        $("#xs_tjfx_graph_Legend").remove();
+    if(document.getElementById("xs_tjfx_range_Legend")){
+        $("#xs_tjfx_range_Legend").remove();
     }
 
-    $("#xs_mainC").append(XS.Main.Tjfx.Graph.createGraphLegendTag());
-    $("#xs_tjfx_graph_Legend").css("display", "block");
-
-    switch (type){
-        case XS.Main.Tjfx.Graph.Type.pie:
-            $(".legendContent").css({height:"165px"});
-            break;
-        case XS.Main.Tjfx.Graph.Type.bar.social:
-            $(".legendContent").css({height:"80px"});
-            break;
-        case XS.Main.Tjfx.Graph.Type.bar.fourOf45:
-            $(".legendContent").css({height:"110px"});
-            break;
-        case XS.Main.Tjfx.Graph.Type.bar.fiveOf45:
-            $(".legendContent").css({height:"130px"});
-            break;
-        case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
-            $(".legendContent").css({height:"115px"});
-            break;
-        case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
-            $(".legendContent").css({height:"95px"});
-            break;
-    }
+    $("#xs_mainC").append(XS.Main.Tjfx.range_createRangeLegendTag(type,parentLevel));
+    $("#xs_tjfx_range_Legend").css("display", "block");
 
     // 注册专题图 mousemove, mouseout事件(注意：专题图图层对象自带 on 函数，没有 events 对象)
     xs_tjfx_graph_themeLayer.on("mousemove", XS.Main.Tjfx.Graph.showInfoWin);
@@ -235,18 +211,18 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
             }else {
                 var action = "";
                 switch (type) {
-                    case XS.Main.Tjfx.Graph.Type.pie:
+                    case XS.Main.Tjfx.type.pie:
                         action = "QueryCounty_EarthInfo";
                         break;
-                    case XS.Main.Tjfx.Graph.Type.bar.social:
+                    case XS.Main.Tjfx.type.bar.social:
                         action = "QuerySocityProtectBycounty";
                         break;
-                    case XS.Main.Tjfx.Graph.Type.bar.fourOf45:
-                    case XS.Main.Tjfx.Graph.Type.bar.fiveOf45:
+                    case XS.Main.Tjfx.type.bar.fourOf45:
+                    case XS.Main.Tjfx.type.bar.fiveOf45:
                         action = "QueryFourFiveByAreaId";
                         break;
-                    case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
-                    case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+                    case XS.Main.Tjfx.type.bar.fiveOf54:
+                    case XS.Main.Tjfx.type.bar.fourOf54:
                         action = "QueryVillFiveFourByCountByAreaId";
                         break;
                 }
@@ -255,8 +231,8 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json) {
                     if (json && json.length > 0) {
                         switch (type){
-                            case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
-                            case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+                            case XS.Main.Tjfx.type.bar.fiveOf54:
+                            case XS.Main.Tjfx.type.bar.fourOf54:
                             {
                                 for(var i in json){
                                     json[i].WlanAndTelNum = json[i].WlanNum +　json[i].TelNum;
@@ -304,18 +280,18 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
             //请求镇级数据
             var action = "";
             switch (type){
-                case XS.Main.Tjfx.Graph.Type.pie:
+                case XS.Main.Tjfx.type.pie:
                     action = "QueryTowns_EarthInfo";
                     break;
-                case XS.Main.Tjfx.Graph.Type.bar.social:
+                case XS.Main.Tjfx.type.bar.social:
                     action = "QuerySocityProtectByTown";
                     break;
-                case XS.Main.Tjfx.Graph.Type.bar.fourOf45:
-                case XS.Main.Tjfx.Graph.Type.bar.fiveOf45:
+                case XS.Main.Tjfx.type.bar.fourOf45:
+                case XS.Main.Tjfx.type.bar.fiveOf45:
                     action = "QueryFourFiveByAreaId";
                     break;
-                case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
-                case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+                case XS.Main.Tjfx.type.bar.fiveOf54:
+                case XS.Main.Tjfx.type.bar.fourOf54:
                     action = "QueryVillFiveFourByCountByAreaId";
                     break;
             }
@@ -324,8 +300,8 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                 if (json && json.length > 0)
                 {
                     switch (type){
-                        case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
-                        case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+                        case XS.Main.Tjfx.type.bar.fiveOf54:
+                        case XS.Main.Tjfx.type.bar.fourOf54:
                         {
                             for(var i in json){
                                 json[i].WlanAndTelNum = json[i].WlanNum +　json[i].TelNum;
@@ -363,18 +339,18 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
             //请求村数据
             var action = "";
             switch (type){
-                case XS.Main.Tjfx.Graph.Type.pie:
+                case XS.Main.Tjfx.type.pie:
                     action = "QueryVillEarthInfo";
                     break;
-                case XS.Main.Tjfx.Graph.Type.bar.social:
+                case XS.Main.Tjfx.type.bar.social:
                     action = "QuerySocityProtectByTown";
                     break;
-                case XS.Main.Tjfx.Graph.Type.bar.fourOf45:
-                case XS.Main.Tjfx.Graph.Type.bar.fiveOf45:
+                case XS.Main.Tjfx.type.bar.fourOf45:
+                case XS.Main.Tjfx.type.bar.fiveOf45:
                     action = "QueryFourFiveByAreaId";
                     break;
-                case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
-                case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+                case XS.Main.Tjfx.type.bar.fiveOf54:
+                case XS.Main.Tjfx.type.bar.fourOf54:
                     action = "QueryVillFiveFourByCountByAreaId";
                     break;
             }
@@ -383,8 +359,8 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                 if (json && json.length > 0)
                 {
                     switch (type){
-                        case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
-                        case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+                        case XS.Main.Tjfx.type.bar.fiveOf54:
+                        case XS.Main.Tjfx.type.bar.fourOf54:
                         {
                             for(var i in json){
                                 json[i].WlanAndTelNum = json[i].WlanNum +　json[i].TelNum;
@@ -526,14 +502,14 @@ XS.Main.Tjfx.Graph.addFeatures2Layer = function(featureArr, data, parentLevel){ 
     }
     switch (xs_tjfx_graph_type)
     {
-        case XS.Main.Tjfx.Graph.Type.pie:
+        case XS.Main.Tjfx.type.pie:
             oId = "regionid";
             break;
-        case XS.Main.Tjfx.Graph.Type.bar.social:
-        case XS.Main.Tjfx.Graph.Type.bar.fourOf45:
-        case XS.Main.Tjfx.Graph.Type.bar.fiveOf45:
-        case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
-        case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+        case XS.Main.Tjfx.type.bar.social:
+        case XS.Main.Tjfx.type.bar.fourOf45:
+        case XS.Main.Tjfx.type.bar.fiveOf45:
+        case XS.Main.Tjfx.type.bar.fiveOf54:
+        case XS.Main.Tjfx.type.bar.fourOf54:
             oId = "REGION_ID";
             break;
     }
@@ -577,32 +553,32 @@ XS.Main.Tjfx.Graph.addFeatures2Layer = function(featureArr, data, parentLevel){ 
                 var fileds = [];
                 switch (xs_tjfx_graph_type)
                 {
-                    case XS.Main.Tjfx.Graph.Type.pie:
+                    case XS.Main.Tjfx.type.pie:
                     {
                         fileds = XS.Main.Tjfx.Graph.filed[0];
                         break;
                     }
-                    case XS.Main.Tjfx.Graph.Type.bar.social:
+                    case XS.Main.Tjfx.type.bar.social:
                     {
                         fileds = XS.Main.Tjfx.Graph.filed[1];
                         break;
                     }
-                    case XS.Main.Tjfx.Graph.Type.bar.fourOf45:
+                    case XS.Main.Tjfx.type.bar.fourOf45:
                     {
                         fileds = XS.Main.Tjfx.Graph.filed[2];
                         break;
                     }
-                    case XS.Main.Tjfx.Graph.Type.bar.fiveOf45:
+                    case XS.Main.Tjfx.type.bar.fiveOf45:
                     {
                         fileds = XS.Main.Tjfx.Graph.filed[3];
                         break;
                     }
-                    case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
+                    case XS.Main.Tjfx.type.bar.fiveOf54:
                     {
                         fileds = XS.Main.Tjfx.Graph.filed[4];
                         break;
                     }
-                    case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+                    case XS.Main.Tjfx.type.bar.fourOf54:
                     {
                         fileds = XS.Main.Tjfx.Graph.filed[5];
                         break;
@@ -619,10 +595,10 @@ XS.Main.Tjfx.Graph.addFeatures2Layer = function(featureArr, data, parentLevel){ 
         }
     }
     switch (xs_tjfx_graph_type){
-        case XS.Main.Tjfx.Graph.Type.bar.fourOf45:
-        case XS.Main.Tjfx.Graph.Type.bar.fiveOf45:
-        case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
-        case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+        case XS.Main.Tjfx.type.bar.fourOf45:
+        case XS.Main.Tjfx.type.bar.fiveOf45:
+        case XS.Main.Tjfx.type.bar.fiveOf54:
+        case XS.Main.Tjfx.type.bar.fourOf54:
         {
             var axisYInterval = Math.ceil(xs_tjfx_graph_maxValue/4);
             var maxValueLength = axisYInterval.toString().length;
@@ -651,7 +627,6 @@ XS.Main.Tjfx.Graph.addFeatures2Layer = function(featureArr, data, parentLevel){ 
     xs_tjfx_graph_themeLayer.addFeatures(features);
     xs_tjfx_graph_themeLayer.setVisibility(true);
     XS.CommonUtil.hideLoader();
-    xs_currentZoneLevel += 1;
 }
 /**
  * 专题图pie mousemove事件
@@ -670,7 +645,7 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
         var info = e.target.dataInfo;
         var sum = 0;
         switch(xs_tjfx_graph_type){
-            case XS.Main.Tjfx.Graph.Type.pie:{
+            case XS.Main.Tjfx.type.pie:{
                 for(var i in XS.Main.Tjfx.Graph.filed[0]){
                     sum +=　parseInt(attributes[XS.Main.Tjfx.Graph.filed[0][i]]);
                 }
@@ -682,7 +657,7 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
         var title = "";
         var x = e.event.clientX;
         var y = e.event.clientY;
-        switch (xs_currentZoneLevel){
+        switch (xs_tjfx_graph_zoneLevel){
             case XS.Main.ZoneLevel.city:
             {
                 jsonObjArr.push({name:'区域',value:attributes.Name});
@@ -691,8 +666,8 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
             }
             case XS.Main.ZoneLevel.county:
             {
-                jsonObjArr.push({name:'区域',value:attributes.乡镇代码});
-                jsonObjArr.push({name:'区域ID',value:attributes.乡镇名称});
+                jsonObjArr.push({name:'区域',value:attributes.乡镇名称});
+                jsonObjArr.push({name:'区域ID',value:attributes.乡镇代码});
                 break;
             }
             case XS.Main.ZoneLevel.town:
@@ -704,7 +679,7 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
         }
 
         switch (xs_tjfx_graph_type){
-            case XS.Main.Tjfx.Graph.Type.pie:{
+            case XS.Main.Tjfx.type.pie:{
                 title = "土地信息";
                 switch (info.field){
                     case "C12":{
@@ -758,7 +733,7 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
                 }
                 break;
             }
-            case XS.Main.Tjfx.Graph.Type.bar.social:{
+            case XS.Main.Tjfx.type.bar.social:{
                 title = "社会保障";
                 for(var i in XS.Main.Tjfx.Graph.filed[1]){
                     if(XS.Main.Tjfx.Graph.filed[1][i] == info.field){
@@ -767,7 +742,7 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
                 }
                 break;
             }
-            case XS.Main.Tjfx.Graph.Type.bar.fourOf45:{
+            case XS.Main.Tjfx.type.bar.fourOf45:{
                 title = "四有五覆盖(四有)";
                 for(var i in XS.Main.Tjfx.Graph.filed[2]){
                     if(XS.Main.Tjfx.Graph.filed[2][i] == info.field){
@@ -776,7 +751,7 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
                 }
                 break;
             }
-            case XS.Main.Tjfx.Graph.Type.bar.fiveOf45:{
+            case XS.Main.Tjfx.type.bar.fiveOf45:{
                 title = "四有五覆盖(五覆盖)";
                 for(var i in XS.Main.Tjfx.Graph.filed[3]){
                     if(XS.Main.Tjfx.Graph.filed[3][i] == info.field){
@@ -785,7 +760,7 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
                 }
                 break;
             }
-            case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:{
+            case XS.Main.Tjfx.type.bar.fiveOf54:{
                 title = "四有五覆盖(五覆盖)";
                 for(var i in XS.Main.Tjfx.Graph.filed[4]){
                     if(XS.Main.Tjfx.Graph.filed[4][i] == info.field){
@@ -794,7 +769,7 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
                 }
                 break;
             }
-            case XS.Main.Tjfx.Graph.Type.bar.fourOf54:{
+            case XS.Main.Tjfx.type.bar.fourOf54:{
                 title = "四有五覆盖(五覆盖)";
                 for(var i in XS.Main.Tjfx.Graph.filed[5]){
                     if(XS.Main.Tjfx.Graph.filed[5][i] == info.field){
@@ -920,23 +895,22 @@ XS.Main.Tjfx.Graph.createGraphLegendTag = function(){
 XS.Main.Tjfx.Graph.themeLayerClickCallback = function(event){
     if(event.target && event.target.refDataID)
     {
-        xs_currentZoneLevel -= 1;
         var feature = xs_tjfx_graph_themeLayer.getFeatureById(event.target.refDataID);
         xs_tjfx_range_centerPoint = feature.geometry.getBounds().getCenterLonLat();
 
         xs_currentZoneFuture = null;
         xs_clickMapType = XS.Main.clickMapType.tjfx_graph;
-        switch (xs_currentZoneLevel) {
+        switch (xs_tjfx_graph_zoneLevel) {
             case XS.Main.ZoneLevel.city:
             {
                 xs_superZoneCode = feature.data.AdminCode;
-                XS.Main.Tjfx.Graph.theme(xs_currentZoneLevel + 1, xs_superZoneCode, xs_tjfx_graph_type);
+                XS.Main.Tjfx.Graph.theme(xs_tjfx_graph_zoneLevel+1, xs_superZoneCode, xs_tjfx_graph_type);
                 break;
             }
             case XS.Main.ZoneLevel.county:
             {
                 xs_superZoneCode = feature.data.乡镇代码;
-                XS.Main.Tjfx.Graph.theme(xs_currentZoneLevel + 1, xs_superZoneCode, xs_tjfx_graph_type);
+                XS.Main.Tjfx.Graph.theme(xs_tjfx_graph_zoneLevel+1, xs_superZoneCode, xs_tjfx_graph_type);
                 break;
             }
             case XS.Main.ZoneLevel.town:
@@ -977,15 +951,15 @@ XS.Main.Tjfx.Graph.MouseOverTip = function(x, y, title, jsonObjArr){
     $("#xs_tjfx_graph_themeTipC").append(contentTag);
 
     switch (xs_tjfx_graph_type){
-        case XS.Main.Tjfx.Graph.Type.pie:{
+        case XS.Main.Tjfx.type.pie:{
             $("#xs_tjfx_graph_themeTipC").css({height:"200px"});
             break;
         }
-        case XS.Main.Tjfx.Graph.Type.bar.social:
-        case XS.Main.Tjfx.Graph.Type.bar.fourOf45:
-        case XS.Main.Tjfx.Graph.Type.bar.fiveOf45:
-        case XS.Main.Tjfx.Graph.Type.bar.fiveOf54:
-        case XS.Main.Tjfx.Graph.Type.bar.fourOf54:
+        case XS.Main.Tjfx.type.bar.social:
+        case XS.Main.Tjfx.type.bar.fourOf45:
+        case XS.Main.Tjfx.type.bar.fiveOf45:
+        case XS.Main.Tjfx.type.bar.fiveOf54:
+        case XS.Main.Tjfx.type.bar.fourOf54:
         {
             $("#xs_tjfx_graph_themeTipC").css({height:"140px"});
             $("#xs_tjfx_graph_themeTipCTitile").css({height:"14%"});
