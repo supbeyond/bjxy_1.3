@@ -1021,9 +1021,6 @@ XS.Main.clickMapCallback = function(mouseEvent){
     //xs_zone_vectorLayer.removeAllFeatures();
     xs_isMapClickTypeNone = false;
     if(xs_clickMapType != XS.Main.clickMapType.none && xs_clickMapType != XS.Main.clickMapType.marker){
-       /* if(xs_clickMapType == XS.Main.clickMapType.marker){
-            xs_clickMapType = XS.Main.clickMapType.none;
-        }*/
         return;
     }
     xs_poorLabelLayer.removeAllFeatures();
@@ -1188,7 +1185,7 @@ XS.Main.clickMapCallback = function(mouseEvent){
                     XS.Main.addTownVillPlevelMarker2Layer(level, xs_clickMapFutureId,0);
                     break;
                 case XS.Main.ZoneLevel.village:
-                    xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 11);
+                    xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 13);
                     var centerPointer = feature.geometry.getBounds().getCenterLonLat();
                     //请求贫困户数据定位地图上去
                     var data = {pbno: xs_clickMapFutureId};

@@ -56,6 +56,7 @@
 
         inputScript('./base/easyui/jquery.easyui-1.4.3.min.js',false);
         inputScript('./base/easyui/locale/easyui-lang-zh_CN.min.js',false);
+        inputScript('./base/other/enc.js',false);
 
         inputScript('./lib/StrUtil.js',false);
         inputScript('./lib/view/CommonUtil.js',false);

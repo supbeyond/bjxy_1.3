@@ -33,13 +33,14 @@ XS.Login.login = function(){
   //  XS.Index.loadMain();
     XS.CommonUtil.loadProgressCircleTag($(document.body), "xs_load_container");
     XS.CommonUtil.showLoader();
-    var data ={userid:xs_Username, password:xs_Password};
-    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QuerySysUserByload", data, function(json){
+    var data ={userid:xs_Username, password:hex_md5(xs_Password)};
+    //QuerySysUserByload
+    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QuerySysUserByload_Super", data, function(json){
         //解析返回数据
         XS.CommonUtil.hideLoader();
         if(json && json.success && json.regionid){
             sessionStorage.setItem("username", xs_Username);
-            sessionStorage.setItem("password", xs_Password);
+            sessionStorage.setItem("password", hex_md5(xs_Password));
             sessionStorage.setItem("userid", json.userid);
             sessionStorage.setItem("regionid", (json.regionid).trim());
             //加载主页

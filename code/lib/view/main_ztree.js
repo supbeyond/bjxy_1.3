@@ -19,6 +19,7 @@ var xs_ztree_isInitedData = false;
  */
 XS.Main.Ztree.load = function(regId, ulevel)
 {
+    XS.CommonUtil.showLoader();
     switch (ulevel) {
         case XS.Main.ZoneLevel.city:
         case XS.Main.ZoneLevel.county:
@@ -452,5 +453,5 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
         }
     });
     xs_ztree_isInitedData = true;
-   // XS.CommonUtil.hideLoader();
+    XS.CommonUtil.hideLoader();
 }
