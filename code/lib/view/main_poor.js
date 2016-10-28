@@ -34,9 +34,16 @@ XS.Main.Poor.showPoor = function(id,centerPointer){
                 xs_clickPoorLegendArr = ['其它'];
                 json[0].reason = '其它';
             }
-            XS.Main.addVectorPoint2ClusterLayer(json, XS.Main.ClusterPointerStyle.poor_info_obj);
+            //XS.Main.addVectorPoint2ClusterLayer(json, XS.Main.ClusterPointerStyle.poor_info_obj);
+            XS.Main.readyAddMarkerData(json);
+        }else{
+            XS.CommonUtil.hideLoader();
+            XS.CommonUtil.showMsgDialog("","未找到相关数据");
         }
-    },function(e){XS.CommonUtil.hideLoader();});
+    },function(e){
+        XS.CommonUtil.hideLoader();
+        XS.CommonUtil.showMsgDialog("","数据请求失败");
+    });
 }
 
 //显示贫困用户
@@ -70,9 +77,10 @@ XS.Main.Poor.showPoors = function(objArr,centerPointer){
         }
         //xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(objArr[0].Longitude, objArr[0].Latitude), 11);
         xs_clickPoorLegendArr =[];
-        XS.Main.addVectorPoint2ClusterLayer(dataArr, XS.Main.ClusterPointerStyle.poor_info_id);
+        XS.Main.readyAddMarkerData(dataArr);
+        //XS.Main.addVectorPoint2ClusterLayer(dataArr, XS.Main.ClusterPointerStyle.poor_info_id);
 
-     //   XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, iconH, type);
+       //S.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, iconH, type);
     }
 }
 

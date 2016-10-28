@@ -830,7 +830,7 @@ XS.Main.utfGridLayerMoveCallbackUpdataData = function(level, x, y, name,THus, po
 
 //添加矢量点到聚散图层
 var xs_clickPoorLegendArr = [];
-XS.Main.addVectorPoint2ClusterLayer = function(objArr, type){
+XS.Main.addVectorPoint2ClusterLayer = function(objArr){
     //XS.Main.clearMap();
     //XS.Main.Poor.clearRelocationLayer();
     xs_isShowUtfGridTip = false;
@@ -936,6 +936,111 @@ XS.Main.addVectorPoint2ClusterLayer = function(objArr, type){
     }else if(type == XS.Main.ClusterPointerStyle.pkdc_tasker){ //任务人监控
         xs_clusterLayer.addFeatures(objArr);
     }
+}
+/**
+ * 添加marker标记前的数据处理
+ * @param objArr
+ * @param type
+ */
+XS.Main.readyAddMarkerData = function(objArr){
+    //XS.Main.clearMap();
+    //XS.Main.Poor.clearRelocationLayer();
+    xs_isShowUtfGridTip = false;
+    //xs_clusterLayer.destroyCluster();
+    //xs_clusterControl.activate();
+    if(!(objArr&&objArr.length>0)){
+        return;
+    }
+
+    if(document.getElementById("xs_tjfx_range_Legend")){
+        $("#xs_tjfx_range_Legend").remove();
+    }
+    $("#xs_mainC").append(XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.village));
+    $("#xs_tjfx_range_Legend").css("display", "block");
+
+    if(xs_clickPoorLegendArr.length == 0){
+        $(".poorLegendItemRow").css({background:"#eee"});
+        XS.Main.Poor.legendRowHover($(".poorLegendItemRow"),"#ddd","#eee");
+    }else if(xs_clickPoorLegendArr.length == 1){
+        for(var i in XS.Main.poorZonePicArr.poor){
+            if(XS.Main.poorZonePicArr.poor[i].name == xs_clickPoorLegendArr[0]){
+                $(".poorLegendItemRow").eq(i).css({background:"#eee"});
+                XS.Main.Poor.legendRowHover($(".poorLegendItemRow").eq(i),"#ddd","#eee");
+                break;
+            }
+        }
+}
+    var geotextFeatures = [];
+    var dataArr = [];
+    for(var i=0; i<objArr.length; i++)
+    {
+        var obj = objArr[i];
+        var iconUrl = "";
+        for(var j in XS.Main.poorZonePicArr.poor){
+            if(XS.Main.poorZonePicArr.poor[j].name == obj.reason){
+                iconUrl = XS.Main.poorZonePicArr.poor[j].value;
+                break;
+            }
+        }
+        obj.xs_p_icon =  iconUrl;
+        dataArr.push(obj);
+
+        var geoText = new SuperMap.Geometry.GeoText(obj.LONGITUDE, obj.LATITUDE, obj.name);
+        var geotextFeature = new SuperMap.Feature.Vector(geoText);
+        geotextFeatures.push(geotextFeature);
+
+    }
+    xs_poorLabelLayer.addFeatures(geotextFeatures);
+    xs_poorLabelLayer.setVisibility(true);
+    //xs_clusterLayer.addFeatures(features);
+    XS.Main.addMarkers2Layer(dataArr, "LONGITUDE", "LATITUDE", "xs_p_icon", 20, 20, 3);
+
+
+    var isFirstClick = true;
+    $(".poorLegendItemRow").click(function (e) {
+        var onlyReasonClick = $(this).children()[0].innerHTML;
+        if(isFirstClick){
+            isFirstClick = false;
+            if(xs_clickPoorLegendArr.length != 1){
+                $(".poorLegendItemRow").css({background:"#fff"});
+                XS.Main.Poor.legendRowHover($(".poorLegendItemRow"),"#ddd","#fff");
+            }
+        }
+        var isHaveReason = false;
+        for (var i in xs_clickPoorLegendArr) {
+            if (onlyReasonClick == xs_clickPoorLegendArr[i]) {
+                isHaveReason = true;
+                xs_clickPoorLegendArr.splice(i, 1);
+                $(this).css({background:"#fff"});
+                XS.Main.Poor.legendRowHover($(this),"#ddd","#fff");
+                break;
+            }
+        }
+        if (!isHaveReason) {
+            xs_clickPoorLegendArr.push(onlyReasonClick);
+            $(this).css({background:"#eee"});
+            XS.Main.Poor.legendRowHover($(this),"#ddd","#eee");
+        }
+
+        var clickPoorLegendLabels = [];
+        var clickPoorLegendMarkers = [];
+        for (var i in xs_clickPoorLegendArr) {
+            for (var j in dataArr) {
+                if (xs_clickPoorLegendArr[i] == dataArr[j].reason) {
+                    clickPoorLegendMarkers.push(dataArr[j]);
+
+                    var geoText = new SuperMap.Geometry.GeoText(dataArr[j].LONGITUDE, dataArr[j].LATITUDE, dataArr[j].name);
+                    var geotextFeature = new SuperMap.Feature.Vector(geoText);
+                    clickPoorLegendLabels.push(geotextFeature);
+                }
+            }
+
+        }
+        xs_poorLabelLayer.removeAllFeatures();
+        xs_poorLabelLayer.addFeatures(clickPoorLegendLabels);
+        //xs_poorLabelLayer.setVisibility(true);
+        XS.Main.addMarkers2Layer(clickPoorLegendMarkers, "LONGITUDE", "LATITUDE", "xs_p_icon", 20, 20, 3);
+    });
 }
 
 //选择聚散点处理
