@@ -435,3 +435,14 @@ XS.Main.Poor.legendCollapse1 = function(){
 XS.Main.Poor.legendClose1 = function(){
     $("#xs_tjfx_range_Legend").remove();
 }
+//鼠标在贫困户图例中移动事件
+XS.Main.Poor.legendRowHover = function(rowObjs,overColor,outColor){
+    rowObjs.hover(
+        function(){
+            $(this).css({background:overColor});
+        },
+        function(){
+            $(this).css({background:outColor});
+        }
+    );
+}

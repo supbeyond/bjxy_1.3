@@ -1762,17 +1762,5 @@ XS.Main.Poor.legendCollapse = function(){
 //关闭图例事件
 XS.Main.Poor.legendClose = function(){
     $("#xs_poor_legend").remove();
-}
-//鼠标在贫困户图例中移动事件
-XS.Main.Poor.legendRowHover = function(rowObjs,overColor,outColor){
-    rowObjs.hover(
-        function(){
-            $(this).css({background:overColor});
-        },
-        function(){
-            $(this).css({background:outColor});
-        }
-    );
-}
+}*/
 
-*/
