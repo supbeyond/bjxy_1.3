@@ -94,6 +94,7 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
     XS.Main.hiddenDivTags();
     XS.Main.Tjfx.removeLayer();
 
+    xs_clickMapType = XS.Main.clickMapType.tjfx_graph;
     xs_tjfx_graph_graphType = "";
     xs_tjfx_graph_themeFields = [];
     xs_tjfx_graph_chartsSetting = null;
@@ -899,7 +900,6 @@ XS.Main.Tjfx.Graph.themeLayerClickCallback = function(event){
         xs_tjfx_range_centerPoint = feature.geometry.getBounds().getCenterLonLat();
 
         xs_currentZoneFuture = null;
-        xs_clickMapType = XS.Main.clickMapType.tjfx_graph;
         switch (xs_tjfx_graph_zoneLevel) {
             case XS.Main.ZoneLevel.city:
             {
@@ -923,7 +923,8 @@ XS.Main.Tjfx.Graph.themeLayerClickCallback = function(event){
         }
     }else
     {
-        xs_clickMapType = XS.Main.clickMapType.none;
+        //XS.CommonUtil.showMsgDialog("","未找到相关数据");
+        //xs_clickMapType = XS.Main.clickMapType.none;
     }
 }
 /**
@@ -975,11 +976,19 @@ XS.Main.Tjfx.Graph.MouseOverTip = function(x, y, title, jsonObjArr){
             display: 'block'
         });
     }else if(x >= ($(window).width() - 252) && y >= ($(window).height() - 252)){
-        $("#xs_tjfx_graph_themeTipC").css({
-            left: x - 252 + 30,
-            top: y - 252 + 90,
-            display: 'block'
-        });
+        if(xs_tjfx_graph_type == XS.Main.Tjfx.type.pie){
+            $("#xs_tjfx_graph_themeTipC").css({
+                left: x - 252 + 30,
+                top: y - 252 + 40,
+                display: 'block'
+            });
+        }else{
+            $("#xs_tjfx_graph_themeTipC").css({
+                left: x - 252 + 30,
+                top: y - 252 + 90,
+                display: 'block'
+            });
+        }
     }else if(x >= ($(window).width() - 252)){
         $("#xs_tjfx_graph_themeTipC").css({
             left: x - 252 + 30,
@@ -987,10 +996,18 @@ XS.Main.Tjfx.Graph.MouseOverTip = function(x, y, title, jsonObjArr){
             display: 'block'
         });
     }else if(y >= ($(window).height() - 252)){
-        $("#xs_tjfx_graph_themeTipC").css({
-            left: x + 20,
-            top: y - 252 + 90,
-            display: 'block'
-        });
+        if(xs_tjfx_graph_type == XS.Main.Tjfx.type.pie){
+            $("#xs_tjfx_graph_themeTipC").css({
+                left: x + 20,
+                top: y - 252 + 40,
+                display: 'block'
+            });
+        }else{
+            $("#xs_tjfx_graph_themeTipC").css({
+                left: x + 20,
+                top: y - 252 + 90,
+                display: 'block'
+            });
+        }
     }
 }

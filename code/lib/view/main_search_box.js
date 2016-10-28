@@ -39,7 +39,7 @@ XS.Searchbox.init = function(){
         '<div id="xs_searchbox_resultC"></div>' +
     '</div>';
     $("#xs_searchbox_boxC").empty().append(xs_search_box);
-
+    XS.Main.addDivHover2HiddenUTFGridTip("xs_searchbox");
 
     $('#xs_searchbox_button').tooltip({
         position: 'bottom'

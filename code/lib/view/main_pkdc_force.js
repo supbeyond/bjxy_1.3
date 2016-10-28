@@ -188,10 +188,10 @@ var xs_pkdc_itemFoundChart = null;
                          '</div>' +
                      '</div>' +
                  '</div>';
-                 XS.CommonUtil.openDialog("xs_main_detail", params.name + "-" + projectName, "icon-man", content, true, false, false, 500, 300,null,100,function(){
+                 XS.CommonUtil.openDialog("xs_main_itemFoundNode", params.name + "-" + projectName, "icon-man", content, true, false, false, 500, 300,null,100,function(){
                      //$("#xs_pkdc_itemFundRowDataWin").dialog("open");
                  });
-                 XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
+                 XS.Main.addDivHover2HiddenUTFGridTip("xs_main_itemFoundNode");
 
                  var nodeDataArr = [];
                  var index = params.data.depth + xs_pkdc_itemFoundFIndex;

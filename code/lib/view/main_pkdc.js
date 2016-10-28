@@ -1121,7 +1121,10 @@ XS.Main.Pkjc.clickDutyChain = function(zoneLevel, stateCode){
                     obj.workpost = "";
                 }
                 var content = '<div id="xs_pkdc_orgchart_container" style="width:auto; min-width: 100%; height:100%; text-align: center;position: relative; top: 0px; left: 0px;line-height: 100%;vertical-align: middle;overflow:auto;background: #ffffff;"></div>';
-                XS.CommonUtil.openDialog("xs_main_detail", "责任链", "icon-man", content, false, true, true, 1000, 350);
+                XS.CommonUtil.openDialog("xs_main_detail", "责任链", "icon-man", content, false, true, true, 1000, 350,null,null,function(){
+                    $("#xs_main_detail").dialog("destroy");
+                    $("#xs_pkdc_msgWin").window("open");
+                });
                 $('#xs_pkdc_orgchart_container').orgchart({
                     'data' : obj,
                     'depth': 5,
@@ -1189,6 +1192,8 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode, zoneName){
             xs_MapInstance.getMapObj().removeLayer(xs_animatorVectorLayer);
             xs_animatorVectorLayer = null;
         }
+        $("#xs_main_detail").dialog("destroy");
+        $("#xs_pkdc_msgWin").window("open");
         xs_clusterLayer.destroyCluster();
         xs_clusterControl.deactivate();
         xs_vectorLayer.removeAllFeatures();

@@ -280,7 +280,10 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId){
     {
         //(titleAttr,tabsId,position,isFit,headerWidth,plain,width,height)
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.city.title,"xs_pkdc_detailTabs","top");
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,function(){
+            $("#xs_main_detail").dialog("destroy");
+            $("#xs_pkdc_msgWin").window("open");
+        },XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
         XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
 
         $("#xs_pkdc_detailTabs").tabs({/*tabWidth:80,*/tabHeight:35});
@@ -392,7 +395,10 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId){
     }else if(level == XS.Main.ZoneLevel.county)
     {
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.county.title,"xs_pkdc_detailTabs","top",false);
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,function(){
+            $("#xs_main_detail").dialog("destroy");
+            $("#xs_pkdc_msgWin").window("open");
+        },XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
         XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
 
         $("#xs_pkdc_detailTabs").tabs({/*tabWidth:106,*/tabHeight:35});
@@ -554,7 +560,10 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId){
     }else if(level == XS.Main.ZoneLevel.town)
     {
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.town.title,"xs_pkdc_detailTabs","top",false);
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,function(){
+            $("#xs_main_detail").dialog("destroy");
+            $("#xs_pkdc_msgWin").window("open");
+        },XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
         XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
 
         $("#xs_pkdc_detailTabs").tabs({/*tabWidth:215,*/tabHeight:35});
@@ -635,7 +644,10 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId){
     }else if(level == XS.Main.ZoneLevel.village)
     {
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.village.title,"xs_pkdc_detailTabs","top",false);
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,null,XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,function(){
+            $("#xs_main_detail").dialog("destroy");
+            $("#xs_pkdc_msgWin").window("open");
+        },XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
         XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
 
         $("#xs_pkdc_detailTabs").tabs({/*tabWidth:215,*/tabHeight:35});
@@ -731,7 +743,10 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
                 XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",true,true,585,560,70,40) +
             '</div>';
         $("#xs_pkdc_AnalysTabs").css({boxSizing: "border-box"});
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 700,600,0,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 700,600,0,null,function(){
+            $("#xs_main_detail").dialog("destroy");
+            $("#xs_pkdc_msgWin").window("open");
+        },XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
         XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
 
        selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab",0);
@@ -892,7 +907,10 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
                 XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",true,true,800,545,70,40) +
             '</div>';
         $("#xs_pkdc_AnalysTabs").css({boxSizing: "border-box"});
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 700,600,0,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 700,600,0,null,function(){
+            $("#xs_main_detail").dialog("destroy");
+            $("#xs_pkdc_msgWin").window("open");
+        },XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
         XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
 
         var selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", 0);
@@ -1020,7 +1038,10 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
         var content = '<div style="padding:  2px 2px 2px 0px;box-sizing: border-box;height: 100%;">' +
             XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",true,true,800,545,70,40) +
             '</div>';
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 700,600,0,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 700,600,0,null,function(){
+            $("#xs_main_detail").dialog("destroy");
+            $("#xs_pkdc_msgWin").window("open");
+        },XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
         XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
 
         var selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", 0);
@@ -1152,7 +1173,10 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
         var content = '<div style="padding: 2px 2px 2px 0px;box-sizing: border-box;height: 100%;">' +
             XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",true,true,800,545,70,40) +
             '</div>';
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 700,600,0,null,null,XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 700,600,0,null,function(){
+            $("#xs_main_detail").dialog("destroy");
+            $("#xs_pkdc_msgWin").window("open");
+        },XS.Main.Pkjc.ItemFoundMaxCall,null,XS.Main.Pkjc.ItemFoundMinCall);
         XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
 
         var selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", 0);
@@ -1314,6 +1338,8 @@ XS.Main.Pkjc.clickItemFund = function(currentName){
         '</div>';
     XS.CommonUtil.openDialog("xs_main_detail", currentName + "-项目资金", "icon-man", content, false, true, false, 700,600,0,null,function(){
         $("#xs_echartjs").empty().append('<script src="../base/echart/echarts.js"></script>');
+        $("#xs_main_detail").dialog("destroy");
+        $("#xs_pkdc_msgWin").window("open");
     },function(){
         $("#xs_pkdc_itemFundRowDataTreeC").css("width","100%");
         xs_pkdc_itemFoundChart.resize();
