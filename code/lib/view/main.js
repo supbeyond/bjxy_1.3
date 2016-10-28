@@ -52,6 +52,7 @@ var xs_user_regionId = ""; //用户所属区域id
 var xs_user_regionLevel = -1; //用户所属区域级别
 var xs_user_Features = []; //缓存用户所属区域Features
 var xs_userZoneName = "毕节市"; //缓存用户所属区域名字
+var xs_userZoomBounds = null; //缓存用户初始化缩放级别
 
 var xs_MapInstance;
 
@@ -312,6 +313,7 @@ XS.Main.addLayers = function(){
     xs_MapInstance.getMapObj().events.on({ "zoomend": XS.Main.zoomedMapCallback});
     xs_MapInstance.getMapObj().events.on({ "moveend": XS.Main.movedMapCallback});
 
+    xs_userZoomBounds =xs_MapInstance.getMapObj().getExtent();
 
     XS.Main.Ztree.load(xs_user_regionId,xs_user_regionLevel);
     XS.Searchbox.init();

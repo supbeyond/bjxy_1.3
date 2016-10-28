@@ -1498,11 +1498,10 @@ XS.Main.hiddenDivTags = function(){
 
     //统计分析--分段专题图Tip
     if($("#xs_tjfx_range_themeTipC").length>0) $("#xs_tjfx_tpx_themeTipC").css("display","none");
-    if($("#xs_tjfx_range_Legend").length>0) $("#xs_tjfx_range_Legend").css("display", "none");
+    if($("#xs_tjfx_range_Legend").length>0) $("#xs_tjfx_range_Legend").remove();
     //if($("#xs_tjfx_graph_Legend").length>0) $("#xs_tjfx_graph_Legend").css("display", "block");
     //统计分析--图表专题图Tip
     if($("#xs_tjfx_graph_themeTipC").length>0) $("#xs_tjfx_graph_themeTipC").css("display","none");
-    if($("#xs_tjfx_graph_Legend").length>0) $("#xs_tjfx_graph_Legend").css("display", "none");
     //if($("#xs_poor_legend").length>0 && xs_main_makerLayerLevel == XS.Main.ZoneLevel.poor) $("#xs_poor_legend").css("display", "none");
     //XS.Main.Poor.clearRelocationLayer();
 
@@ -1519,7 +1518,7 @@ XS.Main.hiddenLayers = function(){
     if(xs_main_makerLayerLevel == XS.Main.ZoneLevel.poor){
         xs_markerLayer.clearMarkers();
         xs_markerLayer.setVisibility(false);
-        xs_poorLabelLayer.setVisibility(false);
+        xs_poorLabelLayer.removeAllFeatures();
     }
 
     XS.Main.Tjfx.removeLayer();
@@ -1551,6 +1550,7 @@ XS.Main.clearMap = function(){
     xs_pkdc_isGaugeClose = true;
     //xs_superZoneCode = -1;
     xs_clickMapType = XS.Main.clickMapType.none;
+    //xs_MapInstance.getMapObj().zoomToExtent(xs_userZoomBounds,false);
 }
 
 //深度清理地图
