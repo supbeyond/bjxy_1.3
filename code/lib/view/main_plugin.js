@@ -830,7 +830,7 @@ XS.Main.utfGridLayerMoveCallbackUpdataData = function(level, x, y, name,THus, po
 
 //添加矢量点到聚散图层
 var xs_clickPoorLegendArr = [];
-XS.Main.addVectorPoint2ClusterLayer = function(objArr){
+XS.Main.addVectorPoint2ClusterLayer = function(objArr,type){
     //XS.Main.clearMap();
     //XS.Main.Poor.clearRelocationLayer();
     xs_isShowUtfGridTip = false;
