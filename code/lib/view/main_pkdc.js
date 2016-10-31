@@ -298,8 +298,6 @@ XS.Main.Pkjc.pkdc = function(){
     /*if(xs_currentZoneFuture==null){
         xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 0);
     }*/
-    $("#xs_tjfx_range_Legend").remove();
-    $("#xs_tjfx_graph_Legend").remove();
 
     xs_pkdc_preName = xs_userZoneName;
     xs_pkdc_currentName = xs_userZoneName;
@@ -619,7 +617,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         $('#xs_pkdc_details').click(function(){
             XS.Main.Pkjc.closeInfoDialog();
             XS.Main.Poor.clearRelocationLayer();
-            XS.Main.Pkjc.clickDetail(xs_pkdc_zoneLevel,xs_pkdc_currentName,xs_pkdc_currentStateCode);
+            XS.Main.Pkjc.clickDetail(xs_pkdc_zoneLevel,xs_pkdc_currentName,xs_pkdc_currentStateCode,false);
         });
         //数据分析点击
         $('#xs_pkdc_dataAnalysis').click(function(){

@@ -201,8 +201,8 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
     var tag = '<div id="xs_tjfx_range_Legend">'+
             '<div class="legendTitle">'+
             '<span>图例</span>'+
-            '<a href="javascript:void(0)" id="xs_poor_legendCollap" onclick="XS.Main.Poor.legendCollapse();"></a>' +
-            '<a href="javascript:void(0)" id="xs_poor_legendClose" onclick="XS.Main.Poor.legendClose();"></a>' +
+            '<a href="javascript:void(0)" id="xs_poor_legendCollap" onclick="XS.Main.Tjfx.legendCollapse();"></a>' +
+            '<a href="javascript:void(0)" id="xs_poor_legendClose" onclick="XS.Main.Tjfx.legendClose();"></a>' +
             '</div>'+
             '<div class="legendContent">';
     switch (type)
@@ -402,7 +402,7 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
 
 
 //图例展开和收缩事件
-XS.Main.Poor.legendCollapse = function(){
+XS.Main.Tjfx.legendCollapse = function(){
     if(xs_poor_isLegendClickSingle){
         xs_poor_isLegendClickSingle = false;
         xs_poor_legendbegoreH = $(".legendContent").outerHeight();
@@ -432,7 +432,7 @@ XS.Main.Poor.legendCollapse = function(){
     }
 }
 //关闭图例事件
-XS.Main.Poor.legendClose = function(){
+XS.Main.Tjfx.legendClose = function(){
     $("#xs_tjfx_range_Legend").remove();
 }
 //鼠标在贫困户图例中移动事件

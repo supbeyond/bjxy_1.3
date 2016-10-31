@@ -57,8 +57,8 @@ XS.Main.Poor.showPoors = function(objArr,centerPointer){
             var lng = 0;
             var lat = 0;
             if(!objArr[i].lng || !objArr[i].lat){
-                lng = centerPointer.lon + (Math.random()>0.5 ? 1 : -1) * Math.random() * 0.002;
-                lat = centerPointer.lat + (Math.random()>0.5 ? 1 : -1) * Math.random() * 0.002;
+                lng = centerPointer.lon + (Math.random()>0.5 ? 1 : -1) * Math.random() * 0.004;
+                lat = centerPointer.lat + (Math.random()>0.5 ? 1 : -1) * Math.random() * 0.004;
             }else{
                 lng = objArr[i].lng;
                 lat = objArr[i].lat;

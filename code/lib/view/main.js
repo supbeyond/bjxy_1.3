@@ -150,7 +150,7 @@ XS.Main.load = function(){
             //结束时间设置为最后运行结束的汽车结束时间
             endTime:0
         });
-    var strategy = new SuperMap.Strategy.GeoText();
+    var strategy = new SuperMap.Strategy.GeoText({isOverLay:true});
     strategy.style = {
         fontColor:"#00bbee",
         fontSize:"8px",

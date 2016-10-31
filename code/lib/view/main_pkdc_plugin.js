@@ -268,7 +268,7 @@ var xs_pkdc_detailPieMinH = 0;
 var xs_pkdc_detailDomH = 0;
 
 //详情点击函数
-XS.Main.Pkjc.clickDetail = function(level,currentName,currentId){
+XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isClickMarker){
     xs_pkdc_AnalysTabsChartArr = [];
     xs_pkdc_detailTabsIndex = -1;
     xs_pkdc_AnalysTabsCInit = null;
@@ -282,7 +282,9 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId){
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.city.title,"xs_pkdc_detailTabs","top");
         XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,function(){
             $("#xs_main_detail").dialog("destroy");
-            $("#xs_pkdc_msgWin").window("open");
+            if(!isClickMarker){
+                $("#xs_pkdc_msgWin").window("open");
+            }
         },XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
         XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
 
@@ -397,7 +399,9 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId){
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.county.title,"xs_pkdc_detailTabs","top",false);
         XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,function(){
             $("#xs_main_detail").dialog("destroy");
-            $("#xs_pkdc_msgWin").window("open");
+            if(!isClickMarker){
+                $("#xs_pkdc_msgWin").window("open");
+            }
         },XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
         XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
 
@@ -562,7 +566,9 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId){
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.town.title,"xs_pkdc_detailTabs","top",false);
         XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,function(){
             $("#xs_main_detail").dialog("destroy");
-            $("#xs_pkdc_msgWin").window("open");
+            if(!isClickMarker){
+                $("#xs_pkdc_msgWin").window("open");
+            }
         },XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
         XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
 
@@ -646,7 +652,9 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId){
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.village.title,"xs_pkdc_detailTabs","top",false);
         XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,function(){
             $("#xs_main_detail").dialog("destroy");
-            $("#xs_pkdc_msgWin").window("open");
+            if(!isClickMarker){
+                $("#xs_pkdc_msgWin").window("open");
+            }
         },XS.Main.Pkjc.detailMaxCall,null,XS.Main.Pkjc.detailMinCall);
         XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
 
