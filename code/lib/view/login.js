@@ -39,10 +39,13 @@ XS.Login.login = function(){
         //解析返回数据
         XS.CommonUtil.hideLoader();
         if(json && json.success && json.regionid){
-            sessionStorage.setItem("username", xs_Username);
-            sessionStorage.setItem("password", hex_md5(xs_Password));
-            sessionStorage.setItem("userid", json.userid);
-            sessionStorage.setItem("regionid", (json.regionid).trim());
+
+          //  sessionStorage.setItem("%%", CryptoJS.AES.encrypt(xs_Username, "@#$$$$$"));
+          //  sessionStorage.setItem("@#$%", CryptoJS.AES.encrypt(xs_Password, "@#&&&$$$"));
+
+            //sessionStorage.setItem("userid", json.userid);
+            //sessionStorage.setItem("@#$", (json.regionid).trim());
+            sessionStorage.setItem("@#$", CryptoJS.AES.encrypt((json.regionid).trim(), "@##*$$"));
             //加载主页
             XS.Index.loadMain();
         }else{
@@ -62,8 +65,9 @@ XS.Login.login = function(){
 
 //用户退出
 XS.Login.logout = function(){
-    sessionStorage.removeItem("username");
-    sessionStorage.removeItem("password");
+    sessionStorage.removeItem("%%");
+    sessionStorage.removeItem("@#$%");
+    sessionStorage.removeItem("@#$");
     //window.location.href = XS.Constants.host+"view/index.html";
     //window.location.href = XS.Constants.host+"view/index.html";
     window.location.href = window.location.toString().substring(0,window.location.toString().lastIndexOf("/view")+1) +"index.html";

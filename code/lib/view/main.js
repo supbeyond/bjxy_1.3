@@ -3,13 +3,12 @@
  */
 $(function(){
     //用户登陆验证
-    xs_Username = sessionStorage.getItem("username");
-    xs_Password = sessionStorage.getItem("password");
-    xs_user_regionId = sessionStorage.getItem("regionid");
-
-    if(XS.StrUtil.isEmpty(xs_Username)||XS.StrUtil.isEmpty(xs_Password)){
+    xs_user_regionId = sessionStorage.getItem("@#$");
+    if(XS.StrUtil.isEmpty(xs_user_regionId)){
         window.location.href = window.location.toString().substring(0,window.location.toString().lastIndexOf("/view")+1) +"index.html";
         return;
+    }else{
+        xs_user_regionId =  CryptoJS.AES.decrypt(xs_user_regionId,"@##*$$").toString(CryptoJS.enc.Utf8);
     }
     $(window).keyup(function(e){
         if(e.keyCode==27) //Esc
