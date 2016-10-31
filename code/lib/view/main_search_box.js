@@ -106,14 +106,14 @@ XS.Searchbox.searchbox = function(){
         {
             xs_searchbox_level = XS.Main.ZoneLevel.county;
             xs_searchbox_action = "QueryTempCountyBaseInfoByCname";
-            data = {Cname:xs_searchbox_content};
+            data = {Cname:xs_searchbox_content,regionid:xs_user_regionId};
             break;
         }
         case '乡镇':
         {
             xs_searchbox_level = XS.Main.ZoneLevel.town;
             xs_searchbox_action = "QueryTempTownInfoByTname";
-            data = {tname:xs_searchbox_content};
+            data = {tname:xs_searchbox_content,regionid:xs_user_regionId};
             break;
         }
         case '行政村':
@@ -242,38 +242,6 @@ XS.Searchbox.searchbox = function(){
  */
 XS.Searchbox.regionBaseInfo = function(i,json,regionId,regionName,fields){
     //$("#xs_searchbox_resultC").animate({height:350},{duration: 1000 });
-    if(!XS.StrUtil.isEmpty(regionId) && !XS.StrUtil.isEmpty(regionName)){
-        switch (xs_user_regionLevel){
-            case XS.Main.ZoneLevel.city:
-            {
-                break;
-            }
-            case XS.Main.ZoneLevel.county:
-            {
-                if(json[i][regionId].toString().slice(0,6) != xs_user_regionId){
-                    if(i<json.length-1){
-                        XS.Searchbox.regionBaseInfo(i+1,json,regionId,regionName,fields);
-                    }else{
-                        XS.Searchbox.BaseInfPanel(i,json,regionId,regionName);
-                    }
-                    return;
-                }
-                break;
-            }
-            case XS.Main.ZoneLevel.town:
-            {
-                if(json[i][regionId].toString().slice(0,9) != xs_user_regionId){
-                    if(i<json.length-1){
-                        XS.Searchbox.regionBaseInfo(i+1,json,regionId,regionName,fields);
-                    }else{
-                        XS.Searchbox.BaseInfPanel(i,json,regionId,regionName);
-                    }
-                    return;
-                }
-                break;
-            }
-        }
-    }
     var baseInfData = [];
     var regionIdV = 0;
     var regionNameV = "";
@@ -474,7 +442,7 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
                 case XS.Main.ZoneLevel.town:
                     xs_superZoneCode = Math.floor(regionId/1000);
                     xs_currentZoneLevel = XS.Main.ZoneLevel.town;
-                    xs_userZoneName = feature.data.县级代码;
+                    xs_userZoneName = feature.data.县级名称;
                     xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 6);
                     XS.Main.readyAddRegionMarkersData([feature],xs_currentZoneLevel-1,xs_superZoneCode);
                     //XS.Main.addTownVillPlevelMarker2Layer(xs_currentZoneLevel-1, xs_superZoneCode,regionId);
