@@ -818,7 +818,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                 for(var i in villBaseInfNameField){
                     xs_pkdc_detailCash.push({name:villBaseInfNameField[i],value:json[villBaseInfValueField[i]]});
                 }
-                $("#xs_pkdc_msg_barC").empty().append(XS.Main.Poor.createTable(xs_pkdc_detailCash, 2, 50,"color:#00bbee",""));
+                $("#xs_pkdc_msg_barC").empty().append(XS.Main.Poor.createTable(xs_pkdc_detailCash, 2, 50,"","color:#00bbee"));
                 $(".datagrid-wrap").css("width","auto");
             }else{
 
@@ -870,7 +870,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                 $('#xs_pkdc_poorHbBtn').linkbutton({text:"贫困户"});
                 xs_pkdc_detailClickNum = 0;
 
-                $("#xs_pkdc_msg_barC").empty().append(XS.Main.Poor.createTable(xs_pkdc_detailCash, 2, 50,"color:#00bbee",""));
+                $("#xs_pkdc_msg_barC").empty().append(XS.Main.Poor.createTable(xs_pkdc_detailCash, 2, 50,"","color:#00bbee"));
                 $(".datagrid-wrap").css("width","auto");
             }
         });

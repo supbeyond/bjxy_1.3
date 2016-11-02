@@ -449,7 +449,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
                             "value": XS.StrUtil.isEmpty(json[i].CBI_MAIN_INDUSTRY) ? "" : json[i].CBI_MAIN_INDUSTRY
                         }
                     ];
-                    $("#xs_pkdc_tabsContent").empty().append(XS.Main.Poor.createTable(jsonObj, 2, 50, "color:#00bbee", ""));
+                    $("#xs_pkdc_tabsContent").empty().append(XS.Main.Poor.createTable(jsonObj, 2, 50, "", "color:#00bbee"));
                     $("#xs_pkdc_tabsContentPie").css({display: 'none'});
                     $(".datagrid-wrap").css("width", "auto");
                     break;
@@ -473,7 +473,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
                                     "value": XS.StrUtil.isEmpty(json[i].CBI_MAIN_INDUSTRY) ? "" : json[i].CBI_MAIN_INDUSTRY
                                 }
                             ];
-                            $("#xs_pkdc_tabsContent").empty().append(XS.Main.Poor.createTable(jsonObj, 2, 50, "color:#00bbee", ""));
+                            $("#xs_pkdc_tabsContent").empty().append(XS.Main.Poor.createTable(jsonObj, 2, 50, "", "color:#00bbee"));
                             $("#xs_pkdc_tabsContentPie").css({display: 'none'});
                             $(".datagrid-wrap").css("width", "auto");
                             break;
@@ -492,7 +492,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
                 switch(index){
                     case 0 ://基本信息
                         if(jsonObj && (index == 4 || jsonObj.length>0)) {
-                            $("#xs_pkdc_tabsContent").empty().append(XS.Main.Poor.createTable(jsonObj, 2, 50, "color:#00bbee", ""));
+                            $("#xs_pkdc_tabsContent").empty().append(XS.Main.Poor.createTable(jsonObj, 2, 50, "", "color:#00bbee"));
                             $("#xs_pkdc_tabsContentPie").css({display: 'none'});
                             $(".datagrid-wrap").css("width", "auto");
                         }else{
@@ -1486,7 +1486,7 @@ XS.Main.Pkjc.dataTable = function(json,nameArr,valueArr,columnNum,rowH){
         xs_pkdc_btnCliDatagridObj[i].value = jsonData[valueArr[i]];
     }
 
-     $("#xs_pkdc_tabsContent").empty().append(XS.Main.Poor.createTable(xs_pkdc_btnCliDatagridObj, columnNum, rowH,"color:#00bbee",""));
+     $("#xs_pkdc_tabsContent").empty().append(XS.Main.Poor.createTable(xs_pkdc_btnCliDatagridObj, columnNum, rowH,"","color:#00bbee"));
      $(".datagrid-wrap").css("width","auto");
 
      var tabsContentDomH = $("#xs_pkdc_tabsContentDom").outerHeight();
