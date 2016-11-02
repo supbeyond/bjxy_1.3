@@ -1207,6 +1207,7 @@ XS.Main.readyAddMarkers = function(centerPoint,level,currentId){
     switch (level){
         case XS.Main.ZoneLevel.county:
             xs_MapInstance.getMapObj().setCenter(centerPoint, 6);
+            XS.Main.Pkjc.clickDetail(level,xs_currentZoneName,currentId,false);
             XS.Main.addTownVillPlevelMarker2Layer(level,currentId);
             break;
         case XS.Main.ZoneLevel.town:
@@ -1420,7 +1421,7 @@ XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, 
                             xs_currentZoneCode = feature.data.乡镇代码;
                             xs_currentZoneName = feature.data.乡镇名称;
                             xs_superZoneCode = Math.floor(xs_currentZoneName/1000);
-                            XS.Main.Pkjc.clickDetail(superLevel + 1,marker.object.data.TOWB_NAME,marker.object.data.TOWB_ID,true);
+                            XS.Main.Pkjc.clickDetail(superLevel + 1,marker.object.data.TOWB_NAME,marker.object.data.TOWB_ID,false);
                             var id = marker.object.data.TOWB_ID;
                             XS.Main.readyAddMarkers(lonLat,superLevel+1,id);
                             break;
@@ -1434,7 +1435,7 @@ XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, 
                             xs_currentZoneCode = feature.data.OldID;
                             xs_currentZoneName = feature.data.vd_name;
                             xs_superZoneCode = xs_currentZoneName.toString().slice(0,9);
-                            XS.Main.Pkjc.clickDetail(superLevel + 1,marker.object.data.VBI_NAME,marker.object.data.VBI__ID,true);
+                            XS.Main.Pkjc.clickDetail(superLevel + 1,marker.object.data.VBI_NAME,marker.object.data.VBI__ID,false);
                             var id = marker.object.data.VBI__ID;
                             XS.Main.readyAddMarkers(lonLat,superLevel+1,id);
                             break;
@@ -1509,6 +1510,10 @@ XS.Main.clearMap = function(){
     XS.Main.hiddenDivTags();
     XS.Main.closeDialogs();
     XS.Main.hiddenLayers();
+    if($("#xs_tjfx_range_Legend").length>0) $("#xs_tjfx_range_Legend").remove();
+
+    xs_markerLayer.clearMarkers();
+    xs_markerLayer.setVisibility(true);
 
     //清空vectorLayer
     //xs_clusterLayer.destroyCluster();

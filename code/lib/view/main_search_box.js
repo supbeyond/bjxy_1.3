@@ -363,7 +363,7 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
     xs_markerLayer.clearMarkers();
     xs_markerLayer.setVisibility(false);
     XS.Main.Poor.clearRelocationLayer();
-    $("#xs_tjfx_range_Legend").css("display", "none");
+    $("#xs_tjfx_range_Legend").remove();
 
     if(regionName == '贫困户' && xs_pkdc_cacheDataArr[poorHIndex].LONGITUDE && xs_pkdc_cacheDataArr[poorHIndex].LATITUDE){
         XS.Main.Poor.showPoor(xs_pkdc_cacheDataArr[poorHIndex].hid,null);
@@ -688,7 +688,7 @@ XS.Searchbox.BaseInfPanel = function(i,json,regionId,regionName){
     $(".xs_searchbox_detail").click(function(){
         var detailRegionId = $(this).attr("regionId");
         var detailRegionName = $(this).attr("regionName");
-        XS.Main.Pkjc.clickDetail(xs_searchbox_level,detailRegionName,detailRegionId,true);
+        XS.Main.Pkjc.clickDetail(xs_searchbox_level,detailRegionName,detailRegionId,false);
     });
     $(".xs_searchbox_nextSeleect").click(function(){
         var nextRegionId = $(this).attr("regionId");

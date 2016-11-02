@@ -481,8 +481,8 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                 '<td>' +
                     "<div id='xs_pkdc_linkButtonC' style='padding-top:2px;vertical-align: middle;'>" +
                         "<a id='xs_pkdc_backSuperBtn' href='javascript:void(0);' style='width: 80px;height:25px; margin-left:5px; display: inline-block;'>上一级</a>" +
-                        "<a id='xs_pkdc_positionBtn' href='javascript:void(0);'  style='width: 80px;height:25px; margin-left:20px; display: inline-block;'>定位</a>" +
-                        "<a id='xs_pkdc_poorAdviceBtn' href='javascript:void(0);'  style='width: 80px;height:25px; margin-left:20px; '>扶贫意见</a>" +
+                        //"<a id='xs_pkdc_positionBtn' href='javascript:void(0);'  style='width: 80px;height:25px; margin-left:20px; display: inline-block;'>定位</a>" +
+                        "<a id='xs_pkdc_poorAdviceBtn' href='javascript:void(0);'  style='width: 80px;height:25px; margin-left:20px; display: inline-block;'>扶贫意见</a>" +
                     "</div>" +
                 '</td>' +
             '</tr>'+
@@ -525,7 +525,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         //返回上一级
         $('#xs_pkdc_backSuperBtn').linkbutton({iconCls:'icon-back'});
         //定位
-        $('#xs_pkdc_positionBtn').linkbutton({iconCls:'icon-main_position'});
+        //$('#xs_pkdc_positionBtn').linkbutton({iconCls:'icon-main_position'});
         //扶贫意见
         $('#xs_pkdc_poorAdviceBtn').linkbutton({iconCls:'e_icon-email_go'});
         //添加加载进度
@@ -604,10 +604,13 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         });
 
         //定位事件处理
-        $("#xs_pkdc_positionBtn").click(function(){
+        /*$("#xs_pkdc_positionBtn").click(function(){
             XS.Main.Poor.clearRelocationLayer();
+            if(XS.Main.CacheZoneInfos.town.data){
+
+            }
             XS.Main.Poor.showPoors(xs_pkdc_cacheDataArr);
-        });
+        });*/
 
         //扶贫意见事件处理
         $('#xs_pkdc_poorAdviceBtn').click(function(){
@@ -617,7 +620,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         $('#xs_pkdc_details').click(function(){
             XS.Main.Pkjc.closeInfoDialog();
             XS.Main.Poor.clearRelocationLayer();
-            XS.Main.Pkjc.clickDetail(xs_pkdc_zoneLevel,xs_pkdc_currentName,xs_pkdc_currentStateCode,false);
+            XS.Main.Pkjc.clickDetail(xs_pkdc_zoneLevel,xs_pkdc_currentName,xs_pkdc_currentStateCode,true);
         });
         //数据分析点击
         $('#xs_pkdc_dataAnalysis').click(function(){
@@ -728,7 +731,9 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
     xs_pkdc_poorOccurRate = [];
     xs_pkdc_cacheDataArr  = [];
     $('#xs_pkdc_backSuperBtn').linkbutton({disabled:false});
-    $('#xs_pkdc_positionBtn').linkbutton({disabled:true});
+    //$('#xs_pkdc_positionBtn').linkbutton({disabled:true});
+    $("#xs_pkdc_msg_barC").css({width:"560px",overflowY: "auto"});
+    $('#xs_pkdc_poorHbBtn,#xs_pkdc_positionBtn').remove();
 
     if(xs_pkdc_zoneLevel == XS.Main.ZoneLevel.city)
     {
@@ -797,27 +802,78 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         }
     }else if(xs_pkdc_zoneLevel == XS.Main.ZoneLevel.village)
     {
-        $('#xs_pkdc_positionBtn').linkbutton({disabled:false});
-        var xs_pkdc_village = '<table id="xs_pkdc_village" class="easyui-datagrid" style="width:578px;height:100%;"></table>';
-        $("#xs_pkdc_msg_barC").empty().append(xs_pkdc_village);
+        //$('#xs_pkdc_positionBtn').linkbutton({disabled:false});
+        $("#xs_pkdc_msg_barC").css({width:"100%",height:"auto",overflowY: "hidden"});
+        var xs_pkdc_detailCash = [];
+        var xs_pkdc_detailCashJson = null;
+        var xs_pkdc_detailClickNum = 0;
+        data = {pd_id:id};
+        $("#xs_pkdc_msgWin_p").css("display", "block");
+        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryVillBaseById", data, function(json) {
+            $("#xs_pkdc_msgWin_p").css("display", "none");
+            if(json && xs_pkdc_detailClickNum == 0) {
+                xs_pkdc_detailCashJson = json;
+                var villBaseInfNameField = XS.Main.Pkjc.detailKV.village.tabs[0].name;
+                var villBaseInfValueField = XS.Main.Pkjc.detailKV.village.tabs[0].value;
+                for(var i in villBaseInfNameField){
+                    xs_pkdc_detailCash.push({name:villBaseInfNameField[i],value:json[villBaseInfValueField[i]]});
+                }
+                $("#xs_pkdc_msg_barC").empty().append(XS.Main.Poor.createTable(xs_pkdc_detailCash, 2, 50,"color:#00bbee",""));
+                $(".datagrid-wrap").css("width","auto");
+            }else{
 
-        if(id != XS.Main.CacheZoneInfos.poorH.villageId){
-            var dataN = {pbno: id,pageNo:1,pageSize:20};
-            $("#xs_pkdc_msgWin_p").css("display", "block");
-            //http://61.159.185.196:7060/Service2.svc/QueryHousePeoByHidOfPage?pbno=52242810102&pageNo=1
-            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryHousePeoByHidOfPage", dataN, function(json){
-                $("#xs_pkdc_msgWin_p").css("display", "none");
-                if(json && json.length>0) {
-                    xs_pkdc_cacheDataArr = json;
-                    XS.Main.CacheZoneInfos.poorH.villageId = id;
-                    XS.Main.CacheZoneInfos.poorH.data = json;
+                //$('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+            }
+        });
+
+        var xs_pkdc_poorHBtn = "<a id='xs_pkdc_poorHbBtn' href='javascript:void(0);'  style='width: 80px;height:25px; margin-left:20px;display: inline-block;'>贫困户</a>";
+        $('#xs_pkdc_linkButtonC').append(xs_pkdc_poorHBtn);
+        $('#xs_pkdc_poorHbBtn').linkbutton({iconCls:'icon-man'});
+        $('#xs_pkdc_poorHbBtn').click(function(){
+            if(xs_pkdc_detailClickNum == 0){
+                $('#xs_pkdc_poorHbBtn').linkbutton({text:"基本信息"});
+                xs_pkdc_detailClickNum = 1;
+
+                var xs_pkdc_positionBtn = "<a id='xs_pkdc_positionBtn' href='javascript:void(0);'  style='width: 80px;height:25px; margin-left:20px;'>定位</a>";
+                $('#xs_pkdc_linkButtonC').append(xs_pkdc_positionBtn);
+                $('#xs_pkdc_positionBtn').linkbutton({iconCls:'icon-main_position'});
+                $('#xs_pkdc_positionBtn').click(function(){
+                    XS.Main.Poor.clearRelocationLayer();
+                    if(xs_pkdc_detailCashJson.VBI_LONGITUDE && xs_pkdc_detailCashJson.VBI_LATITUDE){
+                        var lonLat = new SuperMap.LonLat(xs_pkdc_detailCashJson.VBI_LONGITUDE, xs_pkdc_detailCashJson.VBI_LATITUDE);
+                        XS.Main.readyAddMarkers(lonLat,XS.Main.ZoneLevel.village,xs_pkdc_detailCashJson.VBI__ID);
+                    }
+                });
+
+                var xs_pkdc_village = '<table id="xs_pkdc_village" class="easyui-datagrid" style="width:100%;height:100%;overflow: hidden;"></table>';
+                $("#xs_pkdc_msg_barC").empty().append(xs_pkdc_village);
+                if(id != XS.Main.CacheZoneInfos.poorH.villageId){
+                    var dataN = {pbno: id,pageNo:1,pageSize:15};
+                    $("#xs_pkdc_msgWin_p").css("display", "block");
+                    //http://61.159.185.196:7060/Service2.svc/QueryHousePeoByHidOfPage?pbno=52242810102&pageNo=1
+                    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryHousePeoByHidOfPage", dataN, function(json){
+                        $("#xs_pkdc_msgWin_p").css("display", "none");
+                        if(json && json.length>0 && xs_pkdc_detailClickNum == 1) {
+                            xs_pkdc_cacheDataArr = json;
+                            XS.Main.CacheZoneInfos.poorH.villageId = id;
+                            XS.Main.CacheZoneInfos.poorH.data = json;
+                            XS.Main.Pkjc.showHouseDataGrid();
+                        }
+                    });
+                }else{
+                    xs_pkdc_cacheDataArr = XS.Main.CacheZoneInfos.poorH.data;
                     XS.Main.Pkjc.showHouseDataGrid();
                 }
-            });
-        }else{
-            xs_pkdc_cacheDataArr = XS.Main.CacheZoneInfos.poorH.data;
-            XS.Main.Pkjc.showHouseDataGrid();
-        }
+            }else{
+                $('#xs_pkdc_positionBtn').remove();
+                $("#xs_pkdc_msgWin_p").css("display", "none");
+                $('#xs_pkdc_poorHbBtn').linkbutton({text:"贫困户"});
+                xs_pkdc_detailClickNum = 0;
+
+                $("#xs_pkdc_msg_barC").empty().append(XS.Main.Poor.createTable(xs_pkdc_detailCash, 2, 50,"color:#00bbee",""));
+                $(".datagrid-wrap").css("width","auto");
+            }
+        });
     }
 
 }
@@ -1023,8 +1079,8 @@ XS.Main.Pkjc.showHouseDataGrid = function(){
     $('#xs_pkdc_village').datagrid({
         data: json,
         pagination: true,
-        pageSize: 20,
-        pageList: [20],
+        pageSize: 15,
+        pageList: [15],
         striped: true,
         onSelect:XS.Main.Pkjc.onSelectedRowHandler,
         singleSelect: true,
@@ -1046,9 +1102,11 @@ XS.Main.Pkjc.showHouseDataGrid = function(){
         showPageList: false,
         onSelectPage:function (pageNumber, pageSize) {
 
-            var dataN = {pbno: xs_pkdc_currentStateCode,pageNo:pageNumber};
+            var dataN = {pbno: xs_pkdc_currentStateCode,pageNo:pageNumber,pageSize:pageSize};
+            $("#xs_pkdc_msgWin_p").css("display", "block");
             //http://61.159.185.196:7060/Service2.svc/QueryHousePeoByHidOfPage?pbno=52242810102&pageNo=1
             XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryHousePeoByHidOfPage", dataN, function(json){
+                $("#xs_pkdc_msgWin_p").css("display", "none");
                 if(json && json.length>0){
                     xs_pkdc_cacheDataArr = json;
                     $("#xs_pkdc_village").datagrid("loadData", json);
@@ -1110,6 +1168,7 @@ XS.Main.Pkjc.clickDutyChain = function(zoneLevel, stateCode){
                 }
             }else{
                 XS.CommonUtil.showMsgDialog("", "没有下级相关责任人");
+                $("#xs_pkdc_msgWin").window("open");
             }
             if(obj.name || obj.children){
                 if(!obj.name){
