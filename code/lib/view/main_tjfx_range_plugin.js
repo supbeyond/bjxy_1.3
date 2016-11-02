@@ -200,17 +200,21 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
 
     var tag = '<div id="xs_tjfx_range_Legend">'+
             '<div class="legendTitle">'+
-            '<span>图例</span>'+
-            '<a href="javascript:void(0)" id="xs_poor_legendCollap" onclick="XS.Main.Tjfx.legendCollapse();"></a>' +
-            '<a href="javascript:void(0)" id="xs_poor_legendClose" onclick="XS.Main.Tjfx.legendClose();"></a>' +
+                    '<span>图例</span>'+
+                    '<a href="javascript:void(0)" id="xs_poor_legendCollap" onclick="XS.Main.Tjfx.legendCollapse();"></a>' +
+                    '<a href="javascript:void(0)" id="xs_poor_legendClose" onclick="XS.Main.Tjfx.legendClose();"></a>' +
             '</div>'+
+            '<div style="background: #bbbbFF;">' +
+                '<span style="position: relative;right: 45px;">贫困类型</span>' +
+                '<span style="position: relative;left: 17px;">图标</span>' +
+            '</div>' +
             '<div class="legendContent">';
     switch (type)
     {
         case XS.Main.Tjfx.type.range_pkfsx:
         {
-            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">'+
-                '<tr><td class="legendItemHeader">贫困发生率</td><td class="legendItemValue">颜色</td></tr>';
+            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">';
+               // '<tr><td class="legendItemHeader">贫困发生率</td><td class="legendItemValue">颜色</td></tr>';
 
             if(level == XS.Main.ZoneLevel.city){
                 for(var i in XS.Main.Tjfx.pkfsx_legendItemHeaders.city){
@@ -231,8 +235,8 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
         }
         case XS.Main.Tjfx.type.range_tpx:
         {
-            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">'+
-                '<tr><td class="legendItemHeader">脱贫率</td><td class="legendItemValue">颜色</td></tr>';
+            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">';
+                //'<tr><td class="legendItemHeader">脱贫率</td><td class="legendItemValue">颜色</td></tr>';
 
             var len = XS.Main.Tjfx.range_styleGroups_color.length;
             for(var i in XS.Main.Tjfx.pkfsx_legendItemHeaders.countytown){
@@ -246,8 +250,8 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
         case XS.Main.Tjfx.type.range_wfx:
         {
             //XS.Main.Tjfx.pkfsx_legendItemHeaders.countytown[9] = '40% - 10000%';
-            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">'+
-                '<tr><td class="legendItemHeader">危房率</td><td class="legendItemValue">颜色</td></tr>';
+            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">';
+                //'<tr><td class="legendItemHeader">危房率</td><td class="legendItemValue">颜色</td></tr>';
 
             var len = XS.Main.Tjfx.range_styleGroups_color.length;
             for(var i in XS.Main.Tjfx.pkfsx_legendItemHeaders.countytown){
@@ -261,8 +265,8 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
         case XS.Main.Tjfx.type.range_fpbqx:
         {
             //XS.Main.Tjfx.pkfsx_legendItemHeaders.countytown[9] = '40% - 10000%';
-            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">'+
-                '<tr><td class="legendItemHeader">扶贫搬迁率</td><td class="legendItemValue">颜色</td></tr>';
+            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">';
+                //'<tr><td class="legendItemHeader">扶贫搬迁率</td><td class="legendItemValue">颜色</td></tr>';
 
             var len = XS.Main.Tjfx.range_styleGroups_color.length;
             for(var i in XS.Main.Tjfx.pkfsx_legendItemHeaders.countytown){
@@ -275,8 +279,8 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
         }
         case XS.Main.Tjfx.type.pie:
         {
-            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">'+
-                '<tr><td class="legendItemHeader">土地信息</td><td class="legendItemValue">颜色</td></tr>';
+            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">';
+                //'<tr><td class="legendItemHeader">土地信息</td><td class="legendItemValue">颜色</td></tr>';
 
             for(var i in XS.Main.Tjfx.Graph.axisXLabels[0]){
                 tag += '<tr>';
@@ -288,8 +292,8 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
         }
         case XS.Main.Tjfx.type.bar.social:
         {
-            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">'+
-                '<tr><td class="legendItemHeader">社会保障</td><td class="legendItemValue">颜色</td></tr>';
+            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">';
+                //'<tr><td class="legendItemHeader">社会保障</td><td class="legendItemValue">颜色</td></tr>';
 
             for(var i in XS.Main.Tjfx.Graph.axisXLabels[1]){
                 tag += '<tr>';
@@ -302,8 +306,8 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
         }
         case XS.Main.Tjfx.type.bar.fourOf45:
         {
-            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">'+
-                '<tr><td class="legendItemHeader">四有五覆盖(四有)</td><td class="legendItemValue">颜色</td></tr>';
+            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">';
+                //'<tr><td class="legendItemHeader">四有五覆盖(四有)</td><td class="legendItemValue">颜色</td></tr>';
 
             for(var i in XS.Main.Tjfx.Graph.axisXLabels[2]){
                 tag += '<tr>';
@@ -316,8 +320,8 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
         }
         case XS.Main.Tjfx.type.bar.fiveOf45:
         {
-            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">'+
-                '<tr><td class="legendItemHeader">四有五覆盖(五覆盖)</td><td class="legendItemValue">颜色</td></tr>';
+            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">';
+                //'<tr><td class="legendItemHeader">四有五覆盖(五覆盖)</td><td class="legendItemValue">颜色</td></tr>';
 
             for(var i in XS.Main.Tjfx.Graph.axisXLabels[3]){
                 tag += '<tr>';
@@ -330,8 +334,8 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
         }
         case XS.Main.Tjfx.type.bar.fiveOf54:
         {
-            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">'+
-                '<tr><td class="legendItemHeader">五通四有(五通)</td><td class="legendItemValue">颜色</td></tr>';
+            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">';
+                //'<tr><td class="legendItemHeader">五通四有(五通)</td><td class="legendItemValue">颜色</td></tr>';
 
             for(var i in XS.Main.Tjfx.Graph.axisXLabels[4]){
                 tag += '<tr>';
@@ -344,8 +348,8 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
         }
         case XS.Main.Tjfx.type.bar.fourOf54:
         {
-            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">'+
-                '<tr><td class="legendItemHeader">五通四有(四有)</td><td class="legendItemValue">颜色</td></tr>';
+            tag += '<table id="xs_poor_legendTab" border1="0" cellspacing1="0" cellpadding1="0">';
+                //'<tr><td class="legendItemHeader">五通四有(四有)</td><td class="legendItemValue">颜色</td></tr>';
 
             for(var i in XS.Main.Tjfx.Graph.axisXLabels[2]){
                 tag += '<tr>';
@@ -358,10 +362,10 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
         }
         case XS.Main.Tjfx.type.poorType:
         {
-            tag += '<table id="xs_poor_legendTab" border="0" cellspacing="0" cellpadding="0"><tr>';
+            tag += '<table id="xs_poor_legendTab" border="0" cellspacing="0" cellpadding="0">';//<tr style="background: #1E9088">';
             if(level == XS.Main.ZoneLevel.county)
             {
-                tag += '<td class="legendItemHeader">贫困类型</td><td class="poorLegendItemValue">图标</td></tr>';
+                //tag += '<td class="legendItemHeader">贫困类型</td><td class="poorLegendItemValue">图标</td></tr>';
                 for(var i in XS.Main.poorZonePicArr.town){
                     tag += '<tr>';
                     tag += '<td class="legendItemHeader">'+XS.Main.poorZonePicArr.town[i].name+'</td>';
@@ -372,7 +376,7 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
                 }
             }else if(level == XS.Main.ZoneLevel.town)
             {
-                tag += '<td class="legendItemHeader">贫困类型</td><td class="poorLegendItemValue">图标</td></tr>';
+                //tag += '<td class="legendItemHeader">贫困类型</td><td class="poorLegendItemValue">图标</td></tr>';
                 for(var i in XS.Main.poorZonePicArr.vill){
                     tag += '<tr>';
                     tag += '<td class="legendItemHeader">'+XS.Main.poorZonePicArr.vill[i].name+'</td>';
@@ -383,7 +387,7 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
                 }
             }else if(level == XS.Main.ZoneLevel.village)
             {
-                tag += '<td class="legendItemHeader">贫困原因</td><td class="poorLegendItemValue">图标</td></tr>';
+                //tag += '<td class="legendItemHeader">贫困原因</td><td class="poorLegendItemValue">图标</td></tr>';
                 for(var i in XS.Main.poorZonePicArr.poor){
                     tag += '<tr class="poorLegendItemRow">';
                     tag += '<td class="legendItemHeader">'+XS.Main.poorZonePicArr.poor[i].name+'</td>';
