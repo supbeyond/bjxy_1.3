@@ -273,6 +273,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isClickMarker){
     xs_pkdc_detailTabsIndex = -1;
     xs_pkdc_AnalysTabsCInit = null;
     xs_pkdc_detailDomH = 524;
+    var xs_pkdc_detailIndex = 0;
     XS.Main.Pkjc.minInfoWinDialog();
     var jsonObj = null;
     var data = null;
@@ -331,11 +332,13 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isClickMarker){
                         break;
                 }
                 XS.Main.Pkjc.detailWindowTabs(index);
+                xs_pkdc_detailIndex = index;
                 data = {cbsId:xs_pkdc_currentStateCode,pd_id:xs_pkdc_currentStateCode,casDate:xs_pkdc_currentStateCode,pid:xs_pkdc_currentStateCode};
                 $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
                     $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
                     if(json) {
+                        if(xs_pkdc_detailIndex != index)return;
                         XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.city.tabs[index].name, XS.Main.Pkjc.detailKV.city.tabs [index].value, 3, 35);
                         switch (index) {
                             case 0 ://土地信息
@@ -498,11 +501,13 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isClickMarker){
                 if(index==0){
                     return;
                 }
+                xs_pkdc_detailIndex = index;
                 data = {cbsId:currentId, pd_id:currentId, casDate:currentId,pid:currentId};
                 $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
                     $("#xs_pkdc_pkBaseData_loading").css({"visibility": "hidden"});
                     if(json && (index==4|| json.length > 0)) {
+                        if(xs_pkdc_detailIndex != index)return;
                         XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.county.tabs[index].name, XS.Main.Pkjc.detailKV.county.tabs[index].value, 3, 35);
                         switch (index) {
                             case 1 ://土地信息
@@ -603,11 +608,13 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isClickMarker){
                         break;
                 }
                 XS.Main.Pkjc.detailWindowTabs(index);
+                xs_pkdc_detailIndex = index;
                 data = {pd_id:currentId, tid:currentId};
                 $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
                     $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
                     if(json && (index==0 || json.length > 0)) {
+                        if(xs_pkdc_detailIndex != index)return;
                         switch (index) {
                             case 0 :
                                 XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value, 2, 50);
@@ -689,11 +696,13 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isClickMarker){
                         break;
                 }
                 XS.Main.Pkjc.detailWindowTabs(index);
+                xs_pkdc_detailIndex = index;
                 data = {pd_id:currentId,pid:currentId};
                 $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
                     $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
                     if(json && (index==0 || json.length > 0)) {
+                        if(xs_pkdc_detailIndex != index)return;
                         switch (index) {
                             case 0 ://基本信息
                                 XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.village.tabs[index].name, XS.Main.Pkjc.detailKV.village.tabs[index].value, 2, 50);
@@ -992,7 +1001,7 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName){
                                 case 2 ://帮扶措施
                                     var legend = [40,["低保人数","参加培训人数","异地扶贫搬迁户","异地扶贫搬迁人数","危房改造户"]];
                                     var xAxis = ['','category',legend[1],true];
-                                    var series = [['帮扶措施','bar',0,[],false,true,'top'],['帮扶措施','pie',[legend[1],[]],[0, 60],['80%', '45%'],false]];
+                                    var series = [['帮扶措施','bar',0,[],false,true,'top'],['帮扶措施','pie',[legend[1],[]],[0, 60],['70%', '35%'],false]];
                                     XS.Main.Pkjc.ananlyValueOfJson(json,[series[0][3],series[0][3],series[0][3],series[0][3],series[0][3],
                                             series[1][2][1],series[1][2][1],series[1][2][1],series[1][2][1],series[1][2][1],series[1][2][1]],
                                         ['cps_lowgaran_pop','cps_outpov_pop','cps_move_hhnum','cps_move_pop','cps_reconstru_hhnum',
@@ -1325,16 +1334,16 @@ XS.Main.Pkjc.clickItemFund = function(currentName){
     XS.Main.Pkjc.minInfoWinDialog();
     var content = '<script id="echarts_all" src="../base/echart2/dist/echarts-all.js"></script>' +
         '<div style="width:100%;height: 100%;padding:5px 5px 5px 0px;box-sizing: border-box;">' +
-            '<div style="width:100%;height:100%;">' +
+            '<div id="xs_pkdc_itemFund1" style="width:100%;height:100%;box-sizing: border-box;">' +
                 /*'<i id="xs_pkdc_itemFound_loading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: -25px;visibility: hidden;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading">' +
                 '</i>' +*/
-                "<div id='xs_pkdc_itemFundC' style='position: relative; width:41%; height:100%; display: inline-block;overflow-y: auto;'>" +
+                "<div id='xs_pkdc_itemFundC' style='position: relative; width:41%; height:100%; display: inline-block;overflow-y: auto;border-right: 1px solid #ddd;box-sizing: border-box;'>" +
                     "<div style='width:900px; height:100%;'>" +
                         "<div id='xs_pkdc_itemFundDgridDom'>" +
                         "</div>" +
                     "</div>" +
                 "</div>" +
-                "<div style='position: relative;width: 59%; height:100%; display: inline-block;overflow-y: auto;box-sizing1: border-box;'>" +
+                "<div style='position: relative;width: 59%; height:100%; display: inline-block;overflow-y: auto;box-sizing: border-box;border: 1px solid #ddd;border-left:0;'>" +
                     "<div id='xs_pkdc_itemFundRowDataTreeC' style='width:400px; height:100%;border1: 1px solid green;'>" +
                         '<div id="xs_pkdc_itemFundRowDataTree" style="height: 100%;width:100%; ">' +
                             '<i id="xs_pkdc_itemFound_rowLoading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: -25px;visibility: hidden;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading">' +
@@ -1384,7 +1393,9 @@ XS.Main.Pkjc.clickItemFund = function(currentName){
 
             XS.Main.Pkjc.selectItemFoundRowData(0,json[0]);
         }else{
-            $('#xs_pkdc_itemFundDgridDom').append('<div style="-webkit-flex:1;flex:1;color:#ff0000;font-size: 40px;">暂无相关数据</div>');
+            var xs_pkdc_itemFund1H = $('#xs_pkdc_itemFund1').height() + 'px';
+            var xs_pkdc_itemFundFair = '<div style="color:#ff0000;font-size: 40px;text-align:center;line-height: ' + xs_pkdc_itemFund1H  + ';">暂无相关数据</div>';
+            $('#xs_pkdc_itemFund1').empty().append(xs_pkdc_itemFundFair);
             $("#xs_pkdc_itemFound_rowLoading").css({"visibility":"hidden"});
         }
     });
