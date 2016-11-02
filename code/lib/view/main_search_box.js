@@ -700,6 +700,7 @@ XS.Searchbox.BaseInfPanel = function(i,json,regionId,regionName){
     });
     $(".xs_searchbox_nextSeleect").change(function(){
         var regionIdV = $(this).val();
+        if(regionIdV == -1)return;
         var regionNameV = $(this).html();
         var level = -1;
         switch (regionIdV.length){
