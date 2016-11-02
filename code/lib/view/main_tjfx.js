@@ -15,7 +15,7 @@ XS.Main.Tjfx.type = {
     range_fpbqx:3,   //分段--扶贫搬迁率
     poorType:4,
     pie:5, //图表pie--土地信息
-    bar:{social:6,fourOf45:7,fiveOf45:8,fiveOf54:9,fourOf54:10},
+    bar:{social:6,fourOf45:7,fiveOf45:8,fiveOf54:9,fourOf54:10}
 }
 
 //缓存行政区域Featuers

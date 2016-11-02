@@ -9,7 +9,7 @@ XS.Main.Pkjc.detailKV = {
         title:["基本信息","土地信息","经济收入","人口统计","人口统计2","重点工作","专项扶贫","帮扶信息"],
         tabs:[
             {
-                name:["市","市编号","面积(平米)","重点县","镇","贫困镇","行政村","贫困村","户(万)","贫困户(万)","总人口(万)","贫困人口(万)","贫困发生率(%)"],
+                name:["市","市编号","面积(km²)","重点县","镇","贫困镇","行政村","贫困村","户(万)","贫困户(万)","总人口(万)","贫困人口(万)","贫困发生率(%)"],
                 value:["regionname","regionid","CountArea","CouseNum","TownNum","PoorTownNum","VillNum","PoorVillNum","HouseNum",
                     "PoorHouseNum","PeopleNum","PoorPeopleNum","PoorRate"]
             },
@@ -66,7 +66,11 @@ XS.Main.Pkjc.detailKV = {
     county:{
         title:["基本信息","土地信息","经济收入","人口统计","人口统计2","重点工作","专项扶贫","帮扶信息"],
         tabs:[
-            {},
+            {
+                name:["县","县编号","面积(km²)","贫困类型","经度","纬度","镇","贫困镇","行政村","贫困村","户","贫困户","总人口","贫困人口","贫困发生率(%)"],
+                value:["CBI_NAME","CBI_ID","CBI_AREA","CBI_type","CBI_LONGITUDE","CBI_LATITUDE","CBI_TOWNS_NUM","CBI_PoorTOWNS_NUM",
+                    "CBI_VILLAGE_NUM","CBI_PoorVILLAGE_NUM","cps_hhnum","cps_poor_hhnum","cps_pop","cps_poor_pop","cps_Poverty_rate"],
+            },
             {
                 name:["耕地面积","基本农田面积","有效灌溉面积","林地面积","退耕还林面积","林果面积","牧草地面积","水域面积","荒漠化面积",
                     "石漠化面积","退耕还草面积","森林覆盖率(%)"],
@@ -122,8 +126,9 @@ XS.Main.Pkjc.detailKV = {
         title:["基 本 信 息","基 本 统 计","公 共 服 务","生 产 生 活"],
         tabs:[
             {
-                name:["乡镇名称","乡镇ID","经度","纬度","海平面"],
-                value:["TOWB_NAME","TOWB_ID","TOWB_LATITUDE","TOWB_LONGITUDE","TOWB_MEAN"]
+                name:["镇","镇编号","面积(亩)","贫困级别","经度","纬度","行政村","贫困村","户","贫困户","总人口","贫困人口","平均年收入(元)","贫困发生率(%)"],
+                value:["TOWB_NAME","TOWB_ID","Totolarea","tpl_TownType","TOWB_LONGITUDE","TOWB_LATITUDE","Totolvillnum","TOWB_VillNum",
+                    "TOWB_HouseNum","TOWB_PoorHouseNum","TOWB_PeopleNum","TOWB_PoorPeopleNum","TOWB_MEAN","tpl_PoorRate"]
             },
             {
                 name:["行政村数","贫困村数","参加新农合人数","总人口数","年末总户数","参加居民养老人数","贫困人口数",
@@ -155,8 +160,8 @@ XS.Main.Pkjc.detailKV = {
         title:["基 本 信 息","基 本 统 计","人 口 信 息","公 共 服 务"],
         tabs:[
             {
-                name:["村名","村编号","海拔","面积","经度","纬度","总户数","贫困户数","总人口","贫困人口","人均年收入","贫困发生率(%)"],
-                value:["VBI_NAME","VBI__ID","VBI_ALTITUDE","VBI_LONGITUDE","VBI_LATITUDE","VillArea","VBI_HouseNum",
+                name:["村名","村编号","海拔","面积(亩)","经度","纬度","总户数","贫困户数","总人口","贫困人口","人均年收入","贫困发生率(%)"],
+                value:["VBI_NAME","VBI__ID","VBI_ALTITUDE","VillArea","VBI_LONGITUDE","VBI_LATITUDE","VBI_HouseNum",
                     "VBI_PoorHouseNum","VBI_PeopleNum","VBI_PoorPeopleNum","VBI_AveIncome","VillPoorRate"]
             },
             {
@@ -434,7 +439,18 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
         $("#xs_pkdc_detailTabs").tabs({/*tabWidth:106,*/tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
-        var json = XS.Main.CacheZoneInfos.county;
+        data = {pbno:xs_pkdc_currentStateCode};
+        $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
+        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryCountyBaseInfoByareaId", data, function(json) {
+            $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+            if(json) {
+                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.county.tabs[0].name, XS.Main.Pkjc.detailKV.county.tabs[0].value, 2, 50);
+            }else{
+                $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+            }
+        });
+
+        /*var json = XS.Main.CacheZoneInfos.county;
         if(json && json.length>1) {
             for (var i = 0; i < json.length; i++) {
                 if (json[i].CBI_ID == currentId) {
@@ -483,7 +499,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
                     $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
                 }
             });
-        }
+        }*/
         $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
         $("#xs_pkdc_detailTabs").tabs({
             onSelect:function(title,index){
@@ -491,13 +507,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
                 XS.Main.Pkjc.detailWindowTabs(index);
                 switch(index){
                     case 0 ://基本信息
-                        if(jsonObj && (index == 4 || jsonObj.length>0)) {
-                            $("#xs_pkdc_tabsContent").empty().append(XS.Main.Poor.createTable(jsonObj, 2, 50, "", "color:#00bbee"));
-                            $("#xs_pkdc_tabsContentPie").css({display: 'none'});
-                            $(".datagrid-wrap").css("width", "auto");
-                        }else{
-                                $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
-                            }
+                        action = "QueryCountyBaseInfoByareaId";
                         break;
                     case 1 ://土地信息
                         action = "QueryCountyBasicStatByFId";
@@ -525,12 +535,16 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
                     return;
                 }
                 xs_pkdc_detailIndex = index;
-                data = {cbsId:currentId, pd_id:currentId, casDate:currentId,pid:currentId};
+                data = {cbsId:currentId, pd_id:currentId, casDate:currentId,pid:currentId,pbno:currentId};
                 $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
                     $("#xs_pkdc_pkBaseData_loading").css({"visibility": "hidden"});
                     if(json && (index==4|| json.length > 0)) {
                         if(xs_pkdc_detailIndex != index)return;
+                        if(index == 0){
+                            XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.county.tabs[index].name, XS.Main.Pkjc.detailKV.county.tabs[index].value, 2, 50);
+                            return;
+                        }
                         XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.county.tabs[index].name, XS.Main.Pkjc.detailKV.county.tabs[index].value, 3, 35);
                         switch (index) {
                             case 1 ://土地信息
@@ -1483,7 +1497,11 @@ XS.Main.Pkjc.dataTable = function(json,nameArr,valueArr,columnNum,rowH){
     for(var i=0;i<nameArr.length;i++){
         xs_pkdc_btnCliDatagridObj.push({});
         xs_pkdc_btnCliDatagridObj[i].name = nameArr[i];
-        xs_pkdc_btnCliDatagridObj[i].value = jsonData[valueArr[i]];
+        if(nameArr[i] == "贫困发生率" || nameArr[i] == "贫困发生率(%)"){
+            xs_pkdc_btnCliDatagridObj[i].value = jsonData[valueArr[i]].toFixed(2);
+        }else{
+            xs_pkdc_btnCliDatagridObj[i].value = jsonData[valueArr[i]];
+        }
     }
 
      $("#xs_pkdc_tabsContent").empty().append(XS.Main.Poor.createTable(xs_pkdc_btnCliDatagridObj, columnNum, rowH,"","color:#00bbee"));

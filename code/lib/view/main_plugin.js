@@ -1108,6 +1108,10 @@ XS.Main.clickMapCallback = function(mouseEvent){
             //查询信息
             XS.CommonUtil.hideLoader();
             XS.Main.showBottomToolBar();
+
+            if(xs_tjfx_themeLayer || xs_tjfx_graph_themeLayer){
+                return;
+            }
           //  XS.Main.showFunMenu();
             //放大地图,加载贫困等级区域图标
 

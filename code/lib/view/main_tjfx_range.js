@@ -643,7 +643,7 @@ XS.Main.Tjfx.range_themeLayerClickCallback = function(event){
             {
                 xs_currentZoneFuture = null;
                 xs_superZoneCode = feature.data.AdminCode;
-                //xs_clickMapType = XS.Main.clickMapType.tjfx_range;
+                xs_clickMapType = XS.Main.clickMapType.tjfx_range;
                 XS.Main.Tjfx.range(xs_tjfx_zoneLevel + 1, xs_superZoneCode, xs_tjfx_type);
                 break;
             }
@@ -651,7 +651,7 @@ XS.Main.Tjfx.range_themeLayerClickCallback = function(event){
             {
                 xs_currentZoneFuture = null;
                 xs_superZoneCode = feature.data.乡镇代码;
-                //xs_clickMapType = XS.Main.clickMapType.tjfx_range;
+                xs_clickMapType = XS.Main.clickMapType.tjfx_range;
                 XS.Main.Tjfx.range(xs_tjfx_zoneLevel + 1, xs_superZoneCode, xs_tjfx_type);
                 break;
             }
@@ -660,13 +660,13 @@ XS.Main.Tjfx.range_themeLayerClickCallback = function(event){
                 xs_currentZoneFuture = null;
                 xs_superZoneCode = feature.data.OldID;
                 XS.CommonUtil.showMsgDialog("", "没有下级专题图");
-               // xs_clickMapType = XS.Main.clickMapType.none;
+                xs_clickMapType = XS.Main.clickMapType.none;
                 break;
             }
         }
     }else
     {
         //XS.CommonUtil.showMsgDialog("","未找到相关数据");
-        //xs_clickMapType = XS.Main.clickMapType.none;
+        xs_clickMapType = XS.Main.clickMapType.none;
     }
 }
