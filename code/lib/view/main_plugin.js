@@ -1456,6 +1456,22 @@ XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, 
     XS.CommonUtil.hideLoader();
 }
 
+/**
+ * 添加毕节市图标到图层
+ */
+XS.Main.addCityMarker2Layer = function(){
+    var marker = XS.MarkerUtil.createMarkerToLayer(xs_cityMarkerLayer, 56, 56, 105.16+0.095, 27.07-0.07, "../img/zone/city/city.png");
+    marker.events.on(
+        {
+            click: function (marker) {
+                //点击marker回调lonLat
+                XS.Main.Pkjc.clickDetail(XS.Main.ZoneLevel.city,"毕节市",xs_cityID,false);
+                xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 0);
+            }
+        }
+    );
+}
+
 //隐藏所有Tip的Div标签
 XS.Main.hiddenDivTags = function(){
     //utfGridLayer

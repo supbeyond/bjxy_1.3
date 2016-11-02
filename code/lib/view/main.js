@@ -69,7 +69,8 @@ var xs_clusterLayer; //聚散图层
 
 var xs_animatorVectorLayer = null; //矢量动画图层
 var xs_markerLayer = null; //marker图层
-var xs_poorLabelLayer //显示贫困户标签图层
+var xs_poorLabelLayer; //显示贫困户标签图层
+var xs_cityMarkerLayer; //显示毕节市标签图层
 
 var xs_labelLayer = null; //标签图层
 
@@ -162,6 +163,7 @@ XS.Main.load = function(){
     xs_tasker_labelLayer = new SuperMap.Layer.Vector("tasker_label",{strategies: [strategy]});
 
     xs_markerLayer = new SuperMap.Layer.Markers("markerlayer",{});
+    xs_cityMarkerLayer = new SuperMap.Layer.Markers("citymarkerlayer",{});
     xs_poorLabelLayer = new SuperMap.Layer.Vector("poor_label",{strategies: [strategy]});//显示贫困户标签图层
 
     ///-------------controller---------------------
@@ -299,6 +301,7 @@ XS.Main.addLayers = function(){
         xs_vectorLayer,
         xs_poorLabelLayer,
         xs_markerLayer,
+        xs_cityMarkerLayer,
         xs_clusterLayer
     ]);
     xs_tasker_animatorVectorLayer.setVisibility(false);
@@ -312,6 +315,7 @@ XS.Main.addLayers = function(){
     xs_MapInstance.getMapObj().events.on({ "zoomend": XS.Main.zoomedMapCallback});
     xs_MapInstance.getMapObj().events.on({ "moveend": XS.Main.movedMapCallback});
 
+    XS.Main.addCityMarker2Layer();
     xs_userZoomBounds =xs_MapInstance.getMapObj().getExtent();
 
     XS.Main.Ztree.load(xs_user_regionId,xs_user_regionLevel);

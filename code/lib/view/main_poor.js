@@ -809,7 +809,7 @@ var xs_poor_echart_option =
         show:false,
         orient: 'vertical',
         x: 'right',
-        y:'50%',
+        y:'10%',
         backgroundColor:'rgba(255,255,255,0.3)',
         data: ['毕节'],
         selectedMode: 'single',
@@ -823,7 +823,7 @@ var xs_poor_echart_option =
         min: 0,
         max: 100,
         x:'right',
-        y: '70%',
+        y: '50%',
         calculable: true,
         color: ['#ff3333', 'orange', 'yellow', 'lime', 'aqua']
     },
@@ -863,6 +863,7 @@ var xs_poor_echart_option =
                 effect: {
                     show: true,
                     shadowBlur: 0
+                    /*, color: '#fff',*/
                 },
                 itemStyle: {
                     normal: {
