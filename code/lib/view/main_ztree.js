@@ -357,7 +357,67 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
             if(node)
             {
                 //xs_feature:XS.Main.Ztree.zoneFeatuers.village[0],
+
+                xs_poorLabelLayer.removeAllFeatures();
+                xs_markerLayer.clearMarkers();
+                xs_markerLayer.setVisibility(false);
+                XS.Main.Poor.clearRelocationLayer();
+                $("#xs_tjfx_range_Legend").css("display", "none");
+
                 var feature = node.xs_feature;
+                if(node.xs_nlevel != 0){
+                    xs_currentZoneFuture = feature;
+                    feature.style = xs_stateZoneStyle;
+                    xs_zone_vectorLayer.removeAllFeatures();
+                    xs_zone_vectorLayer.addFeatures(feature);
+
+                    xs_pkdc_isFirstShowInfoWin = true;
+                    xs_currentZoneLevel = node.xs_nlevel;
+                    xs_currentZoneName = node.text;
+                    xs_MapInstance.getMapObj().zoomToExtent(feature.geometry.getBounds(),false);
+                }
+
+                switch (node.xs_nlevel){
+                    case 0://ctity
+                    {
+                        xs_currentZoneLevel = node.xs_nlevel;
+                        XS.Main.showBottomToolBar();
+                        xs_currentZoneCode = xs_cityID;
+                        if(document.getElementById('xs_dcs_receiver')){
+                            $("#xs_dcs_receiver").textbox('setValue', "毕节市");
+                        }
+                        //xs_dcl_sender
+                        if(document.getElementById('xs_dcl_receiver')){
+                            $("#xs_dcl_receiver").textbox('setValue', "毕节市");
+                        }
+                        return;
+                    }
+                    case 1://county
+                    {
+                        xs_superZoneCode = Math.floor(node.xs_id/100);
+                        xs_clickMapFutureId  = node.xs_id;
+                        xs_currentZoneCode =  node.xs_id;
+                        break;
+                    }
+                    case 2://town
+                    {
+                        xs_superZoneCode = Math.floor(node.xs_id/1000);
+                        xs_clickMapFutureId  = node.xs_id;
+                        xs_currentZoneCode =  node.xs_id;
+                        XS.Main.readyAddRegionMarkersData([feature],xs_currentZoneLevel-1,xs_superZoneCode);
+                        break;
+                    }
+                    case 3://vill
+                    {
+                        xs_superZoneCode = feature.data.OldID.toString().slice(0,9);
+                        xs_clickMapFutureId  = feature.data.OldID;
+                        xs_currentZoneCode =  feature.data.OldID;
+                        XS.Main.readyAddRegionMarkersData([feature],xs_currentZoneLevel-1,xs_superZoneCode);
+                        break;
+                    }
+                }
+                return;
+
                 var layerName = "";
                 switch (node.xs_nlevel){
                     case 0: //city
