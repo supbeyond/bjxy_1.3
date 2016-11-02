@@ -1112,30 +1112,6 @@ XS.Main.clickMapCallback = function(mouseEvent){
             //放大地图,加载贫困等级区域图标
 
             XS.Main.readyAddMarkers(feature.geometry.getBounds().getCenterLonLat(),level,xs_currentZoneCode);
-            /*switch (level){
-                case XS.Main.ZoneLevel.county:
-                    xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 6);
-                    XS.Main.addTownVillPlevelMarker2Layer(level,xs_clickMapFutureId,0);
-                    break;
-                case XS.Main.ZoneLevel.town:
-                    xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 9);
-                    XS.Main.addTownVillPlevelMarker2Layer(level, xs_clickMapFutureId,0);
-                    break;
-                case XS.Main.ZoneLevel.village:
-                    xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 13);
-                    var centerPointer = feature.geometry.getBounds().getCenterLonLat();
-                    //请求贫困户数据定位地图上去
-                    var data = {pbno: xs_clickMapFutureId};
-                    XS.CommonUtil.showLoader();
-                    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryHousePeoByIdArea", data, function(json){
-                        XS.CommonUtil.hideLoader();
-                        if(json && json.length>0)
-                        {
-                            XS.Main.Poor.showPoors(json,centerPointer);
-                        }
-                    },function(e){XS.CommonUtil.hideLoader();});
-                    break;
-            }*/
         }else{
             XS.CommonUtil.hideLoader();
         }
@@ -1260,14 +1236,6 @@ XS.Main.readyAddMarkers = function(centerPoint,level,currentId){
 var xs_main_makerLayerLevel = -1; //保存marker图层时缩放级别
 XS.Main.addTownVillPlevelMarker2Layer = function(superLevel, superId){
     xs_clickMapType = XS.Main.clickMapType.marker;
-    /*if(document.getElementById("xs_tjfx_range_Legend")){
-        $("#xs_tjfx_range_Legend").remove();
-    }
-    $("#xs_mainC").append(XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,superLevel));
-    $("#xs_tjfx_range_Legend").css("display", "block");
-
-    XS.Main.addDivHover2HiddenUTFGridTip("xs_tjfx_range_Legend");*/
-
     var sql = "";
     var layerName = "";
     switch (superLevel){
@@ -1287,97 +1255,6 @@ XS.Main.addTownVillPlevelMarker2Layer = function(superLevel, superId){
         if (result && result.recordsets&&result.recordsets[0].features.length>0)
         {
             XS.Main.readyAddRegionMarkersData(result.recordsets[0].features,superLevel,superId);
-            /*var lonLatArr = {};
-            var action = "";
-
-            for (i = 0; i < result.recordsets[0].features.length; i++)
-            {
-                feature = result.recordsets[0].features[i];
-                var centerPoint = feature.geometry.getBounds().getCenterLonLat();
-                var id = "";
-                if(XS.Main.ZoneLevel.county==superLevel){
-                    id = feature.data.乡镇代码;
-                    action = "QueryTownsBaseInfoByareaId";
-                }else{
-                    id = feature.data.OldID;
-                    action = "QueryVillBaseByareaId";
-                }
-                if(currentId){
-                    if(id == currentId){
-                        lonLatArr[id] = centerPoint;
-                        break;
-                    }
-                }else{
-                    lonLatArr[id] = centerPoint;
-                }
-            }
-            //请求数据
-            var data = {pbno:superId};
-            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json)
-            {
-                XS.CommonUtil.hideLoader();
-                if (json && json.length>0)
-                {
-                    var dataArr = [];
-                    var pid = "";
-                    var plevel = "";
-                    if(XS.Main.ZoneLevel.county==superLevel){
-                        pid = "TOWB_ID";
-                        plevel = "tpl_TownType";
-                    }else{
-                        pid = "VBI__ID";
-                        plevel = "VillType";
-                    }
-                    for(var i=0;i<json.length; i++)
-                    {
-                        var data = json[i];
-
-                        XS.LogUtil.log(data.tpl_TownType+data.VillType);
-
-                        var id = data[pid];
-                        var lonLat = lonLatArr[id];
-                        if(lonLat){
-                            data.xs_lon = lonLat.lon,
-                            data.xs_lat = lonLat.lat
-
-                            var iconUri = "";
-                            if(XS.Main.ZoneLevel.county==superLevel)
-                            {
-                                for(var j in XS.Main.poorZonePicArr.town){
-                                    if(data[plevel] == XS.Main.poorZonePicArr.town[j].name){
-                                        iconUri = XS.Main.poorZonePicArr.town[j].value;
-                                    }
-                                }
-                                if(!iconUri){
-                                    iconUri = "../img/zone/town/town_pother.png";
-                                }
-                                data.xs_p_icon = iconUri;
-                            }else{
-                                for(var j in XS.Main.poorZonePicArr.vill){
-                                    if(data[plevel] == XS.Main.poorZonePicArr.vill[j].name){
-                                        iconUri = XS.Main.poorZonePicArr.vill[j].value;
-                                    }
-                                }
-                                if(!iconUri){
-                                    iconUri = "../img/zone/vill/vill_p1.png";
-                                }
-                                data.xs_p_icon = iconUri;
-                            }
-                            if(currentId){
-                                if(id == currentId){
-                                    dataArr.push(data);
-                                    break;
-                                }
-                            }else{
-                                dataArr.push(data);
-                            }
-                        }
-                    }
-
-                    //添加 marker图片
-                    XS.Main.addMarkers2Layer(dataArr, "xs_lon", "xs_lat", "xs_p_icon", 32, 32, superLevel);
-                }
-            },function(e){XS.CommonUtil.hideLoader();});*/
         }else{
             XS.CommonUtil.hideLoader();
         }
