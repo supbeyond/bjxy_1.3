@@ -1286,6 +1286,7 @@ XS.Main.Poor.clearRelocationLayer = function(){
         xs_clickMapType = XS.Main.clickMapType.none;
         xs_isShowUtfGridTip = true;
         xs_poor_elementsLayer.setVisibility(false);
+        xs_poor_elementsLayer = null;
         try{
             xs_poor_echartObj.getZrender().animation['stop']();
         }catch (e){}

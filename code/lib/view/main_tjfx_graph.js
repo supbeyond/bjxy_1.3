@@ -85,13 +85,17 @@ XS.Main.Tjfx.Graph.graph = function(type){
  * @param type
  */
 XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
+    XS.Main.Poor.clearRelocationLayer();
+    XS.Main.clearMap();
+    XS.Main.Pkjc.closeInfoDialog();
+    XS.CommonUtil.closeDialog("xs_main_detail");
+
     xs_isShowUtfGridTip = false;
     //xs_currentZoneLevel = parentLevel;
     xs_tjfx_graph_zoneLevel = parentLevel;
     xs_tjfx_zoneLevel = parentLevel;
     xs_tjfx_graph_type =  type;
 
-    XS.Main.hiddenDivTags();
     XS.Main.Tjfx.removeLayer();
 
     xs_clickMapType = XS.Main.clickMapType.tjfx_graph;
@@ -920,6 +924,7 @@ XS.Main.Tjfx.Graph.themeLayerClickCallback = function(event){
                 xs_superZoneCode = feature.data.OldID;
                 xs_clickMapType = XS.Main.clickMapType.none;
                 XS.CommonUtil.showMsgDialog("", "没有下级专题图");
+                xs_clickMapType = XS.Main.clickMapType.tjfx_graph;
                 // xs_clickMapType = XS.Main.clickMapType.none;
                 break;
             }

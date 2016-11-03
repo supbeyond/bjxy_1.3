@@ -183,7 +183,7 @@ XS.Main.Tjfx.range = function(level, parentId, type){
                     action = "QueryOutPoorBycount";
                     break;
                 case XS.Main.Tjfx.type.range_wfx:
-                    action = "QueryDangerHouseByTown";
+                    action = "QueryDangerHouseBycount";
                     break;
                 case XS.Main.Tjfx.type.range_fpbqx:
                     action = "QueryMovePoorByTown";
@@ -307,7 +307,6 @@ XS.Main.Tjfx.range_addFeatures2Layer = function(featureArr, data, level){ // 0:c
 
     var xOff = (1 / xs_MapInstance.getMapObj().getScale()) * 0.00000001;
     var yOff = -(1 / xs_MapInstance.getMapObj().getScale()) * 0.00000005;
-
     for (var i in featureArr)
     {
         feature = featureArr[i];

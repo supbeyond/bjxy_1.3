@@ -956,13 +956,13 @@ XS.Main.clickMapCallback = function(mouseEvent){
     //lonLat.lon, lonLat.lat
     //xs_zone_vectorLayer.removeAllFeatures();
     xs_isMapClickTypeNone = false;
-    if(xs_clickMapType != XS.Main.clickMapType.none && xs_clickMapType != XS.Main.clickMapType.marker){
+    if(xs_clickMapType != XS.Main.clickMapType.none && xs_clickMapType != XS.Main.clickMapType.marker && xs_clickMapType != XS.Main.clickMapType.poor_povertyrelocation){
         return;
     }
     xs_poorLabelLayer.removeAllFeatures();
     xs_markerLayer.clearMarkers();
     xs_markerLayer.setVisibility(false);
-    XS.Main.Poor.clearRelocationLayer();
+    //XS.Main.Poor.clearRelocationLayer();
     $("#xs_tjfx_range_Legend").css("display", "none");
 
     xs_currentZoneFuture = null;
@@ -1099,7 +1099,7 @@ XS.Main.clickMapCallback = function(mouseEvent){
                     break;
                 }
             }
-            xs_MapInstance.getMapObj().zoomToExtent(feature.geometry.getBounds(),false);
+            //xs_MapInstance.getMapObj().zoomToExtent(feature.geometry.getBounds(),false);
             xs_currentZoneFuture = feature;
             feature.style = xs_stateZoneStyle;
             xs_zone_vectorLayer.removeAllFeatures();
@@ -1110,7 +1110,7 @@ XS.Main.clickMapCallback = function(mouseEvent){
             XS.CommonUtil.hideLoader();
             XS.Main.showBottomToolBar();
 
-            if(xs_tjfx_themeLayer || xs_tjfx_graph_themeLayer){
+            if(xs_tjfx_themeLayer || xs_tjfx_graph_themeLayer || xs_poor_elementsLayer){
                 return;
             }
           //  XS.Main.showFunMenu();
