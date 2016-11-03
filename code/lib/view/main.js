@@ -4,11 +4,13 @@
 $(function(){
     //用户登陆验证
     xs_user_regionId = sessionStorage.getItem("@#$");
+    xs_Username = sessionStorage.getItem("%%");
     if(XS.StrUtil.isEmpty(xs_user_regionId)){
         window.location.href = window.location.toString().substring(0,window.location.toString().lastIndexOf("/view")+1) +"index.html";
         return;
     }else{
         xs_user_regionId =  CryptoJS.AES.decrypt(xs_user_regionId,"@##*$$").toString(CryptoJS.enc.Utf8);
+        xs_Username =  CryptoJS.AES.decrypt(xs_Username,"@#$$$$$").toString(CryptoJS.enc.Utf8);
     }
     $(window).keyup(function(e){
         if(e.keyCode==27) //Esc
@@ -264,7 +266,7 @@ XS.Main.load = function(){
 
                         xs_author_vectorLayer.setVisibility(true);
                         xs_author_vectorLayer.addFeatures(xs_user_Features);
-                        xs_MapInstance.getMapObj().zoomToExtent(xs_user_Features[0].geometry.getBounds(),false);
+                        xs_MapInstance.getMapObj().zoomToExtent(xs_user_Features[0].geometry.getBounds(),true);
 
                     }else{
                         XS.CommonUtil.hideLoader();
@@ -288,7 +290,7 @@ XS.Main.load = function(){
 }
 
 XS.Main.addLayers = function(){
-    //xs_MapInstance.getMapObj().maxExtent = new SuperMap.Bounds(103.56 , 26.33, 106.76 , 27.81);
+    xs_MapInstance.getMapObj().maxExtent = new SuperMap.Bounds(103.56 , 26.33, 106.76 , 27.81);
     xs_MapInstance.getMapObj().addLayers([
         xs_MapInstance.getBLayer(),
         xs_utfGridCountyLayer,

@@ -40,7 +40,7 @@ XS.Login.login = function(){
         XS.CommonUtil.hideLoader();
         if(json && json.success && json.regionid){
 
-          //  sessionStorage.setItem("%%", CryptoJS.AES.encrypt(xs_Username, "@#$$$$$"));
+            sessionStorage.setItem("%%", CryptoJS.AES.encrypt(xs_Username, "@#$$$$$"));
           //  sessionStorage.setItem("@#$%", CryptoJS.AES.encrypt(xs_Password, "@#&&&$$$"));
 
             //sessionStorage.setItem("userid", json.userid);

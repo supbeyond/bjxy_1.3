@@ -363,6 +363,7 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
                 xs_markerLayer.setVisibility(false);
                 XS.Main.Poor.clearRelocationLayer();
                 $("#xs_tjfx_range_Legend").css("display", "none");
+                XS.Main.showBottomToolBar();
 
                 var feature = node.xs_feature;
                 if(node.xs_nlevel != 0){
@@ -390,6 +391,7 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
                         if(document.getElementById('xs_dcl_receiver')){
                             $("#xs_dcl_receiver").textbox('setValue', "毕节市");
                         }
+                        xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 0);
                         return;
                     }
                     case 1://county
@@ -416,98 +418,14 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
                         break;
                     }
                 }
-                return;
-
-                var layerName = "";
-                switch (node.xs_nlevel){
-                    case 0: //city
-                        xs_currentZoneLevel = node.xs_nlevel;
-                        XS.Main.showBottomToolBar();
-                        xs_currentZoneCode = xs_cityID;
-                        if(document.getElementById('xs_dcs_receiver')){
-                            $("#xs_dcs_receiver").textbox('setValue', "毕节市");
-                        }
-                        //xs_dcl_sender
-                        if(document.getElementById('xs_dcl_receiver')){
-                            $("#xs_dcl_receiver").textbox('setValue', "毕节市");
-                        }
-                        return;
-                    case 1: //county
-                        layerName = "County_Code";
-                        break;
-                    case 2: //town
-                        layerName = "Twon_Code";
-                        break;
-                    case 3: //village
-                        layerName = "Village_Code";
-                        break;
+                xs_currentZoneCode = node.xs_id;
+                if(document.getElementById('xs_dcs_receiver')){
+                    $("#xs_dcs_receiver").textbox('setValue', xs_currentZoneName);
                 }
-                var sql = "SMID="+feature.data.SmID;
-                XS.CommonUtil.showLoader();
-                XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql, xs_MapInstance.bLayerUrl, function(queryEventArgs)
-                {
-                    var i, feature, result = queryEventArgs.result;
-                    if (result && result.recordsets&&result.recordsets[0].features.length>0)
-                    {
-                        feature = result.recordsets[0].features[0];
-                        var id = feature.data.AdminCode || feature.data.乡镇代码 || feature.data.OldID;
-                        switch (node.xs_nlevel)
-                        {
-                            case XS.Main.ZoneLevel.county:
-                            {
-                                xs_clickMapFutureId = feature.data.AdminCode;
-                                xs_currentZoneCode = feature.data.AdminCode;
-                                xs_currentZoneName = feature.data.Name;
-                                xs_superZoneCode = xs_cityID;
-                                xs_userZoneName = "毕节市";
-                                break;
-                            }
-                            case XS.Main.ZoneLevel.town:
-                            {
-                                xs_clickMapFutureId = feature.data.乡镇代码;
-                                xs_currentZoneCode = feature.data.乡镇代码;
-                                xs_currentZoneName = feature.data.乡镇名称;
-                                xs_superZoneCode = feature.data.县级代码;
-                                xs_userZoneName = feature.data.县级名称;
-                                break;
-                            }
-                            case XS.Main.ZoneLevel.village:
-                            {
-                                xs_clickMapFutureId = feature.data.OldID;
-                                xs_currentZoneCode = feature.data.OldID;
-                                xs_currentZoneName = feature.data.vd_name;
-                                xs_superZoneCode = feature.data.Town_id;
-                                xs_userZoneName = feature.data.Town_name;
-                                break;
-                            }
-                        }
-
-                        xs_MapInstance.getMapObj().zoomToExtent(feature.geometry.getBounds(),false);
-                        xs_currentZoneFuture = feature;
-                        feature.style = xs_stateZoneStyle;
-                        xs_zone_vectorLayer.removeAllFeatures();
-                        xs_zone_vectorLayer.addFeatures(feature);
-                        xs_isMapClickTypeNone = true;
-                        xs_currentZoneLevel = node.xs_nlevel;
-
-                        if(document.getElementById('xs_dcs_receiver')){
-                            $("#xs_dcs_receiver").textbox('setValue', xs_currentZoneName);
-                        }
-                        //xs_dcl_sender
-                        if(document.getElementById('xs_dcl_receiver')){
-                            $("#xs_dcl_receiver").textbox('setValue', xs_currentZoneName);
-                        }
-
-                        XS.CommonUtil.hideLoader();
-                        XS.Main.showBottomToolBar();
-                    }else{
-                        XS.CommonUtil.hideLoader();
-                        XS.CommonUtil.showMsgDialog("","查询失败");
-                    }
-                },function(e){
-                    XS.CommonUtil.hideLoader();
-                    XS.CommonUtil.showMsgDialog("","查询失败");
-                });
+                //xs_dcl_sender
+                if(document.getElementById('xs_dcl_receiver')){
+                    $("#xs_dcl_receiver").textbox('setValue', xs_currentZoneName);
+                }
             }
         }
     });

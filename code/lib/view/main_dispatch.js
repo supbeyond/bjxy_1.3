@@ -56,7 +56,7 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
         '<div id="xs_dc_tab_sender" style="padding: 5px; height: 100%; box-sizing: border-box;">'+
         '<table cellpadding="4" bordercolor="#DBDBDB" border="1" style="border-collapse: collapse;width: 100%; height: 100%;font-size: 13px;">' +
             '<tr>' +
-                '<td>发送者</td>' +
+                '<td style="width: 60px;">发送者</td>' +
                 '<td><input id="xs_dcs_sender" style="width: 100%; height: 25px;" class="easyui-textbox" type="text" data-options="multiline:true" value=""/></td>' +
                 '<td>发送者ID</td>' +
                 '<td><input id="xs_dcs_senderid" style="width: 100%; height: 25px;" class="easyui-textbox" type="text" data-options="multiline:true" value=""/></td>'+
@@ -71,7 +71,13 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
                 '<td>名称</td>' +
                 '<td><input id="xs_dcs_name" style="width: 100%;height: 50px;" class="easyui-textbox" type="text" data-options="multiline:true"/></td>' +
                 '<td>类型</td>' +
-                '<td ><input id="xs_dcs_type" style="width: 100%;height: 50px;" class="easyui-textbox" type="text" data-options="multiline:true"/></td>' +
+                '<td >' +
+                    '<select id="xs_dcs_type" style="height: 30px;width: 100%;" class="easyui-combobox">'+
+                    '<option value="1">资金</option>' +
+                    '<option value="2">项目</option>' +
+                    '<option value="0">其他</option>' +
+                    '</select>'+
+                '</td>' +
             '</tr>'+
             '<tr>' +
                 '<td>开始时间</td>' +
@@ -223,8 +229,10 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
     //
     $("#xs_dcs_name").textbox();
     $("#xs_dcs_type").textbox();
-    $("#xs_dcs_content").textbox();
     $("#xs_dcs_level").combobox({
+        'panelHeight':85
+    });
+    $("#xs_dcs_type").combobox({
         'panelHeight':85
     });
     $("#xs_dcs_progress").combobox();
@@ -458,7 +466,7 @@ XS.Main.Dispatchcmmd.search = function(){
                             return;
                         }
                         if(xs_dispatch_selectedData.SENDERNAME!=xs_Username||xs_dispatch_selectedData.SENDERID!=xs_user_regionId){
-                            XS.CommonUtil.showMsgDialog("","你无权删除这条任务");
+                            XS.CommonUtil.showMsgDialog("","你无权修改这条任务");
                             return;
                         }
                         XS.Main.Dispatchcmmd.clearSenderTab();
@@ -467,7 +475,7 @@ XS.Main.Dispatchcmmd.search = function(){
 
                         $("#xs_dcs_taskid").textbox('setValue',xs_dispatch_selectedData.TASKID);
                         $("#xs_dcs_name").textbox('setValue',xs_dispatch_selectedData.TASKNAME);
-                        $("#xs_dcs_type").textbox('setValue',xs_dispatch_selectedData.TASKTTYPE);
+
 
                         $("#xs_dcs_sender").textbox('setValue',xs_dispatch_selectedData.SENDERNAME);
                         $("#xs_dcs_senderid").textbox('setValue',xs_dispatch_selectedData.SENDERID);
@@ -476,6 +484,8 @@ XS.Main.Dispatchcmmd.search = function(){
 
                         $("#xs_dcs_ds").textbox('setValue',xs_dispatch_selectedData.BEGINDATE);
                         $("#xs_dcs_dd").textbox('setValue',xs_dispatch_selectedData.ENDDATE);
+
+                        $("#xs_dcs_type").combobox('setValue',xs_dispatch_selectedData.TASKTTYPE); //任务类型
 
                         $("#xs_dcs_progress").combobox('setValue',xs_dispatch_selectedData.COMPLETE) //完成度
 
@@ -486,13 +496,13 @@ XS.Main.Dispatchcmmd.search = function(){
                         $("#xs_dcs_level").combobox('setValue',xs_dispatch_selectedData.IMPORTENT); //紧急度
 
                         $("#xs_dcs_name").textbox("disable");
-                        $("#xs_dcs_type").textbox("disable");
                         $("#xs_dcs_content").textbox("disable"); //内容
                         $("#xs_dcs_ds").datetimebox("disable");
                         $("#xs_dcs_dd").datetimebox("disable");
                         $("#xs_dcs_dfinish").datetimebox("disable"); //完成时间
 
                         $("#xs_dcs_level").combobox("disable"); //紧急度
+                        $("#xs_dcs_type").combobox("disable");
 
                         $('#xs_dc_tab').tabs("select",0);
                     }
@@ -544,7 +554,8 @@ XS.Main.Dispatchcmmd.search = function(){
 
                         $("#xs_dcs_taskid").textbox('setValue',xs_dispatch_selectedData.TASKID);
                         $("#xs_dcs_name").textbox('setValue',xs_dispatch_selectedData.TASKNAME);
-                        $("#xs_dcs_type").textbox('setValue',xs_dispatch_selectedData.TASKTTYPE);
+
+                        $("#xs_dcs_type").combobox('setValue',xs_dispatch_selectedData.TASKTTYPE);
 
                         $("#xs_dcs_sender").textbox('setValue',xs_dispatch_selectedData.SENDERNAME);
                         $("#xs_dcs_senderid").textbox('setValue',xs_dispatch_selectedData.SENDERID);
@@ -563,7 +574,7 @@ XS.Main.Dispatchcmmd.search = function(){
                         $("#xs_dcs_level").combobox('setValue',xs_dispatch_selectedData.IMPORTENT); //紧急度
 
                         $("#xs_dcs_name").textbox("disable");
-                        $("#xs_dcs_type").textbox("disable");
+                        $("#xs_dcs_type").combobox("disable");
                         $("#xs_dcs_content").textbox("disable"); //内容
                         $("#xs_dcs_ds").datetimebox("disable");
                         $("#xs_dcs_dd").datetimebox("disable");
@@ -626,7 +637,7 @@ XS.Main.Dispatchcmmd.clearSenderTab = function(){
 
     $("#xs_dcs_receiver").textbox('setValue',xs_currentZoneName);
 
-    $("#xs_dcs_type").textbox('setValue',"");
+    $("#xs_dcs_type").combobox('setValue',"1");
     $("#xs_dcs_ds").textbox('setValue',"");
     $("#xs_dcs_dd").textbox('setValue',"");
     $("#xs_dcs_progress").combobox('setValue',"-2") //完成度
@@ -636,7 +647,7 @@ XS.Main.Dispatchcmmd.clearSenderTab = function(){
     $("#xs_dcs_level").combobox('setValue',"1"); //紧急度
 
     $("#xs_dcs_name").textbox("enable");
-    $("#xs_dcs_type").textbox("enable");
+    $("#xs_dcs_type").combobox("enable");
     $("#xs_dcs_content").textbox("enable"); //内容
     $("#xs_dcs_ds").datetimebox("enable");
     $("#xs_dcs_dd").datetimebox("enable");

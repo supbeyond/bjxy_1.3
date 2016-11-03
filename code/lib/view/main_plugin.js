@@ -15,10 +15,11 @@ var xs_isMapClickTypeNone = false; //判断单击地图是否是的类型为None
 //var xs_poorHLabelLayer = null;
 //行政区域点中样式
 var xs_stateZoneStyle = {
-    strokeColor: "#00bbee",
-    strokeWidth: 1,
+    strokeColor: "#ffff00",
+    strokeWidth: 2,
     fillColor: "#ffffff",
-    fillOpacity: "0.1"
+    fillOpacity: "0.1",
+    fill: false
 };
 
 var xs_cityID = "5224"; //市ID
@@ -1555,6 +1556,7 @@ XS.Main.depClearMap = function() {
     XS.Main.Pkjc.closeInfoDialog();
     xs_currentZoneFuture = null;
     xs_vectorLayer.removeAllFeatures();
+    xs_markerLayer.clearMarkers();
 
     clearInterval(xs_pkjc_IntervalId);
     xs_tasker_labelLayer.removeAllFeatures();
