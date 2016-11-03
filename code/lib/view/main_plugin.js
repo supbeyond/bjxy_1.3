@@ -1327,11 +1327,17 @@ XS.Main.readyAddRegionMarkersData = function (features,superLevel,superId) {
                 if(feature){
                     lonLat = feature.geometry.getBounds().getCenterLonLat();
                 }
-                if(lonLat){
+                if(lonLat)
+                {
                     data.xs_feature = feature;
 
-                    data.xs_lon = lonLat.lon,
-                    data.xs_lat = lonLat.lat
+                    data.xs_lon = lonLat.lon;
+
+                    if(XS.Main.ZoneLevel.county==superLevel) {
+                        data.xs_lat = lonLat.lat + 0.003
+                    }else{
+                        data.xs_lat = lonLat.lat + 0.0005
+                    }
 
                     var iconUri = "";
                     if(XS.Main.ZoneLevel.county==superLevel)
