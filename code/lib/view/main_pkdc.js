@@ -817,9 +817,9 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                 var villBaseInfValueField = XS.Main.Pkjc.detailKV.village.tabs[0].value;
                 for(var i in villBaseInfNameField){
                     if(villBaseInfNameField[i] == "贫困发生率" || villBaseInfNameField[i] == "贫困发生率(%)"){
-                        xs_pkdc_detailCash.push({name:villBaseInfNameField[i],value:json[villBaseInfValueField[i]].toFixed(2)});
+                        xs_pkdc_detailCash.push({name:villBaseInfNameField[i],value:json[villBaseInfValueField[i]] || json[villBaseInfValueField[i]]==0 ? json[villBaseInfValueField[i]].toFixed(2) : ""});
                     }else{
-                        xs_pkdc_detailCash.push({name:villBaseInfNameField[i],value:json[villBaseInfValueField[i]]});
+                        xs_pkdc_detailCash.push({name:villBaseInfNameField[i],value:json[villBaseInfValueField[i]] || json[villBaseInfValueField[i]]==0 ? json[villBaseInfValueField[i]] : ""});
                     }
                 }
                 $("#xs_pkdc_msg_barC").empty().append(XS.Main.Poor.createTable(xs_pkdc_detailCash, 2, 50,"","color:#00bbee"));

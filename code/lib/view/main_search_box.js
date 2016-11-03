@@ -248,9 +248,9 @@ XS.Searchbox.regionBaseInfo = function(i,json,regionId,regionName,fields){
     for(var j in fields){
         if(fields[j][0] == "POVERT"){
             if(xs_searchbox_type == "区县"){
-                baseInfData.push({name:fields[j][1],value:(json[i].C7/json[i].C10).toFixed(2)});
+                baseInfData.push({name:fields[j][1],value:(json[i].C7/json[i].C10) || (json[i].C7/json[i].C10) == 0 ? (json[i].C7/json[i].C10).toFixed(2) : ""});
             }else{
-                baseInfData.push({name:fields[j][1],value:(json[i].B3/json[i].B3A).toFixed(2)});
+                baseInfData.push({name:fields[j][1],value:(json[i].B3/json[i].B3A) || (json[i].B3/json[i].B3A) == 0 ? (json[i].B3/json[i].B3A).toFixed(2) : ""});
             }
         }else{
             if(XS.StrUtil.isEmpty(regionId) && XS.StrUtil.isEmpty(regionName) && j>11){
@@ -259,15 +259,15 @@ XS.Searchbox.regionBaseInfo = function(i,json,regionId,regionName,fields){
                 for(var k=12;k<fields.length;k++){
                     address += json[i][fields[k][0]];
                 }
-                baseInfData.push({name:"家庭地址",value:address});
+                baseInfData.push({name:"家庭地址",value:!address ? "" : address});
                 break;
             }else{
                 if(fields[j][0] == "AGE"){
                     var poorHBirthYear = json[i].CARDID.slice(6,10);
                     var currentYear = new Date().getFullYear();
-                    baseInfData.push({name:fields[j][1],value:currentYear-poorHBirthYear});
+                    baseInfData.push({name:fields[j][1],value:(currentYear-poorHBirthYear) || currentYear == poorHBirthYear? (currentYear-poorHBirthYear) : ""});
                 }else{
-                    baseInfData.push({name:fields[j][1],value:json[i][fields[j][0]]});
+                    baseInfData.push({name:fields[j][1],value:json[i][fields[j][0]] || json[i][fields[j][0]] == 0 ? json[i][fields[j][0]] : ""});
                 }
             }
         }

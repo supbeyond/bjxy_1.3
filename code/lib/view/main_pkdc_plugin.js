@@ -1498,9 +1498,9 @@ XS.Main.Pkjc.dataTable = function(json,nameArr,valueArr,columnNum,rowH){
         xs_pkdc_btnCliDatagridObj.push({});
         xs_pkdc_btnCliDatagridObj[i].name = nameArr[i];
         if(nameArr[i] == "贫困发生率" || nameArr[i] == "贫困发生率(%)"){
-            xs_pkdc_btnCliDatagridObj[i].value = !jsonData[valueArr[i]] ? "" : jsonData[valueArr[i]].toFixed(2);
+            xs_pkdc_btnCliDatagridObj[i].value = jsonData[valueArr[i]] || jsonData[valueArr[i]] == 0 ? jsonData[valueArr[i]].toFixed(2) : "";
         }else{
-            xs_pkdc_btnCliDatagridObj[i].value = jsonData[valueArr[i]];
+            xs_pkdc_btnCliDatagridObj[i].value = jsonData[valueArr[i]] || jsonData[valueArr[i]] == 0 ? jsonData[valueArr[i]] : "";
         }
     }
 
