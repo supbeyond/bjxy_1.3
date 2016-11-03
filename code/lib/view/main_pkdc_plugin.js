@@ -443,7 +443,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
         $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
         XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryCountyBaseInfoByareaId", data, function(json) {
             $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
-            if(json) {
+            if(json && json.length>0) {
                 XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.county.tabs[0].name, XS.Main.Pkjc.detailKV.county.tabs[0].value, 2, 50);
             }else{
                 $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
@@ -1498,7 +1498,7 @@ XS.Main.Pkjc.dataTable = function(json,nameArr,valueArr,columnNum,rowH){
         xs_pkdc_btnCliDatagridObj.push({});
         xs_pkdc_btnCliDatagridObj[i].name = nameArr[i];
         if(nameArr[i] == "贫困发生率" || nameArr[i] == "贫困发生率(%)"){
-            xs_pkdc_btnCliDatagridObj[i].value = jsonData[valueArr[i]].toFixed(2);
+            xs_pkdc_btnCliDatagridObj[i].value = !jsonData[valueArr[i]] ? "" : jsonData[valueArr[i]].toFixed(2);
         }else{
             xs_pkdc_btnCliDatagridObj[i].value = jsonData[valueArr[i]];
         }
