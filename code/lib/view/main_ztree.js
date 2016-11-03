@@ -362,6 +362,7 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
                 xs_markerLayer.clearMarkers();
                 xs_markerLayer.setVisibility(false);
                 XS.Main.Poor.clearRelocationLayer();
+                XS.Main.clearMap();
                 $("#xs_tjfx_range_Legend").css("display", "none");
                 XS.Main.showBottomToolBar();
 
