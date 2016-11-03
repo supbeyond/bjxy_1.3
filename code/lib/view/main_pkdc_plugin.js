@@ -303,7 +303,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
         $("#xs_pkdc_detailTabs").tabs({/*tabWidth:80,*/tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
-        data = {pid:xs_pkdc_currentStateCode};
+        data = {pid:currentId};
         $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
         XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryCityBaseView", data, function(json) {
             $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
@@ -357,7 +357,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
                 }
                 XS.Main.Pkjc.detailWindowTabs(index);
                 xs_pkdc_detailIndex = index;
-                data = {cbsId:xs_pkdc_currentStateCode,pd_id:xs_pkdc_currentStateCode,casDate:xs_pkdc_currentStateCode,pid:xs_pkdc_currentStateCode};
+                data = {cbsId:currentId,pd_id:currentId,casDate:currentId,pid:currentId};
                 $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
                     $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
@@ -439,7 +439,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
         $("#xs_pkdc_detailTabs").tabs({/*tabWidth:106,*/tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
-        data = {pbno:xs_pkdc_currentStateCode};
+        data = {pbno:currentId};
         $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
         XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryCountyBaseInfoByareaId", data, function(json) {
             $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
