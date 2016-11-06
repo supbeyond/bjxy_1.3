@@ -155,6 +155,7 @@ XS.Main.load = function(){
     var strategy = new SuperMap.Strategy.GeoText({isOverLay:true});
     strategy.style = {
         fontColor:"#00bbee",
+        //fontColor:"#F4C602",
         fontSize:"8px",
         fill: false,
         fillColor: "#000000",

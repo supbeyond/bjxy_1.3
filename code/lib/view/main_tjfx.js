@@ -35,9 +35,9 @@ XS.Main.Tjfx.CacheZoneInfos = {
 //展示左边统计工具栏
 var xs_tjfx_toolmenu_isShow = false;
 XS.Main.Tjfx.showToolMenu = function(){
-    XS.Main.hiddenDivTags();
+    /*XS.Main.hiddenDivTags();
     XS.Main.closeDialogs();
-    XS.Main.hiddenLayers();
+    XS.Main.hiddenLayers();*/
     if(xs_tjfx_toolmenu_isShow){
         xs_tjfx_toolmenu_isShow = false;
         $("#xs_tjfx_leftMenuC").menu("hide");

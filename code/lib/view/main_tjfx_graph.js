@@ -50,6 +50,7 @@ var xs_tjfx_graph_zoneLevel = 0;
  * @param type 统计类型
  */
 XS.Main.Tjfx.Graph.graph = function(type){
+    $("#xs_tjfx_leftMenuC").menu("hide");
     XS.Main.Pkjc.closeInfoDialog();
     XS.Main.Poor.clearRelocationLayer();
     xs_markerLayer.clearMarkers();
@@ -89,6 +90,8 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
     XS.Main.clearMap();
     XS.Main.Pkjc.closeInfoDialog();
     XS.CommonUtil.closeDialog("xs_main_detail");
+    xs_currentZoneFuture = null;
+    xs_zone_vectorLayer.removeAllFeatures();
 
     xs_isShowUtfGridTip = false;
     //xs_currentZoneLevel = parentLevel;
@@ -200,15 +203,19 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                 }
                 if(XS.Main.Tjfx.Graph.featuersArr.county.data.length < 1){
 
+                    XS.CommonUtil.showLoader();
                     XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel, "SMID>0", function()
                         {
+                            XS.CommonUtil.hideLoader();
                             if(XS.Main.Tjfx.Graph.featuersArr.county.data.length>0)
                             {
                                 XS.Main.Tjfx.Graph.addFeatures2Layer(XS.Main.Tjfx.Graph.featuersArr.county.data,XS.Main.Tjfx.Graph.CacheZoneInfos.county.data,0);
+                            }else{
+                                XS.CommonUtil.showMsgDialog("","未找到相关数据！");
                             }
-                            XS.CommonUtil.hideLoader();
                         }, function(e)
                         {
+                            XS.CommonUtil.showMsgDialog("","请求数据失败！");
                             XS.CommonUtil.hideLoader();
                         }
                     );
@@ -233,7 +240,9 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                 }
 
                 data = {pid: parentCode,pd_id: parentCode};
+                XS.CommonUtil.showLoader();
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json) {
+                    XS.CommonUtil.hideLoader();
                     if (json && json.length > 0) {
                         switch (type){
                             case XS.Main.Tjfx.type.bar.fiveOf54:
@@ -257,18 +266,21 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                         }
                         if (XS.Main.Tjfx.Graph.featuersArr.county.data.length < 1) {
 
+                            XS.CommonUtil.showLoader();
                             XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel, "SMID>0", function () {
+                                    XS.CommonUtil.hideLoader();
                                     if (XS.Main.Tjfx.Graph.featuersArr.county.data.length > 0) {
                                         XS.Main.Tjfx.Graph.addFeatures2Layer(XS.Main.Tjfx.Graph.featuersArr.county.data,XS.Main.Tjfx.Graph.CacheZoneInfos.county.data,0);
+                                    }else{
+                                        XS.CommonUtil.showMsgDialog("","未找到相关数据！");
                                     }
-                                    XS.CommonUtil.hideLoader();
                                 }, function (e) {
+                                    XS.CommonUtil.showMsgDialog("", "获取数据失败！");
                                     XS.CommonUtil.hideLoader();
                                 }
                             );
                         }
                     } else {
-                        XS.CommonUtil.hideLoader();
                         XS.CommonUtil.showMsgDialog("", "获取数据失败！");
                     }
                 }, function (e) {
@@ -301,7 +313,9 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                     break;
             }
             data = {pid:parentCode,pd_id:parentCode};
+            XS.CommonUtil.showLoader();
             XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json) {
+                XS.CommonUtil.hideLoader();
                 if (json && json.length > 0)
                 {
                     switch (type){
@@ -317,20 +331,23 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                         }
                     }
                     XS.Main.Tjfx.Graph.CacheZoneInfos.town = json;
+                    XS.CommonUtil.showLoader();
                     XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel, "县级代码=="+parentCode, function()
                         {
+                            XS.CommonUtil.hideLoader();
                             if(XS.Main.Tjfx.Graph.featuersArr.town.length>0)
                             {
                                 XS.Main.Tjfx.Graph.addFeatures2Layer(XS.Main.Tjfx.Graph.featuersArr.town,XS.Main.Tjfx.Graph.CacheZoneInfos.town,1);
+                            }else{
+                                XS.CommonUtil.showMsgDialog("", "未找到相关数据！");
                             }
-                            XS.CommonUtil.hideLoader();
                         }, function(e)
                         {
+                            XS.CommonUtil.showMsgDialog("", "获取数据失败！");
                             XS.CommonUtil.hideLoader();
                         }
                     );
                 }else{
-                    XS.CommonUtil.hideLoader();
                     XS.CommonUtil.showMsgDialog("", "获取数据失败！");
                 }
             },function(e){XS.CommonUtil.hideLoader();});
@@ -360,7 +377,9 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                     break;
             }
             data = {pid:parentCode, pd_id:parentCode};
+            XS.CommonUtil.showLoader();
             XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json) {
+                XS.CommonUtil.hideLoader();
                 if (json && json.length > 0)
                 {
                     switch (type){
@@ -376,20 +395,24 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                         }
                     }
                     XS.Main.Tjfx.Graph.CacheZoneInfos.village = json;
+                    XS.CommonUtil.showLoader();
                     XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel, "Town_id=="+parentCode, function()
                         {
+                            XS.CommonUtil.hideLoader();
                             if(XS.Main.Tjfx.Graph.featuersArr.village.length>0)
                             {
                                 XS.Main.Tjfx.Graph.addFeatures2Layer(XS.Main.Tjfx.Graph.featuersArr.village,XS.Main.Tjfx.Graph.CacheZoneInfos.village,2);
+                            }else{
+                                XS.CommonUtil.showMsgDialog("", "未找到相关数据！");
                             }
                             XS.CommonUtil.hideLoader();
                         }, function(e)
                         {
                             XS.CommonUtil.hideLoader();
+                            XS.CommonUtil.showMsgDialog("", "获取数据失败！");
                         }
                     );
                 }else{
-                    XS.CommonUtil.hideLoader();
                     XS.CommonUtil.showMsgDialog("", "获取数据失败！");
                 }
             },function(e){XS.CommonUtil.hideLoader();});
@@ -532,6 +555,9 @@ XS.Main.Tjfx.Graph.addFeatures2Layer = function(featureArr, data, parentLevel){ 
         for(var j=0; j<data.length; j++)
         {
             var obj = data[j];
+            if(!obj){
+                continue;
+            }
             if(obj[oId]==feature.data[fId])
             {
                 var isNext = false;

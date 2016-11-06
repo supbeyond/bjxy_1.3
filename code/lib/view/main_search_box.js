@@ -26,7 +26,7 @@ XS.Searchbox.init = function(){
     var xs_search_box = '<div id="xs_searchbox" class="easyui-panel">' +
         '<div id="xs_searchbox_C">' +
             XS.Searchbox.searchType() +
-            '<input id="xs_searchbox_content" autocomplete="off" placeholder="&nbsp;行政区、贫困户信息查询" onkeydown1="XS.Searchbox.getConKey();">' +
+            '<input id="xs_searchbox_content" autocomplete="off" placeholder="&nbsp;行政区、贫困户查询" onkeydown1="XS.Searchbox.getConKey();">' +
             '<div id="xs_searchbox_clear" class="easyui-panel" onclick="XS.Searchbox.clearCon();">' +
                 '<div id="xs_searchbox_loadingC">' +
                     '<i id="xs_searchbox_loading" class="fa <!--fa-circle-thin--> fa-spinner fa-pulse fa-3x fa-fw xs_loading">' +
@@ -314,7 +314,8 @@ XS.Searchbox.regionBaseInfo = function(i,json,regionId,regionName,fields){
             break;
         }
         default :{
-            xs_searchbox_baseInf += XS.Main.Poor.createTable(baseInfData, 2, 30,"","color:#00bbee");
+            xs_searchbox_baseInf += XS.Searchbox.createTable(baseInfData,2,30,[[12,2]],"","color:#00bbee",["xs_searchbox_tool"]);
+            //xs_searchbox_baseInf += XS.Main.Poor.createTable(baseInfData, 2, 30,"","color:#00bbee");
         }
     }
     xs_searchbox_baseInf += '</div></div></div>';
@@ -350,7 +351,7 @@ XS.Searchbox.searchType = function(){
         }
     }
     xs_searchbox_option += '<option value="姓名">姓名</option>' +
-        '<option value="身份证号">身份证号</option>' +
+        '<option value="身份证号">身份证</option>' +
         '<option value="电话">电话</option>' +
         '</select>';
     return xs_searchbox_option;
@@ -368,7 +369,11 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
     if(regionName == '贫困户' && xs_pkdc_cacheDataArr[poorHIndex].LONGITUDE && xs_pkdc_cacheDataArr[poorHIndex].LATITUDE){
         XS.Main.Poor.showPoor(xs_pkdc_cacheDataArr[poorHIndex].hid,null);
         return;
+    }else if(regionName == '贫困户详情' && xs_pkdc_cacheDataArr[poorHIndex].LONGITUDE && xs_pkdc_cacheDataArr[poorHIndex].LATITUDE){
+        XS.Main.Poor.showPoorDetailInfo(xs_pkdc_cacheDataArr[poorHIndex]);
+        return;
     }
+    xs_isClickMapFinish = false;
     var layerName = "";
     var sql = "";
     var regionIdStr = ""
@@ -390,7 +395,7 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
         case XS.Main.ZoneLevel.village:
         case XS.Main.ZoneLevel.poor:
         {
-            sql = "Town_id="+regionId.slice(0,9);
+            sql = "Town_id="+regionId.toString().slice(0,9);
             layerName = "Village_Code";
             regionIdStr = "OldID";
             break;
@@ -415,14 +420,23 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
                 }
             }
             if(!feature){
+                xs_isClickMapFinish = true;
                 XS.CommonUtil.showMsgDialog("","未找到相关数据！");
                 return;
             }
             if(regionName == '贫困户'){
+                xs_isClickMapFinish = true;
                 var centerPointer = feature.geometry.getBounds().getCenterLonLat();
                 XS.Main.Poor.showPoor(xs_pkdc_cacheDataArr[poorHIndex].hid,centerPointer);
                 return;
-             }
+             }else if(regionName == '贫困户详情'){
+                xs_isClickMapFinish = true;
+                var centerPointer = feature.geometry.getBounds().getCenterLonLat();
+                xs_pkdc_cacheDataArr[poorHIndex].LONGITUDE = centerPointer.lon;
+                xs_pkdc_cacheDataArr[poorHIndex].LATITUDE = centerPointer.lat;
+                XS.Main.Poor.showPoorDetailInfo(xs_pkdc_cacheDataArr[poorHIndex]);
+                return;
+            }
             //xs_MapInstance.getMapObj().zoomToExtent(feature.geometry.getBounds(),false);
             xs_currentZoneFuture = feature;
             feature.style = xs_stateZoneStyle;
@@ -436,13 +450,13 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
                 case XS.Main.ZoneLevel.county:
                     xs_superZoneCode = Math.floor(regionId/100);
                     xs_currentZoneLevel = XS.Main.ZoneLevel.county;
-                    xs_userZoneName = "毕节市";
                     xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 3);
+                    xs_isClickMapFinish = true;
                     break;
                 case XS.Main.ZoneLevel.town:
                     xs_superZoneCode = Math.floor(regionId/1000);
                     xs_currentZoneLevel = XS.Main.ZoneLevel.town;
-                    xs_userZoneName = feature.data.县级名称;
+                    xs_isClickMapFinish = true;
                     xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 6);
                     XS.Main.readyAddRegionMarkersData([feature],xs_currentZoneLevel-1,xs_superZoneCode);
                     //XS.Main.addTownVillPlevelMarker2Layer(xs_currentZoneLevel-1, xs_superZoneCode,regionId);
@@ -450,18 +464,20 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
                 case XS.Main.ZoneLevel.village:
                     xs_superZoneCode = regionId.slice(0,9);
                     xs_currentZoneLevel = XS.Main.ZoneLevel.village;
-                    xs_userZoneName = feature.data.Town_name;
+                    xs_isClickMapFinish = true;
                     xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 9);
                     XS.Main.readyAddRegionMarkersData([feature],xs_currentZoneLevel-1,xs_superZoneCode);
                     //XS.Main.addTownVillPlevelMarker2Layer(xs_currentZoneLevel-1, xs_superZoneCode,regionId);
                     break;
             }
         }else{
+            xs_isClickMapFinish = true;
             XS.CommonUtil.hideLoader();
             XS.CommonUtil.showMsgDialog("","加载数据失败！");
             //XS.Login.logout();
         }
     }, function(e){
+        xs_isClickMapFinish = true;
         XS.CommonUtil.hideLoader();
         XS.CommonUtil.showMsgDialog("","加载数据失败！");
         //XS.Login.logout();
@@ -606,7 +622,15 @@ XS.Searchbox.tool = function(i,json,regionIdV,regionNameV,regionId,regionName,fi
         case "行政村":
             {
                 xs_searchbox_tool += '<td colspan="4" align="center" style="border-right: 0;">' +
-                        '<button class="xs_searchbox_detail" style="cursor: pointer;" regionId="'+regionIdV+'" regionName="'+ regionNameV+'">详情</button>' +
+                    '<button class="xs_searchbox_detail" style="cursor: pointer;" regionId="'+regionIdV+'" regionName="'+ regionNameV+'">详情</button>' +
+                    '</td>';
+                $(".xs_searchbox_tool:last").append(xs_searchbox_tool);
+                break;
+            }
+        default :
+            {
+                xs_searchbox_tool += '<td colspan="4" align="center" style="border-right: 0;">' +
+                        '<button class="xs_searchbox_detail" style="cursor: pointer;" poorHIndex="'+regionIdV+'">详情</button>' +
                     '</td>';
                 $(".xs_searchbox_tool:last").append(xs_searchbox_tool);
                 break;
@@ -686,9 +710,24 @@ XS.Searchbox.BaseInfPanel = function(i,json,regionId,regionName){
         $(".xs_searchbox_positionBtn").click();
     }
     $(".xs_searchbox_detail").click(function(){
-        var detailRegionId = $(this).attr("regionId");
-        var detailRegionName = $(this).attr("regionName");
-        XS.Main.Pkjc.clickDetail(xs_searchbox_level,detailRegionName,detailRegionId,false);
+        switch (xs_searchbox_type){
+            case "区县":
+            case "乡镇":
+            case "行政村":
+            {
+                var detailRegionId = $(this).attr("regionId");
+                var detailRegionName = $(this).attr("regionName");
+                XS.Main.Pkjc.clickDetail(xs_searchbox_level,detailRegionName,detailRegionId,false);
+                break;
+            }
+            default :
+            {
+                xs_pkdc_cacheDataArr = xs_search_cashData;
+                var poorHIndex = $(this).attr("poorHIndex");
+                XS.Searchbox.baseInfoClick(4,xs_pkdc_cacheDataArr[poorHIndex].VID,"贫困户详情",poorHIndex);
+                break;
+            }
+        }
     });
     $(".xs_searchbox_nextSeleect").click(function(){
         var nextRegionId = $(this).attr("regionId");

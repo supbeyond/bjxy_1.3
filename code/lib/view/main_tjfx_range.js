@@ -22,8 +22,9 @@ XS.Main.Tjfx.range = function(level, parentId, type){
     XS.Main.clearMap();
     XS.Main.Pkjc.closeInfoDialog();
     XS.CommonUtil.closeDialog("xs_main_detail");
+    xs_currentZoneFuture = null;
+    xs_zone_vectorLayer.removeAllFeatures();
    // xs_currentZoneLevel = level;
-    xs_clickMapType = XS.Main.clickMapType.tjfx_range;
     xs_tjfx_zoneLevel = level;
     xs_superZoneCode = -1;
 
@@ -35,6 +36,7 @@ XS.Main.Tjfx.range = function(level, parentId, type){
     xs_markerLayer.clearMarkers();
     xs_markerLayer.setVisibility(false);
     XS.Main.Poor.clearRelocationLayer();
+    xs_clickMapType = XS.Main.clickMapType.tjfx_range;
 
     //添加标签专题图
     var strategy = new SuperMap.Strategy.GeoText();
@@ -126,13 +128,14 @@ XS.Main.Tjfx.range = function(level, parentId, type){
             {
                 XS.Main.Tjfx.CacheZoneInfos.county = XS.Main.CacheZoneInfos.county;
                 //2.获取空间数据
+                XS.CommonUtil.showLoader();
                 XS.Main.Tjfx.loadZoneFeatuers(level, "SMID>0", function()
                     {
+                        XS.CommonUtil.hideLoader();
                         if(XS.Main.Tjfx.type_featuersArr.county.length>0)
                         {
                             XS.Main.Tjfx.range_addFeatures2Layer(XS.Main.Tjfx.type_featuersArr.county,XS.Main.Tjfx.CacheZoneInfos.county,0);
                         }
-                        XS.CommonUtil.hideLoader();
                     }, function(e)
                     {
                         XS.CommonUtil.hideLoader();
@@ -140,6 +143,7 @@ XS.Main.Tjfx.range = function(level, parentId, type){
                 );
             }else
             {
+                XS.CommonUtil.showLoader();
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json)
                 {
                     if (json && json.length > 0)
@@ -149,13 +153,15 @@ XS.Main.Tjfx.range = function(level, parentId, type){
                         }
                         XS.Main.Tjfx.CacheZoneInfos.county = json;
                         //2.获取空间数据
+
+                        XS.CommonUtil.showLoader();
                         XS.Main.Tjfx.loadZoneFeatuers(level, "SMID>0", function()
                             {
+                                XS.CommonUtil.hideLoader();
                                 if(XS.Main.Tjfx.type_featuersArr.county.length>0)
                                 {
                                     XS.Main.Tjfx.range_addFeatures2Layer(XS.Main.Tjfx.type_featuersArr.county,XS.Main.Tjfx.CacheZoneInfos.county,0);
                                 }
-                                XS.CommonUtil.hideLoader();
                             }, function(e)
                             {
                                 XS.CommonUtil.hideLoader();
@@ -190,12 +196,16 @@ XS.Main.Tjfx.range = function(level, parentId, type){
                     break;
             }
             var data = {pbno:parentId, pd_id:parentId};
+            XS.CommonUtil.showLoader();
             XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json) {
+                XS.CommonUtil.hideLoader();
                 if (json && json.length > 0)
                 {
                     XS.Main.Tjfx.CacheZoneInfos.town = json;
+                    XS.CommonUtil.showLoader();
                     XS.Main.Tjfx.loadZoneFeatuers(level, "县级代码=="+parentId, function()
                         {
+                            XS.CommonUtil.hideLoader();
                             if(XS.Main.Tjfx.type_featuersArr.town.length>0)
                             {
                                 XS.Main.Tjfx.range_addFeatures2Layer(XS.Main.Tjfx.type_featuersArr.town,XS.Main.Tjfx.CacheZoneInfos.town,1);
@@ -234,11 +244,14 @@ XS.Main.Tjfx.range = function(level, parentId, type){
                     break;
             }
             var data = {pbno:parentId, pd_id:parentId};
+            XS.CommonUtil.showLoader();
             XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json) {
                 if (json && json.length > 0) {
                     XS.Main.Tjfx.CacheZoneInfos.village = json;
+                    XS.CommonUtil.showLoader();
                     XS.Main.Tjfx.loadZoneFeatuers(level, "Town_id=="+parentId, function()
                         {
+                            XS.CommonUtil.hideLoader();
                             if(XS.Main.Tjfx.type_featuersArr.village.length>0)
                             {
                                 XS.Main.Tjfx.range_addFeatures2Layer(XS.Main.Tjfx.type_featuersArr.village,XS.Main.Tjfx.CacheZoneInfos.village,2);
@@ -640,7 +653,6 @@ XS.Main.Tjfx.range_themeLayerClickCallback = function(event){
         switch (xs_tjfx_zoneLevel) {
             case XS.Main.ZoneLevel.city:
             {
-                xs_currentZoneFuture = null;
                 xs_superZoneCode = feature.data.AdminCode;
                 xs_clickMapType = XS.Main.clickMapType.tjfx_range;
                 XS.Main.Tjfx.range(xs_tjfx_zoneLevel + 1, xs_superZoneCode, xs_tjfx_type);
@@ -648,7 +660,6 @@ XS.Main.Tjfx.range_themeLayerClickCallback = function(event){
             }
             case XS.Main.ZoneLevel.county:
             {
-                xs_currentZoneFuture = null;
                 xs_superZoneCode = feature.data.乡镇代码;
                 xs_clickMapType = XS.Main.clickMapType.tjfx_range;
                 XS.Main.Tjfx.range(xs_tjfx_zoneLevel + 1, xs_superZoneCode, xs_tjfx_type);
@@ -656,10 +667,9 @@ XS.Main.Tjfx.range_themeLayerClickCallback = function(event){
             }
             case XS.Main.ZoneLevel.town:
             {
-                xs_currentZoneFuture = null;
                 xs_superZoneCode = feature.data.OldID;
                 XS.CommonUtil.showMsgDialog("", "没有下级专题图");
-                xs_clickMapType = XS.Main.clickMapType.none;
+                xs_clickMapType = XS.Main.clickMapType.tjfx_range;
                 break;
             }
         }

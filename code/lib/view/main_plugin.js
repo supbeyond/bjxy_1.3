@@ -12,6 +12,7 @@ var xs_currentZoneFuture = null; //保存当前被选中的行政Future
 var xs_clickMapFutureId = -1; //保存当前被选中的行政FutureID
 var xs_currentZoneLevel = -1; //记录当前行政等级
 var xs_isMapClickTypeNone = false; //判断单击地图是否是的类型为None
+var xs_isClickMapFinish = true;
 //var xs_poorHLabelLayer = null;
 //行政区域点中样式
 var xs_stateZoneStyle = {
@@ -322,7 +323,7 @@ XS.Main.RightClickMenuHandler = function(name){
         XS.Login.logout();
     }
     else if(name == 'toolbar'){
-        XS.Main.showLeftToolBar();
+        //XS.Main.showLeftToolBar();
     }
     else if(name== 'pkdc'){
         XS.Main.Pkjc.pkdc();
@@ -955,10 +956,11 @@ XS.Main.clickMapCallback = function(mouseEvent){
    // var lonLat = mapInstance.getMapObj().getLonLatFromPixel(mouseEvent.xy);
     //lonLat.lon, lonLat.lat
     //xs_zone_vectorLayer.removeAllFeatures();
-    xs_isMapClickTypeNone = false;
-    if(xs_clickMapType != XS.Main.clickMapType.none && xs_clickMapType != XS.Main.clickMapType.marker && xs_clickMapType != XS.Main.clickMapType.poor_povertyrelocation){
+    if(xs_clickMapType != XS.Main.clickMapType.none && xs_clickMapType != XS.Main.clickMapType.marker){
         return;
     }
+    xs_isClickMapFinish = false;
+    xs_isMapClickTypeNone = false;
     xs_poorLabelLayer.removeAllFeatures();
     xs_markerLayer.clearMarkers();
     xs_markerLayer.setVisibility(false);
@@ -989,6 +991,7 @@ XS.Main.clickMapCallback = function(mouseEvent){
             }
 
             if(feature==null){
+                xs_isClickMapFinish = true;
                 XS.CommonUtil.hideLoader();
                 return;
             }
@@ -1018,6 +1021,7 @@ XS.Main.clickMapCallback = function(mouseEvent){
                             if(xs_user_regionId != feature.data.AdminCode){
                                 XS.CommonUtil.showMsgDialog("", "您的权限不够");
                                 XS.CommonUtil.hideLoader();
+                                xs_isClickMapFinish = true;
                                 return;
                             }
                             break;
@@ -1025,6 +1029,7 @@ XS.Main.clickMapCallback = function(mouseEvent){
                         case XS.Main.ZoneLevel.village:
                             XS.CommonUtil.showMsgDialog("", "您的权限不够");
                             XS.CommonUtil.hideLoader();
+                            xs_isClickMapFinish = true;
                             return;
                     }
 
@@ -1032,7 +1037,6 @@ XS.Main.clickMapCallback = function(mouseEvent){
                     xs_currentZoneCode = feature.data.AdminCode;
                     xs_currentZoneName = feature.data.Name;
                     xs_superZoneCode = xs_cityID;
-                    xs_userZoneName = "毕节市";
                     break;
                 }
                 case XS.Main.ZoneLevel.town:
@@ -1042,6 +1046,7 @@ XS.Main.clickMapCallback = function(mouseEvent){
                             if(xs_user_regionId != feature.data.县级代码){
                                 XS.CommonUtil.showMsgDialog("", "您的权限不够");
                                 XS.CommonUtil.hideLoader();
+                                xs_isClickMapFinish = true;
                                 return;
                             }
                             break;
@@ -1049,12 +1054,14 @@ XS.Main.clickMapCallback = function(mouseEvent){
                             if(xs_user_regionId != feature.data.乡镇代码){
                                 XS.CommonUtil.showMsgDialog("", "您的权限不够");
                                 XS.CommonUtil.hideLoader();
+                                xs_isClickMapFinish = true;
                                 return;
                             }
                             break;
                         case XS.Main.ZoneLevel.village:
                             XS.CommonUtil.showMsgDialog("", "您的权限不够");
                             XS.CommonUtil.hideLoader();
+                            xs_isClickMapFinish = true;
                             return;
                     }
 
@@ -1062,7 +1069,6 @@ XS.Main.clickMapCallback = function(mouseEvent){
                     xs_currentZoneCode = feature.data.乡镇代码;
                     xs_currentZoneName = feature.data.乡镇名称;
                     xs_superZoneCode = feature.data.县级代码;
-                    xs_userZoneName = feature.data.乡镇名称;
                     break;
                 }
                 case XS.Main.ZoneLevel.village:
@@ -1072,6 +1078,7 @@ XS.Main.clickMapCallback = function(mouseEvent){
                             if(xs_user_regionId != feature.data.country_id){
                                 XS.CommonUtil.showMsgDialog("", "您的权限不够");
                                 XS.CommonUtil.hideLoader();
+                                xs_isClickMapFinish = true;
                                 return;
                             }
                             break;
@@ -1079,6 +1086,7 @@ XS.Main.clickMapCallback = function(mouseEvent){
                             if(xs_user_regionId != feature.data.Town_id){
                                 XS.CommonUtil.showMsgDialog("", "您的权限不够");
                                 XS.CommonUtil.hideLoader();
+                                xs_isClickMapFinish = true;
                                 return;
                             }
                             break;
@@ -1086,6 +1094,7 @@ XS.Main.clickMapCallback = function(mouseEvent){
                             if(xs_user_regionId != feature.data.OldID){
                                 XS.CommonUtil.showMsgDialog("", "您的权限不够");
                                 XS.CommonUtil.hideLoader();
+                                xs_isClickMapFinish = true;
                                 return;
                             }
                         break;
@@ -1095,7 +1104,6 @@ XS.Main.clickMapCallback = function(mouseEvent){
                     xs_currentZoneCode = feature.data.OldID;
                     xs_currentZoneName = feature.data.vd_name;
                     xs_superZoneCode = feature.data.Town_id;
-                    xs_userZoneName = feature.data.Town_name;
                     break;
                 }
             }
@@ -1109,6 +1117,7 @@ XS.Main.clickMapCallback = function(mouseEvent){
             //查询信息
             XS.CommonUtil.hideLoader();
             XS.Main.showBottomToolBar();
+            xs_isClickMapFinish = true;
 
             if(xs_tjfx_themeLayer || xs_tjfx_graph_themeLayer || xs_poor_elementsLayer){
                 return;
@@ -1118,9 +1127,11 @@ XS.Main.clickMapCallback = function(mouseEvent){
 
             XS.Main.readyAddMarkers(feature.geometry.getBounds().getCenterLonLat(),level,xs_currentZoneCode);
         }else{
+            xs_isClickMapFinish = true;
             XS.CommonUtil.hideLoader();
         }
     },function(e){
+        xs_isClickMapFinish = true;
         XS.CommonUtil.hideLoader();
     });
 }
@@ -1368,8 +1379,13 @@ XS.Main.readyAddRegionMarkersData = function (features,superLevel,superId) {
 
             //添加 marker图片
             XS.Main.addMarkers2Layer(dataArr, "xs_lon", "xs_lat", "xs_p_icon", 32, 32, superLevel);
+        }else{
+            XS.CommonUtil.showMsgDialog("","未找到相关数据！");
         }
-    },function(e){XS.CommonUtil.hideLoader();});
+    },function(e){
+        XS.CommonUtil.showMsgDialog("","加载数据失败！");
+        XS.CommonUtil.hideLoader();
+    });
 }
 /**
  * 添加makker标记到图层中去
@@ -1387,7 +1403,6 @@ XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, 
     xs_markerLayer.clearMarkers();
     xs_markerLayer.setVisibility(true);
     xs_main_makerLayerLevel = superLevel + 1;
-
     for(var i=0; i<dataArr.length; i++)
     {
         var data = dataArr[i];
@@ -1509,15 +1524,16 @@ XS.Main.hiddenDivTags = function(){
 XS.Main.closeDialogs = function(){
     //统计分析--左工具菜单
     if($("#xs_tjfx_toolmenuC").length>0) $("#xs_tjfx_toomenuC").dialog('close');
+    $("#xs_main_detail_relocation").dialog('close');
 }
 
 //隐藏所有相关图层
 XS.Main.hiddenLayers = function(){
-    if(xs_main_makerLayerLevel == XS.Main.ZoneLevel.poor){
+    /*if(xs_main_makerLayerLevel == XS.Main.ZoneLevel.poor){
         xs_markerLayer.clearMarkers();
         xs_markerLayer.setVisibility(false);
         xs_poorLabelLayer.removeAllFeatures();
-    }
+    }*/
 
     XS.Main.Tjfx.removeLayer();
     xs_vectorLayer.removeAllFeatures();
@@ -1537,16 +1553,14 @@ XS.Main.clearMap = function(){
     XS.Main.hiddenDivTags();
     XS.Main.closeDialogs();
     XS.Main.hiddenLayers();
-    if($("#xs_tjfx_range_Legend").length>0) $("#xs_tjfx_range_Legend").remove();
+    //if($("#xs_tjfx_range_Legend").length>0) $("#xs_tjfx_range_Legend").remove();
 
-    xs_markerLayer.clearMarkers();
-    xs_markerLayer.setVisibility(true);
+    //xs_markerLayer.clearMarkers();
+    //xs_markerLayer.setVisibility(true);
 
     //清空vectorLayer
     //xs_clusterLayer.destroyCluster();
     //xs_clusterControl.deactivate();
-
-    xs_zone_vectorLayer.removeAllFeatures();
 
     xs_isShowUtfGridTip = true;
     xs_pkdc_isGaugeClose = true;
@@ -1557,12 +1571,15 @@ XS.Main.clearMap = function(){
 
 //深度清理地图
 XS.Main.depClearMap = function() {
+    xs_isClickMapFinish = true;
     XS.Main.clearMap();
     XS.Main.closeDialogs("xs_main_detail");
     XS.Main.Pkjc.closeInfoDialog();
     xs_currentZoneFuture = null;
     xs_vectorLayer.removeAllFeatures();
     xs_markerLayer.clearMarkers();
+    xs_zone_vectorLayer.removeAllFeatures();
+    if($("#xs_tjfx_range_Legend").length>0) $("#xs_tjfx_range_Legend").remove();
 
     clearInterval(xs_pkjc_IntervalId);
     xs_tasker_labelLayer.removeAllFeatures();
@@ -1578,7 +1595,7 @@ XS.Main.showAdvanceFeedDialog = function(regionid){
             '<input id="xs_main_ipt_advance" class="easyui-textbox easyui-resizable" data-options="multiline:true,prompt:\'请输入意见\'" style="width:100%;height:200px">'+
             '<a id="xs_main_btn_advance" href="javascript:0;" class="easyui-linkbutton" style="margin-top: 10px; margin-left: 340px;"><span style="width:120px; height: 40px; text-align: center;line-height: 40px;font-size: 25px;font-weight: bold; display: inline-block;">提交</span></a>'
         '</div>';
-    XS.CommonUtil.openDialog("xs_main_detail_1", "意见反馈", "icon-man", htmlContent, false, false, true, 500, 300);    $("#xs_main_btn_advance").click(function(){
+    XS.CommonUtil.openDialog("xs_main_detail_11", "意见反馈", "icon-man", htmlContent, false, false, true, 500, 300);    $("#xs_main_btn_advance").click(function(){
         var advance = $("#xs_main_ipt_advance").val();
         if(XS.StrUtil.isEmpty(advance)){
             XS.CommonUtil.showMsgDialog("", "意见内容不能为空");
@@ -1770,6 +1787,7 @@ XS.Main.addDivHover2HiddenUTFGridTip = function(id){
 //************************处理点击鼠标右键选中菜单选项处理函数************************************
 //分段专题图 贫困发生率 脱贫率
 XS.Main.cRItem_Tjfx_Range = function(type){
+    $("#xs_tjfx_leftMenuC").menu("hide");
     XS.CommonUtil.closeDialog("xs_main_fmenu_dialog");
     XS.Searchbox.clearCon();
     if(xs_currentZoneFuture != null){

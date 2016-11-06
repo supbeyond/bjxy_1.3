@@ -147,10 +147,14 @@ XS.CommonUtil.openDialog = function(id, title, iconCls, content, resizable, maxi
  */
 XS.CommonUtil.closeDialog = function(id){
     if(document.getElementById(id)){
-        try{
-            $('#'+id).dialog("close");
-        }catch (e){};
-        $('#'+id).remove();
+        if(id == "xs_main_detail"){
+            $('#'+id).dialog("destroy");
+        }else{
+            try{
+                $('#'+id).dialog("close");
+            }catch (e){};
+            $('#'+id).remove();
+        }
     }
 }
 
