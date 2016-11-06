@@ -310,7 +310,8 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
             if(json) {
                 XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.city.tabs[0].name, XS.Main.Pkjc.detailKV.city.tabs[0].value, 2, 50);
             }else{
-                $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
+                $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
             }
         });
         /*data = {cbsId:xs_pkdc_currentStateCode};
@@ -420,7 +421,8 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
                                 break;
                         }
                     }else{
-                        $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                        var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
+                        $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
                     }
                 });
             }
@@ -446,7 +448,8 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
             if(json && json.length>0) {
                 XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.county.tabs[0].name, XS.Main.Pkjc.detailKV.county.tabs[0].value, 2, 50);
             }else{
-                $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
+                $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
             }
         });
 
@@ -595,7 +598,8 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
                                 break;
                         }
                     }else{
-                    $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                        var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
+                        $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
                     }
                 });
             }
@@ -621,7 +625,8 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
             if(json) {
                 XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[0].name, XS.Main.Pkjc.detailKV.town.tabs[0].value, 2, 50);
             }else{
-                $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
+                $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
             }
         });
         $("#xs_pkdc_detailTabs").tabs({
@@ -683,7 +688,8 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
                                 break;
                         }
                     }else{
-                        $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                        var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
+                        $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
                     }
                 });
             }
@@ -709,7 +715,8 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
             if(json) {
                 XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.village.tabs[0].name, XS.Main.Pkjc.detailKV.village.tabs[0].value, 2, 50);
             }else{
-                $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
+                $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
             }
         });
         $("#xs_pkdc_detailTabs").tabs({
@@ -771,7 +778,8 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
                                 break;
                         }
                     }else{
-                        $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                        var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
+                        $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
                     }
                 });
             }
@@ -824,7 +832,8 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
                 XS.Main.Pkjc.ciAnalyOpt([5,'饮水分析'],['axis',['line',""]],[40,['未安全饮水人数','未安全饮水率']],[120,40,60,30],xAxis,
                     [['人数','value'],['(%)','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
             }else{
-                $('#xs_pkdc_AnalysTabsChart').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
+                $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
             }
         });
         $("#xs_pkdc_AnalysTabs").tabs({
@@ -952,7 +961,8 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
                             }
                         }
                     }else{
-                        $('#xs_pkdc_AnalysTabsChart').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                        var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
+                        $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
                     }
                 });
             }
@@ -989,7 +999,8 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
                 XS.Main.Pkjc.ananlyValueOfJson(json,[yAxis[0][2],series[0][3]],['EDU','NUM'],'',[]);
                 XS.Main.Pkjc.ciAnalyOpt([10,'文化程度'],['axis',['shadow']],[],[60,60,80,60],['人数','value'],yAxis,[],[],series,"xs_pkdc_AnalysTabsChart");
             }else{
-                $('#xs_pkdc_AnalysTabsChart').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
+                $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
             }
         });
         $("#xs_pkdc_AnalysTabs").tabs({
@@ -1086,7 +1097,8 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
                             }
                         }
                     }else{
-                        $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                        var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
+                        $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
                     }
                 });
             }
@@ -1125,7 +1137,8 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
                 var polar = [["60%",["50%","55%"]],['value',false,false,false,false,false],['value',false,false,true,true,false,xs_pkdc_analyMax/1000]];
                 XS.Main.Pkjc.ciAnalyOpt([5,'文化程度'],['',[]],legend,[],[],[],[],polar,series,"xs_pkdc_AnalysTabsChart",color);
             }else{
-                $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
+                $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
             }
         });
         $("#xs_pkdc_AnalysTabs").tabs({
@@ -1223,7 +1236,8 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
                             }
                         }
                     }else{
-                        $('#xs_pkdc_AnalysTabsChart').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                        var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
+                        $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
                     }
                 });
             }
@@ -1259,7 +1273,8 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
                 XS.Main.Pkjc.ananlyValueOfJson(json,[xAxis[2],series[0][3]],['EDU','NUM'],'',[]);
                 XS.Main.Pkjc.ciAnalyOpt([10,'文化程度'],['',[]],[],[80,60,60,60],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",["rgb(52,161,45)"]);
             }else{
-                $('#xs_pkdc_tabsContentDom').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
+                $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
             }
         });
         $("#xs_pkdc_AnalysTabs").tabs({
@@ -1368,7 +1383,8 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
                             }
                         }
                     }else{
-                        $('#xs_pkdc_AnalysTabsChart').empty().append('<div style="position: absolute;color:#ff0000;font-size: 40px;left: 44%;top: 48%;">暂无相关数据</div>');
+                        var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
+                        $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
                     }
                 });
             }
