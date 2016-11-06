@@ -1434,6 +1434,7 @@ XS.Main.Pkjc.task_queryLine = function(){
     }
     //轨迹查询
     XS.Main.clearMap();
+    XS.Main.clearMarker();
     $("#xs_pkdc_task_loading").css({"visibility":"visible"});
     //string workid,string begintime,string endtime
     var data = {workid: xs_pkdc_task_rdata.SU_ACCOUNT, begintime:sdate, endtime:ddate};
@@ -1561,6 +1562,8 @@ XS.Main.Pkjc.reqOnLineTasker = function(regionid){
 
     xs_tasker_animatorVectorLayer.setVisibility(true);
     xs_tasker_labelLayer.setVisibility(true);
+    XS.Main.clearMap();
+    XS.Main.clearMarker();
 
     XS.CommonUtil.showLoader();
     var data = {regionid: regionid};
