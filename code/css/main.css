@@ -43,16 +43,36 @@ html, body{
     cursor: pointer;
 }
 
-#xs_title{
+#xs_titleC{
     z-index: 999;
     position: absolute;
     width: 100%;
-    left: -10px;
-    top: 10px;
-    text-align: center;
+    height: 55px;
+    line-height: 55px;
+    left1: -10px;
+    top1: 10px;
+    text-align1: center;
+    background: rgba(88,130,174,0.5);
+    font-size1: 40px;
+    font-weight1: 900;
+    color1: rgba(255, 255, 255, 0.8); /*00bbee  2531EE*/
+
+    text-shadow1:
+    2px -2px 2px #000000
+   /* ,-2px 2px 2px #808080;*/
+}
+#xs_title{
+    vertical-align: top;
+    z-index1: 999;
+    position: relative;
+    width1: 100%;
+    left1: -10px;
+    top1: 10px;
+    text-align1: center;
     background: transparent;
-    font-size: 40px;
+    font-size: 35px;
     font-weight: 900;
+    display: inline-block;
     color: rgba(255, 255, 255, 0.8); /*00bbee  2531EE*/
 
     text-shadow:
@@ -442,6 +462,21 @@ html, body{
 
 /*右顶 计时器*/
 #xs_rt_btn_timer{
+    vertical-align: top;
+    position: absolute;
+    right: 0px;
+    top1: 20px;
+    width: 360px;
+    height1: 26px;
+    overflow: hidden;
+    background: transparent;
+    font-size: 25px;
+    font-weight: 900;
+    color: #ff0000;
+    display: inline-block;
+    text-shadow: 2px -2px 2px #690000;
+}
+/*#xs_rt_btn_timer{
     position: absolute;
     right: 5px;
     top: 20px;
@@ -453,7 +488,7 @@ html, body{
     font-weight: 900;
     color: #ff0000;
     text-shadow: 2px -2px 2px #690000;
-}
+}*/
 
 /*------------右下工具按钮--------------------------------------*/
 .xs_rb_btn{
@@ -485,10 +520,11 @@ html, body{
 /*底部版权*/
 #xs_b_btn_copyright{
     position: absolute;
-    left: -250px;
+    left1: -250px;
     bottom: 5px;
-    margin-left: 50%;
-    width: 520px;
+    text-align: center;
+    margin-left1: 50%;
+    width: 100%;
     /*height: 26px;*/
     overflow: hidden;
     background: transparent;
@@ -499,15 +535,29 @@ html, body{
     2px -2px 2px #000000
 }
 /*-----------------------------搜索框-------------------------------------------------*/
+#xs_searchbox_boxC{
+    width: 353px;
+    height:38px;
+    position: relative;
+    left: 10px;
+    top1: 2px;
+    display: inline-block;
+    vertical-align: middle;
+    margin-bottom: 5px;
+    margin-right: 40px;
+    background: transparent;
+}
 #xs_searchbox{
     background: transparent;
     border1: 1px solid green;
     vertical-align1: top;
+    background: transparent;
     /*border: 0px;*/
 }
 #xs_searchbox_C{
-    height: 40px;
+    height: 38px;
     box-shadow:0px 2px 1px 1px rgba(122, 0, 0, 0.3);
+    background: transparent;
 }
 #xs_searchbox_type{
     width: 80px;
@@ -520,6 +570,7 @@ html, body{
     position: relative;
     border-radius:2px 0 0 2px;
     vertical-align: top;
+    background1: transparent;
 }
 
 #xs_searchbox_content{
@@ -574,8 +625,10 @@ html, body{
     position: relative;
     top:20%;
     border-left: 1px solid #eee;
+    box-sizing: border-box;
 }
 #xs_searchbox_loading{
+    position: absolute;
     text-align: center;
     font-size: 16px;
     color: #00bbee;
