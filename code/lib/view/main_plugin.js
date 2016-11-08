@@ -1240,6 +1240,8 @@ XS.Main.readyAddMarkers = function(centerPoint,level,currentId){
                 if(json && json.length>0)
                 {
                     XS.Main.Poor.showPoors(json,centerPoint);
+                }else{
+                    XS.CommonUtil.showMsgDialog("","请求数据失败");
                 }
             },function(e){XS.CommonUtil.hideLoader();});
             break;
@@ -1314,9 +1316,9 @@ XS.Main.readyAddRegionMarkersData = function (features,superLevel,superId) {
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json)
     {
         XS.CommonUtil.hideLoader();
+        var dataArr = [];
         if (json && json.length>0)
         {
-            var dataArr = [];
             var pid = "";
             var plevel = "";
             if(XS.Main.ZoneLevel.county==superLevel){
@@ -1374,14 +1376,41 @@ XS.Main.readyAddRegionMarkersData = function (features,superLevel,superId) {
                         data.xs_p_icon = iconUri;
                     }
                     dataArr.push(data);
+                    delete lonLatArr[id];
                 }
             }
-
             //添加 marker图片
-            XS.Main.addMarkers2Layer(dataArr, "xs_lon", "xs_lat", "xs_p_icon", 32, 32, superLevel);
-        }else{
+            //XS.Main.addMarkers2Layer(dataArr, "xs_lon", "xs_lat", "xs_p_icon", 32, 32, superLevel);
+        }/*else{
             XS.CommonUtil.showMsgDialog("","未找到相关数据！");
+        }*/
+        /*
+         name:["镇","镇编号","面积(亩)","贫困级别","经度","纬度","行政村","贫困村","户","贫困户","总人口","贫困人口","平均年收入(元)","贫困发生率(%)"],
+         value:["TOWB_NAME","TOWB_ID","Totolarea","tpl_TownType","TOWB_LONGITUDE","TOWB_LATITUDE","Totolvillnum","TOWB_VillNum",
+         "TOWB_HouseNum","TOWB_PoorHouseNum","TOWB_PeopleNum","TOWB_PoorPeopleNum","TOWB_MEAN","tpl_PoorRate"]
+        */
+        for(var i in lonLatArr){
+            var data = lonLatArr[i].data;
+            data.xs_feature = lonLatArr[i];
+
+            data.xs_lon = lonLatArr[i].geometry.getBounds().getCenterLonLat().lon;
+
+            if(XS.Main.ZoneLevel.county==superLevel) {
+                data.tpl_TownType = '其它';
+                data.TOWB_NAME = data.乡镇名称;
+                data.TOWB_ID = data.乡镇代码;
+                data.xs_lat = lonLatArr[i].geometry.getBounds().getCenterLonLat().lat + 0.003;
+                data.xs_p_icon = "../img/zone/town/town_pother.png";
+            }else{
+             data.VillType = '其它';
+             data.VBI_NAME = data.vd_name;
+             data.VBI__ID = data.OldID;
+             data.xs_lat = lonLatArr[i].geometry.getBounds().getCenterLonLat().lat + 0.0005;
+             data.xs_p_icon = "../img/zone/vill/vill_p5.png";
+             }
+            dataArr.push(data);
         }
+        XS.Main.addMarkers2Layer(dataArr, "xs_lon", "xs_lat", "xs_p_icon", 32, 32, superLevel);
     },function(e){
         XS.CommonUtil.showMsgDialog("","加载数据失败！");
         XS.CommonUtil.hideLoader();
@@ -1414,11 +1443,8 @@ XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, 
                 click: function (marker) {
                     //点击marker回调lonLat
                     if(superLevel != XS.Main.ZoneLevel.village){
-                        xs_poorLabelLayer.removeAllFeatures();
-                        xs_markerLayer.clearMarkers();
-                        xs_markerLayer.setVisibility(false);
+                        XS.Main.clearMarker();
                         XS.Main.Poor.clearRelocationLayer();
-                        $("#xs_tjfx_range_Legend").css("display", "none");
 
                         xs_clickMapType = XS.Main.clickMapType.none;
                         var lonLat = marker.object.lonlat;
@@ -1446,8 +1472,12 @@ XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, 
                             xs_clickMapFutureId = feature.data.乡镇代码;
                             xs_currentZoneCode = feature.data.乡镇代码;
                             xs_currentZoneName = feature.data.乡镇名称;
-                            xs_superZoneCode = Math.floor(xs_currentZoneName/1000);
-                            XS.Main.Pkjc.clickDetail(superLevel + 1,marker.object.data.TOWB_NAME,marker.object.data.TOWB_ID,false);
+                            xs_superZoneCode = Math.floor(xs_currentZoneCode/1000);
+                            if(marker.object.data.tpl_TownType == "其它"){
+                                XS.Main.Pkjc.clickDetail(superLevel + 1,marker.object.data.TOWB_NAME,marker.object.data.TOWB_ID,false,marker.object.data);
+                            }else{
+                                XS.Main.Pkjc.clickDetail(superLevel + 1,marker.object.data.TOWB_NAME,marker.object.data.TOWB_ID,false);
+                            }
                             var id = marker.object.data.TOWB_ID;
                             XS.Main.readyAddMarkers(lonLat,superLevel+1,id);
                             break;
@@ -1461,7 +1491,11 @@ XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, 
                             xs_currentZoneCode = feature.data.OldID;
                             xs_currentZoneName = feature.data.vd_name;
                             xs_superZoneCode = xs_currentZoneName.toString().slice(0,9);
-                            XS.Main.Pkjc.clickDetail(superLevel + 1,marker.object.data.VBI_NAME,marker.object.data.VBI__ID,false);
+                            if(marker.object.data.VillType == "其它"){
+                                XS.Main.Pkjc.clickDetail(superLevel + 1,marker.object.data.VBI_NAME,marker.object.data.VBI__ID,false,marker.object.data);
+                            }else{
+                                XS.Main.Pkjc.clickDetail(superLevel + 1,marker.object.data.VBI_NAME,marker.object.data.VBI__ID,false);
+                            }
                             var id = marker.object.data.VBI__ID;
                             XS.Main.readyAddMarkers(lonLat,superLevel+1,id);
                             break;
@@ -1491,6 +1525,7 @@ XS.Main.addCityMarker2Layer = function(){
         {
             click: function (marker) {
                 //点击marker回调lonLat
+                XS.Main.depClearMap();
                 XS.Main.Pkjc.clickDetail(XS.Main.ZoneLevel.city,"毕节市",xs_cityID,false);
                 xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 0);
             }
@@ -1556,7 +1591,7 @@ XS.Main.clearMap = function(){
     //if($("#xs_tjfx_range_Legend").length>0) $("#xs_tjfx_range_Legend").remove();
 
     //xs_markerLayer.clearMarkers();
-    //xs_markerLayer.setVisibility(true);
+    //xs_markerLayer.setVisibility(false);
 
     //清空vectorLayer
     //xs_clusterLayer.destroyCluster();
@@ -1571,6 +1606,7 @@ XS.Main.clearMap = function(){
 
 //深度清理地图
 XS.Main.depClearMap = function() {
+    XS.CommonUtil.hideLoader();
     xs_isClickMapFinish = true;
     XS.Main.clearMap();
     XS.Main.closeDialogs("xs_main_detail");
@@ -1587,7 +1623,13 @@ XS.Main.depClearMap = function() {
 
     XS.Main.Poor.clearRelocationLayer();
 }
-
+//清除xs_markerLayer、xs_poorLabelLayer和图例
+XS.Main.clearMarker = function() {
+    xs_markerLayer.clearMarkers();
+    xs_markerLayer.setVisibility(false);
+    xs_poorLabelLayer.removeAllFeatures();
+    if($("#xs_tjfx_range_Legend").length>0) $("#xs_tjfx_range_Legend").remove();
+}
 //意见反馈
 XS.Main.showAdvanceFeedDialog = function(regionid){
     var htmlContent =

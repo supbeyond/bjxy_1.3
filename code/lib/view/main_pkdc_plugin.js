@@ -268,6 +268,19 @@ XS.Main.Pkjc.scatterOption = {
     series: []
 };
 
+var xs_pkdc_cashDetailData = {
+    city:{baseInfo:"",earthInfo:"",income:"",peopleStatistic:"",peopleStatistic2:"",majorWork:"",helpPoor:"",helpInfo:""},
+    county:{baseInfo:"",earthInfo:"",income:"",peopleStatistic:"",peopleStatistic2:"",majorWork:"",helpPoor:"",helpInfo:""},
+    town:{baseInfo:"",baseStatistic:"",publicService:"",productLife:""},
+    vill:{baseInfo:"",baseStatistic:"",popInfo:"",publicService:""}
+};
+var xs_pkdc_cashAnalyData = {
+    city:{drinkWater:"",move:"",trainAnaly:"",socialProtect:"",dangerHouse:"",outPoor:"",poorReason:"",cultureDegree:""},
+    county:{cultureDegree:"",poorReason:"",helpMeasure:"",fiveFour:"",fourFive:""},
+    town:{cultureDegree:"",poorReason:"",helpMeasure:"",fiveFour:"",fourFive:""},
+    vill:{cultureDegree:"",poorReason:"",helpMeasure:"",fiveFour:"",fourFive:"",outPooreVolve:""}
+};
+
 var xs_pkdc_analyMax = 0;
 var xs_pkdc_btnCliDatagridObj = null;
 var xs_pkdc_itemFoundJson = null;
@@ -279,7 +292,7 @@ var xs_pkdc_detailPieMinH = 0;
 var xs_pkdc_detailDomH = 0;
 
 //详情点击函数
-XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
+XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc,cashTownVillBInfoObj){
     xs_pkdc_AnalysTabsChartArr = [];
     xs_pkdc_detailTabsIndex = -1;
     xs_pkdc_AnalysTabsCInit = null;
@@ -302,18 +315,22 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
 
         $("#xs_pkdc_detailTabs").tabs({/*tabWidth:80,*/tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
-
-        data = {pid:currentId};
-        $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
-        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryCityBaseView", data, function(json) {
-            $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
-            if(json) {
-                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.city.tabs[0].name, XS.Main.Pkjc.detailKV.city.tabs[0].value, 2, 50);
-            }else{
-                var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
-                $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
-            }
-        });
+        if(xs_pkdc_cashDetailData.city.baseInfo){
+            XS.Main.Pkjc.dataTable(xs_pkdc_cashDetailData.city.baseInfo, XS.Main.Pkjc.detailKV.city.tabs[0].name, XS.Main.Pkjc.detailKV.city.tabs[0].value, 2, 50);
+        }else{
+            data = {pid:currentId};
+            $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
+            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryCityBaseView", data, function(json) {
+                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                if(json) {
+                    xs_pkdc_cashDetailData.city.baseInfo = json;
+                    XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.city.tabs[0].name, XS.Main.Pkjc.detailKV.city.tabs[0].value, 2, 50);
+                }else{
+                    var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
+                    $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
+                }
+            });
+        }
         /*data = {cbsId:xs_pkdc_currentStateCode};
         $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
         XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryCityBasicStatByFId", data, function(json) {
@@ -330,105 +347,113 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
             onSelect:function(title,index){
                 xs_pkdc_AnalysTabsChartArr = [];
                 var action = "";
-                switch(index){
-                    case 0 ://基本信息
-                        action = "QueryCityBaseView";
-                        break;
-                    case 1 ://土地信息
-                        action = "QueryCityBasicStatByFId";
-                        break;
-                    case 2 ://经济收入
-                        action = "QueryCityBasicStatByFId";
-                        break;
-                    case 3 ://人口统计
-                        action = "QueryCityPopStatByFid";
-                        break;
-                    case 4 ://人口统计2
-                        action = "QueryCountyPeopleCount";
-                        break;
-                    case 5 ://重点工作
-                        action = "QueryCityFocusInfoByFId";
-                        break;
-                    case 6 ://专项扶
-                        action = "QueryCityAllevStatByFId";
-                        break;
-                    case 7 ://扶贫信息
-                        action = "QueryCityHelpStatByFId";
-                        break;
-                }
                 XS.Main.Pkjc.detailWindowTabs(index);
                 xs_pkdc_detailIndex = index;
-                data = {cbsId:currentId,pd_id:currentId,casDate:currentId,pid:currentId};
-                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
-                XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
-                    $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
-                    if(json) {
-                        if(xs_pkdc_detailIndex != index)return;
-                        if(index == 0){
-                            XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.city.tabs[0].name, XS.Main.Pkjc.detailKV.city.tabs[0].value, 2, 50);
-                            return;
+                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                switch(index){
+                    case 0 ://基本信息
+                        if(xs_pkdc_cashDetailData.city.baseInfo){
+                        XS.Main.Pkjc.cityDetailShow(xs_pkdc_cashDetailData.city.baseInfo,index);
+                        }else{
+                            action = "QueryCityBaseView";
                         }
-                        XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.city.tabs[index].name, XS.Main.Pkjc.detailKV.city.tabs [index].value, 3, 35);
-                        switch (index) {
-                            case 1 ://土地信息
-                                //土地信息的pie显示
-                                XS.Main.Pkjc.tabsContentPie("国有土地分布图", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "xs_pkdc_tabsContentPie", [], "");
-                                break;
-                            case 2 ://经济收入
-                                //经济收入的三大产业pie显示
-                                XS.Main.Pkjc.tabsContentPie("国民生产总值分布情况", [1, 2, 3], "xs_pkdc_tabsContentPie", [], "");
-                                break;
-                            case 3 ://村、户、人口的贫困Pie显示
-                                $("#xs_pkdc_tabsContentBtn").css("display", "block");
-                                $("#xs_pkdc_tabsContentBtn1").linkbutton({text: "村及人口贫困分布"});
-                                $("#xs_pkdc_tabsContentBtn2").linkbutton({text: "户贫困分布"});
-
-                                XS.Main.Pkjc.tabsContentPie("村贫困分布情况", [2, 8], "xs_pkdc_tabsContPieDiv1", [1, 2], "非贫困村");
-                                XS.Main.Pkjc.tabsContentPie("人口贫困分布情况", [5, 10], "xs_pkdc_tabsContPieDiv2", [3, 5], "非贫困人口");
-                                $("#xs_pkdc_tabsContentBtn1").click(function () {
-                                    XS.Main.Pkjc.tabsContentPie("村贫困分布情况", [2, 8], "xs_pkdc_tabsContPieDiv1", [1, 2], "非贫困村");
-                                    XS.Main.Pkjc.tabsContentPie("人口贫困分布情况", [5, 10], "xs_pkdc_tabsContPieDiv2", [3, 5], "非贫困人口");
-                                });
-                                $("#xs_pkdc_tabsContentBtn2").click(function () {
-                                    XS.Main.Pkjc.tabsContentPie("户贫困分布情况", [6, 9], "xs_pkdc_tabsContPieDiv1", [4, 6], "非贫困户");
-                                    XS.Main.Pkjc.tabsContentPie("危房户分布情况", [12, 13, 14], "xs_pkdc_tabsContPieDiv2", [], "");
-                                });
-                                break;
-                            case 4 ://人口统计2
-                                $("#xs_pkdc_tabsContentBtn").css("display", "block");
-                                $("#xs_pkdc_tabsContentBtn1").linkbutton({text: "参培及参合"});
-                                $("#xs_pkdc_tabsContentBtn2").linkbutton({text: "务工及资助"});
-
-                                XS.Main.Pkjc.tabsContentPie("贫困人口参加培训情况", [4, 7], "xs_pkdc_tabsContPieDiv1", [], "");
-                                XS.Main.Pkjc.tabsContentPie("贫困人口参加新农合情况", [0, 8], "xs_pkdc_tabsContPieDiv2", [], "");
-                                $("#xs_pkdc_tabsContentBtn1").click(function () {
-                                    XS.Main.Pkjc.tabsContentPie("贫困人口参加培训情况", [4, 7], "xs_pkdc_tabsContPieDiv1", [], "");
-                                    XS.Main.Pkjc.tabsContentPie("贫困人口参加新农合情况", [0, 8], "xs_pkdc_tabsContPieDiv2", [], "");
-                                });
-                                $("#xs_pkdc_tabsContentBtn2").click(function () {
-                                    XS.Main.Pkjc.tabsContentPie("贫困人口务工情况", [5, 6], "xs_pkdc_tabsContPieDiv1", [], "");
-                                    XS.Main.Pkjc.tabsContentPie("享受资助情况", [1, 2], "xs_pkdc_tabsContPieDiv2", [], "");
-                                });
-                                break;
-                            case 5 ://重点工作
-                                XS.Main.Pkjc.dynScatterSeries("扶贫措施", [2, 4, 5, 7, 8], "xs_pkdc_tabsContentPie", 40);
-                                break;
-                            case 6 ://专项扶
-                                XS.Main.Pkjc.tabsContentPie("各项培训情况", [0, 2, 3, 4], "xs_pkdc_tabsContentPie", [], "");
-                                break;
-                            case 7 ://扶贫信息
-                                XS.Main.Pkjc.tabsContentPie("各项扶贫资金投入情况", [6, 7, 8, 9, 10, 11, 12, 13], "xs_pkdc_tabsContentPie", [], "");
-                                break;
+                        break;
+                    case 1 ://土地信息
+                        if(xs_pkdc_cashDetailData.city.earthInfo){
+                            XS.Main.Pkjc.cityDetailShow(xs_pkdc_cashDetailData.city.earthInfo,index);
+                        }else{
+                            action = "QueryCityBasicStatByFId";
                         }
-                    }else{
-                        var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
-                        $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
-                    }
-                });
+                        break;
+                    case 2 ://经济收入
+                        if(xs_pkdc_cashDetailData.city.income){
+                            XS.Main.Pkjc.cityDetailShow(xs_pkdc_cashDetailData.city.income,index);
+                        }else{
+                            action = "QueryCityBasicStatByFId";
+                        }
+                        break;
+                    case 3 ://人口统计
+                        if(xs_pkdc_cashDetailData.city.peopleStatistic){
+                            XS.Main.Pkjc.cityDetailShow(xs_pkdc_cashDetailData.city.peopleStatistic,index);
+                        }else{
+                            action = "QueryCityPopStatByFid";
+                        }
+                        break;
+                    case 4 ://人口统计2
+                        if(xs_pkdc_cashDetailData.city.peopleStatistic2){
+                            XS.Main.Pkjc.cityDetailShow(xs_pkdc_cashDetailData.city.peopleStatistic2,index);
+                        }else{
+                            action = "QueryCountyPeopleCount";
+                        }
+                        break;
+                    case 5 ://重点工作
+                        if(xs_pkdc_cashDetailData.city.majorWork){
+                            XS.Main.Pkjc.cityDetailShow(xs_pkdc_cashDetailData.city.majorWork,index);
+                        }else{
+                            action = "QueryCityFocusInfoByFId";
+                        }
+                        break;
+                    case 6 ://专项扶
+                        if(xs_pkdc_cashDetailData.city.helpPoor){
+                            XS.Main.Pkjc.cityDetailShow(xs_pkdc_cashDetailData.city.helpPoor,index);
+                        }else{
+                            action = "QueryCityAllevStatByFId";
+                        }
+                        break;
+                    case 7 ://扶贫信息
+                        if(xs_pkdc_cashDetailData.city.helpInfo){
+                            XS.Main.Pkjc.cityDetailShow(xs_pkdc_cashDetailData.city.helpInfo,index);
+                        }else{
+                            action = "QueryCityHelpStatByFId";
+                        }
+                        break;
+                }
+                if(action){
+                    //if(xs_pkdc_cashDetailData.city.baseInfo)
+                    data = {cbsId:currentId,pd_id:currentId,casDate:currentId,pid:currentId};
+                    $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
+                    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
+                        $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                        if(json) {
+                            if(xs_pkdc_detailIndex != index)return;
+                            switch (index){
+                                case 0://基本信息
+                                    xs_pkdc_cashDetailData.city.baseInfo = json;
+                                    break;
+                                case 1://土地信息
+                                    xs_pkdc_cashDetailData.city.earthInfo = json;
+                                    break;
+                                case 2://经济收入
+                                    xs_pkdc_cashDetailData.city.income = json;
+                                    break;
+                                case 3 ://人口统计
+                                    xs_pkdc_cashDetailData.city.peopleStatistic = json;
+                                    break;
+                                case 4 ://人口统计2
+                                    xs_pkdc_cashDetailData.city.peopleStatistic2 = json;
+                                    break;
+                                case 5 ://重点工作
+                                    xs_pkdc_cashDetailData.city.majorWork = json;
+                                    break;
+                                case 6 ://专项扶
+                                    xs_pkdc_cashDetailData.city.helpPoor = json;
+                                    break;
+                                case 7 ://扶贫信息
+                                    xs_pkdc_cashDetailData.city.helpInfo = json;
+                                    break;
+                            }
+                            XS.Main.Pkjc.cityDetailShow(json,index);
+                        }else{
+                            var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
+                            $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
+                        }
+                    });
+                }
             }
         });
     }else if(level == XS.Main.ZoneLevel.county)
     {
+        xs_pkdc_cashDetailData.county = {baseInfo:"",earthInfo:"",income:"",peopleStatistic:"",peopleStatistic2:"",majorWork:"",helpPoor:"",helpInfo:""};
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.county.title,"xs_pkdc_detailTabs","top",false);
         XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,function(){
             $("#xs_main_detail").dialog("destroy");
@@ -441,17 +466,22 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
         $("#xs_pkdc_detailTabs").tabs({/*tabWidth:106,*/tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
-        data = {pbno:currentId};
-        $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
-        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryCountyBaseInfoByareaId", data, function(json) {
-            $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
-            if(json && json.length>0) {
-                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.county.tabs[0].name, XS.Main.Pkjc.detailKV.county.tabs[0].value, 2, 50);
-            }else{
-                var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
-                $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
-            }
-        });
+        if(xs_pkdc_cashDetailData.county.baseInfo){
+            XS.Main.Pkjc.dataTable(xs_pkdc_cashDetailData.county.baseInfo, XS.Main.Pkjc.detailKV.county.tabs[0].name, XS.Main.Pkjc.detailKV.county.tabs[0].value, 2, 50);
+        }else{
+            data = {pbno:currentId};
+            $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
+            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryCountyBaseInfoByareaId", data, function(json) {
+                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                if(json && json.length>0) {
+                    xs_pkdc_cashDetailData.county.baseInfo = json;
+                    XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.county.tabs[0].name, XS.Main.Pkjc.detailKV.county.tabs[0].value, 2, 50);
+                }else{
+                    var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
+                    $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
+                }
+            });
+        }
 
         /*var json = XS.Main.CacheZoneInfos.county;
         if(json && json.length>1) {
@@ -503,109 +533,117 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
                 }
             });
         }*/
-        $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
         $("#xs_pkdc_detailTabs").tabs({
             onSelect:function(title,index){
                 var action = "";
                 XS.Main.Pkjc.detailWindowTabs(index);
+                xs_pkdc_detailIndex = index;
+                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
                 switch(index){
                     case 0 ://基本信息
-                        action = "QueryCountyBaseInfoByareaId";
+                        if(xs_pkdc_cashDetailData.county.baseInfo){
+                            XS.Main.Pkjc.countyDetailShow(xs_pkdc_cashDetailData.county.baseInfo,index);
+                        }else{
+                            action = "QueryCountyBaseInfoByareaId";
+                        }
                         break;
                     case 1 ://土地信息
-                        action = "QueryCountyBasicStatByFId";
+                        if(xs_pkdc_cashDetailData.county.earthInfo){
+                            XS.Main.Pkjc.countyDetailShow(xs_pkdc_cashDetailData.county.earthInfo,index);
+                        }else{
+                            action = "QueryCountyBasicStatByFId";
+                        }
                         break;
                     case 2 ://经济收入
-                        action = "QueryCountyBasicStatByFId";
+                        if(xs_pkdc_cashDetailData.county.income){
+                            XS.Main.Pkjc.countyDetailShow(xs_pkdc_cashDetailData.county.income,index);
+                        }else{
+                            action = "QueryCountyBasicStatByFId";
+                        }
                         break;
                     case 3 ://人口统计
-                        action = "QueryCountyPopStatByFid";
+                        if(xs_pkdc_cashDetailData.county.peopleStatistic){
+                            XS.Main.Pkjc.countyDetailShow(xs_pkdc_cashDetailData.county.peopleStatistic,index);
+                        }else{
+                            action = "QueryCountyPopStatByFid";
+                        }
                         break;
                     case 4 ://人口统计2
-                        action = "QueryCountyPeopleCount";
+                        if(xs_pkdc_cashDetailData.county.peopleStatistic2){
+                            XS.Main.Pkjc.countyDetailShow(xs_pkdc_cashDetailData.county.peopleStatistic2,index);
+                        }else{
+                            action = "QueryCountyPeopleCount";
+                        }
                         break;
                     case 5 ://重点工作
-                        action = "QueryCountyFocusInfoByFId";
+                        if(xs_pkdc_cashDetailData.county.majorWork){
+                            XS.Main.Pkjc.countyDetailShow(xs_pkdc_cashDetailData.county.majorWork,index);
+                        }else{
+                            action = "QueryCountyFocusInfoByFId";
+                        }
                         break;
                     case 6 ://专项扶贫
-                        action = "QueryCountyAllevStatByFId";
+                        if(xs_pkdc_cashDetailData.county.helpPoor){
+                            XS.Main.Pkjc.countyDetailShow(xs_pkdc_cashDetailData.county.helpPoor,index);
+                        }else{
+                            action = "QueryCountyAllevStatByFId";
+                        }
                         break;
                     case 7 ://扶贫信息
-                        action = "QueryCountyHelpStatByFId";
+                        if(xs_pkdc_cashDetailData.county.helpInfo){
+                            XS.Main.Pkjc.countyDetailShow(xs_pkdc_cashDetailData.county.helpInfo,index);
+                        }else{
+                            action = "QueryCountyHelpStatByFId";
+                        }
                         break;
                 }
-                xs_pkdc_detailIndex = index;
-                data = {cbsId:currentId, pd_id:currentId, casDate:currentId,pid:currentId,pbno:currentId};
-                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
-                XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
-                    $("#xs_pkdc_pkBaseData_loading").css({"visibility": "hidden"});
-                    if(json && (index==4|| json.length > 0)) {
-                        if(xs_pkdc_detailIndex != index)return;
-                        if(index == 0){
-                            XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.county.tabs[index].name, XS.Main.Pkjc.detailKV.county.tabs[index].value, 2, 50);
-                            return;
+                if(action){
+                    data = {cbsId:currentId, pd_id:currentId, casDate:currentId,pid:currentId,pbno:currentId};
+                    $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
+                    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
+                        $("#xs_pkdc_pkBaseData_loading").css({"visibility": "hidden"});
+                        if(json && (index==4|| json.length > 0)) {
+                            if(xs_pkdc_detailIndex != index)return;switch (index){
+                                case 0://基本信息
+                                    xs_pkdc_cashDetailData.county.baseInfo = json;
+                                    break;
+                                case 1://土地信息
+                                    xs_pkdc_cashDetailData.county.earthInfo = json;
+                                    break;
+                                case 2://经济收入
+                                    xs_pkdc_cashDetailData.county.income = json;
+                                    break;
+                                case 3 ://人口统计
+                                    xs_pkdc_cashDetailData.county.peopleStatistic = json;
+                                    break;
+                                case 4 ://人口统计2
+                                    xs_pkdc_cashDetailData.county.peopleStatistic2 = json;
+                                    break;
+                                case 5 ://重点工作
+                                    xs_pkdc_cashDetailData.county.majorWork = json;
+                                    break;
+                                case 6 ://专项扶
+                                    xs_pkdc_cashDetailData.county.helpPoor = json;
+                                    break;
+                                case 7 ://扶贫信息
+                                    xs_pkdc_cashDetailData.county.helpInfo = json;
+                                    break;
+                            }
+                            XS.Main.Pkjc.countyDetailShow(json,index);
+                        }else{
+                            var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
+                            $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
                         }
-                        XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.county.tabs[index].name, XS.Main.Pkjc.detailKV.county.tabs[index].value, 3, 35);
-                        switch (index) {
-                            case 1 ://土地信息
-                                //土地信息的pie显示
-                                XS.Main.Pkjc.tabsContentPie("国有土地分布图", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "xs_pkdc_tabsContentPie", [], "");
-                                break;
-                            case 2 ://经济收入
-                                //经济收入的三大产业pie显示
-                                XS.Main.Pkjc.tabsContentPie("国民生产总值分布情况", [1, 2, 3], "xs_pkdc_tabsContentPie", [], "");
-                                break;
-                            case 3 ://村、户、人口的贫困Pie显示
-                                $("#xs_pkdc_tabsContentBtn").css("display", "block");
-                                $("#xs_pkdc_tabsContentBtn1").linkbutton({text: "村及人口贫困分布"});
-                                $("#xs_pkdc_tabsContentBtn2").linkbutton({text: "户贫困分布"});
-
-                                XS.Main.Pkjc.tabsContentPie("村贫困分布情况", [2, 8], "xs_pkdc_tabsContPieDiv1", [1, 2], "非贫困村");
-                                XS.Main.Pkjc.tabsContentPie("人口贫困分布情况", [5, 10], "xs_pkdc_tabsContPieDiv2", [3, 5], "非贫困人口");
-                                $("#xs_pkdc_tabsContentBtn1").click(function () {
-                                    XS.Main.Pkjc.tabsContentPie("村贫困分布情况", [2, 8], "xs_pkdc_tabsContPieDiv1", [1, 2], "非贫困村");
-                                    XS.Main.Pkjc.tabsContentPie("人口贫困分布情况", [5, 10], "xs_pkdc_tabsContPieDiv2", [3, 5], "非贫困人口");
-                                });
-                                $("#xs_pkdc_tabsContentBtn2").click(function () {
-                                    XS.Main.Pkjc.tabsContentPie("户贫困分布情况", [6, 9], "xs_pkdc_tabsContPieDiv1", [4, 6], "非贫困户");
-                                    XS.Main.Pkjc.tabsContentPie("危房户分布情况", [12, 13, 14], "xs_pkdc_tabsContPieDiv2", [], "");
-                                });
-                                break;
-                            case 4 ://人口统计2
-                                $("#xs_pkdc_tabsContentBtn").css("display", "block");
-                                $("#xs_pkdc_tabsContentBtn1").linkbutton({text: "参培及参合"});
-                                $("#xs_pkdc_tabsContentBtn2").linkbutton({text: "务工及资助"});
-
-                                XS.Main.Pkjc.tabsContentPie("贫困人口参加培训情况", [4, 7], "xs_pkdc_tabsContPieDiv1", [], "");
-                                XS.Main.Pkjc.tabsContentPie("贫困人口参加新农合情况", [0, 8], "xs_pkdc_tabsContPieDiv2", [], "");
-                                $("#xs_pkdc_tabsContentBtn1").click(function () {
-                                    XS.Main.Pkjc.tabsContentPie("贫困人口参加培训情况", [4, 7], "xs_pkdc_tabsContPieDiv1", [], "");
-                                    XS.Main.Pkjc.tabsContentPie("贫困人口参加新农合情况", [0, 8], "xs_pkdc_tabsContPieDiv2", [], "");
-                                });
-                                $("#xs_pkdc_tabsContentBtn2").click(function () {
-                                    XS.Main.Pkjc.tabsContentPie("贫困人口务工情况", [5, 6], "xs_pkdc_tabsContPieDiv1", [], "");
-                                    XS.Main.Pkjc.tabsContentPie("享受资助情况", [1, 2], "xs_pkdc_tabsContPieDiv2", [], "");
-                                });
-                                break;
-                            case 5 ://重点工作
-                                XS.Main.Pkjc.dynScatterSeries("扶贫措施", [2, 4, 5, 7, 8], "xs_pkdc_tabsContentPie", 5);
-                                break;
-                            case 6 ://专项扶
-                                XS.Main.Pkjc.tabsContentPie("各项培训情况", [0, 2, 3, 4], "xs_pkdc_tabsContentPie", [], "");
-                                break;
-                            case 7 ://扶贫信息
-                                XS.Main.Pkjc.tabsContentPie("各项扶贫资金投入情况", [6, 7, 8, 9, 10, 11, 12, 13], "xs_pkdc_tabsContentPie", [], "");
-                                break;
-                        }
-                    }else{
-                        var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
-                        $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
-                    }
-                });
+                    });
+                }
             }
         });
     }else if(level == XS.Main.ZoneLevel.town)
     {
+        xs_pkdc_cashDetailData.town = {baseInfo:"",baseStatistic:"",publicService:"",productLife:""};
+        if(cashTownVillBInfoObj){
+            xs_pkdc_cashDetailData.town.baseInfo = cashTownVillBInfoObj;
+        }
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.town.title,"xs_pkdc_detailTabs","top",false);
         XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,function(){
             $("#xs_main_detail").dialog("destroy");
@@ -618,84 +656,93 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
         $("#xs_pkdc_detailTabs").tabs({/*tabWidth:215,*/tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
 
-        data = {pd_id:currentId};
-        $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
-        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTownsBaseInfoById", data, function(json) {
-            $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
-            if(json) {
-                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[0].name, XS.Main.Pkjc.detailKV.town.tabs[0].value, 2, 50);
-            }else{
-                var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
-                $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
-            }
-        });
+        if(xs_pkdc_cashDetailData.town.baseInfo){
+            XS.Main.Pkjc.dataTable(xs_pkdc_cashDetailData.town.baseInfo, XS.Main.Pkjc.detailKV.town.tabs[0].name, XS.Main.Pkjc.detailKV.town.tabs[0].value, 2, 50);
+        }else{
+            data = {pd_id:currentId};
+            $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
+            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTownsBaseInfoById", data, function(json) {
+                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                if(json) {
+                    XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[0].name, XS.Main.Pkjc.detailKV.town.tabs[0].value, 2, 50);
+                }else{
+                    var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
+                    $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
+                }
+            });
+        }
         $("#xs_pkdc_detailTabs").tabs({
             onSelect: function (title, index) {
                 var action = "";
-                switch (index) {
-                    case 0 ://基本信息
-                        action = "QueryTownsBaseInfoById";
-                        break;
-                    case 1 ://基本统计
-                        action = "QueryTownsBasicStatById";
-                        break;
-                    case 2 ://公共服务
-                        action = "QueryTownsPubStatByTid";
-                        break;
-                    case 3 ://生产生活
-                        action = "QueryTownsProLivByTid";
-                        break;
-                }
                 XS.Main.Pkjc.detailWindowTabs(index);
                 xs_pkdc_detailIndex = index;
-                data = {pd_id:currentId, tid:currentId};
-                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
-                XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
-                    $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
-                    if(json && (index==0 || json.length > 0)) {
-                        if(xs_pkdc_detailIndex != index)return;
-                        switch (index) {
-                            case 0 :
-                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value, 2, 50);
-                                break;
-                            case 1 ://基本统计
-                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value, 3, 35);
-                                $("#xs_pkdc_tabsContentBtn").css("display", "block");
-                                $("#xs_pkdc_tabsContentBtn1").linkbutton({text: "村、户及人口情况"});
-                                $("#xs_pkdc_tabsContentBtn2").linkbutton({text: "资助、务工及少数民族"});
-
-                                XS.Main.Pkjc.tabsContentPie("贫困村分布情况", [1], "xs_pkdc_tabsContPieDiv1", [0, 1], "非贫困村");
-                                XS.Main.Pkjc.tabsContentPie("贫困户分布情况", [7], "xs_pkdc_tabsContPieDiv2", [4, 7], "非贫困户");
-                                XS.Main.Pkjc.tabsContentPie("贫困人口分布情况", [6], "xs_pkdc_tabsContPieDiv3", [3, 6], "非贫困村");
-                                $("#xs_pkdc_tabsContentBtn1").click(function () {
-                                    XS.Main.Pkjc.tabsContentPie("贫困村分布情况", [1], "xs_pkdc_tabsContPieDiv1", [0, 1], "非贫困村");
-                                    XS.Main.Pkjc.tabsContentPie("贫困户分布情况", [7], "xs_pkdc_tabsContPieDiv2", [4, 7], "非贫困户");
-                                    XS.Main.Pkjc.tabsContentPie("贫困人口分布情况", [6], "xs_pkdc_tabsContPieDiv3", [3, 6], "非贫困村");
-                                });
-                                $("#xs_pkdc_tabsContentBtn2").click(function () {
-                                    XS.Main.Pkjc.tabsContentPie("资助情况", [5, 12], "xs_pkdc_tabsContPieDiv1", [], "");
-                                    XS.Main.Pkjc.tabsContentPie("少数民族分布情况", [9], "xs_pkdc_tabsContPieDiv2", [3, 9], "非少数民族");
-                                    XS.Main.Pkjc.tabsContentPie("务工情况", [10, 11], "xs_pkdc_tabsContPieDiv3", [], "");
-                                });
-                                break;
-                            case 2 ://公共服务
-                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value, 3, 35);
-                                XS.Main.Pkjc.tabsContentPie("公共设施分布情况", [0, 1, 2, 3, 4, 5, 6], "xs_pkdc_tabsContentPie", [], "");
-                                break;
-                            case 3 ://生产生活
-                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value, 3, 35);
-                                XS.Main.Pkjc.dynScatterSeries("扶贫措施", [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "xs_pkdc_tabsContentPie", 100);
-                                break;
+                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                switch (index) {
+                    case 0 ://基本信息
+                        if(xs_pkdc_cashDetailData.town.baseInfo){
+                            XS.Main.Pkjc.townDetailShow(xs_pkdc_cashDetailData.town.baseInfo,index);
+                        }else{
+                            action = "QueryTownsBaseInfoById";
                         }
-                    }else{
-                        var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
-                        $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
-                    }
-                });
+                        break;
+                    case 1 ://基本统计
+                        if(xs_pkdc_cashDetailData.town.baseStatistic){
+                            XS.Main.Pkjc.townDetailShow(xs_pkdc_cashDetailData.town.baseStatistic,index);
+                        }else{
+                            action = "QueryTownsBasicStatById";
+                        }
+                        break;
+                    case 2 ://公共服务
+                        if(xs_pkdc_cashDetailData.town.publicService){
+                            XS.Main.Pkjc.townDetailShow(xs_pkdc_cashDetailData.town.publicService,index);
+                        }else{
+                            action = "QueryTownsPubStatByTid";
+                        }
+                        break;
+                    case 3 ://生产生活
+                        if(xs_pkdc_cashDetailData.town.productLife){
+                            XS.Main.Pkjc.townDetailShow(xs_pkdc_cashDetailData.town.productLife,index);
+                        }else{
+                            action = "QueryTownsProLivByTid";
+                        }
+                        break;
+                }
+                if(action){
+                    data = {pd_id:currentId, tid:currentId};
+                    $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
+                    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
+                        $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                        if(json && (index==0 || json.length > 0)) {
+                            if(xs_pkdc_detailIndex != index)return;
+                            switch (index) {
+                                case 0 ://基本信息
+                                    xs_pkdc_cashDetailData.town.baseInfo = json;
+                                    break;
+                                case 1 ://基本统计
+                                    xs_pkdc_cashDetailData.town.baseStatistic = json;
+                                    break;
+                                case 2 ://公共服务
+                                    xs_pkdc_cashDetailData.town.publicService = json;
+                                    break;
+                                case 3 ://生产生活
+                                    xs_pkdc_cashDetailData.town.productLife = json;
+                                    break;
+                            }
+                            XS.Main.Pkjc.townDetailShow(json,index);
+                        }else{
+                            var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
+                            $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
+                        }
+                    });
+                }
             }
         });
     }else if(level == XS.Main.ZoneLevel.village)
     {
+        xs_pkdc_cashDetailData.vill = {baseInfo:"",baseStatistic:"",popInfo:"",publicService:""};
+        if(cashTownVillBInfoObj){
+            xs_pkdc_cashDetailData.vill.baseInfo = cashTownVillBInfoObj;
+        }
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.village.title,"xs_pkdc_detailTabs","top",false);
         XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,function(){
             $("#xs_main_detail").dialog("destroy");
@@ -707,81 +754,85 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc){
 
         $("#xs_pkdc_detailTabs").tabs({/*tabWidth:215,*/tabHeight:35});
         XS.Main.Pkjc.detailWindowTabs(0);
-
-        data = {pd_id:currentId};
-        $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
-        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryVillBaseById", data, function(json) {
-            $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
-            if(json) {
-                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.village.tabs[0].name, XS.Main.Pkjc.detailKV.village.tabs[0].value, 2, 50);
-            }else{
-                var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
-                $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
-            }
-        });
+        if(xs_pkdc_cashDetailData.vill.baseInfo){
+            XS.Main.Pkjc.dataTable(xs_pkdc_cashDetailData.vill.baseInfo, XS.Main.Pkjc.detailKV.village.tabs[0].name, XS.Main.Pkjc.detailKV.village.tabs[0].value, 2, 50);
+        }else{
+            data = {pd_id:currentId};
+            $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
+            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryVillBaseById", data, function(json) {
+                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                if(json) {
+                    XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.village.tabs[0].name, XS.Main.Pkjc.detailKV.village.tabs[0].value, 2, 50);
+                }else{
+                    var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
+                    $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
+                }
+            });
+        }
         $("#xs_pkdc_detailTabs").tabs({
             onSelect: function (title, index) {
                 var action = "";
-                switch (index) {
-                    case 0 ://基本信息
-                        action = "QueryVillBaseById";
-                        break;
-                    case 1://基本统计
-                        action = "QueryVillDynamicById";
-                        break;
-                    case 2://人口信息
-                        action = "QueryVillCountById";
-                        break;
-                    case 3://公共服务
-                        action = "QueryPoorPublicVill";
-                        break;
-                }
                 XS.Main.Pkjc.detailWindowTabs(index);
                 xs_pkdc_detailIndex = index;
-                data = {pd_id:currentId,pid:currentId};
-                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
-                XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
-                    $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
-                    if(json && (index==0 || json.length > 0)) {
-                        if(xs_pkdc_detailIndex != index)return;
-                        switch (index) {
-                            case 0 ://基本信息
-                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.village.tabs[index].name, XS.Main.Pkjc.detailKV.village.tabs[index].value, 2, 50);
-                                break;
-                            case 1://基本统计
-                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.village.tabs[index].name, XS.Main.Pkjc.detailKV.village.tabs[index].value, 3, 35);
-                                XS.Main.Pkjc.tabsContentPie("国有土地分布图", [5, 6, 7, 8, 9], "xs_pkdc_tabsContentPie", [], "");
-                                break;
-                            case 2://人口信息
-                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.village.tabs[index].name, XS.Main.Pkjc.detailKV.village.tabs[index].value, 3, 30);
-                                $("#xs_pkdc_tabsContentBtn").css("display", "block");
-                                $("#xs_pkdc_tabsContentBtn1").linkbutton({text: "户、人口及资助情况"});
-                                $("#xs_pkdc_tabsContentBtn2").linkbutton({text: "健康、劳动力及参培"});
-
-                                XS.Main.Pkjc.tabsContentPie("贫困户分布情况", [3], "xs_pkdc_tabsContPieDiv1", [1, 3], "非贫困户");
-                                XS.Main.Pkjc.tabsContentPie("贫困人口分布情况", [4], "xs_pkdc_tabsContPieDiv2", [2, 4], "非贫困人口");
-                                XS.Main.Pkjc.tabsContentPie("资助情况", [5, 6], "xs_pkdc_tabsContPieDiv3", [], "");
-                                $("#xs_pkdc_tabsContentBtn1").click(function () {
-                                    XS.Main.Pkjc.tabsContentPie("贫困户分布情况", [3], "xs_pkdc_tabsContPieDiv1", [1, 3], "非贫困户");
-                                    XS.Main.Pkjc.tabsContentPie("贫困人口分布情况", [4], "xs_pkdc_tabsContPieDiv2", [2, 4], "非贫困人口");
-                                    XS.Main.Pkjc.tabsContentPie("资助情况", [5, 6], "xs_pkdc_tabsContPieDiv3", [], "");
-                                });
-                                $("#xs_pkdc_tabsContentBtn2").click(function () {
-                                    XS.Main.Pkjc.tabsContentPie("健康状况", [9], "xs_pkdc_tabsContPieDiv1", [2, 9], "非残疾人");
-                                    XS.Main.Pkjc.tabsContentPie("劳动力情况", [10], "xs_pkdc_tabsContPieDiv2", [2, 10], "非贫困人口");
-                                    XS.Main.Pkjc.tabsContentPie("参培情况", [11], "xs_pkdc_tabsContPieDiv3", [2, 11], "未参加培训人数");
-                                });
-                                break;
-                            case 3://公共服务
-                                XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.village.tabs[index].name, XS.Main.Pkjc.detailKV.village.tabs[index].value, 3, 35);
-                                XS.Main.Pkjc.tabsContentPie("公共设施情况", [0, 1, 2, 3, 4], "xs_pkdc_tabsContentPie", [], "");
-                                break;
+                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                switch (index) {
+                    case 0 ://基本信息
+                        if(xs_pkdc_cashDetailData.vill.baseInfo){
+                            XS.Main.Pkjc.villDetailShow(xs_pkdc_cashDetailData.vill.baseInfo,index);
+                        }else{
+                            action = "QueryVillBaseById";
                         }
-                    }else{
-                        var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
-                        $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
-                    }
-                });
+                        break;
+                    case 1://基本统计
+                        if(xs_pkdc_cashDetailData.vill.baseStatistic){
+                            XS.Main.Pkjc.villDetailShow(xs_pkdc_cashDetailData.vill.baseStatistic,index);
+                        }else{
+                            action = "QueryVillDynamicById";
+                        }
+                        break;
+                    case 2://人口信息
+                        if(xs_pkdc_cashDetailData.vill.popInfo){
+                            XS.Main.Pkjc.villDetailShow(xs_pkdc_cashDetailData.vill.popInfo,index);
+                        }else{
+                            action = "QueryVillCountById";
+                        }
+                        break;
+                    case 3://公共服务
+                        if(xs_pkdc_cashDetailData.vill.publicService){
+                            XS.Main.Pkjc.villDetailShow(xs_pkdc_cashDetailData.vill.publicService,index);
+                        }else{
+                            action = "QueryPoorPublicVill";
+                        }
+                        break;
+                }
+                if(action){
+                    data = {pd_id:currentId,pid:currentId};
+                    $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
+                    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
+                        $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                        if(json && (index==0 || json.length > 0)) {
+                            if(xs_pkdc_detailIndex != index)return;
+                            switch (index) {
+                                case 0 ://基本信息
+                                    xs_pkdc_cashDetailData.vill.baseInfo = json;
+                                    break;
+                                case 1://基本统计
+                                    xs_pkdc_cashDetailData.vill.baseStatistic = json;
+                                    break;
+                                case 2://人口信息
+                                    xs_pkdc_cashDetailData.vill.popInfo = json;
+                                    break;
+                                case 3://公共服务
+                                    xs_pkdc_cashDetailData.vill.publicService = json;
+                                    break;
+                            }
+                            XS.Main.Pkjc.villDetailShow(json,index);
+                        }else{
+                            var xs_pkdc_tabsContentDomH = $('#xs_pkdc_tabsContentDom').height() + 'px';
+                            $('#xs_pkdc_tabsContentDom').empty().css({height:xs_pkdc_tabsContentDomH,lineHeight:xs_pkdc_tabsContentDomH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
+                        }
+                    });
+                }
             }
         });
     }
@@ -821,53 +872,36 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
                 '<div id="xs_pkdc_AnalysTabsChart" style="width:610px;height: 100%;overflow-x1: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;"></div>' +
             '</div>');
 
-         var data = {pd_id:currentCode};
-        $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
-        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryUnSafeWaterBycount", data, function(json) {
-            $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
-            if(json && json.length>0 && xs_pkdc_analyIndex == 0){
-                var xAxis = ['','category',[],true];
-                var series = [['未安全饮水人数','bar',0,[],null],['未安全饮水率','line',1,[],false]];
-                XS.Main.Pkjc.ananlyValueOfJson(json,[xAxis[2],series[0][3],series[1][3]],['REGION_Name','UnwaterNum','UnwaterRate'],'',[]);
-                XS.Main.Pkjc.ciAnalyOpt([5,'饮水分析'],['axis',['line',""]],[40,['未安全饮水人数','未安全饮水率']],[120,40,60,30],xAxis,
-                    [['人数','value'],['(%)','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
-            }else{
-                var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
-                $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
-            }
-        });
+        if(xs_pkdc_cashAnalyData.city.drinkWater){
+            var xAxis = ['','category',[],true];
+            var series = [['未安全饮水人数','bar',0,[],null],['未安全饮水率','line',1,[],false]];
+            XS.Main.Pkjc.ananlyValueOfJson(xs_pkdc_cashAnalyData.city.drinkWater,[xAxis[2],series[0][3],series[1][3]],['REGION_Name','UnwaterNum','UnwaterRate'],'',[]);
+            XS.Main.Pkjc.ciAnalyOpt([5,'饮水分析'],['axis',['line',""]],[40,['未安全饮水人数','未安全饮水率']],[120,40,60,30],xAxis,
+                [['人数','value'],['(%)','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
+        }else{
+            var data = {pd_id:currentCode};
+            $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
+            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryUnSafeWaterBycount", data, function(json) {
+                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                if(json && json.length>0 && xs_pkdc_analyIndex == 0){
+                    xs_pkdc_cashAnalyData.city.drinkWater = json;
+                    var xAxis = ['','category',[],true];
+                    var series = [['未安全饮水人数','bar',0,[],null],['未安全饮水率','line',1,[],false]];
+                    XS.Main.Pkjc.ananlyValueOfJson(json,[xAxis[2],series[0][3],series[1][3]],['REGION_Name','UnwaterNum','UnwaterRate'],'',[]);
+                    XS.Main.Pkjc.ciAnalyOpt([5,'饮水分析'],['axis',['line',""]],[40,['未安全饮水人数','未安全饮水率']],[120,40,60,30],xAxis,
+                        [['人数','value'],['(%)','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
+                }else{
+                    var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
+                    $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
+                }
+            });
+        }
         $("#xs_pkdc_AnalysTabs").tabs({
             onSelect:function(title,index){
                 xs_pkdc_AnalysTabsCInit = null;
                 xs_pkdc_AnalysTabsChartArr = [];
                 xs_pkdc_analyIndex = index;
                 var action = "";
-                switch(index){
-                    case 0 ://饮水分析
-                        action = "QueryUnSafeWaterBycount";
-                        break;
-                    case 1 ://异地搬迁
-                        action = "QueryMovePoorBycount";
-                        break;
-                    case 2 ://培训分析
-                        action = "QueryTrainCountBycounty";
-                        break;
-                    case 3 ://社会保障
-                        action = "QuerySocityProtectBycounty";
-                        break;
-                    case 4 ://危房情况
-                        action = "QueryDangerHouseBycount";
-                        break;
-                    case 5 ://脱贫分析
-                        action = "QueryOutPoorBycount";
-                        break;
-                    case 6 ://致贫原因
-                        action = "QueryGroupbyReasonById";
-                        break;
-                    case 7 ://文化程度
-                        action = "QueryGroupbyeduById";
-                        break;
-                }
                 $("#xs_pkdc_AnalysTabsChartC").remove();
                 selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab",index);
 
@@ -877,98 +911,111 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
                 if(xs_pkdc_isAnalysMax){
                     $("#xs_pkdc_AnalysTabsChart").css({width:"100%"});
                 }
-                data = {pd_id:currentCode,pid:currentCode};
-                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
-                XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
-                    $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
-                    if (json && json.length > 0){
-                        if(xs_pkdc_analyIndex == index){
-                            switch (index){
-                                case 0 ://饮水分析
-                                    var xAxis = ['','category',[],true];
-                                    var series = [['未安全饮水人数','bar',0,[],null],['未安全饮水率','line',1,[],false]];
-                                    XS.Main.Pkjc.ananlyValueOfJson(json,[xAxis[2],series[0][3],series[1][3]],['REGION_Name','UnwaterNum','UnwaterRate'],'',[]);
-                                    XS.Main.Pkjc.ciAnalyOpt([5,'饮水分析'],['axis',['line']],[40,['未安全饮水人数','未安全饮水率']],[120,40,80,40],xAxis,
-                                        [['人数','value'],['(%)','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
-
-                                    break;
-                                case 1 ://异地搬迁
-                                    $("#xs_pkdc_AnalysTabsChart").append('<div id="xs_pkdc_AnalysTabsChart1" style="width:100%;height: 500px;box-sizing: border-box"></div>');
-                                    $("#xs_pkdc_AnalysTabsChart").append('<div id="xs_pkdc_AnalysTabsChart2" style="width:100%;height: 400px;box-sizing: border-box"></div>');
-                                    var radar = ['60%',["50%","55%"],[[],[]]];
-                                    var radarSeries = [['异地搬迁户数 vs 异地搬迁人数','radar',[['异地搬迁户数',[]],['异地搬迁人数',[]]]]];
-
-                                    var xAxis = ['','category',[],true];
-                                    var lineSeries = [['异地搬迁率','line',0,[],false]];
-                                    XS.Main.Pkjc.ananlyValueOfJson(json,[radar[2][0],radarSeries[0][2][0][1],radarSeries[0][2][1][1],xAxis[2],lineSeries[0][3]],
-                                        ['REGION_Name','MoveHnum','MovePnum','REGION_Name','MoveRate'],'MovePnum',radar[2]);
-                                    XS.Main.Pkjc.ciAnalyOpt([5,'异地搬迁'],['',[]],[40,["异地搬迁户数","异地搬迁人数"]],[],[],[],radar,[],radarSeries,"xs_pkdc_AnalysTabsChart1");
-                                    XS.Main.Pkjc.ciAnalyOpt([0,"异地搬迁率"],['item',['']],[],[40,40,40,30],xAxis,[['(%)','value']],[],[],lineSeries,"xs_pkdc_AnalysTabsChart2");
-                                    break;
-                                case 2 ://培训分析
-                                    $("#xs_pkdc_AnalysTabsChart").append('<div id="xs_pkdc_AnalysTabsChart1" style="width:100%;height: 500px;box-sizing: border-box"></div>');
-                                    $("#xs_pkdc_AnalysTabsChart").append('<div id="xs_pkdc_AnalysTabsChart2" style="width:100%;height: 400px;box-sizing: border-box"></div>');
-                                    var legend = [40,['省内务工人数','省外务工人数','劳动力人数','参加培训人数']];
-                                    var yAxis = [['','category',[]]];
-                                    var series = [['省内务工人数','bar',0,[],'总量',"insideRight"],['省外务工人数','bar',0,[],'总量',"insideRight"],
-                                        ['劳动力人数','bar',0,[],'总量',"insideRight"],['参加培训人数','bar',0,[],'总量',"insideRight"]];
-                                    var lineXAxis = ['','category',[],true];
-                                    var lineSeries = [['培训率','line',0,[],false],['省外务工率','line',0,[],false],['省内务工率','line',0,[],false]];
-                                    XS.Main.Pkjc.ananlyValueOfJson(json,[yAxis[0][2],series[0][3],series[1][3],series[2][3],series[3][3],lineXAxis[2],lineSeries[0][3],lineSeries[1][3],lineSeries[2][3]],
-                                        ['REGION_Name','InWorkNum','OutWorkNum','LaborNum','TrainNum','REGION_Name','TrainRate','OutWorkRate','InWorkRate'],'',[]);
-                                    XS.Main.Pkjc.ciAnalyOpt([5,'培训分析'],['axis',['shadow']],legend,[90,40,80,50],['','value'],yAxis,[],[],series,"xs_pkdc_AnalysTabsChart1");
-                                    XS.Main.Pkjc.ciAnalyOpt([],['axis',['line']],[30,['培训率',"省外务工率","省内务工率"]],[60,40,40,30],lineXAxis,[['(%)','value']],[],[],lineSeries,"xs_pkdc_AnalysTabsChart2");
-                                    break;
-                                case 3 ://社会保障
-                                    var legend = [40,['合作医疗','养老保险','低保','合作医疗率','养老保险率','低保率']];
-                                    var xAxis = ['','category',[],true];
-                                    var series = [];
-                                    for(var i=0;i<6;i++){
-                                        if(i<3){series.push([legend[1][i],'bar',0,[],null]);}
-                                        else{series.push([legend[1][i],'line',1,[],false]);}
-                                    }
-                                    XS.Main.Pkjc.ananlyValueOfJson(json,[xAxis[2],series[0][3],series[1][3],series[2][3],series[3][3],series[4][3],series[5][3]],
-                                        ['REGION_Name','CoMedicalNum','EndowNum','LowNum','CoMedicalRate','EndowRate','LowRate'],'',[]);
-                                    XS.Main.Pkjc.ciAnalyOpt([5,'社会保障'],['axis',['line']],legend,[120,40,80,40],xAxis,[['人数','value'],['(%)','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
-                                    break;
-                                case 4 ://危房情况
-                                    var legend = [40,[]];
-                                    var series = [['危房户数','pie',[[],[]],[20, 90],['30%', '60%'],'radius'],['危房发生率','pie',[[],[]],[20, 90],['70%', '60%'],'area']];
-                                    XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1],series[0][2][0],series[0][2][1],series[1][2][0],series[1][2][1]],
-                                        ['REGION_Name','REGION_Name','DangerHnum','REGION_Name','DangerHRate'],'',[]);
-                                    XS.Main.Pkjc.ciAnalyOpt([5,'危房情况'],['',[]],legend,[120,40,80,40],[],[],[],[],series,"xs_pkdc_AnalysTabsChart");
-                                    break;
-                                case 5 ://脱贫分析
-                                    var legend = [40,["脱贫率","脱贫人数"]];
-                                    var xAxis = ['','category',[],true];
-                                    var series = [['脱贫户数','pie',[[],[]],[0, 60],['80%', '45%'],false],['脱贫人数','bar',0,[],false,true,'top'],['脱贫率','line',1,[],false]];
-                                    XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1],xAxis[2],series[0][2][0],series[0][2][1],series[1][3],series[2][3]],
-                                        ['REGION_Name','REGION_Name','REGION_Name','OutPoorHNum','OutPoorPNum','OutPoorRate'],'',[]);
-                                    XS.Main.Pkjc.ciAnalyOpt([5,'脱贫分析'],['',[]],legend,[120,40,80,40],xAxis,[['人数','value'],['(%)','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
-                                    break;
-                                case 6 ://致贫原因
-                                    var radar = ['60%',["50%","55%"],[[],[]]];
-                                    var series = [['','radar',[['人数',[]]]]];
-                                    XS.Main.Pkjc.ananlyValueOfJson(json,[radar[2][0],series[0][2][0][1]],['REASON','NUM'],'NUM',radar[2]);
-                                    XS.Main.Pkjc.ciAnalyOpt([5,'致贫原因'],['',[]],[],[],[],[],radar,[],series,"xs_pkdc_AnalysTabsChart");
-                                    break;
-                                case 7 ://文化程度
-                                    var xAxis = ['','category',[],true];
-                                    var series = [['文化程度','bar',0,[],true,true,'top']];
-                                    XS.Main.Pkjc.ananlyValueOfJson(json,[xAxis[2],series[0][3]],['EDU','NUM'],'',[]);
-                                    XS.Main.Pkjc.ciAnalyOpt([10,'文化程度'],['item',['']],[],[100,60,80,40],xAxis,[['人数','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
-                                    break;
-                            }
+                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                switch(index){
+                    case 0 ://饮水分析
+                        if(xs_pkdc_cashAnalyData.city.drinkWater){
+                            XS.Main.Pkjc.cityAnalyShow (xs_pkdc_cashAnalyData.city.drinkWater,index);
+                        }else{
+                            action = "QueryUnSafeWaterBycount";
                         }
-                    }else{
-                        var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
-                        $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
-                    }
-                });
+                        break;
+                    case 1 ://异地搬迁
+                        if(xs_pkdc_cashAnalyData.city.move){
+                            XS.Main.Pkjc.cityAnalyShow(xs_pkdc_cashAnalyData.city.move,index);
+                        }else{
+                            action = "QueryMovePoorBycount";
+                        }
+                        break;
+                    case 2 ://培训分析
+                        if(xs_pkdc_cashAnalyData.city.trainAnaly){
+                            XS.Main.Pkjc.cityAnalyShow(xs_pkdc_cashAnalyData.city.trainAnaly,index);
+                        }else{
+                            action = "QueryTrainCountBycounty";
+                        }
+                        break;
+                    case 3 ://社会保障
+                        if(xs_pkdc_cashAnalyData.city.socialProtect){
+                            XS.Main.Pkjc.cityAnalyShow(xs_pkdc_cashAnalyData.city.socialProtect,index);
+                        }else{
+                            action = "QuerySocityProtectBycounty";
+                        }
+                        break;
+                    case 4 ://危房情况
+                        if(xs_pkdc_cashAnalyData.city.dangerHouse){
+                            XS.Main.Pkjc.cityAnalyShow(xs_pkdc_cashAnalyData.city.dangerHouse,index);
+                        }else{
+                            action = "QueryDangerHouseBycount";
+                        }
+                        break;
+                    case 5 ://脱贫分析
+                        if(xs_pkdc_cashAnalyData.city.outPoor){
+                            XS.Main.Pkjc.cityAnalyShow(xs_pkdc_cashAnalyData.city.outPoor,index);
+                        }else{
+                            action = "QueryOutPoorBycount";
+                        }
+                        break;
+                    case 6 ://致贫原因
+                        if(xs_pkdc_cashAnalyData.city.poorReason){
+                            XS.Main.Pkjc.cityAnalyShow(xs_pkdc_cashAnalyData.city.poorReason,index);
+                        }else{
+                            action = "QueryGroupbyReasonById";
+                        }
+                        break;
+                    case 7 ://文化程度
+                        if(xs_pkdc_cashAnalyData.city.cultureDegree){
+                            XS.Main.Pkjc.cityAnalyShow(xs_pkdc_cashAnalyData.city.cultureDegree,index);
+                        }else{
+                            action = "QueryGroupbyeduById";
+                        }
+                        break;
+                }
+                if(action){
+                    data = {pd_id:currentCode,pid:currentCode};
+                    $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
+                    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
+                        $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                        if (json && json.length > 0){
+                            if(xs_pkdc_analyIndex == index){
+                                switch(index){
+                                    case 0 ://饮水分析
+                                        xs_pkdc_cashAnalyData.city.drinkWater = json;
+                                        break;
+                                    case 1 ://异地搬迁
+                                        xs_pkdc_cashAnalyData.city.move = json;
+                                        break;
+                                    case 2 ://培训分析
+                                        xs_pkdc_cashAnalyData.city.trainAnaly = json;
+                                        break;
+                                    case 3 ://社会保障
+                                        xs_pkdc_cashAnalyData.city.socialProtect = json;
+                                        break;
+                                    case 4 ://危房情况
+                                        xs_pkdc_cashAnalyData.city.dangerHouse = json;
+                                        break;
+                                    case 5 ://脱贫分析
+                                        xs_pkdc_cashAnalyData.city.outPoor = json;
+                                        break;
+                                    case 6 ://致贫原因
+                                        xs_pkdc_cashAnalyData.city.poorReason = json;
+                                        break;
+                                    case 7 ://文化程度
+                                        xs_pkdc_cashAnalyData.city.cultureDegree = json;
+                                        break;
+                                }
+                                XS.Main.Pkjc.cityAnalyShow(json,index);
+                            }
+                        }else{
+                            var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
+                            $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
+                        }
+                    });
+                }
             }
         });
     }else if(level == XS.Main.ZoneLevel.county)
     {
+        xs_pkdc_cashAnalyData.county = {cultureDegree:"",poorReason:"",helpMeasure:"",fiveFour:"",fourFive:""};
         xs_pkdc_AnalysTabsCInit = null;
         xs_pkdc_AnalysTabsChartArr = [];
         var tabTile = ["文化程度", "致贫原因", "帮扶措施", "五通四有", "四有五覆盖"];
@@ -989,43 +1036,34 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
             '<div id="xs_pkdc_AnalysTabsChart" style="width:610px;height: 100%;overflow-x1: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;"></div>' +
             '</div>');
         //文化程度
-        var data = {pid: currentCode};
-        $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
-        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryGroupbyeduById", data, function (json) {
-            $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
-            if (json && json.length > 0 && xs_pkdc_analyIndex == 0) {
-                var yAxis = [['','category',[]]];
-                var series = [['','bar',0,[],true,true,'right']];//[[name,type,barGap,data,stack,showLabel,position]]
-                XS.Main.Pkjc.ananlyValueOfJson(json,[yAxis[0][2],series[0][3]],['EDU','NUM'],'',[]);
-                XS.Main.Pkjc.ciAnalyOpt([10,'文化程度'],['axis',['shadow']],[],[60,60,80,60],['人数','value'],yAxis,[],[],series,"xs_pkdc_AnalysTabsChart");
-            }else{
-                var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
-                $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
-            }
-        });
+        if(xs_pkdc_cashAnalyData.county.cultureDegree){
+            var yAxis = [['','category',[]]];
+            var series = [['','bar',0,[],true,true,'right']];//[[name,type,barGap,data,stack,showLabel,position]]
+            XS.Main.Pkjc.ananlyValueOfJson(xs_pkdc_cashAnalyData.county.cultureDegree,[yAxis[0][2],series[0][3]],['EDU','NUM'],'',[]);
+            XS.Main.Pkjc.ciAnalyOpt([10,'文化程度'],['axis',['shadow']],[],[60,60,80,60],['人数','value'],yAxis,[],[],series,"xs_pkdc_AnalysTabsChart");
+        }else{
+            var data = {pid: currentCode};
+            $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
+            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryGroupbyeduById", data, function (json) {
+                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                if (json && json.length > 0 && xs_pkdc_analyIndex == 0) {
+                    xs_pkdc_cashAnalyData.county.cultureDegree = json;
+                    var yAxis = [['','category',[]]];
+                    var series = [['','bar',0,[],true,true,'right']];//[[name,type,barGap,data,stack,showLabel,position]]
+                    XS.Main.Pkjc.ananlyValueOfJson(json,[yAxis[0][2],series[0][3]],['EDU','NUM'],'',[]);
+                    XS.Main.Pkjc.ciAnalyOpt([10,'文化程度'],['axis',['shadow']],[],[60,60,80,60],['人数','value'],yAxis,[],[],series,"xs_pkdc_AnalysTabsChart");
+                }else{
+                    var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
+                    $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
+                }
+            });
+        }
         $("#xs_pkdc_AnalysTabs").tabs({
             onSelect: function (title, index) {
                 xs_pkdc_AnalysTabsCInit = null;
                 xs_pkdc_AnalysTabsChartArr = [];
                 xs_pkdc_analyIndex = index;
                 var action = "";
-                switch(index){
-                    case 0 ://文化程度
-                        action = "QueryGroupbyeduById";
-                        break;
-                    case 1 ://致贫原因
-                        action = "QueryGroupbyReasonById";
-                        break;
-                    case 2 ://帮扶措施
-                        action = "QueryCountyPopStatByTid";
-                        break;
-                    case 3 ://五通四有
-                        action = "QueryVillFiveFourByCountByAreaId";
-                        break;
-                    case 4 ://四有五覆盖
-                        action = "QueryFourFiveByAreaId";
-                        break;
-                }
                 $("#xs_pkdc_AnalysTabsChartC").remove();
                 selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", index);
                 selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChartC" style="width:100%;height: 100%;overflow-x: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;;">' +
@@ -1034,77 +1072,80 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
                 if(xs_pkdc_isAnalysMax){
                     $("#xs_pkdc_AnalysTabsChart").css({width:"100%"});
                 }
-                data = {cid:currentCode,pd_id:currentCode,pid:currentCode};
-                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
-                XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
-                    $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
-                    if (json && json.length > 0) {
-                        if(xs_pkdc_analyIndex == index){
-                            switch (index) {
+                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                switch(index){
+                    case 0 ://文化程度
+                        if(xs_pkdc_cashAnalyData.county.cultureDegree){
+                            XS.Main.Pkjc.countyAnalyShow(xs_pkdc_cashAnalyData.county.cultureDegree,index);
+                        }else{
+                            action = "QueryGroupbyReasonById";
+                        }
+                        break;
+                    case 1 ://致贫原因
+                        if(xs_pkdc_cashAnalyData.county.poorReason){
+                            XS.Main.Pkjc.countyAnalyShow(xs_pkdc_cashAnalyData.county.poorReason,index);
+                        }else{
+                            action = "QueryGroupbyReasonById";
+                        }
+                        break;
+                    case 2 ://帮扶措施
+                        if(xs_pkdc_cashAnalyData.county.helpMeasure){
+                            XS.Main.Pkjc.countyAnalyShow(xs_pkdc_cashAnalyData.county.helpMeasure,index);
+                        }else{
+                            action = "QueryCountyPopStatByTid";
+                        }
+                        break;
+                    case 3 ://五通四有
+                        if(xs_pkdc_cashAnalyData.county.fiveFour){
+                            XS.Main.Pkjc.countyAnalyShow(xs_pkdc_cashAnalyData.county.fiveFour,index);
+                        }else{
+                            action = "QueryVillFiveFourByCountByAreaId";
+                        }
+                        break;
+                    case 4 ://四有五覆盖
+                        if(xs_pkdc_cashAnalyData.county.fourFive){
+                            XS.Main.Pkjc.countyAnalyShow(xs_pkdc_cashAnalyData.county.fourFive,index);
+                        }else{
+                            action = "QueryFourFiveByAreaId";
+                        }
+                        break;
+                }
+                if(action){
+                    data = {cid:currentCode,pd_id:currentCode,pid:currentCode};
+                    $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
+                    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
+                        $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                        if (json && json.length > 0) {
+                            if(xs_pkdc_analyIndex == index){switch(index){
                                 case 0 ://文化程度
-                                    var yAxis = [['','category',[]]];
-                                    var series = [['文化程度','bar',0,[],true,true,'right']];
-                                    XS.Main.Pkjc.ananlyValueOfJson(json,[yAxis[0][2],series[0][3]],['EDU','NUM'],'',[]);
-                                    XS.Main.Pkjc.ciAnalyOpt([5,'文化程度'],['axis',['shadow']],[],[100,60,80,60],['人数','value'],yAxis,[],[],series,"xs_pkdc_AnalysTabsChart");
+                                    xs_pkdc_cashAnalyData.county.cultureDegree = json;
                                     break;
                                 case 1 ://致贫原因
-                                    var radar = ['60%',["50%","55%"],[[],[]]];
-                                    var series = [['','radar',[['人数',[]]]]];
-                                    XS.Main.Pkjc.ananlyValueOfJson(json,[radar[2][0],series[0][2][0][1]],['REASON','NUM'],'NUM',radar[2]);
-                                    XS.Main.Pkjc.ciAnalyOpt([5,'致贫原因(人)'],['',[]],[],[],[],[],radar,[],series,"xs_pkdc_AnalysTabsChart",['rgba(0,0,255,1)']);
+                                    xs_pkdc_cashAnalyData.county.poorReason = json;
                                     break;
                                 case 2 ://帮扶措施
-                                    var legend = [40,["低保人数","参加培训人数","异地扶贫搬迁户","异地扶贫搬迁人数","危房改造户"]];
-                                    var xAxis = ['','category',legend[1],true];
-                                    var series = [['帮扶措施','bar',0,[],false,true,'top'],['帮扶措施','pie',[legend[1],[]],[0, 60],['70%', '35%'],false]];
-                                    XS.Main.Pkjc.ananlyValueOfJson(json,[series[0][3],series[0][3],series[0][3],series[0][3],series[0][3],
-                                            series[1][2][1],series[1][2][1],series[1][2][1],series[1][2][1],series[1][2][1],series[1][2][1]],
-                                        ['cps_lowgaran_pop','cps_outpov_pop','cps_move_hhnum','cps_move_pop','cps_reconstru_hhnum',
-                                            'cps_lowgaran_pop','cps_outpov_pop','cps_move_hhnum','cps_move_pop','cps_reconstru_hhnum'],'',[]);
-                                    XS.Main.Pkjc.ciAnalyOpt([5,'帮扶措施'],['',[]],legend,[120,40,80,40],xAxis,[['人数','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
+                                    xs_pkdc_cashAnalyData.county.helpMeasure = json;
                                     break;
                                 case 3 ://五通四有
-                                    var field = ["BeautifulNum","BusStateNum","CultureNum","EconomyNum","HRoadHardNum","HealthRoomNum","PowerNum","RoadHardNum","TelNum","WlanNum","ZRoadHardNum"];
-                                    var xAxis = ['','category',["美丽乡村","通客运","文化场所","村集体经济","通户公路","村卫生室","通生产用电","村沥青路","通电话","通宽带","通组公路"],false];
-                                    var legend = [40,[],[]];
-                                    XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
-                                    //[[name,type,yAxisIndex,[[],[]],smooth]]
-                                    var series = [];
-                                    for(var i=0;i<json.length;i++){
-                                        legend[2].push('rect');
-                                        series.push([legend[1][i],'line',0,[],false,true]);
-                                        for(var j=0;j<field.length;j++){
-                                            series[i][3].push(json[i][field[j]]);
-                                        }
-                                    }
-                                    XS.Main.Pkjc.ciAnalyOpt([5,'五通四有'],['axis',['line']],legend,[170,40,35,25],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
+                                    xs_pkdc_cashAnalyData.county.fiveFour = json;
                                     break;
                                 case 4 ://四有五覆盖
-                                    var field = ["WaterSafeNum","ElectricSafeNum","HouseSafeNum","EnroadHardNum","YardHardNum","CoMedicNum","InsureNum","WorkSkillNum","EduHelpNum","IndustyNum"];
-                                    var xAxis = ['','category',["安全饮水","安全用电","安全住房","户路硬化","院坝硬化","合作医保","养老保险","就业培训","教育资助","增收产业"],false];
-                                    var legend = [40,[],[]];
-                                    XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
-                                    var series = [];
-                                    for(var i=0;i<json.length;i++){
-                                        legend[2].push('rect');
-                                        series.push([legend[1][i],'line',0,[],false,true]);
-                                        for(var j=0;j<field.length;j++){
-                                            series[i][3].push(json[i][field[j]]);
-                                        }
-                                    }
-                                    XS.Main.Pkjc.ciAnalyOpt([5,'四有五覆盖'],['axis',['line']],legend,[170,40,80,40],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
+                                    xs_pkdc_cashAnalyData.county.fourFive = json;
                                     break;
                             }
+                                XS.Main.Pkjc.countyAnalyShow(json,index);
+                            }
+                        }else{
+                            var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
+                            $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
                         }
-                    }else{
-                        var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
-                        $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
-                    }
-                });
+                    });
+                }
             }
         });
     }else if(level == XS.Main.ZoneLevel.town)
     {
+        xs_pkdc_cashAnalyData.town = {cultureDegree:"",poorReason:"",helpMeasure:"",fiveFour:"",fourFive:""};
         xs_pkdc_AnalysTabsCInit = null;
         xs_pkdc_AnalysTabsChartArr = [];
         var tabTile = ["文化程度", "致贫原因", "帮扶措施", "五通四有", "四有五覆盖"];
@@ -1124,46 +1165,42 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
             '<div id="xs_pkdc_AnalysTabsChart" style="width:610px;height: 100%;overflow-x1: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;"></div>' +
             '</div>');
         //文化程度
-        var data = {pid:currentCode};
-        $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
-        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryGroupbyeduById", data, function(json) {
-            $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
-            if (json && json.length > 0 && xs_pkdc_analyIndex == 0) {
-                var legend = [40,[]];
-                var color = ['rgba(218,235,117,0.8)','rgba(214,161,244,0.8)','rgba(197,168,115,0.8)','rgba(184,255,193,0.8)','rgba(255,246,144,0.8)',
-                    'rgba(209,184,255,0.8)','rgba(255,224,200,0.8)'];
-                var series = [['','pie',[[],[]],[0, '50%'],["50%","55%"],'area',['multiple',false,false,2,false]]];
-                XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1],series[0][2][0],series[0][2][1]],['EDU','EDU','NUM'],'NUM',[]);
-                var polar = [["60%",["50%","55%"]],['value',false,false,false,false,false],['value',false,false,true,true,false,xs_pkdc_analyMax/1000]];
-                XS.Main.Pkjc.ciAnalyOpt([5,'文化程度'],['',[]],legend,[],[],[],[],polar,series,"xs_pkdc_AnalysTabsChart",color);
-            }else{
-                var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
-                $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
-            }
-        });
+        if(xs_pkdc_cashAnalyData.town.cultureDegree){
+            var legend = [40,[]];
+            var color = ['rgba(218,235,117,0.8)','rgba(214,161,244,0.8)','rgba(197,168,115,0.8)','rgba(184,255,193,0.8)','rgba(255,246,144,0.8)',
+                'rgba(209,184,255,0.8)','rgba(255,224,200,0.8)'];
+            var series = [['','pie',[[],[]],[0, '50%'],["50%","55%"],'area',['multiple',false,false,2,false]]];
+            XS.Main.Pkjc.ananlyValueOfJson(xs_pkdc_cashAnalyData.town.cultureDegree,[legend[1],series[0][2][0],series[0][2][1]],['EDU','EDU','NUM'],'NUM',[]);
+            var polar = [["60%",["50%","55%"]],['value',false,false,false,false,false],['value',false,false,true,true,false,xs_pkdc_analyMax/1000]];
+            XS.Main.Pkjc.ciAnalyOpt([5,'文化程度'],['',[]],legend,[],[],[],[],polar,series,"xs_pkdc_AnalysTabsChart",color);
+        }else{
+            var data = {pid:currentCode};
+            $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
+            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryGroupbyeduById", data, function(json) {
+                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                if (json && json.length > 0) {
+                    xs_pkdc_cashAnalyData.town.cultureDegree = json;
+                    if(xs_pkdc_analyIndex == 0){
+                        var legend = [40,[]];
+                        var color = ['rgba(218,235,117,0.8)','rgba(214,161,244,0.8)','rgba(197,168,115,0.8)','rgba(184,255,193,0.8)','rgba(255,246,144,0.8)',
+                            'rgba(209,184,255,0.8)','rgba(255,224,200,0.8)'];
+                        var series = [['','pie',[[],[]],[0, '50%'],["50%","55%"],'area',['multiple',false,false,2,false]]];
+                        XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1],series[0][2][0],series[0][2][1]],['EDU','EDU','NUM'],'NUM',[]);
+                        var polar = [["60%",["50%","55%"]],['value',false,false,false,false,false],['value',false,false,true,true,false,xs_pkdc_analyMax/1000]];
+                        XS.Main.Pkjc.ciAnalyOpt([5,'文化程度'],['',[]],legend,[],[],[],[],polar,series,"xs_pkdc_AnalysTabsChart",color);
+                    }
+                }else{
+                    var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
+                    $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
+                }
+            });
+        }
         $("#xs_pkdc_AnalysTabs").tabs({
             onSelect: function (title, index) {
                 xs_pkdc_AnalysTabsCInit = null;
                 xs_pkdc_AnalysTabsChartArr = [];
                 xs_pkdc_analyIndex = index;
                 var action = "";
-                switch(index){
-                    case 0 ://文化程度
-                        action = "QueryGroupbyeduById";
-                        break;
-                    case 1 ://致贫原因
-                        action = "QueryGroupbyReasonById";
-                        break;
-                    case 2 ://帮扶措施
-                        action = "QueryTownsBasicStatByTid";
-                        break;
-                    case 3 ://五通四有
-                        action = "QueryVillFiveFourByCountByAreaId";
-                        break;
-                    case 4 ://四有五覆盖
-                        action = "QueryFourFiveByAreaId";
-                        break;
-                }
                 $("#xs_pkdc_AnalysTabsChartC").remove();
                 selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", index);
                 selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChartC" style="width:100%;height: 100%;overflow-x: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;;">' +
@@ -1172,78 +1209,81 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
                 if(xs_pkdc_isAnalysMax){
                     $("#xs_pkdc_AnalysTabsChart").css({width:"100%"});
                 }
-                data = {pd_id:currentCode,pid:currentCode,cid:currentCode};
-                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
-                XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
-                    $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
-                    if (json && json.length > 0) {
-                        if(xs_pkdc_analyIndex == index){
-                            switch (index) {
-                                case 0 ://文化程度
-                                    var legend = [40,[]];
-                                    var color = ['rgba(218,235,117,0.8)','rgba(214,161,244,0.8)','rgba(197,168,115,0.8)','rgba(184,255,193,0.8)','rgba(255,246,144,0.8)',
-                                        'rgba(209,184,255,0.8)','rgba(255,224,200,0.8)'];
-                                    var series = [['','pie',[[],[]],[0, '50%'],["50%","55%"],'area',['multiple',false,false,2,false]]];
-                                    XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1],series[0][2][0],series[0][2][1]],['EDU','EDU','NUM'],'NUM',[]);
-                                    var polar = [["60%",["50%","55%"]],['value',false,false,false,false,false],['value',false,false,true,true,false,xs_pkdc_analyMax/1000]];
-                                    XS.Main.Pkjc.ciAnalyOpt([5,'文化程度'],['',[]],legend,[],[],[],[],polar,series,"xs_pkdc_AnalysTabsChart",color);
-                                    break;
-                                case 1 ://致贫原因
-                                    var radar = ['60%',["50%","55%"],[[],[]]];
-                                    var series = [['','radar',[['致贫原因',[]]]]];
-                                    XS.Main.Pkjc.ananlyValueOfJson(json,[radar[2][0],series[0][2][0][1]],['REASON','NUM'],'NUM',radar[2]);
-                                    XS.Main.Pkjc.ciAnalyOpt([5,'致贫原因'],['item',['']],[],[],[],[],radar,[],series,"xs_pkdc_AnalysTabsChart",['rgba(0,0,255,1)']);
-                                    break;
-                                case 2 ://帮扶措施
-                                    var legend = [40,["低保人数","参加培训人数","异地扶贫搬迁户","异地扶贫搬迁人数","危房改造户"]];
-                                    var xAxis = ['','category',legend[1],true];
-                                    var series = [['帮扶措施','bar',0,[],false,true,'top']];
-                                    XS.Main.Pkjc.ananlyValueOfJson(json,[series[0][3],series[0][3],series[0][3],series[0][3],series[0][3]],
-                                        ['cps_lowgaran_pop','cps_outpov_pop','cps_move_hhnum','cps_move_pop','cps_reconstru_hhnum'],'',[]);
-                                    XS.Main.Pkjc.ciAnalyOpt([15,'帮扶措施'],['',[]],legend,[110,40,80,40],xAxis,[['人数','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
-                                    break;
-                                case 3 ://五通四有
-                                    var field = ["BeautifulNum","BusStateNum","CultureNum","EconomyNum","HRoadHardNum","HealthRoomNum","PowerNum","RoadHardNum","TelNum","WlanNum","ZRoadHardNum"];
-                                    var xAxis = ['','category',["美丽乡村","通客运","文化场所","村集体经济","通户公路","村卫生室","通生产用电","村沥青路","通电话","通宽带","通组公路"],false,45];
-                                    var legend = [80,[],[]];
-                                    XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
-                                    //[[name,type,yAxisIndex,[[],[]],smooth,stack]]
-                                    var series = [];
-                                    for(var i=0;i<json.length;i++){
-                                        legend[2].push('rect');
-                                        series.push([legend[1][i],'line',0,[],true,false]);
-                                        for(var j=0;j<field.length;j++){
-                                            series[i][3].push(json[i][field[j]]);
-                                        }
-                                    }
-                                    XS.Main.Pkjc.ciAnalyOpt([20,'五通四有'],['item',['']],legend,[200,60,60,40],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
-                                    break;
-                                case 4 ://四有五覆盖
-                                    var field = ["CoMedicNum","EduHelpNum","ElectricSafeNum","HouseSafeNum","IndustyNum","InsureNum","WaterSafeNum","WorkSkillNum","YardHardNum","EnroadHardNum"];
-                                    var xAxis = ['','category',["新合作医疗","教育帮扶","用电安全","住房安全","有产业支持","参加保险","饮水安全","劳动技能","院坝硬化","入户路硬化"],false];
-                                    var legend = [60,[],[]];
-                                    XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
-                                    var series = [];
-                                    for(var i=0;i<json.length;i++){
-                                        legend[2].push('rect');
-                                        series.push([legend[1][i],'line',0,[],true,true]);
-                                        for(var j=0;j<field.length;j++){
-                                            series[i][3].push(json[i][field[j]]);
-                                        }
-                                    }
-                                    XS.Main.Pkjc.ciAnalyOpt([5,'四有五覆盖'],['axis',['line']],legend,[200,60,60,40],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
-                                    break;
-                            }
+                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                switch(index){
+                    case 0 ://文化程度
+                        if(xs_pkdc_cashAnalyData.town.cultureDegree){
+                            XS.Main.Pkjc.townAnalyShow(xs_pkdc_cashAnalyData.town.cultureDegree,index);
+                        }else{
+                            action = "QueryGroupbyeduById";
                         }
-                    }else{
-                        var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
-                        $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
-                    }
-                });
+                        break;
+                    case 1 ://致贫原因
+                        if(xs_pkdc_cashAnalyData.town.poorReason){
+                            XS.Main.Pkjc.townAnalyShow(xs_pkdc_cashAnalyData.town.poorReason,index);
+                        }else{
+                            action = "QueryGroupbyReasonById";
+                        }
+                        break;
+                    case 2 ://帮扶措施
+                        if(xs_pkdc_cashAnalyData.town.helpMeasure){
+                            XS.Main.Pkjc.townAnalyShow(xs_pkdc_cashAnalyData.town.helpMeasure,index);
+                        }else{
+                            action = "QueryTownsBasicStatByTid";
+                        }
+                        break;
+                    case 3 ://五通四有
+                        if(xs_pkdc_cashAnalyData.town.fiveFour){
+                            XS.Main.Pkjc.townAnalyShow(xs_pkdc_cashAnalyData.town.fiveFour,index);
+                        }else{
+                            action = "QueryVillFiveFourByCountByAreaId";
+                        }
+                        break;
+                    case 4 ://四有五覆盖
+                        if(xs_pkdc_cashAnalyData.town.fourFive){
+                            XS.Main.Pkjc.townAnalyShow(xs_pkdc_cashAnalyData.town.fourFive,index);
+                        }else{
+                            action = "QueryFourFiveByAreaId";
+                        }
+                        break;
+                }
+                if(action){
+                    data = {pd_id:currentCode,pid:currentCode,cid:currentCode};
+                    $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
+                    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
+                        $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                        if (json && json.length > 0) {
+                            if(xs_pkdc_analyIndex == index){
+                                switch(index){
+                                    case 0 ://文化程度
+                                        xs_pkdc_cashAnalyData.town.cultureDegree = json;
+                                        break;
+                                    case 1 ://致贫原因
+                                        xs_pkdc_cashAnalyData.town.poorReason = json;
+                                        break;
+                                    case 2 ://帮扶措施
+                                        xs_pkdc_cashAnalyData.town.helpMeasure = json;
+                                        break;
+                                    case 3 ://五通四有
+                                        xs_pkdc_cashAnalyData.town.fiveFour = json;
+                                        break;
+                                    case 4 ://四有五覆盖
+                                        xs_pkdc_cashAnalyData.town.fourFive = json;
+                                        break;
+                                }
+                                XS.Main.Pkjc.townAnalyShow(json,index);
+                            }
+                        }else{
+                            var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
+                            $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
+                        }
+                    });
+                }
             }
         });
     }else if(level == XS.Main.ZoneLevel.village)
     {
+        xs_pkdc_cashAnalyData.vill = {cultureDegree:"",poorReason:"",helpMeasure:"",fiveFour:"",fourFive:"",outPooreVolve:""};
         xs_pkdc_AnalysTabsCInit = null;
         xs_pkdc_AnalysTabsChartArr = [];
         var tabTile = ["文化程度", "致贫原因", "帮扶措施", "五通四有", "四有五覆盖","脱贫进展"];
@@ -1263,46 +1303,36 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
             '<div id="xs_pkdc_AnalysTabsChart" style="width:610px;height: 100%;overflow-x1: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;"></div>' +
             '</div>');
         //文化程度
-        var data = {pid:currentCode};
-        $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
-        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryGroupbyeduById", data, function(json) {
-            $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
-            if (json && json.length > 0 && xs_pkdc_analyIndex == 0) {
-                var xAxis = ['','category',[],false];
-                var series = [['','line',0,[],true]];
-                XS.Main.Pkjc.ananlyValueOfJson(json,[xAxis[2],series[0][3]],['EDU','NUM'],'',[]);
-                XS.Main.Pkjc.ciAnalyOpt([10,'文化程度'],['',[]],[],[80,60,60,60],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",["rgb(52,161,45)"]);
-            }else{
-                var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
-                $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
-            }
-        });
+        if(xs_pkdc_cashAnalyData.vill.cultureDegree){
+            var xAxis = ['','category',[],false];
+            var series = [['','line',0,[],true]];
+            XS.Main.Pkjc.ananlyValueOfJson(xs_pkdc_cashAnalyData.vill.cultureDegree,[xAxis[2],series[0][3]],['EDU','NUM'],'',[]);
+            XS.Main.Pkjc.ciAnalyOpt([10,'文化程度'],['',[]],[],[80,60,60,60],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",["rgb(52,161,45)"]);
+        }else{
+            var data = {pid:currentCode};
+            $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
+            XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryGroupbyeduById", data, function(json) {
+                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                if (json && json.length > 0) {
+                    xs_pkdc_cashAnalyData.vill.cultureDegree = json;
+                    if(xs_pkdc_analyIndex == 0){
+                        var xAxis = ['','category',[],false];
+                        var series = [['','line',0,[],true]];
+                        XS.Main.Pkjc.ananlyValueOfJson(json,[xAxis[2],series[0][3]],['EDU','NUM'],'',[]);
+                        XS.Main.Pkjc.ciAnalyOpt([10,'文化程度'],['',[]],[],[80,60,60,60],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",["rgb(52,161,45)"]);
+                    }
+                }else{
+                    var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
+                    $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
+                }
+            });
+        }
         $("#xs_pkdc_AnalysTabs").tabs({
             onSelect: function (title, index) {
                 xs_pkdc_AnalysTabsCInit = null;
                 xs_pkdc_AnalysTabsChartArr = [];
                 xs_pkdc_analyIndex = index;
                 var action = "";
-                switch(index){
-                    case 0 ://文化程度
-                        action = "QueryGroupbyeduById";
-                        break;
-                    case 1 ://致贫原因
-                        action = "QueryGroupbyReasonById";
-                        break;
-                    case 2 ://帮扶措施
-                        action = "QueryCountyPopStatByTid";
-                        break;
-                    case 3 ://五通四有
-                        action = "QueryVillFiveFourById";
-                        break;
-                    case 4 ://四有五覆盖
-                        action = "QueryFourFiveByAreaId";
-                        break;
-                    case 5 ://脱贫进展
-                        action = "QueryFourFiveByAreaId";
-                        break;
-                }
                 $("#xs_pkdc_AnalysTabsChartC").remove();
                 selectTab = $("#xs_pkdc_AnalysTabs").tabs("getTab", index);
                 selectTab.empty().append('<div id="xs_pkdc_AnalysTabsChartC" style="width:100%;height: 100%;overflow-x1: hidden;overflow-y1: hidden;box-sizing: border-box;border1: 1px solid green;;">' +
@@ -1311,82 +1341,86 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
                 if(xs_pkdc_isAnalysMax){
                     $("#xs_pkdc_AnalysTabsChart").css({width:"100%"});
                 }
-                data = {pd_id:currentCode,pid:currentCode,cid:currentCode,vid:currentCode};
-                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
-                XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
-                    $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
-                    if (json && json.length > 0) {
-                        if(xs_pkdc_analyIndex == index){
-                            switch (index) {
-                                case 0 ://文化程度
-                                    var xAxis = ['','category',[],false];
-                                    var series = [['','line',0,[],true]];
-                                    XS.Main.Pkjc.ananlyValueOfJson(json,[xAxis[2],series[0][3]],['EDU','NUM'],'',[]);
-                                    XS.Main.Pkjc.ciAnalyOpt([5,'文化程度'],['',[]],[],[80,60,60,60],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
-                                    break;
-                                case 1 ://致贫原因
-                                    var radar = ['60%',["50%","55%"],[[],[]]];
-                                    var series = [['致贫原因','radar',[['',[]]]]];
-                                    var jsonObj = [];
-                                    for(var i=0;i<json.length;i++){
-                                        if(json[i].REASON != '因残' && json[i].REASON != '缺资金'){
-                                            jsonObj.push(json[i]);
-                                        }
-                                    }
-
-                                    XS.Main.Pkjc.ananlyValueOfJson(jsonObj,[radar[2][0],series[0][2][0][1]],['REASON','NUM'],'NUM',radar[2]);
-                                    XS.Main.Pkjc.ciAnalyOpt([5,'致贫原因'],['',[]],[],[],[],[],radar,[],series,"xs_pkdc_AnalysTabsChart",['rgba(0,0,255,1)']);
-                                    break;
-                                case 2 ://帮扶措施
-                                    var legend = [40,["低保人数","参加培训人数","异地扶贫搬迁户","异地扶贫搬迁人数","危房改造户"]];
-                                    var xAxis = ['','category',legend[1],true];
-                                    var series = [['帮扶措施','bar',0,[],null]];
-                                    XS.Main.Pkjc.ananlyValueOfJson(json,[series[0][3],series[0][3],series[0][3],series[0][3],series[0][3]],
-                                        ['cps_lowgaran_pop','cps_outpov_pop','cps_move_hhnum','cps_move_pop','cps_reconstru_hhnum'],'',[]);
-                                    XS.Main.Pkjc.ciAnalyOpt([5,'帮扶措施'],['',[]],legend,[120,40,80,40],xAxis,[['人数','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
-                                    break;
-                                case 3 ://五通四有
-                                    XS.Main.Pkjc.viAnaly54(json,"xs_pkdc_AnalysTabsChart");
-                                    /* var field = ["BeautifulNum","BusStateNum","CultureNum","EconomyNum","HRoadHardNum","HealthRoomNum","PowerNum","RoadHardNum","TelNum","WlanNum","ZRoadHardNum"];
-                                     var xAxis = ['','category',["美丽乡村","通客运","文化场所","村集体经济","通户公路","村卫生室","通生产用电","村沥青路","通电话","通宽带","通组公路"],false,45];
-                                     var legend = [40,[],[]];
-                                     XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
-                                     //[[name,type,yAxisIndex,[[],[]],smooth,stack]]
-                                     var series = [];
-                                     for(var i=0;i<json.length;i++){
-                                     legend[2].push('rect');
-                                     series.push([legend[1][i],'line',0,[],true,false]);
-                                     for(var j=0;j<field.length;j++){
-                                     series[i][3].push(json[i][field[j]]);
-                                     }
-                                     }
-                                     XS.Main.Pkjc.ciAnalyOpt([5,'五通四有'],['axis',['line']],legend,[200,80,60,40],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);*/
-                                    break;
-                                case 4 ://四有五覆盖
-                                    var field = ["CoMedicNum","EduHelpNum","ElectricSafeNum","HouseSafeNum","IndustyNum","InsureNum","WaterSafeNum","WorkSkillNum","YardHardNum","EnroadHardNum"];
-                                    var xAxis = ['','category',["新合作医疗","教育帮扶","用电安全","住房安全","有产业支持","参加保险","饮水安全","劳动技能","院坝硬化","入户路硬化"]];
-                                    var legend = [60,[],[]];
-                                    XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
-                                    var series = [];
-                                    for(var i=0;i<json.length;i++){
-                                        legend[2].push('rect');
-                                        series.push([legend[1][i],'line',0,[],true]);
-                                        for(var j=0;j<field.length;j++){
-                                            series[i][3].push(json[i][field[j]]);
-                                        }
-                                    }
-                                    XS.Main.Pkjc.ciAnalyOpt([5,'四有五覆盖'],['axis','line'],legend,[250,80,80,40],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
-                                    break;
-                                case 5 ://脱贫进展
-
-                                    break;
-                            }
+                $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                switch(index){
+                    case 0 ://文化程度
+                        if(xs_pkdc_cashAnalyData.vill.cultureDegree){
+                            XS.Main.Pkjc.villAnalyShow(xs_pkdc_cashAnalyData.vill.cultureDegree,index);
+                        }else{
+                            action = "QueryGroupbyeduById";
                         }
-                    }else{
-                        var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
-                        $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
-                    }
-                });
+                        break;
+                    case 1 ://致贫原因
+                        if(xs_pkdc_cashAnalyData.vill.poorReason){
+                            XS.Main.Pkjc.villAnalyShow(xs_pkdc_cashAnalyData.vill.poorReason,index);
+                        }else{
+                            action = "QueryGroupbyReasonById";
+                        }
+                        break;
+                    case 2 ://帮扶措施
+                        if(xs_pkdc_cashAnalyData.vill.helpMeasure){
+                            XS.Main.Pkjc.villAnalyShow(xs_pkdc_cashAnalyData.vill.helpMeasure,index);
+                        }else{
+                            action = "QueryCountyPopStatByTid";
+                        }
+                        break;
+                    case 3 ://五通四有
+                        if(xs_pkdc_cashAnalyData.vill.fiveFour){
+                            XS.Main.Pkjc.villAnalyShow(xs_pkdc_cashAnalyData.vill.fiveFour,index);
+                        }else{
+                            action = "QueryVillFiveFourById";
+                        }
+                        break;
+                    case 4 ://四有五覆盖
+                        if(xs_pkdc_cashAnalyData.vill.fourFive){
+                            XS.Main.Pkjc.villAnalyShow(xs_pkdc_cashAnalyData.vill.fourFive,index);
+                        }else{
+                            action = "QueryFourFiveByAreaId";
+                        }
+                        break;
+                    case 5 ://脱贫进展
+                        if(xs_pkdc_cashAnalyData.vill.outPooreVolve){
+                            XS.Main.Pkjc.villAnalyShow(xs_pkdc_cashAnalyData.vill.outPooreVolve,index);
+                        }else{
+                            action = "QueryFourFiveByAreaId";
+                        }
+                        break;
+                }
+                if(action){
+                    data = {pd_id:currentCode,pid:currentCode,cid:currentCode,vid:currentCode};
+                    $("#xs_pkdc_pkBaseData_loading").css({"visibility":"visible"});
+                    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function(json) {
+                        $("#xs_pkdc_pkBaseData_loading").css({"visibility":"hidden"});
+                        if (json && json.length > 0) {
+                            if(xs_pkdc_analyIndex == index){
+                                switch(index){
+                                    case 0 ://文化程度
+                                        xs_pkdc_cashAnalyData.vill.cultureDegree =json;
+                                        break;
+                                    case 1 ://致贫原因
+                                        xs_pkdc_cashAnalyData.vill.poorReason =json;
+                                        break;
+                                    case 2 ://帮扶措施
+                                        xs_pkdc_cashAnalyData.vill.helpMeasure =json;
+                                        break;
+                                    case 3 ://五通四有
+                                        xs_pkdc_cashAnalyData.vill.fiveFour =json;
+                                        break;
+                                    case 4 ://四有五覆盖
+                                        xs_pkdc_cashAnalyData.vill.fourFive =json;
+                                        break;
+                                    case 5 ://脱贫进展
+                                        xs_pkdc_cashAnalyData.vill.outPooreVolve =json;
+                                        break;
+                                }
+                                XS.Main.Pkjc.villAnalyShow(json,index);
+                            }
+                        }else{
+                            var xs_pkdc_AnalysTabsChartH = $('#xs_pkdc_AnalysTabsChart').height() + 'px';
+                            $('#xs_pkdc_AnalysTabsChart').empty().css({height:xs_pkdc_AnalysTabsChartH,lineHeight:xs_pkdc_AnalysTabsChartH,textAlign:"center",fontSize:"50px",color:"red"}).html("暂无相关数据");
+                        }
+                    });
+                }
             }
         });
     }
@@ -2002,5 +2036,458 @@ XS.Main.Pkjc.ItemFoundMinCall = function(){
     }else if(xs_pkdc_AnalysTabsChartArr.length == 2){
         xs_pkdc_AnalysTabsChartArr[0].resize();
         xs_pkdc_AnalysTabsChartArr[1].resize();
+    }
+}
+//详情市级内容展示
+XS.Main.Pkjc.cityDetailShow = function(json,index){
+    if(index == 0){
+        XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.city.tabs[0].name, XS.Main.Pkjc.detailKV.city.tabs[0].value, 2, 50);
+        return;
+    }
+    XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.city.tabs[index].name, XS.Main.Pkjc.detailKV.city.tabs [index].value, 3, 35);
+    switch (index) {
+        case 1 ://土地信息
+            //土地信息的pie显示
+            XS.Main.Pkjc.tabsContentPie("国有土地分布图", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "xs_pkdc_tabsContentPie", [], "");
+            break;
+        case 2 ://经济收入
+            //经济收入的三大产业pie显示
+            XS.Main.Pkjc.tabsContentPie("国民生产总值分布情况", [1, 2, 3], "xs_pkdc_tabsContentPie", [], "");
+            break;
+        case 3 ://村、户、人口的贫困Pie显示
+            $("#xs_pkdc_tabsContentBtn").css("display", "block");
+            $("#xs_pkdc_tabsContentBtn1").linkbutton({text: "村及人口贫困分布"});
+            $("#xs_pkdc_tabsContentBtn2").linkbutton({text: "户贫困分布"});
+
+            XS.Main.Pkjc.tabsContentPie("村贫困分布情况", [2, 8], "xs_pkdc_tabsContPieDiv1", [1, 2], "非贫困村");
+            XS.Main.Pkjc.tabsContentPie("人口贫困分布情况", [5, 10], "xs_pkdc_tabsContPieDiv2", [3, 5], "非贫困人口");
+            $("#xs_pkdc_tabsContentBtn1").click(function () {
+                XS.Main.Pkjc.tabsContentPie("村贫困分布情况", [2, 8], "xs_pkdc_tabsContPieDiv1", [1, 2], "非贫困村");
+                XS.Main.Pkjc.tabsContentPie("人口贫困分布情况", [5, 10], "xs_pkdc_tabsContPieDiv2", [3, 5], "非贫困人口");
+            });
+            $("#xs_pkdc_tabsContentBtn2").click(function () {
+                XS.Main.Pkjc.tabsContentPie("户贫困分布情况", [6, 9], "xs_pkdc_tabsContPieDiv1", [4, 6], "非贫困户");
+                XS.Main.Pkjc.tabsContentPie("危房户分布情况", [12, 13, 14], "xs_pkdc_tabsContPieDiv2", [], "");
+            });
+            break;
+        case 4 ://人口统计2
+            $("#xs_pkdc_tabsContentBtn").css("display", "block");
+            $("#xs_pkdc_tabsContentBtn1").linkbutton({text: "参培及参合"});
+            $("#xs_pkdc_tabsContentBtn2").linkbutton({text: "务工及资助"});
+
+            XS.Main.Pkjc.tabsContentPie("贫困人口参加培训情况", [4, 7], "xs_pkdc_tabsContPieDiv1", [], "");
+            XS.Main.Pkjc.tabsContentPie("贫困人口参加新农合情况", [0, 8], "xs_pkdc_tabsContPieDiv2", [], "");
+            $("#xs_pkdc_tabsContentBtn1").click(function () {
+                XS.Main.Pkjc.tabsContentPie("贫困人口参加培训情况", [4, 7], "xs_pkdc_tabsContPieDiv1", [], "");
+                XS.Main.Pkjc.tabsContentPie("贫困人口参加新农合情况", [0, 8], "xs_pkdc_tabsContPieDiv2", [], "");
+            });
+            $("#xs_pkdc_tabsContentBtn2").click(function () {
+                XS.Main.Pkjc.tabsContentPie("贫困人口务工情况", [5, 6], "xs_pkdc_tabsContPieDiv1", [], "");
+                XS.Main.Pkjc.tabsContentPie("享受资助情况", [1, 2], "xs_pkdc_tabsContPieDiv2", [], "");
+            });
+            break;
+        case 5 ://重点工作
+            XS.Main.Pkjc.dynScatterSeries("扶贫措施", [2, 4, 5, 7, 8], "xs_pkdc_tabsContentPie", 40);
+            break;
+        case 6 ://专项扶
+            XS.Main.Pkjc.tabsContentPie("各项培训情况", [0, 2, 3, 4], "xs_pkdc_tabsContentPie", [], "");
+            break;
+        case 7 ://扶贫信息
+            XS.Main.Pkjc.tabsContentPie("各项扶贫资金投入情况", [6, 7, 8, 9, 10, 11, 12, 13], "xs_pkdc_tabsContentPie", [], "");
+            break;
+    }
+}
+//详情县级内容展示
+XS.Main.Pkjc.countyDetailShow = function(json,index){
+    if(index == 0){
+        XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.county.tabs[index].name, XS.Main.Pkjc.detailKV.county.tabs[index].value, 2, 50);
+        return;
+    }
+    XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.county.tabs[index].name, XS.Main.Pkjc.detailKV.county.tabs[index].value, 3, 35);
+    switch (index) {
+        case 1 ://土地信息
+            //土地信息的pie显示
+            XS.Main.Pkjc.tabsContentPie("国有土地分布图", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "xs_pkdc_tabsContentPie", [], "");
+            break;
+        case 2 ://经济收入
+            //经济收入的三大产业pie显示
+            XS.Main.Pkjc.tabsContentPie("国民生产总值分布情况", [1, 2, 3], "xs_pkdc_tabsContentPie", [], "");
+            break;
+        case 3 ://村、户、人口的贫困Pie显示
+            $("#xs_pkdc_tabsContentBtn").css("display", "block");
+            $("#xs_pkdc_tabsContentBtn1").linkbutton({text: "村及人口贫困分布"});
+            $("#xs_pkdc_tabsContentBtn2").linkbutton({text: "户贫困分布"});
+
+            XS.Main.Pkjc.tabsContentPie("村贫困分布情况", [2, 8], "xs_pkdc_tabsContPieDiv1", [1, 2], "非贫困村");
+            XS.Main.Pkjc.tabsContentPie("人口贫困分布情况", [5, 10], "xs_pkdc_tabsContPieDiv2", [3, 5], "非贫困人口");
+            $("#xs_pkdc_tabsContentBtn1").click(function () {
+                XS.Main.Pkjc.tabsContentPie("村贫困分布情况", [2, 8], "xs_pkdc_tabsContPieDiv1", [1, 2], "非贫困村");
+                XS.Main.Pkjc.tabsContentPie("人口贫困分布情况", [5, 10], "xs_pkdc_tabsContPieDiv2", [3, 5], "非贫困人口");
+            });
+            $("#xs_pkdc_tabsContentBtn2").click(function () {
+                XS.Main.Pkjc.tabsContentPie("户贫困分布情况", [6, 9], "xs_pkdc_tabsContPieDiv1", [4, 6], "非贫困户");
+                XS.Main.Pkjc.tabsContentPie("危房户分布情况", [12, 13, 14], "xs_pkdc_tabsContPieDiv2", [], "");
+            });
+            break;
+        case 4 ://人口统计2
+            $("#xs_pkdc_tabsContentBtn").css("display", "block");
+            $("#xs_pkdc_tabsContentBtn1").linkbutton({text: "参培及参合"});
+            $("#xs_pkdc_tabsContentBtn2").linkbutton({text: "务工及资助"});
+
+            XS.Main.Pkjc.tabsContentPie("贫困人口参加培训情况", [4, 7], "xs_pkdc_tabsContPieDiv1", [], "");
+            XS.Main.Pkjc.tabsContentPie("贫困人口参加新农合情况", [0, 8], "xs_pkdc_tabsContPieDiv2", [], "");
+            $("#xs_pkdc_tabsContentBtn1").click(function () {
+                XS.Main.Pkjc.tabsContentPie("贫困人口参加培训情况", [4, 7], "xs_pkdc_tabsContPieDiv1", [], "");
+                XS.Main.Pkjc.tabsContentPie("贫困人口参加新农合情况", [0, 8], "xs_pkdc_tabsContPieDiv2", [], "");
+            });
+            $("#xs_pkdc_tabsContentBtn2").click(function () {
+                XS.Main.Pkjc.tabsContentPie("贫困人口务工情况", [5, 6], "xs_pkdc_tabsContPieDiv1", [], "");
+                XS.Main.Pkjc.tabsContentPie("享受资助情况", [1, 2], "xs_pkdc_tabsContPieDiv2", [], "");
+            });
+            break;
+        case 5 ://重点工作
+            XS.Main.Pkjc.dynScatterSeries("扶贫措施", [2, 4, 5, 7, 8], "xs_pkdc_tabsContentPie", 5);
+            break;
+        case 6 ://专项扶
+            XS.Main.Pkjc.tabsContentPie("各项培训情况", [0, 2, 3, 4], "xs_pkdc_tabsContentPie", [], "");
+            break;
+        case 7 ://扶贫信息
+            XS.Main.Pkjc.tabsContentPie("各项扶贫资金投入情况", [6, 7, 8, 9, 10, 11, 12, 13], "xs_pkdc_tabsContentPie", [], "");
+            break;
+    }
+}
+//详情镇级内容展示
+XS.Main.Pkjc.townDetailShow = function(json,index){
+    switch (index) {
+        case 0 :
+            XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value, 2, 50);
+            break;
+        case 1 ://基本统计
+            XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value, 3, 35);
+            $("#xs_pkdc_tabsContentBtn").css("display", "block");
+            $("#xs_pkdc_tabsContentBtn1").linkbutton({text: "村、户及人口情况"});
+            $("#xs_pkdc_tabsContentBtn2").linkbutton({text: "资助、务工及少数民族"});
+
+            XS.Main.Pkjc.tabsContentPie("贫困村分布情况", [1], "xs_pkdc_tabsContPieDiv1", [0, 1], "非贫困村");
+            XS.Main.Pkjc.tabsContentPie("贫困户分布情况", [7], "xs_pkdc_tabsContPieDiv2", [4, 7], "非贫困户");
+            XS.Main.Pkjc.tabsContentPie("贫困人口分布情况", [6], "xs_pkdc_tabsContPieDiv3", [3, 6], "非贫困村");
+            $("#xs_pkdc_tabsContentBtn1").click(function () {
+                XS.Main.Pkjc.tabsContentPie("贫困村分布情况", [1], "xs_pkdc_tabsContPieDiv1", [0, 1], "非贫困村");
+                XS.Main.Pkjc.tabsContentPie("贫困户分布情况", [7], "xs_pkdc_tabsContPieDiv2", [4, 7], "非贫困户");
+                XS.Main.Pkjc.tabsContentPie("贫困人口分布情况", [6], "xs_pkdc_tabsContPieDiv3", [3, 6], "非贫困村");
+            });
+            $("#xs_pkdc_tabsContentBtn2").click(function () {
+                XS.Main.Pkjc.tabsContentPie("资助情况", [5, 12], "xs_pkdc_tabsContPieDiv1", [], "");
+                XS.Main.Pkjc.tabsContentPie("少数民族分布情况", [9], "xs_pkdc_tabsContPieDiv2", [3, 9], "非少数民族");
+                XS.Main.Pkjc.tabsContentPie("务工情况", [10, 11], "xs_pkdc_tabsContPieDiv3", [], "");
+            });
+            break;
+        case 2 ://公共服务
+            XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value, 3, 35);
+            XS.Main.Pkjc.tabsContentPie("公共设施分布情况", [0, 1, 2, 3, 4, 5, 6], "xs_pkdc_tabsContentPie", [], "");
+            break;
+        case 3 ://生产生活
+            XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value, 3, 35);
+            XS.Main.Pkjc.dynScatterSeries("扶贫措施", [4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16], "xs_pkdc_tabsContentPie", 100);
+            break;
+    }
+}
+//详情村级内容展示
+XS.Main.Pkjc.villDetailShow = function(json,index){
+    switch (index) {
+        case 0 ://基本信息
+            XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.village.tabs[index].name, XS.Main.Pkjc.detailKV.village.tabs[index].value, 2, 50);
+            break;
+        case 1://基本统计
+            XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.village.tabs[index].name, XS.Main.Pkjc.detailKV.village.tabs[index].value, 3, 35);
+            XS.Main.Pkjc.tabsContentPie("国有土地分布图", [5, 6, 7, 8, 9], "xs_pkdc_tabsContentPie", [], "");
+            break;
+        case 2://人口信息
+            XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.village.tabs[index].name, XS.Main.Pkjc.detailKV.village.tabs[index].value, 3, 30);
+            $("#xs_pkdc_tabsContentBtn").css("display", "block");
+            $("#xs_pkdc_tabsContentBtn1").linkbutton({text: "户、人口及资助情况"});
+            $("#xs_pkdc_tabsContentBtn2").linkbutton({text: "健康、劳动力及参培"});
+
+            XS.Main.Pkjc.tabsContentPie("贫困户分布情况", [3], "xs_pkdc_tabsContPieDiv1", [1, 3], "非贫困户");
+            XS.Main.Pkjc.tabsContentPie("贫困人口分布情况", [4], "xs_pkdc_tabsContPieDiv2", [2, 4], "非贫困人口");
+            XS.Main.Pkjc.tabsContentPie("资助情况", [5, 6], "xs_pkdc_tabsContPieDiv3", [], "");
+            $("#xs_pkdc_tabsContentBtn1").click(function () {
+                XS.Main.Pkjc.tabsContentPie("贫困户分布情况", [3], "xs_pkdc_tabsContPieDiv1", [1, 3], "非贫困户");
+                XS.Main.Pkjc.tabsContentPie("贫困人口分布情况", [4], "xs_pkdc_tabsContPieDiv2", [2, 4], "非贫困人口");
+                XS.Main.Pkjc.tabsContentPie("资助情况", [5, 6], "xs_pkdc_tabsContPieDiv3", [], "");
+            });
+            $("#xs_pkdc_tabsContentBtn2").click(function () {
+                XS.Main.Pkjc.tabsContentPie("健康状况", [9], "xs_pkdc_tabsContPieDiv1", [2, 9], "非残疾人");
+                XS.Main.Pkjc.tabsContentPie("劳动力情况", [10], "xs_pkdc_tabsContPieDiv2", [2, 10], "非贫困人口");
+                XS.Main.Pkjc.tabsContentPie("参培情况", [11], "xs_pkdc_tabsContPieDiv3", [2, 11], "未参加培训人数");
+            });
+            break;
+        case 3://公共服务
+            XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.village.tabs[index].name, XS.Main.Pkjc.detailKV.village.tabs[index].value, 3, 35);
+            XS.Main.Pkjc.tabsContentPie("公共设施情况", [0, 1, 2, 3, 4], "xs_pkdc_tabsContentPie", [], "");
+            break;
+    }
+}
+//数据分析市级内容展示
+XS.Main.Pkjc.cityAnalyShow = function(json,index){
+    switch (index){
+        case 0 ://饮水分析
+            var xAxis = ['','category',[],true];
+            var series = [['未安全饮水人数','bar',0,[],null],['未安全饮水率','line',1,[],false]];
+            XS.Main.Pkjc.ananlyValueOfJson(json,[xAxis[2],series[0][3],series[1][3]],['REGION_Name','UnwaterNum','UnwaterRate'],'',[]);
+            XS.Main.Pkjc.ciAnalyOpt([5,'饮水分析'],['axis',['line']],[40,['未安全饮水人数','未安全饮水率']],[120,40,80,40],xAxis,
+                [['人数','value'],['(%)','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
+
+            break;
+        case 1 ://异地搬迁
+            $("#xs_pkdc_AnalysTabsChart").append('<div id="xs_pkdc_AnalysTabsChart1" style="width:100%;height: 500px;box-sizing: border-box"></div>');
+            $("#xs_pkdc_AnalysTabsChart").append('<div id="xs_pkdc_AnalysTabsChart2" style="width:100%;height: 400px;box-sizing: border-box"></div>');
+            var radar = ['60%',["50%","55%"],[[],[]]];
+            var radarSeries = [['异地搬迁户数 vs 异地搬迁人数','radar',[['异地搬迁户数',[]],['异地搬迁人数',[]]]]];
+
+            var xAxis = ['','category',[],true];
+            var lineSeries = [['异地搬迁率','line',0,[],false]];
+            XS.Main.Pkjc.ananlyValueOfJson(json,[radar[2][0],radarSeries[0][2][0][1],radarSeries[0][2][1][1],xAxis[2],lineSeries[0][3]],
+                ['REGION_Name','MoveHnum','MovePnum','REGION_Name','MoveRate'],'MovePnum',radar[2]);
+            XS.Main.Pkjc.ciAnalyOpt([5,'异地搬迁'],['',[]],[40,["异地搬迁户数","异地搬迁人数"]],[],[],[],radar,[],radarSeries,"xs_pkdc_AnalysTabsChart1");
+            XS.Main.Pkjc.ciAnalyOpt([0,"异地搬迁率"],['item',['']],[],[40,40,40,30],xAxis,[['(%)','value']],[],[],lineSeries,"xs_pkdc_AnalysTabsChart2");
+            break;
+        case 2 ://培训分析
+            $("#xs_pkdc_AnalysTabsChart").append('<div id="xs_pkdc_AnalysTabsChart1" style="width:100%;height: 500px;box-sizing: border-box"></div>');
+            $("#xs_pkdc_AnalysTabsChart").append('<div id="xs_pkdc_AnalysTabsChart2" style="width:100%;height: 400px;box-sizing: border-box"></div>');
+            var legend = [40,['省内务工人数','省外务工人数','劳动力人数','参加培训人数']];
+            var yAxis = [['','category',[]]];
+            var series = [['省内务工人数','bar',0,[],'总量',"insideRight"],['省外务工人数','bar',0,[],'总量',"insideRight"],
+                ['劳动力人数','bar',0,[],'总量',"insideRight"],['参加培训人数','bar',0,[],'总量',"insideRight"]];
+            var lineXAxis = ['','category',[],true];
+            var lineSeries = [['培训率','line',0,[],false],['省外务工率','line',0,[],false],['省内务工率','line',0,[],false]];
+            XS.Main.Pkjc.ananlyValueOfJson(json,[yAxis[0][2],series[0][3],series[1][3],series[2][3],series[3][3],lineXAxis[2],lineSeries[0][3],lineSeries[1][3],lineSeries[2][3]],
+                ['REGION_Name','InWorkNum','OutWorkNum','LaborNum','TrainNum','REGION_Name','TrainRate','OutWorkRate','InWorkRate'],'',[]);
+            XS.Main.Pkjc.ciAnalyOpt([5,'培训分析'],['axis',['shadow']],legend,[90,40,80,50],['','value'],yAxis,[],[],series,"xs_pkdc_AnalysTabsChart1");
+            XS.Main.Pkjc.ciAnalyOpt([],['axis',['line']],[30,['培训率',"省外务工率","省内务工率"]],[60,40,40,30],lineXAxis,[['(%)','value']],[],[],lineSeries,"xs_pkdc_AnalysTabsChart2");
+            break;
+        case 3 ://社会保障
+            var legend = [40,['合作医疗','养老保险','低保','合作医疗率','养老保险率','低保率']];
+            var xAxis = ['','category',[],true];
+            var series = [];
+            for(var i=0;i<6;i++){
+                if(i<3){series.push([legend[1][i],'bar',0,[],null]);}
+                else{series.push([legend[1][i],'line',1,[],false]);}
+            }
+            XS.Main.Pkjc.ananlyValueOfJson(json,[xAxis[2],series[0][3],series[1][3],series[2][3],series[3][3],series[4][3],series[5][3]],
+                ['REGION_Name','CoMedicalNum','EndowNum','LowNum','CoMedicalRate','EndowRate','LowRate'],'',[]);
+            XS.Main.Pkjc.ciAnalyOpt([5,'社会保障'],['axis',['line']],legend,[120,40,80,40],xAxis,[['人数','value'],['(%)','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
+            break;
+        case 4 ://危房情况
+            var legend = [40,[]];
+            var series = [['危房户数','pie',[[],[]],[20, 90],['30%', '60%'],'radius'],['危房发生率','pie',[[],[]],[20, 90],['70%', '60%'],'area']];
+            XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1],series[0][2][0],series[0][2][1],series[1][2][0],series[1][2][1]],
+                ['REGION_Name','REGION_Name','DangerHnum','REGION_Name','DangerHRate'],'',[]);
+            XS.Main.Pkjc.ciAnalyOpt([5,'危房情况'],['',[]],legend,[120,40,80,40],[],[],[],[],series,"xs_pkdc_AnalysTabsChart");
+            break;
+        case 5 ://脱贫分析
+            var legend = [40,["脱贫率","脱贫人数"]];
+            var xAxis = ['','category',[],true];
+            var series = [['脱贫户数','pie',[[],[]],[0, 60],['80%', '45%'],false],['脱贫人数','bar',0,[],false,true,'top'],['脱贫率','line',1,[],false]];
+            XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1],xAxis[2],series[0][2][0],series[0][2][1],series[1][3],series[2][3]],
+                ['REGION_Name','REGION_Name','REGION_Name','OutPoorHNum','OutPoorPNum','OutPoorRate'],'',[]);
+            XS.Main.Pkjc.ciAnalyOpt([5,'脱贫分析'],['',[]],legend,[120,40,80,40],xAxis,[['人数','value'],['(%)','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
+            break;
+        case 6 ://致贫原因
+            var radar = ['60%',["50%","55%"],[[],[]]];
+            var series = [['','radar',[['人数',[]]]]];
+            XS.Main.Pkjc.ananlyValueOfJson(json,[radar[2][0],series[0][2][0][1]],['REASON','NUM'],'NUM',radar[2]);
+            XS.Main.Pkjc.ciAnalyOpt([5,'致贫原因'],['',[]],[],[],[],[],radar,[],series,"xs_pkdc_AnalysTabsChart");
+            break;
+        case 7 ://文化程度
+            var xAxis = ['','category',[],true];
+            var series = [['文化程度','bar',0,[],true,true,'top']];
+            XS.Main.Pkjc.ananlyValueOfJson(json,[xAxis[2],series[0][3]],['EDU','NUM'],'',[]);
+            XS.Main.Pkjc.ciAnalyOpt([10,'文化程度'],['item',['']],[],[100,60,80,40],xAxis,[['人数','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
+            break;
+    }
+}
+//数据分析县级内容展示
+XS.Main.Pkjc.countyAnalyShow = function(json,index){
+    switch (index) {
+        case 0 ://文化程度var yAxis = [['','category',[]]];
+            var yAxis = [['','category',[]]];
+            var series = [['','bar',0,[],true,true,'right']];//[[name,type,barGap,data,stack,showLabel,position]]
+            XS.Main.Pkjc.ananlyValueOfJson(json,[yAxis[0][2],series[0][3]],['EDU','NUM'],'',[]);
+            XS.Main.Pkjc.ciAnalyOpt([10,'文化程度'],['axis',['shadow']],[],[60,60,80,60],['人数','value'],yAxis,[],[],series,"xs_pkdc_AnalysTabsChart");
+            break;
+        case 1 ://致贫原因
+            var radar = ['60%',["50%","55%"],[[],[]]];
+            var series = [['','radar',[['人数',[]]]]];
+            XS.Main.Pkjc.ananlyValueOfJson(json,[radar[2][0],series[0][2][0][1]],['REASON','NUM'],'NUM',radar[2]);
+            XS.Main.Pkjc.ciAnalyOpt([5,'致贫原因(人)'],['',[]],[],[],[],[],radar,[],series,"xs_pkdc_AnalysTabsChart",['rgba(0,0,255,1)']);
+            break;
+        case 2 ://帮扶措施
+            var legend = [40,["低保人数","参加培训人数","异地扶贫搬迁户","异地扶贫搬迁人数","危房改造户"]];
+            var xAxis = ['','category',legend[1],true];
+            var series = [['帮扶措施','bar',0,[],false,true,'top'],['帮扶措施','pie',[legend[1],[]],[0, 60],['70%', '35%'],false]];
+            XS.Main.Pkjc.ananlyValueOfJson(json,[series[0][3],series[0][3],series[0][3],series[0][3],series[0][3],
+                    series[1][2][1],series[1][2][1],series[1][2][1],series[1][2][1],series[1][2][1],series[1][2][1]],
+                ['cps_lowgaran_pop','cps_outpov_pop','cps_move_hhnum','cps_move_pop','cps_reconstru_hhnum',
+                    'cps_lowgaran_pop','cps_outpov_pop','cps_move_hhnum','cps_move_pop','cps_reconstru_hhnum'],'',[]);
+            XS.Main.Pkjc.ciAnalyOpt([5,'帮扶措施'],['',[]],legend,[120,40,80,40],xAxis,[['人数','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
+            break;
+        case 3 ://五通四有
+            var field = ["BeautifulNum","BusStateNum","CultureNum","EconomyNum","HRoadHardNum","HealthRoomNum","PowerNum","RoadHardNum","TelNum","WlanNum","ZRoadHardNum"];
+            var xAxis = ['','category',["美丽乡村","通客运","文化场所","村集体经济","通户公路","村卫生室","通生产用电","村沥青路","通电话","通宽带","通组公路"],false];
+            var legend = [40,[],[]];
+            XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
+            //[[name,type,yAxisIndex,[[],[]],smooth]]
+            var series = [];
+            for(var i=0;i<json.length;i++){
+                legend[2].push('rect');
+                series.push([legend[1][i],'line',0,[],false,true]);
+                for(var j=0;j<field.length;j++){
+                    series[i][3].push(json[i][field[j]]);
+                }
+            }
+            XS.Main.Pkjc.ciAnalyOpt([5,'五通四有'],['axis',['line']],legend,[170,40,35,25],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
+            break;
+        case 4 ://四有五覆盖
+            var field = ["WaterSafeNum","ElectricSafeNum","HouseSafeNum","EnroadHardNum","YardHardNum","CoMedicNum","InsureNum","WorkSkillNum","EduHelpNum","IndustyNum"];
+            var xAxis = ['','category',["安全饮水","安全用电","安全住房","户路硬化","院坝硬化","合作医保","养老保险","就业培训","教育资助","增收产业"],false];
+            var legend = [40,[],[]];
+            XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
+            var series = [];
+            for(var i=0;i<json.length;i++){
+                legend[2].push('rect');
+                series.push([legend[1][i],'line',0,[],false,true]);
+                for(var j=0;j<field.length;j++){
+                    series[i][3].push(json[i][field[j]]);
+                }
+            }
+            XS.Main.Pkjc.ciAnalyOpt([5,'四有五覆盖'],['axis',['line']],legend,[170,40,80,40],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
+            break;
+    }
+}
+//数据分析镇级内容展示
+XS.Main.Pkjc.townAnalyShow = function(json,index){
+    switch (index) {
+        case 0 ://文化程度
+            var legend = [40,[]];
+            var color = ['rgba(218,235,117,0.8)','rgba(214,161,244,0.8)','rgba(197,168,115,0.8)','rgba(184,255,193,0.8)','rgba(255,246,144,0.8)',
+                'rgba(209,184,255,0.8)','rgba(255,224,200,0.8)'];
+            var series = [['','pie',[[],[]],[0, '50%'],["50%","55%"],'area',['multiple',false,false,2,false]]];
+            XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1],series[0][2][0],series[0][2][1]],['EDU','EDU','NUM'],'NUM',[]);
+            var polar = [["60%",["50%","55%"]],['value',false,false,false,false,false],['value',false,false,true,true,false,xs_pkdc_analyMax/1000]];
+            XS.Main.Pkjc.ciAnalyOpt([5,'文化程度'],['',[]],legend,[],[],[],[],polar,series,"xs_pkdc_AnalysTabsChart",color);
+            break;
+        case 1 ://致贫原因
+            var radar = ['60%',["50%","55%"],[[],[]]];
+            var series = [['','radar',[['致贫原因',[]]]]];
+            XS.Main.Pkjc.ananlyValueOfJson(json,[radar[2][0],series[0][2][0][1]],['REASON','NUM'],'NUM',radar[2]);
+            XS.Main.Pkjc.ciAnalyOpt([5,'致贫原因'],['item',['']],[],[],[],[],radar,[],series,"xs_pkdc_AnalysTabsChart",['rgba(0,0,255,1)']);
+            break;
+        case 2 ://帮扶措施
+            var legend = [40,["低保人数","参加培训人数","异地扶贫搬迁户","异地扶贫搬迁人数","危房改造户"]];
+            var xAxis = ['','category',legend[1],true];
+            var series = [['帮扶措施','bar',0,[],false,true,'top']];
+            XS.Main.Pkjc.ananlyValueOfJson(json,[series[0][3],series[0][3],series[0][3],series[0][3],series[0][3]],
+                ['cps_lowgaran_pop','cps_outpov_pop','cps_move_hhnum','cps_move_pop','cps_reconstru_hhnum'],'',[]);
+            XS.Main.Pkjc.ciAnalyOpt([15,'帮扶措施'],['',[]],legend,[110,40,80,40],xAxis,[['人数','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
+            break;
+        case 3 ://五通四有
+            var field = ["BeautifulNum","BusStateNum","CultureNum","EconomyNum","HRoadHardNum","HealthRoomNum","PowerNum","RoadHardNum","TelNum","WlanNum","ZRoadHardNum"];
+            var xAxis = ['','category',["美丽乡村","通客运","文化场所","村集体经济","通户公路","村卫生室","通生产用电","村沥青路","通电话","通宽带","通组公路"],false,45];
+            var legend = [80,[],[]];
+            XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
+            //[[name,type,yAxisIndex,[[],[]],smooth,stack]]
+            var series = [];
+            for(var i=0;i<json.length;i++){
+                legend[2].push('rect');
+                series.push([legend[1][i],'line',0,[],true,false]);
+                for(var j=0;j<field.length;j++){
+                    series[i][3].push(json[i][field[j]]);
+                }
+            }
+            XS.Main.Pkjc.ciAnalyOpt([20,'五通四有'],['item',['']],legend,[200,60,60,40],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
+            break;
+        case 4 ://四有五覆盖
+            var field = ["CoMedicNum","EduHelpNum","ElectricSafeNum","HouseSafeNum","IndustyNum","InsureNum","WaterSafeNum","WorkSkillNum","YardHardNum","EnroadHardNum"];
+            var xAxis = ['','category',["新合作医疗","教育帮扶","用电安全","住房安全","有产业支持","参加保险","饮水安全","劳动技能","院坝硬化","入户路硬化"],false];
+            var legend = [60,[],[]];
+            XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
+            var series = [];
+            for(var i=0;i<json.length;i++){
+                legend[2].push('rect');
+                series.push([legend[1][i],'line',0,[],true,true]);
+                for(var j=0;j<field.length;j++){
+                    series[i][3].push(json[i][field[j]]);
+                }
+            }
+            XS.Main.Pkjc.ciAnalyOpt([5,'四有五覆盖'],['axis',['line']],legend,[200,60,60,40],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
+            break;
+    }
+}
+//数据分析村级内容展示
+XS.Main.Pkjc.villAnalyShow = function(json,index){
+    switch (index) {
+        case 0 ://文化程度
+            var xAxis = ['','category',[],false];
+            var series = [['','line',0,[],true]];
+            XS.Main.Pkjc.ananlyValueOfJson(json,[xAxis[2],series[0][3]],['EDU','NUM'],'',[]);
+            XS.Main.Pkjc.ciAnalyOpt([5,'文化程度'],['',[]],[],[80,60,60,60],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
+            break;
+        case 1 ://致贫原因
+            var radar = ['60%',["50%","55%"],[[],[]]];
+            var series = [['致贫原因','radar',[['',[]]]]];
+            var jsonObj = [];
+            for(var i=0;i<json.length;i++){
+                if(json[i].REASON != '因残' && json[i].REASON != '缺资金'){
+                    jsonObj.push(json[i]);
+                }
+            }
+
+            XS.Main.Pkjc.ananlyValueOfJson(jsonObj,[radar[2][0],series[0][2][0][1]],['REASON','NUM'],'NUM',radar[2]);
+            XS.Main.Pkjc.ciAnalyOpt([5,'致贫原因'],['',[]],[],[],[],[],radar,[],series,"xs_pkdc_AnalysTabsChart",['rgba(0,0,255,1)']);
+            break;
+        case 2 ://帮扶措施
+            var legend = [40,["低保人数","参加培训人数","异地扶贫搬迁户","异地扶贫搬迁人数","危房改造户"]];
+            var xAxis = ['','category',legend[1],true];
+            var series = [['帮扶措施','bar',0,[],null]];
+            XS.Main.Pkjc.ananlyValueOfJson(json,[series[0][3],series[0][3],series[0][3],series[0][3],series[0][3]],
+                ['cps_lowgaran_pop','cps_outpov_pop','cps_move_hhnum','cps_move_pop','cps_reconstru_hhnum'],'',[]);
+            XS.Main.Pkjc.ciAnalyOpt([5,'帮扶措施'],['',[]],legend,[120,40,80,40],xAxis,[['人数','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
+            break;
+        case 3 ://五通四有
+            XS.Main.Pkjc.viAnaly54(json,"xs_pkdc_AnalysTabsChart");
+            /* var field = ["BeautifulNum","BusStateNum","CultureNum","EconomyNum","HRoadHardNum","HealthRoomNum","PowerNum","RoadHardNum","TelNum","WlanNum","ZRoadHardNum"];
+             var xAxis = ['','category',["美丽乡村","通客运","文化场所","村集体经济","通户公路","村卫生室","通生产用电","村沥青路","通电话","通宽带","通组公路"],false,45];
+             var legend = [40,[],[]];
+             XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
+             //[[name,type,yAxisIndex,[[],[]],smooth,stack]]
+             var series = [];
+             for(var i=0;i<json.length;i++){
+             legend[2].push('rect');
+             series.push([legend[1][i],'line',0,[],true,false]);
+             for(var j=0;j<field.length;j++){
+             series[i][3].push(json[i][field[j]]);
+             }
+             }
+             XS.Main.Pkjc.ciAnalyOpt([5,'五通四有'],['axis',['line']],legend,[200,80,60,40],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);*/
+            break;
+        case 4 ://四有五覆盖
+            var field = ["CoMedicNum","EduHelpNum","ElectricSafeNum","HouseSafeNum","IndustyNum","InsureNum","WaterSafeNum","WorkSkillNum","YardHardNum","EnroadHardNum"];
+            var xAxis = ['','category',["新合作医疗","教育帮扶","用电安全","住房安全","有产业支持","参加保险","饮水安全","劳动技能","院坝硬化","入户路硬化"]];
+            var legend = [60,[],[]];
+            XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
+            var series = [];
+            for(var i=0;i<json.length;i++){
+                legend[2].push('rect');
+                series.push([legend[1][i],'line',0,[],true]);
+                for(var j=0;j<field.length;j++){
+                    series[i][3].push(json[i][field[j]]);
+                }
+            }
+            XS.Main.Pkjc.ciAnalyOpt([5,'四有五覆盖'],['axis','line'],legend,[250,80,80,40],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
+            break;
+        case 5 ://脱贫进展
+
+            break;
     }
 }
