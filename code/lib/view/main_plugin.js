@@ -1622,6 +1622,7 @@ XS.Main.depClearMap = function() {
     xs_tasker_animatorVectorLayer.removeAllFeatures();
 
     XS.Main.Poor.clearRelocationLayer();
+    XS.Main.clearMarker();
 }
 //清除xs_markerLayer、xs_poorLabelLayer和图例
 XS.Main.clearMarker = function() {

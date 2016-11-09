@@ -666,7 +666,7 @@ XS.Searchbox.BaseInfPanel = function(i,json,regionId,regionName){
         });
     }
     if(XS.StrUtil.isEmpty(regionId) && XS.StrUtil.isEmpty(regionName) && $("#xs_searchbox_pager").length == 0){
-        $("#xs_searchbox_resultC").append('<div id="xs_searchbox_pager" style1="width: 100%;height: 40px"></div>');
+        $("#xs_searchbox_resultC").append('<div id="xs_searchbox_pager"></div>');
     }
     $("#xs_searchbox_resultBaseInf").css({display:'block'})
     if(xs_searchbox_resultBaseInfH < 320 ){

@@ -504,7 +504,6 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
     xs_pkdc_isShowInfoWin = true;
     xs_pkdc_isFirstShowInfoWin = false;
     $("#xs_echartjs").empty().append('<script src="../base/echart/echarts.js"></script>');
-
     xs_pkdc_isWinMin = false;
     xs_pkdc_superStateCode = superId;
     xs_pkdc_currentStateCode = id;
@@ -708,63 +707,6 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
     $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/*, width:1020,height:600*/}).window('open');
     $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
     $("#xs_pkdc_msg_pieC").css("display","block");
-    /*switch (xs_pkdc_zoneLevel){
-        case XS.Main.ZoneLevel.city:{
-            xs_pkdc_preName = "毕节市";
-            xs_pkdc_currentName = "毕节市";
-            $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/!*, width:1020,height:600*!/}).window('open');
-            $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
-            break;
-        }
-        case XS.Main.ZoneLevel.county:{
-            XS.Main.Pkjc.reqCurrAndPreName();
-            break;
-        }
-        case XS.Main.ZoneLevel.town:{
-            if(xs_pkdc_zoneLevel == xs_user_regionLevel){
-                XS.Main.Pkjc.reqCurrAndPreName();
-            }else{
-                if(XS.Main.CacheZoneInfos.county.length<1)
-                {
-                    var data = {pbno: xs_cityID};
-                    $("#xs_pkdc_msgWin_p").css("display", "block");
-                    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryCountyBaseInfoByareaId", data, function(json){
-                        $("#xs_pkdc_msgWin_p").css("display", "none");
-                        if(json && json.length>0){
-                            XS.Main.CacheZoneInfos.county = json;
-                            XS.Main.Pkjc.reqCurrAndPreName();
-                        }
-                    });
-                }else{
-                    XS.Main.Pkjc.reqCurrAndPreName();
-                }
-            }
-            break;
-        }
-        case XS.Main.ZoneLevel.village:{
-            $("#xs_pkdc_msg_pieC").css("display","none");
-            if(xs_pkdc_zoneLevel == xs_user_regionLevel){
-                XS.Main.Pkjc.reqCurrAndPreName();
-            }else{
-                var countyId = Math.floor(superId/1000);
-                if(countyId != XS.Main.CacheZoneInfos.town.countyId){
-                    var dataN = {pbno: countyId};
-                    $("#xs_pkdc_msgWin_p").css("display", "block");
-                    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTownsBaseInfoByareaId", dataN, function(json){
-                        $("#xs_pkdc_msgWin_p").css("display", "none");
-                        if(json && json.length>0){
-                            XS.Main.CacheZoneInfos.town.data = json;
-                            XS.Main.CacheZoneInfos.town.countyId = countyId;
-                            XS.Main.Pkjc.reqCurrAndPreName();
-                        }
-                    });
-                }else{
-                    XS.Main.Pkjc.reqCurrAndPreName();
-                }
-            }
-            break;
-        }
-    }*/
 
     if(!xs_pkdc_PieChart){
         xs_pkdc_PieChart = echarts.init(document.getElementById("xs_pkdc_msg_pieC"));

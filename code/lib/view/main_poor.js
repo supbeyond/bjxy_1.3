@@ -896,6 +896,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
     XS.Main.Pkjc.closeGaugeData();
 
     $("#xs_echartjs").empty().append('<script src="../base/echart2/dist/echarts-all.js"></script>');
+
     if(xs_poor_elementsLayer==null)
     {
         xs_poor_elementsLayer = new SuperMap.Layer.Elements("xs_poor_elementsLayer");

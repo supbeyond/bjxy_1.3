@@ -136,7 +136,6 @@ XS.Main.load = function(){
             utfgridResolution: 8
         }
     );
-
     xs_vectorLayer = new SuperMap.Layer.Vector("vectorLayer");
     xs_zone_vectorLayer = new SuperMap.Layer.Vector("zone_vectorLayer");
     xs_author_vectorLayer = new SuperMap.Layer.Vector("author_vectorLayer");
@@ -170,10 +169,15 @@ XS.Main.load = function(){
     xs_poorLabelLayer = new SuperMap.Layer.Vector("poor_label",{strategies: [strategy]});//显示贫困户标签图层
 
     ///-------------controller---------------------
-    xs_utfGridController = new SuperMap.Control.UTFGrid({
+    /*xs_utfGridController = new SuperMap.Control.UTFGrid({
         layers: [xs_utfGridCountyLayer,xs_utfGridTownLayer,xs_utfGridVillageLayer],
         callback: XS.Main.utfGridLayerMoveCallback,
         handlerMode: "move"
+    });*/
+    xs_utfGridController = new SuperMap.Control.UTFGrid({
+        layers: [xs_utfGridCountyLayer,xs_utfGridTownLayer,xs_utfGridVillageLayer],
+        callback: XS.Main.utfGridLayerMoveCallback,
+        handlerMode: "touchmove"
     });
     xs_utfGridController.autoActivate = true;
     xs_MapInstance.getMapObj().addControl(xs_utfGridController);
@@ -315,6 +319,8 @@ XS.Main.addLayers = function(){
 
     xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 0);
     xs_MapInstance.getMapObj().events.on({ "click": XS.Main.clickMapCallback});
+    //xs_MapInstance.getMapObj().events.on({ "touchend": xs_MapInstance.getMapObj().events.on( "click")});
+
     xs_MapInstance.getMapObj().events.on({ "zoomend": XS.Main.zoomedMapCallback});
     xs_MapInstance.getMapObj().events.on({ "moveend": XS.Main.movedMapCallback});
 
