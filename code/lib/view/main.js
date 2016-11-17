@@ -73,6 +73,7 @@ var xs_animatorVectorLayer = null; //矢量动画图层
 var xs_markerLayer = null; //marker图层
 var xs_poorLabelLayer; //显示贫困户标签图层
 var xs_cityMarkerLayer; //显示毕节市标签图层
+var xs_operateSystem = 0;
 
 var xs_labelLayer = null; //标签图层
 
@@ -81,6 +82,19 @@ var xs_tasker_labelLayer = null; //处理区域任务监督人的标签图层动
 
 XS.Main = {};
 XS.Main.load = function(){
+    var userAgent = navigator.userAgent.toLowerCase();
+    if(userAgent.match(/windows/) == "windows"){
+        XS.CommonUtil.showMsgDialog("", "windows");
+        xs_operateSystem = 0;
+    }else{
+        XS.CommonUtil.showMsgDialog("", "andriod");
+        xs_operateSystem = 1;
+        window.addEventListener("orientationchange", function() {
+            alert("screen: " + $(document).width() + "||" + "height: " + $(screen).height());
+        });
+
+    }
+
     XS.CommonUtil.loadProgressCircleTag($(document.body), "xs_load_container");
     XS.CommonUtil.showLoader();
     //鼠标移动监听
@@ -169,16 +183,16 @@ XS.Main.load = function(){
     xs_poorLabelLayer = new SuperMap.Layer.Vector("poor_label",{strategies: [strategy]});//显示贫困户标签图层
 
     ///-------------controller---------------------
-    /*xs_utfGridController = new SuperMap.Control.UTFGrid({
-        layers: [xs_utfGridCountyLayer,xs_utfGridTownLayer,xs_utfGridVillageLayer],
-        callback: XS.Main.utfGridLayerMoveCallback,
-        handlerMode: "move"
-    });*/
     xs_utfGridController = new SuperMap.Control.UTFGrid({
         layers: [xs_utfGridCountyLayer,xs_utfGridTownLayer,xs_utfGridVillageLayer],
         callback: XS.Main.utfGridLayerMoveCallback,
-        handlerMode: "touchmove"
+        handlerMode: "move"
     });
+    /*xs_utfGridController = new SuperMap.Control.UTFGrid({
+        layers: [xs_utfGridCountyLayer,xs_utfGridTownLayer,xs_utfGridVillageLayer],
+        callback: XS.Main.utfGridLayerMoveCallback,
+        handlerMode: "touchmove"
+    });*/
     xs_utfGridController.autoActivate = true;
     xs_MapInstance.getMapObj().addControl(xs_utfGridController);
 
@@ -318,8 +332,16 @@ XS.Main.addLayers = function(){
     xs_author_vectorLayer.setVisibility(false);
 
     xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 0);
-    xs_MapInstance.getMapObj().events.on({ "click": XS.Main.clickMapCallback});
-    //xs_MapInstance.getMapObj().events.on({ "touchend": xs_MapInstance.getMapObj().events.on( "click")});
+    $("#xs_Map").bind({"contextmenu":XS.Main.mapContextmenu});
+    if(xs_operateSystem == 0){
+        xs_MapInstance.getMapObj().events.on({ "click": XS.Main.clickMapCallback});
+    }else{
+        xs_MapInstance.getMapObj().events.on({
+            "touchstart": XS.Main.touchstartMapCall,
+            "touchmove":XS.Main.touchstartMapCall,
+            "touchend": XS.Main.clickMapCallback
+        });
+    }
 
     xs_MapInstance.getMapObj().events.on({ "zoomend": XS.Main.zoomedMapCallback});
     xs_MapInstance.getMapObj().events.on({ "moveend": XS.Main.movedMapCallback});
