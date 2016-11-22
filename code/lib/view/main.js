@@ -73,7 +73,6 @@ var xs_animatorVectorLayer = null; //矢量动画图层
 var xs_markerLayer = null; //marker图层
 var xs_poorLabelLayer; //显示贫困户标签图层
 var xs_cityMarkerLayer; //显示毕节市标签图层
-var xs_operateSystem = 0;
 
 var xs_labelLayer = null; //标签图层
 
@@ -82,31 +81,6 @@ var xs_tasker_labelLayer = null; //处理区域任务监督人的标签图层动
 
 XS.Main = {};
 XS.Main.load = function(){
-    var userAgent = navigator.userAgent.toLowerCase();
-    if(userAgent.match(/windows/) == "windows"){
-        XS.CommonUtil.showMsgDialog("", "windows");
-        xs_operateSystem = 0;
-    }else{
-        XS.CommonUtil.showMsgDialog("", "andriod");
-        xs_operateSystem = 1;
-        window.addEventListener("orientationchange", function() {
-            if($("#xs_pkdc_msgWin").length>0){
-                var top = (document.body.offsetHeight-600)/2.0 - 40;
-                $('#xs_pkdc_msgWin').window("resize",{width:600,height:600,left:0,top:top});
-            }
-            if($("#xs_main_detail").length>0){
-                var top = (document.body.offsetHeight-600)/2.0 - 40;
-                $("#xs_main_detail").dialog("resize",{width:600,height:600,left:0,top:top});
-            }
-            if($("#xs_main_itemFoundNode").length>0){
-                var left = (document.body.offsetWidth-500)/2.0;
-                var top = (document.body.offsetHeight-300)/2.0;
-                $("#xs_main_itemFoundNode").dialog("resize",{width:500,height:300,left:left,top:top});
-            }
-        });
-
-    }
-
     XS.CommonUtil.loadProgressCircleTag($(document.body), "xs_load_container");
     XS.CommonUtil.showLoader();
     //鼠标移动监听
@@ -344,17 +318,7 @@ XS.Main.addLayers = function(){
     xs_author_vectorLayer.setVisibility(false);
 
     xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 0);
-    $("#xs_Map").bind({"contextmenu":XS.Main.mapContextmenu});
-    if(xs_operateSystem == 0){
-        xs_MapInstance.getMapObj().events.on({ "click": XS.Main.clickMapCallback});
-    }else{
-        xs_MapInstance.getMapObj().events.on({
-            "touchstart": XS.Main.touchstartMapCall,
-            "touchmove":XS.Main.touchstartMapCall,
-            "touchend": XS.Main.clickMapCallback
-        });
-    }
-
+    xs_MapInstance.getMapObj().events.on({ "click": XS.Main.clickMapCallback});
     xs_MapInstance.getMapObj().events.on({ "zoomend": XS.Main.zoomedMapCallback});
     xs_MapInstance.getMapObj().events.on({ "moveend": XS.Main.movedMapCallback});
 

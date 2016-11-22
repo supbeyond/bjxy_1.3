@@ -196,13 +196,13 @@ XS.Main.init = function(){
     );
     //xs_tjfx_leftMenuC
     //右击-菜单
-    /*$("#xs_Map").bind('contextmenu',function(e){
+    $("#xs_Map").bind('contextmenu',function(e){
         e.preventDefault();
         $('#xs_rightMeun').menu('show', {
             left: e.pageX,
             top: e.pageY
         });
-    });*/
+    });
     //右顶 计时器
 
     //右下--工具按钮
@@ -265,18 +265,6 @@ XS.Main.init = function(){
 var xs_btoolbar_isShowing = false;
 var xs_btoolbar_isToolHover = false;
 var xs_btoolbar_isClosing = false;
-//右击菜单
-var xs_isrightMeunShow = false;
-XS.Main.mapContextmenu = function(e){
-    if(xs_operateSystem == 1){
-        xs_isrightMeunShow = true;
-    }
-    e.preventDefault();
-    $('#xs_rightMeun').menu('show', {
-        left: e.pageX,
-        top: e.pageY
-    });
-}
 
 //滑出底工具菜单
 XS.Main.showBottomToolBar = function(){
@@ -969,29 +957,9 @@ XS.Main.clusterControlCallback =
         $("#xs_clusterTipC").css({display: 'none'});
     }
 };
-//touchstart事件
-XS.Main.touchstartMapCall = function(mouseEvent){
-    $("#xs_Map").unbind("contextmenu");
-    xs_isrightMeunShow = true;
-}
+
 //点击地图事件处理
 XS.Main.clickMapCallback = function(mouseEvent){
-    if(xs_isrightMeunShow){
-        xs_isrightMeunShow = false;
-        return;
-    }
-    if(xs_operateSystem == 1){
-        $("#xs_Map").bind({"contextmenu":XS.Main.mapContextmenu});
-    }
-    /*if(mouseEvent.touches){
-        var touches = mouseEvent.touches;
-        //alert(touches.length);
-        //alert(mouseEvent.timeStamp);
-        if(touches.length>0){
-            //alert(touches.length);
-            return;
-        }
-    }*/
    // var lonLat = mapInstance.getMapObj().getLonLatFromPixel(mouseEvent.xy);
     //lonLat.lon, lonLat.lat
     //xs_zone_vectorLayer.removeAllFeatures();
@@ -1481,23 +1449,7 @@ XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, 
         var marker = XS.MarkerUtil.createMarkerToLayer(xs_markerLayer, iconW, iconH, data[lonKey], data[latKey], data[iconUriKey]);
         data.xs_type = superLevel;
         marker.data = data;
-        if(xs_operateSystem == 0){
-            marker.events.on({click: markerClickFun});
-        }else{
-            marker.events.on({
-                touchmove: touchmoveMark,
-                touchend: markerClickFun
-            });
-        }
-        var xs_isShowMarker = true;
-        function touchmoveMark(){
-            xs_isShowMarker = false;
-        }
-        function markerClickFun(marker) {
-            if(!xs_isShowMarker){
-                xs_isShowMarker = true;
-                return;
-            }
+        marker.events.on({click: function(marker) {
             //点击marker回调lonLat
             if (superLevel != XS.Main.ZoneLevel.village) {
                 XS.Main.clearMarker();
@@ -1563,7 +1515,7 @@ XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, 
                     XS.Main.Poor.clickClusterCallback(marker.object.data);
                     break;
             }
-        }
+        }});
     }
     XS.CommonUtil.hideLoader();
 }
@@ -1573,30 +1525,13 @@ XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, 
  */
 XS.Main.addCityMarker2Layer = function(){
     var marker = XS.MarkerUtil.createMarkerToLayer(xs_cityMarkerLayer, 56, 56, 105.16+0.095, 27.07-0.07, "../img/zone/city/city.png");
-    if(xs_operateSystem == 0){
-        marker.events.on({click: cityMarkerClick});
-    }else{
-        marker.events.on({
-            //touchstart: touchmoveCityMark,
-            touchmove: touchmoveCityMark,
-            touchend: cityMarkerClick
-        });
 
-    }
-    var isShowMarkerClick = true;
-    function touchmoveCityMark(marker){
-        isShowMarkerClick = false;
-    }
-    function cityMarkerClick(marker) {
-        if(!isShowMarkerClick){
-            isShowMarkerClick = true;
-            return;
-        }
+    marker.events.on({click: function(marker) {
         //点击marker回调lonLat
         XS.Main.depClearMap();
         XS.Main.Pkjc.clickDetail(XS.Main.ZoneLevel.city,"毕节市",xs_cityID,false);
         xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 0);
-    }
+    }});
 }
 
 //隐藏所有Tip的Div标签
@@ -1705,13 +1640,7 @@ XS.Main.showAdvanceFeedDialog = function(regionid){
             '<a id="xs_main_btn_advance" href="javascript:0;" class="easyui-linkbutton" style="margin-top: 10px; margin-left: 340px;"><span style="width:120px; height: 40px; text-align: center;line-height: 40px;font-size: 25px;font-weight: bold; display: inline-block;">提交</span></a>'
         '</div>';
 
-    var left = null;
-    var top = null;
-    if(xs_operateSystem == 1){
-        left = (document.body.offsetWidth-500)/2.0;
-        top = (document.body.offsetHeight-300)/2.0;
-    }
-    XS.CommonUtil.openDialog("xs_main_detail_11", "意见反馈", "icon-man", htmlContent, false, false, true, 500, 300,left,top);
+    XS.CommonUtil.openDialog("xs_main_detail_11", "意见反馈", "icon-man", htmlContent, false, false, true, 500, 300);
     $("#xs_main_btn_advance").click(function(){
         var advance = $("#xs_main_ipt_advance").val();
         if(XS.StrUtil.isEmpty(advance)){

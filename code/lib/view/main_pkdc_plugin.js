@@ -303,15 +303,11 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc,cashTownV
     XS.Main.Pkjc.minInfoWinDialog();
     var jsonObj = null;
     var data = null;
-    var top = null;
-    if(xs_operateSystem == 1){
-        top = (document.body.offsetHeight-600)/2.0 - 40;
-    }
     if(level == XS.Main.ZoneLevel.city)
     {
         //(titleAttr,tabsId,position,isFit,headerWidth,plain,width,height)
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.city.title,"xs_pkdc_detailTabs","top");
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,top,function(){
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,function(){
             $("#xs_main_detail").dialog("destroy");
             if(isPkdc){
                 $("#xs_pkdc_msgWin").window("open");
@@ -468,7 +464,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc,cashTownV
     {
         xs_pkdc_cashDetailData.county = {baseInfo:"",earthInfo:"",income:"",peopleStatistic:"",peopleStatistic2:"",majorWork:"",helpPoor:"",helpInfo:""};
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.county.title,"xs_pkdc_detailTabs","top",false);
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,top,function(){
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,function(){
             $("#xs_main_detail").dialog("destroy");
             if(isPkdc){
                 $("#xs_pkdc_msgWin").window("open");
@@ -658,7 +654,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc,cashTownV
             xs_pkdc_cashDetailData.town.baseInfo = cashTownVillBInfoObj;
         }
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.town.title,"xs_pkdc_detailTabs","top",false);
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,top,function(){
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,function(){
             $("#xs_main_detail").dialog("destroy");
             if(isPkdc){
                 $("#xs_pkdc_msgWin").window("open");
@@ -757,7 +753,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc,cashTownV
             xs_pkdc_cashDetailData.vill.baseInfo = cashTownVillBInfoObj;
         }
         var content = XS.Main.Pkjc.tabsContent(XS.Main.Pkjc.detailKV.village.title,"xs_pkdc_detailTabs","top",false);
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,top,function(){
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-详情", "icon-man", content, false, true, false, 600,600,0,null,function(){
             $("#xs_main_detail").dialog("destroy");
             if(isPkdc){
                 $("#xs_pkdc_msgWin").window("open");
@@ -867,10 +863,6 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
     xs_pkdc_AnalysTabsChartArr = [];
     XS.Main.Pkjc.minInfoWinDialog();
     var xs_pkdc_analyIndex = 0;
-    var top = null;
-    if(xs_operateSystem == 1){
-        top = (document.body.offsetHeight-600)/2.0 - 40;
-    }
     if(level == XS.Main.ZoneLevel.city)//(titleAttr,tabsId,position,isFit,plain,width,height,headerWidth,tabHeight)
     {
         var tabTile = ["饮水分析","异地搬迁","培训分析","社会保障","危房情况","脱贫分析","致贫原因","文化程度"];
@@ -878,7 +870,7 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
                 XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",true,true,585,560,70,40) +
             '</div>';
         $("#xs_pkdc_AnalysTabs").css({boxSizing: "border-box"});
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 700,600,0,top,function(){
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 700,600,0,null,function(){
             $("#xs_main_detail").dialog("destroy");
             if(ispkdc){
                 $("#xs_pkdc_msgWin").window("open");
@@ -1042,7 +1034,7 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
                 XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",true,true,800,545,70,40) +
             '</div>';
         $("#xs_pkdc_AnalysTabs").css({boxSizing: "border-box"});
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 700,600,0,top,function(){
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 700,600,0,null,function(){
             $("#xs_main_detail").dialog("destroy");
             if(ispkdc){
                 $("#xs_pkdc_msgWin").window("open");
@@ -1171,7 +1163,7 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
         var content = '<div style="padding:  2px 2px 2px 0px;box-sizing: border-box;height: 100%;">' +
             XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",true,true,800,545,70,40) +
             '</div>';
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 700,600,0,top,function(){
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 700,600,0,null,function(){
             $("#xs_main_detail").dialog("destroy");
             if(ispkdc){
                 $("#xs_pkdc_msgWin").window("open");
@@ -1309,7 +1301,7 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
         var content = '<div style="padding: 2px 2px 2px 0px;box-sizing: border-box;height: 100%;">' +
             XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",true,true,800,545,70,40) +
             '</div>';
-        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 700,600,0,top,function(){
+        XS.CommonUtil.openDialog("xs_main_detail", currentName + "-贫困数据分析", "icon-man", content, false, true, false, 700,600,0,null,function(){
             $("#xs_main_detail").dialog("destroy");
             if(ispkdc){
                 $("#xs_pkdc_msgWin").window("open");
@@ -1451,10 +1443,6 @@ XS.Main.Pkjc.clickItemFund = function(currentName){
     XS.Main.Poor.clearRelocationLayer();
     xs_pkdc_itemFundDgridJson = [];
     XS.Main.Pkjc.minInfoWinDialog();
-    var top = null;
-    if(xs_operateSystem == 1){
-        top = (document.body.offsetHeight-600)/2.0 - 40;
-    }
     var content = '<script id="echarts_all" src="../base/echart2/dist/echarts-all.js"></script>' +
         '<div style="width:100%;height: 100%;padding:5px 5px 5px 0px;box-sizing: border-box;">' +
             '<div id="xs_pkdc_itemFund1" style="width:100%;height:100%;box-sizing: border-box;">' +
@@ -1476,7 +1464,7 @@ XS.Main.Pkjc.clickItemFund = function(currentName){
                 "</div>" +
             '</div>' +
         '</div>';
-    XS.CommonUtil.openDialog("xs_main_detail", currentName + "-项目资金", "icon-man", content, false, true, false, 700,600,0,top,function(){
+    XS.CommonUtil.openDialog("xs_main_detail", currentName + "-项目资金", "icon-man", content, false, true, false, 700,600,0,null,function(){
         $("#xs_echartjs").empty().append('<script src="../base/echart/echarts.js"></script>');
         $("#xs_main_detail").dialog("destroy");
         $("#xs_pkdc_msgWin").window("open");

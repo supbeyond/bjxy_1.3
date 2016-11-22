@@ -568,10 +568,6 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         $('#xs_pkdc_poorAdviceBtn').linkbutton({iconCls:'e_icon-email_go'});
         //添加加载进度
         XS.CommonUtil.loadProgressCircleTag($("#xs_pkdc_mgsLeft"), "xs_pkdc_msgWin_p");
-        var top = null;
-        if(xs_operateSystem == 1){
-            top = (document.body.offsetHeight-600)/2.0 - 40;
-        }
 
         //初始化窗口
         $('#xs_pkdc_msgWin').window({
@@ -585,7 +581,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
             width:600,
             height:600,
             left:0,
-            top:top,
+            top:null,
             tools:[],
             onClose:function(){
                 xs_pkdc_isShowInfoWin = false;

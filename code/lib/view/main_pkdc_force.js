@@ -189,13 +189,7 @@ var xs_pkdc_itemFoundChart = null;
                      '</div>' +
                  '</div>';
 
-                 var left = null;
-                 var top = null;
-                 if(xs_operateSystem == 1){
-                     left = (document.body.offsetWidth-500)/2.0;
-                     top = (document.body.offsetHeight-300)/2.0;
-                 }
-                 XS.CommonUtil.openDialog("xs_main_itemFoundNode", params.name + "-" + projectName, "icon-man", content, true, false, false, 500, 300,left,top,function(){
+                 XS.CommonUtil.openDialog("xs_main_itemFoundNode", params.name + "-" + projectName, "icon-man", content, true, false, false, 500, 300,null,null,function(){
                      //$("#xs_pkdc_itemFundRowDataWin").dialog("open");
                  });
                  XS.Main.addDivHover2HiddenUTFGridTip("xs_main_itemFoundNode");
