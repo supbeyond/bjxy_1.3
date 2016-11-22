@@ -90,7 +90,19 @@ XS.Main.load = function(){
         XS.CommonUtil.showMsgDialog("", "andriod");
         xs_operateSystem = 1;
         window.addEventListener("orientationchange", function() {
-            alert("screen: " + $(document).width() + "||" + "height: " + $(screen).height());
+            if($("#xs_pkdc_msgWin").length>0){
+                var top = (document.body.offsetHeight-600)/2.0 - 40;
+                $('#xs_pkdc_msgWin').window("resize",{width:600,height:600,left:0,top:top});
+            }
+            if($("#xs_main_detail").length>0){
+                var top = (document.body.offsetHeight-600)/2.0 - 40;
+                $("#xs_main_detail").dialog("resize",{width:600,height:600,left:0,top:top});
+            }
+            if($("#xs_main_itemFoundNode").length>0){
+                var left = (document.body.offsetWidth-500)/2.0;
+                var top = (document.body.offsetHeight-300)/2.0;
+                $("#xs_main_itemFoundNode").dialog("resize",{width:500,height:300,left:left,top:top});
+            }
         });
 
     }

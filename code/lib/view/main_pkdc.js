@@ -568,6 +568,10 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         $('#xs_pkdc_poorAdviceBtn').linkbutton({iconCls:'e_icon-email_go'});
         //添加加载进度
         XS.CommonUtil.loadProgressCircleTag($("#xs_pkdc_mgsLeft"), "xs_pkdc_msgWin_p");
+        var top = null;
+        if(xs_operateSystem == 1){
+            top = (document.body.offsetHeight-600)/2.0 - 40;
+        }
 
         //初始化窗口
         $('#xs_pkdc_msgWin').window({
@@ -581,7 +585,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
             width:600,
             height:600,
             left:0,
-            top:null,
+            top:top,
             tools:[],
             onClose:function(){
                 xs_pkdc_isShowInfoWin = false;
@@ -662,14 +666,10 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         });
         //详情点击
         $('#xs_pkdc_details').click(function(){
-            XS.Main.Pkjc.closeInfoDialog();
-            XS.Main.Poor.clearRelocationLayer();
             XS.Main.Pkjc.clickDetail(xs_pkdc_zoneLevel,xs_pkdc_currentName,xs_pkdc_currentStateCode,true);
         });
         //数据分析点击
         $('#xs_pkdc_dataAnalysis').click(function(){
-            XS.Main.Pkjc.closeInfoDialog();
-            XS.Main.Poor.clearRelocationLayer();
             XS.Main.Pkjc.clickAnalysis(xs_pkdc_zoneLevel,xs_pkdc_currentStateCode,xs_pkdc_currentName,true);
         });
         //责任监控
@@ -690,8 +690,6 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         });
         //项目资金点击
         $('#xs_pkdc_itemFund').click(function(){
-            XS.Main.Pkjc.closeInfoDialog();
-            XS.Main.Poor.clearRelocationLayer();
             XS.Main.Pkjc.clickItemFund(xs_pkdc_currentName);
         });
         //扶贫搬迁点击

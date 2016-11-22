@@ -140,7 +140,7 @@ XS.Main.readyAddMarkerData = function(objArr){
     xs_poorLabelLayer.addFeatures(geotextFeatures);
     xs_poorLabelLayer.setVisibility(true);
     //xs_clusterLayer.addFeatures(features);
-    XS.Main.addMarkers2Layer(dataArr, "LONGITUDE", "LATITUDE", "xs_p_icon", 20, 20, 3);
+    XS.Main.addMarkers2Layer(dataArr, "LONGITUDE", "LATITUDE", "xs_p_icon", 25, 25, 3);
 
 
     var isFirstClick = true;
@@ -186,7 +186,7 @@ XS.Main.readyAddMarkerData = function(objArr){
         xs_poorLabelLayer.removeAllFeatures();
         xs_poorLabelLayer.addFeatures(clickPoorLegendLabels);
         //xs_poorLabelLayer.setVisibility(true);
-        XS.Main.addMarkers2Layer(clickPoorLegendMarkers, "LONGITUDE", "LATITUDE", "xs_p_icon", 20, 20, 3);
+        XS.Main.addMarkers2Layer(clickPoorLegendMarkers, "LONGITUDE", "LATITUDE", "xs_p_icon", 25, 25, 3);
     });
 }
 
@@ -210,6 +210,8 @@ XS.Main.Poor.clickClusterCallback = function(obj){
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTempHouseNinfoByHId", data, function (json) {
         XS.CommonUtil.hideLoader();
         if (json && json.length>0) {
+            json[0].LONGITUDE = obj.LONGITUDE;
+            json[0].LATITUDE = obj.LATITUDE;
             XS.Main.Poor.showPoorInfo(json[0]);
         }
     },function(e){XS.CommonUtil.hideLoader();});
@@ -882,6 +884,7 @@ var xs_poor_echart_option =
  * 扶贫搬迁
  * @param id
  */
+var xs_poor_isUpOneLevel = false;
 XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
     XS.Main.hiddenLayers();
     xs_markerLayer.clearMarkers();
@@ -896,7 +899,6 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
     XS.Main.Pkjc.closeGaugeData();
 
     $("#xs_echartjs").empty().append('<script src="../base/echart2/dist/echarts-all.js"></script>');
-
     if(xs_poor_elementsLayer==null)
     {
         xs_poor_elementsLayer = new SuperMap.Layer.Elements("xs_poor_elementsLayer");
@@ -920,6 +922,9 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
         {
            // console.log(params);
             //XS.LogUtil.log("level="+level+"parentId="+parentId);
+            if(params.data.xs_type == 0){
+                xs_poor_isUpOneLevel = true;
+            }
             xs_clickMapType = XS.Main.clickMapType.poor_povertyrelocation;
             if(params)
             {
@@ -1053,6 +1058,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
     xs_poor_elementsLayer.setVisibility(true);
 
     XS.CommonUtil.showLoader();
+    xs_clickMapType = XS.Main.clickMapType.none;
     switch (level)
     {
         case XS.Main.ZoneLevel.city:
@@ -1064,12 +1070,10 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                         if(XS.Main.Tjfx.type_featuersArr.county.length>0){
                             XS.Main.Poor.preloc_handleData(level, parentId);
                         }else{
-                            xs_clickMapType = XS.Main.clickMapType.none;
                             XS.CommonUtil.hideLoader();
                         }
                     }, function(e)
                     {
-                        xs_clickMapType = XS.Main.clickMapType.none;
                         XS.CommonUtil.hideLoader();
                     }
                 );
@@ -1084,12 +1088,10 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                         {
                             XS.Main.Poor.preloc_handleData(level, parentId);
                         }else{
-                            xs_clickMapType = XS.Main.clickMapType.none;
                             XS.CommonUtil.hideLoader();
                         }
                     }, function(e)
                     {
-                        xs_clickMapType = XS.Main.clickMapType.none;
                         XS.CommonUtil.hideLoader();
                     }
                 );
@@ -1105,22 +1107,18 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                                     {
                                         XS.Main.Poor.preloc_handleData(level, parentId);
                                     }else{
-                                        xs_clickMapType = XS.Main.clickMapType.none;
                                         XS.CommonUtil.hideLoader();
                                     }
                                 }, function(e)
                                 {
-                                    xs_clickMapType = XS.Main.clickMapType.none;
                                     XS.CommonUtil.hideLoader();
                                 }
                             );
                         }else{
-                            xs_clickMapType = XS.Main.clickMapType.none;
                             XS.CommonUtil.hideLoader();
                         }
                     }, function(e)
                     {
-                        xs_clickMapType = XS.Main.clickMapType.none;
                         XS.CommonUtil.hideLoader();
                     }
                 );
@@ -1145,20 +1143,16 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                                     break;
                                 }
                             }else{
-                                xs_clickMapType = XS.Main.clickMapType.none;
                                 XS.CommonUtil.hideLoader();
                             }
                         }, function(e){
-                            xs_clickMapType = XS.Main.clickMapType.none;
                             XS.CommonUtil.hideLoader();
                         });
                     }else{
-                        xs_clickMapType = XS.Main.clickMapType.none;
                         XS.CommonUtil.hideLoader();
                     }
                 }, function(e)
                 {
-                    xs_clickMapType = XS.Main.clickMapType.none;
                     XS.CommonUtil.hideLoader();
                 }
             );
@@ -1171,7 +1165,6 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
             XS.Main.Poor.preloc_handleData(level, parentId, pdata);
             break;
     }
-
 }
 
 XS.Main.Poor.povertyRelocationClick = function(params) {
@@ -1623,7 +1616,6 @@ XS.Main.Poor.preloc_handleData = function(level, parentId, relocatorData){
 
     XS.Main.Poor.preloc_reSetOption(xs_poor_echart_option);
     xs_poor_echartObj.setOption(xs_poor_echart_option, {});
-    xs_clickMapType = XS.Main.clickMapType.none;
     XS.CommonUtil.hideLoader();
 }
 
@@ -1701,7 +1693,7 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
         xs_currentZoneFuture = null;
         xs_zone_vectorLayer.removeAllFeatures();
         var centerPoint = xs_MapInstance.getMapCenterPoint();
-        var data = {'name':obj.name, 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'镰刀湾村', 'flon':centerPoint.lon, 'flat':centerPoint.lat, 'to':obj.VILL, 'tlon':obj.LONGITUDE, 'tlat':obj.LATITUDE};
+        var data = {'name':obj.HHNAME, 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'镰刀湾村', 'flon':centerPoint.lon, 'flat':centerPoint.lat, 'to':obj.VILL, 'tlon':obj.LONGITUDE, 'tlat':obj.LATITUDE};
         XS.Main.Poor.povertyRelocation(XS.Main.ZoneLevel.poor, obj.VID, data);
     });
 

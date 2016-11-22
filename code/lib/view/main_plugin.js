@@ -143,7 +143,7 @@ var xs_rbbtn_isfullscreen = false; //是否是全屏
 XS.Main.init = function(){
     //xs_leftToolBarC
     //xs_tjfx_leftMenu
-    $("#xs_leftToolBarC").css("left", window.outerWidth/2.0-315);
+    //$("#xs_leftToolBarC").css("left", window.outerWidth/2.0-315);
     $("#xs_tjfx_leftMenu").css({
         "left":window.outerWidth/2.0+250
     });
@@ -281,8 +281,15 @@ XS.Main.mapContextmenu = function(e){
 //滑出底工具菜单
 XS.Main.showBottomToolBar = function(){
     if((!xs_btoolbar_isShowing)&&((!xs_btoolbar_isClosing))){
+        var bodyOffsetWidth = document.body.offsetWidth;
+        if(bodyOffsetWidth > 640){
+            $("#xs_leftToolPanel").css({left: (bodyOffsetWidth - 640)/2.0});
+        }else{
+            $("#xs_leftToolPanel").css({left: 0});
+        }
         xs_btoolbar_isShowing = true;
         $("#xs_utfGridC").css("display","none"); //关闭显示窗口
+        //$("#xs_leftToolBarC").css({width:document.body.offsetHeight});
         $("#xs_leftToolBarC").stop(true, false).animate({"bottom": -30}, 200, function(msg){
             xs_btoolbar_isShowing = false;
         });
@@ -1697,7 +1704,15 @@ XS.Main.showAdvanceFeedDialog = function(regionid){
             '<input id="xs_main_ipt_advance" class="easyui-textbox easyui-resizable" data-options="multiline:true,prompt:\'请输入意见\'" style="width:100%;height:200px">'+
             '<a id="xs_main_btn_advance" href="javascript:0;" class="easyui-linkbutton" style="margin-top: 10px; margin-left: 340px;"><span style="width:120px; height: 40px; text-align: center;line-height: 40px;font-size: 25px;font-weight: bold; display: inline-block;">提交</span></a>'
         '</div>';
-    XS.CommonUtil.openDialog("xs_main_detail_11", "意见反馈", "icon-man", htmlContent, false, false, true, 500, 300);    $("#xs_main_btn_advance").click(function(){
+
+    var left = null;
+    var top = null;
+    if(xs_operateSystem == 1){
+        left = (document.body.offsetWidth-500)/2.0;
+        top = (document.body.offsetHeight-300)/2.0;
+    }
+    XS.CommonUtil.openDialog("xs_main_detail_11", "意见反馈", "icon-man", htmlContent, false, false, true, 500, 300,left,top);
+    $("#xs_main_btn_advance").click(function(){
         var advance = $("#xs_main_ipt_advance").val();
         if(XS.StrUtil.isEmpty(advance)){
             XS.CommonUtil.showMsgDialog("", "意见内容不能为空");
