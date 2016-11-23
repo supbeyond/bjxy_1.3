@@ -113,7 +113,7 @@ XS.Main.Tjfx.range = function(level, parentId, type){
                     action = "QueryCountyBaseInfoByareaId";
                     break;
                 case XS.Main.Tjfx.type.range_tpx:
-                    action = "QueryOutPoorBycount";
+                    action = "QueryOutPoorBycount_SP";
                     break;
                 case XS.Main.Tjfx.type.range_wfx:
                     action = "QueryDangerHouseBycount";
@@ -186,7 +186,7 @@ XS.Main.Tjfx.range = function(level, parentId, type){
                     action = "QueryTownsBaseInfoByareaId";
                     break;
                 case XS.Main.Tjfx.type.range_tpx:
-                    action = "QueryOutPoorBycount";
+                    action = "QueryOutPoorBycount_SP";
                     break;
                 case XS.Main.Tjfx.type.range_wfx:
                     action = "QueryDangerHouseBycount";
@@ -234,7 +234,7 @@ XS.Main.Tjfx.range = function(level, parentId, type){
                     action = "QueryVillBaseByareaId";
                     break;
                 case XS.Main.Tjfx.type.range_tpx:
-                    action = "QueryOutPoorBycount";
+                    action = "QueryOutPoorBycount_SP";
                     break;
                 case XS.Main.Tjfx.type.range_wfx:
                     action = "QueryDangerHouseBycount";
@@ -466,8 +466,8 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                 jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
                 jsonObj.push({"name":"区域","value":obj.REGION_Name});
                 jsonObj.push({"name":"脱贫率","value":obj.OutPoorRate});
+                jsonObj.push({"name":"总户数","value":obj.OutPoorPNum});
                 jsonObj.push({"name":"脱贫户数","value":obj.OutPoorHNum});
-                jsonObj.push({"name":"脱贫人数","value":obj.OutPoorPNum});
                 break;
             case XS.Main.Tjfx.type.range_wfx:
                 switch (xs_tjfx_zoneLevel){

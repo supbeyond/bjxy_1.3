@@ -1011,16 +1011,24 @@ XS.Main.Pkjc.reqCurrAndPreName = function(){
  * @param poorRate
  */
 XS.Main.Pkjc.showBar = function(regionId,regionName,poorH,poorP,poorRate){
-    var json = xs_pkdc_cacheDataArr;
-    for(var i=0;i<json.length;i++){
-        xs_pkdc_categoryData.push(json[i][regionName]);
-        xs_pkdc_barChartData.poorHSeries.push(json[i][poorH]);
-        xs_pkdc_barChartData.poorPSeries.push(json[i][poorP]);
-        xs_pkdc_poorOccurRate.push(json[i][poorRate]);
+    var json = [];
+    for(var i=0;i<xs_pkdc_cacheDataArr.length;i++){
+        if(!xs_pkdc_cacheDataArr[i]){
+            continue;
+        }
+        json.push(xs_pkdc_cacheDataArr[i]);
+        xs_pkdc_categoryData.push(xs_pkdc_cacheDataArr[i][regionName]);
+        xs_pkdc_barChartData.poorHSeries.push(xs_pkdc_cacheDataArr[i][poorH]);
+        xs_pkdc_barChartData.poorPSeries.push(xs_pkdc_cacheDataArr[i][poorP]);
+        xs_pkdc_poorOccurRate.push(xs_pkdc_cacheDataArr[i][poorRate]);
     }
 
     var gridN = xs_pkdc_categoryData.length;
-    if(gridN >=10){
+    if(gridN == 0){
+        $("#xs_pkdc_msg_pieC").css("display","none");
+        $("#xs_pkdc_msg_barC").css("height","100%");
+        return;
+    }else if(gridN >=10){
         $("#xs_pkdc_msg_barC").css("height",gridN * 39 + 90);
     }else{
         $("#xs_pkdc_msg_barC").css("height","100%");
