@@ -595,7 +595,7 @@ html, body{
     background:url("../img/searchbox.png") no-repeat 0 -76px #00aedd;
 }
 #xs_searchbox_button{
-    width: 57px;
+    width: 56px;
     height: 100%;
     cursor:pointer;
     display: inline-block;
