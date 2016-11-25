@@ -759,7 +759,7 @@ XS.Main.Poor.show45State = function(id,name){
                         content
                             += '</div>'+
                 '</div>';
-            content +=
+            /*content +=
                 '<script>' +
                     '$(".xs_poor_45_c").mouseenter(function(){' +
                         '$(this).find(".xs_poor_45_tip").show("fast");' +
@@ -767,7 +767,7 @@ XS.Main.Poor.show45State = function(id,name){
                     ' $(".xs_poor_45_c").mouseleave(function(){' +
                         '$(this).find(".xs_poor_45_tip").hide("fast");' +
                     '});' +
-                '</script>';
+                '</script>';*/
             XS.CommonUtil.openDialog("xs_main_detail_1", name, "icon-man", content, false, false, false);
         }else
         {

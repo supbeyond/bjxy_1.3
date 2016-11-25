@@ -270,10 +270,10 @@ var xs_btoolbar_isClosing = false;
 XS.Main.showBottomToolBar = function(){
     if((!xs_btoolbar_isShowing)&&((!xs_btoolbar_isClosing))){
         var bodyOffsetWidth = document.body.offsetWidth;
-        if(bodyOffsetWidth > 640){
-            $("#xs_leftToolPanel").css({left: (bodyOffsetWidth - 640)/2.0});
+        if(bodyOffsetWidth > 575){
+            $("#xs_leftToolBarC").css({left: (bodyOffsetWidth - 575)/2.0});
         }else{
-            $("#xs_leftToolPanel").css({left: 0});
+            $("#xs_leftToolBarC").css({left: 0});
         }
         xs_btoolbar_isShowing = true;
         $("#xs_utfGridC").css("display","none"); //关闭显示窗口
@@ -1530,7 +1530,6 @@ XS.Main.addCityMarker2Layer = function(){
         //点击marker回调lonLat
         XS.Main.depClearMap();
         XS.Main.Pkjc.clickDetail(XS.Main.ZoneLevel.city,"毕节市",xs_cityID,false);
-        xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 0);
     }});
 }
 
@@ -1624,6 +1623,7 @@ XS.Main.depClearMap = function() {
 
     XS.Main.Poor.clearRelocationLayer();
     XS.Main.clearMarker();
+    xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 0);
 }
 //清除xs_markerLayer、xs_poorLabelLayer和图例
 XS.Main.clearMarker = function() {
