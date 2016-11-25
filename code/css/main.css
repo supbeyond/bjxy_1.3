@@ -86,15 +86,14 @@ html, body{
 /*底-功能列表*/
 #xs_leftToolBarC{
     z-index: 999;
-    border1: 3px solid green;
     position: fixed;
     left1: 0px;
     bottom: -150px;
     background: transparent;
-    width: 100%;
+    width: 575px;
     height: 140px;
     scroll:no;
-    border-width1:0px;
+    border-width:0px;
     /*border: 1px solid red;*/
     /*-webkit-box-shadow:0 0 2px 2px rgba(19, 33, 46, 0.12);
     -moz-box-shadow:0 0 2px 2px rgba(19, 33, 46, 0.12);
@@ -377,10 +376,9 @@ html, body{
     text-align: center;
     color: #FFFFFF;
     padding-bottom: 2px;
-    display: none;
+    display: block;
     font-size: 13px;
     padding: 8px 0px;
-    color: #ffffff;
 }
 
 #xs_poor_45_aqyd{
@@ -402,6 +400,14 @@ html, body{
     width: 100%;height:100%;
     box-sizing: border-box;
     padding: 1%;
+}
+
+.xs_poor_45_villC:hover{
+    box-shadow: 15px 15px 20px rgba(50,50,50,0.4);
+    transform:scale(1.20);
+    -webkit-transform:rotate(0deg) scale(1.01);
+    z-index: 2;
+    cursor: pointer;
 }
 
 .xs_poor_45_villC{
@@ -445,7 +451,7 @@ html, body{
     text-align: center;
     color: #FFFFFF;
     padding-bottom: 2px;
-    display: none;
+    display: block;
     font-size: 13px;
     padding: 8px 0px;
 }
