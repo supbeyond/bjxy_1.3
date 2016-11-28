@@ -13,6 +13,7 @@ var xs_clickMapFutureId = -1; //保存当前被选中的行政FutureID
 var xs_currentZoneLevel = -1; //记录当前行政等级
 var xs_isMapClickTypeNone = false; //判断单击地图是否是的类型为None
 var xs_isClickMapFinish = true;
+var xs_mouseMove_regionId = -1; //鼠标移动的目标ID
 //var xs_poorHLabelLayer = null;
 //行政区域点中样式
 var xs_stateZoneStyle = {
@@ -31,6 +32,13 @@ XS.Main.CacheZoneInfos = { //缓存行政区域信息
     village:{townId:"", data:[]},
     poorH:{villageId:"",data:[]}
 };
+//缓存各级区域要素信息
+XS.Main.CacheZoneFeatureInf = {
+    city:[],
+    county:[],
+    town:[],
+    vill:[]
+}
 
 //行政区域级别
 XS.Main.ZoneLevel = {
@@ -424,9 +432,12 @@ XS.Main.utfGridLayerMoveCallback = function (infoLookup, loc, pixel)
             info = infoLookup[idx];
             if (info && info.data)
             {
+                var isExistData = false;
+                var data = infoLookup[idx].data;
                 var scale = 1/xs_MapInstance.getMapObj().getScale();
                 if(scale>300000)
                 {
+                    xs_mouseMove_regionId = data.AdminCode;
                     //县County_Code.Name
                     if(info.data.vc_hh_num)
                     {
@@ -438,6 +449,7 @@ XS.Main.utfGridLayerMoveCallback = function (infoLookup, loc, pixel)
                     }
                 }else if(scale<=300000&&scale>80000)
                 {
+                    xs_mouseMove_regionId = data.乡镇代码;
                     if(info.data.乡镇代码)
                     {
                         if(xs_user_regionLevel<=XS.Main.ZoneLevel.town)
@@ -464,6 +476,7 @@ XS.Main.utfGridLayerMoveCallback = function (infoLookup, loc, pixel)
                     }
                 }else
                 {
+                    xs_mouseMove_regionId = data.OldID;
                     if(info.data.Town_id)
                     {
                         //村Village_Code.vd_name
@@ -499,11 +512,49 @@ XS.Main.utfGridLayerMoveCallback = function (infoLookup, loc, pixel)
                         }
                     }
                 }
+                var cacheFeatures = [];
+                var idStr = "";
+                switch (idx){
+                    case "1":
+                        cacheFeatures = XS.Main.CacheZoneFeatureInf.county;
+                        idStr = "AdminCode";
+                        break;
+                    case "2":
+                        cacheFeatures = XS.Main.CacheZoneFeatureInf.town;
+                        idStr = "乡镇代码";
+                        break;
+                    case "3":
+                        cacheFeatures = XS.Main.CacheZoneFeatureInf.vill;
+                        idStr = "OldID";
+                        break;
+                }
+                for(var i=0;i<cacheFeatures.length;i++){
+                    if(cacheFeatures.id == data[idStr]){
+                        isExistData = true;
+                        break;
+                    }
+                }
+                if(!isExistData){
+                    cacheFeatures.push({id:data[idStr],data:data});
+                }
             }
         }
     }
 };
-
+//缓存鼠标移动数据
+XS.Main.cashMouseData = function(cacheFeatures,infoLookup,regionNo,idStr){
+    var isExistData = false;
+    var data = infoLookup[regionNo];
+    for(var i=0;i<cacheFeatures.length;i++){
+        if(cacheFeatures.id == data[idStr]){
+            isExistData = true;
+            break;
+        }
+    }
+    if(!isExistData){
+        cacheFeatures.push({id:data[idStr],data:data});
+    }
+}
 /** CTV --County Town Village
  * @param level level:0--county ; 1--town; 2--village
  * @param pbno  父级区域ID
@@ -981,13 +1032,25 @@ XS.Main.clickMapCallback = function(mouseEvent){
     xs_currentZoneFuture = null;
     var scale = 1/xs_MapInstance.getMapObj().getScale();
     var layerName = "";
+    var targetFeature = null;
+    var level = -1;
     if(scale>300000){ //county
+        level = XS.Main.ZoneLevel.county;
         layerName = "County_Code";
+        targetFeature = XS.Searchbox.findTargetFeature(XS.Main.Ztree.zoneFeatuers.county,xs_mouseMove_regionId,"AdminCode");
     }else if(scale<=300000&& scale>80000) //town
     {
+        level = XS.Main.ZoneLevel.town;
         layerName = "Twon_Code";
+        targetFeature = XS.Searchbox.findTargetFeature(XS.Main.Ztree.zoneFeatuers.town,xs_mouseMove_regionId,"乡镇代码");
     }else{ //village
+        level = XS.Main.ZoneLevel.village;
         layerName = "Village_Code";
+        targetFeature = XS.Searchbox.findTargetFeature(XS.Main.Ztree.zoneFeatuers.village,xs_mouseMove_regionId,"OldID");
+    }
+    if(targetFeature){
+        XS.Main.featureAfter(level,targetFeature);
+        return;
     }
     var lonLat = xs_MapInstance.getMapObj().getLonLatFromPixel(mouseEvent.xy);
     var point = new SuperMap.Geometry.Point(lonLat.lon, lonLat.lat);
@@ -1007,136 +1070,8 @@ XS.Main.clickMapCallback = function(mouseEvent){
                 return;
             }
 
-            var scale = 1/xs_MapInstance.getMapObj().getScale();
-            var layerName = "";
-            var level = -1;
-            if(scale>300000){ //county
-                layerName = "County_Code";
-                level = XS.Main.ZoneLevel.county;
-            }else if(scale<=300000&& scale>80000) //town
-            {
-                layerName = "Twon_Code";
-                level = XS.Main.ZoneLevel.town;
-            }else{ //village
-                layerName = "Village_Code";
-                level = XS.Main.ZoneLevel.village;
-            }
-
             //加载数据到矢量图层中
-            switch (level)
-            {
-                case XS.Main.ZoneLevel.county:
-                {
-                    switch (xs_user_regionLevel){
-                        case XS.Main.ZoneLevel.county:
-                            if(xs_user_regionId != feature.data.AdminCode){
-                                XS.CommonUtil.showMsgDialog("", "您的权限不够");
-                                XS.CommonUtil.hideLoader();
-                                xs_isClickMapFinish = true;
-                                return;
-                            }
-                            break;
-                        case XS.Main.ZoneLevel.town:
-                        case XS.Main.ZoneLevel.village:
-                            XS.CommonUtil.showMsgDialog("", "您的权限不够");
-                            XS.CommonUtil.hideLoader();
-                            xs_isClickMapFinish = true;
-                            return;
-                    }
-
-                    xs_clickMapFutureId = feature.data.AdminCode;
-                    xs_currentZoneCode = feature.data.AdminCode;
-                    xs_currentZoneName = feature.data.Name;
-                    xs_superZoneCode = xs_cityID;
-                    break;
-                }
-                case XS.Main.ZoneLevel.town:
-                {
-                    switch (xs_user_regionLevel){
-                        case XS.Main.ZoneLevel.county:
-                            if(xs_user_regionId != feature.data.县级代码){
-                                XS.CommonUtil.showMsgDialog("", "您的权限不够");
-                                XS.CommonUtil.hideLoader();
-                                xs_isClickMapFinish = true;
-                                return;
-                            }
-                            break;
-                        case XS.Main.ZoneLevel.town:
-                            if(xs_user_regionId != feature.data.乡镇代码){
-                                XS.CommonUtil.showMsgDialog("", "您的权限不够");
-                                XS.CommonUtil.hideLoader();
-                                xs_isClickMapFinish = true;
-                                return;
-                            }
-                            break;
-                        case XS.Main.ZoneLevel.village:
-                            XS.CommonUtil.showMsgDialog("", "您的权限不够");
-                            XS.CommonUtil.hideLoader();
-                            xs_isClickMapFinish = true;
-                            return;
-                    }
-
-                    xs_clickMapFutureId = feature.data.乡镇代码;
-                    xs_currentZoneCode = feature.data.乡镇代码;
-                    xs_currentZoneName = feature.data.乡镇名称;
-                    xs_superZoneCode = feature.data.县级代码;
-                    break;
-                }
-                case XS.Main.ZoneLevel.village:
-                {
-                    switch (xs_user_regionLevel){
-                        case XS.Main.ZoneLevel.county:
-                            if(xs_user_regionId != feature.data.country_id){
-                                XS.CommonUtil.showMsgDialog("", "您的权限不够");
-                                XS.CommonUtil.hideLoader();
-                                xs_isClickMapFinish = true;
-                                return;
-                            }
-                            break;
-                        case XS.Main.ZoneLevel.town:
-                            if(xs_user_regionId != feature.data.Town_id){
-                                XS.CommonUtil.showMsgDialog("", "您的权限不够");
-                                XS.CommonUtil.hideLoader();
-                                xs_isClickMapFinish = true;
-                                return;
-                            }
-                            break;
-                        case XS.Main.ZoneLevel.village:
-                            if(xs_user_regionId != feature.data.OldID){
-                                XS.CommonUtil.showMsgDialog("", "您的权限不够");
-                                XS.CommonUtil.hideLoader();
-                                xs_isClickMapFinish = true;
-                                return;
-                            }
-                        break;
-                    }
-
-                    xs_clickMapFutureId = feature.data.OldID;
-                    xs_currentZoneCode = feature.data.OldID;
-                    xs_currentZoneName = feature.data.vd_name;
-                    xs_superZoneCode = feature.data.Town_id;
-                    break;
-                }
-            }
-            //xs_MapInstance.getMapObj().zoomToExtent(feature.geometry.getBounds(),false);
-            xs_currentZoneFuture = feature;
-            feature.style = xs_stateZoneStyle;
-            xs_zone_vectorLayer.removeAllFeatures();
-            xs_zone_vectorLayer.addFeatures(feature);
-            xs_isMapClickTypeNone = true;
-            xs_currentZoneLevel = level;
-            //查询信息
-            XS.CommonUtil.hideLoader();
-            XS.Main.showBottomToolBar();
-            xs_isClickMapFinish = true;
-
-            if(xs_tjfx_themeLayer || xs_tjfx_graph_themeLayer || xs_poor_elementsLayer){
-                return;
-            }
-          //  XS.Main.showFunMenu();
-            //放大地图,加载贫困等级区域图标
-
-            XS.Main.readyAddMarkers(feature.geometry.getBounds().getCenterLonLat(),level,xs_currentZoneCode);
+            XS.Main.featureAfter(level,feature);
         }else{
             xs_isClickMapFinish = true;
             XS.CommonUtil.hideLoader();
@@ -1146,7 +1081,122 @@ XS.Main.clickMapCallback = function(mouseEvent){
         XS.CommonUtil.hideLoader();
     });
 }
+//点击地图获得feature之后的操作
+XS.Main.featureAfter = function(level,feature){
+    switch (level)
+    {
+        case XS.Main.ZoneLevel.county:
+        {
+            switch (xs_user_regionLevel){
+                case XS.Main.ZoneLevel.county:
+                    if(xs_user_regionId != feature.data.AdminCode){
+                        XS.CommonUtil.showMsgDialog("", "您的权限不够");
+                        XS.CommonUtil.hideLoader();
+                        xs_isClickMapFinish = true;
+                        return;
+                    }
+                    break;
+                case XS.Main.ZoneLevel.town:
+                case XS.Main.ZoneLevel.village:
+                    XS.CommonUtil.showMsgDialog("", "您的权限不够");
+                    XS.CommonUtil.hideLoader();
+                    xs_isClickMapFinish = true;
+                    return;
+            }
 
+            xs_clickMapFutureId = feature.data.AdminCode;
+            xs_currentZoneCode = feature.data.AdminCode;
+            xs_currentZoneName = feature.data.Name;
+            xs_superZoneCode = xs_cityID;
+            break;
+        }
+        case XS.Main.ZoneLevel.town:
+        {
+            switch (xs_user_regionLevel){
+                case XS.Main.ZoneLevel.county:
+                    if(xs_user_regionId != feature.data.县级代码){
+                        XS.CommonUtil.showMsgDialog("", "您的权限不够");
+                        XS.CommonUtil.hideLoader();
+                        xs_isClickMapFinish = true;
+                        return;
+                    }
+                    break;
+                case XS.Main.ZoneLevel.town:
+                    if(xs_user_regionId != feature.data.乡镇代码){
+                        XS.CommonUtil.showMsgDialog("", "您的权限不够");
+                        XS.CommonUtil.hideLoader();
+                        xs_isClickMapFinish = true;
+                        return;
+                    }
+                    break;
+                case XS.Main.ZoneLevel.village:
+                    XS.CommonUtil.showMsgDialog("", "您的权限不够");
+                    XS.CommonUtil.hideLoader();
+                    xs_isClickMapFinish = true;
+                    return;
+            }
+
+            xs_clickMapFutureId = feature.data.乡镇代码;
+            xs_currentZoneCode = feature.data.乡镇代码;
+            xs_currentZoneName = feature.data.乡镇名称;
+            xs_superZoneCode = feature.data.县级代码;
+            break;
+        }
+        case XS.Main.ZoneLevel.village:
+        {
+            switch (xs_user_regionLevel){
+                case XS.Main.ZoneLevel.county:
+                    if(xs_user_regionId != feature.data.country_id){
+                        XS.CommonUtil.showMsgDialog("", "您的权限不够");
+                        XS.CommonUtil.hideLoader();
+                        xs_isClickMapFinish = true;
+                        return;
+                    }
+                    break;
+                case XS.Main.ZoneLevel.town:
+                    if(xs_user_regionId != feature.data.Town_id){
+                        XS.CommonUtil.showMsgDialog("", "您的权限不够");
+                        XS.CommonUtil.hideLoader();
+                        xs_isClickMapFinish = true;
+                        return;
+                    }
+                    break;
+                case XS.Main.ZoneLevel.village:
+                    if(xs_user_regionId != feature.data.OldID){
+                        XS.CommonUtil.showMsgDialog("", "您的权限不够");
+                        XS.CommonUtil.hideLoader();
+                        xs_isClickMapFinish = true;
+                        return;
+                    }
+                    break;
+            }
+
+            xs_clickMapFutureId = feature.data.OldID;
+            xs_currentZoneCode = feature.data.OldID;
+            xs_currentZoneName = feature.data.vd_name;
+            xs_superZoneCode = feature.data.Town_id;
+            break;
+        }
+    }
+    //xs_MapInstance.getMapObj().zoomToExtent(feature.geometry.getBounds(),false);
+    xs_currentZoneFuture = feature;
+    feature.style = xs_stateZoneStyle;
+    xs_zone_vectorLayer.removeAllFeatures();
+    xs_zone_vectorLayer.addFeatures(feature);
+    xs_isMapClickTypeNone = true;
+    xs_currentZoneLevel = level;
+    //查询信息
+    XS.CommonUtil.hideLoader();
+    XS.Main.showBottomToolBar();
+    xs_isClickMapFinish = true;
+
+    if(xs_tjfx_themeLayer || xs_tjfx_graph_themeLayer || xs_poor_elementsLayer){
+        return;
+    }
+    //  XS.Main.showFunMenu();
+    //放大地图,加载贫困等级区域图标
+    XS.Main.readyAddMarkers(feature.geometry.getBounds().getCenterLonLat(),level,xs_currentZoneCode);
+}
 //缩放地图事件处理
 XS.Main.zoomedMapCallback = function(e){
     if(e && e.object) {
@@ -1268,15 +1318,34 @@ XS.Main.addTownVillPlevelMarker2Layer = function(superLevel, superId){
     xs_clickMapType = XS.Main.clickMapType.marker;
     var sql = "";
     var layerName = "";
+    var targetFeatures = [];
     switch (superLevel){
         case XS.Main.ZoneLevel.county:
             sql = "县级代码==";
             layerName = "Twon_Code";
+            for(var i=0;i<XS.Main.Ztree.zoneFeatuers.town.length;i++){
+                var superIdV = XS.Main.Ztree.zoneFeatuers.town[i].data.乡镇代码;
+                if(Math.floor(superIdV/1000) != superId){
+                    continue;
+                }
+                targetFeatures.push(XS.Main.Ztree.zoneFeatuers.town[i]);
+            }
             break;
         case XS.Main.ZoneLevel.town:
             sql = "Town_id==";
             layerName = "Village_Code";
+            for(var i=0;i<XS.Main.Ztree.zoneFeatuers.village.length;i++){
+                var superIdV = XS.Main.Ztree.zoneFeatuers.village[i].data.OldID;
+                if(superIdV.toString().slice(0,9) != superId){
+                    continue;
+                }
+                targetFeatures.push(XS.Main.Ztree.zoneFeatuers.town[i]);
+            }
             break;
+    }
+    if(targetFeatures.length>0){
+        XS.Main.readyAddRegionMarkersData(targetFeatures,superLevel,superId);
+        return;
     }
     XS.CommonUtil.showLoader();
     XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql+superId, xs_MapInstance.bLayerUrl,function(queryEventArgs)
