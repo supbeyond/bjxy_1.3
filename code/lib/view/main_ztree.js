@@ -11,6 +11,9 @@ XS.Main.Ztree.zoneFeatuers = {
     village:[]
 };
 var xs_ztree_isInitedData = false;
+var xs_ztree_isCountyFinish = false;
+var xs_ztree_isTownFinish = false;
+var xs_ztree_isVillFinish = false;
 
 /**
  * 加载行政区域树
@@ -24,9 +27,12 @@ XS.Main.Ztree.load = function(regId, ulevel)
         case XS.Main.ZoneLevel.city:
         case XS.Main.ZoneLevel.county:
             XS.Main.Ztree.loadCounty(regId, ulevel);
+            XS.Main.Ztree.loadTown(regId, ulevel);
+            XS.Main.Ztree.loadVillage(regId, ulevel);
             break;
         case XS.Main.ZoneLevel.town:
             XS.Main.Ztree.loadTown(regId, ulevel);
+            XS.Main.Ztree.loadVillage(regId, ulevel);
             break;
         case XS.Main.ZoneLevel.village:
             XS.Main.Ztree.loadVillage(regId, ulevel);
@@ -44,20 +50,24 @@ XS.Main.Ztree.loadCounty = function (regId, ulevel)
             break;
         case XS.Main.ZoneLevel.county:
             XS.Main.Ztree.zoneFeatuers.county = xs_user_Features;
-            XS.Main.Ztree.loadTown(regId, ulevel);
+            xs_ztree_isCountyFinish = true;
+            XS.Main.Ztree.handleZoneData(regId, ulevel);
+            //XS.Main.Ztree.loadTown(regId, ulevel);
             return;
     }
     XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql, xs_MapInstance.bLayerUrl,function(queryEventArgs)
     {
         var i, feature, result = queryEventArgs.result;
-        if (result && result.recordsets&&result.recordsets[0].features.length>0)
+        if (result && result.recordsets&&result.recordsets[0]&&result.recordsets[0].features.length>0)
         {
             for (i = 0; i < result.recordsets[0].features.length; i++)
             {
                 feature = result.recordsets[0].features[i];
                 XS.Main.Ztree.zoneFeatuers.county.push(feature);
             }
-            XS.Main.Ztree.loadTown(regId, ulevel);
+            xs_ztree_isCountyFinish = true;
+            XS.Main.Ztree.handleZoneData(regId, ulevel);
+            //XS.Main.Ztree.loadTown(regId, ulevel);
         }else{
             XS.CommonUtil.hideLoader();
             XS.CommonUtil.showMsgDialog("","加载数据失败！");
@@ -82,20 +92,24 @@ XS.Main.Ztree.loadTown = function (regId, ulevel)
             break;
         case XS.Main.ZoneLevel.town:
             XS.Main.Ztree.zoneFeatuers.town = xs_user_Features;
-            XS.Main.Ztree.loadVillage(regId, ulevel);
+            xs_ztree_isTownFinish = true;
+            XS.Main.Ztree.handleZoneData(regId, ulevel);
+            //XS.Main.Ztree.loadVillage(regId, ulevel);
             return;
     }
     XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql, xs_MapInstance.bLayerUrl,function(queryEventArgs)
     {
         var i, feature, result = queryEventArgs.result;
-        if (result && result.recordsets&&result.recordsets[0].features.length>0)
+        if (result && result.recordsets&&result.recordsets[0]&&result.recordsets[0].features.length>0)
         {
             for (i = 0; i < result.recordsets[0].features.length; i++)
             {
                 feature = result.recordsets[0].features[i];
                 XS.Main.Ztree.zoneFeatuers.town.push(feature);
             }
-            XS.Main.Ztree.loadVillage(regId, ulevel);
+            xs_ztree_isTownFinish = true;
+            XS.Main.Ztree.handleZoneData(regId, ulevel);
+            //XS.Main.Ztree.loadVillage(regId, ulevel);
         }else{
             XS.CommonUtil.hideLoader();
             XS.CommonUtil.showMsgDialog("","加载数据失败！");
@@ -113,7 +127,8 @@ XS.Main.Ztree.loadVillage = function (regId, ulevel)
     var layerName = "Village_Code";
     switch (ulevel) {
         case XS.Main.ZoneLevel.city:
-            XS.Main.Ztree.handleZoneData(regId, ulevel); //一次请求所有村的数据太多
+            //sql = "SMID>0";
+            //XS.Main.Ztree.handleZoneData(regId, ulevel); //一次请求所有村的数据太多
             return;
         case XS.Main.ZoneLevel.county:
             sql = "country_id="+regId;
@@ -123,6 +138,7 @@ XS.Main.Ztree.loadVillage = function (regId, ulevel)
             break;
         case XS.Main.ZoneLevel.village:
             XS.Main.Ztree.zoneFeatuers.village = xs_user_Features;
+            xs_ztree_isVillFinish = true;
             //处理数据
             XS.Main.Ztree.handleZoneData(regId, ulevel);
             return;
@@ -130,7 +146,7 @@ XS.Main.Ztree.loadVillage = function (regId, ulevel)
     XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql, xs_MapInstance.bLayerUrl,function(queryEventArgs)
     {
         var i, feature, result = queryEventArgs.result;
-        if (result && result.recordsets&&result.recordsets[0].features.length>0)
+        if (result && result.recordsets&&result.recordsets[0]&&result.recordsets[0].features.length>0)
         {
             for (i = 0; i < result.recordsets[0].features.length; i++)
             {
@@ -138,7 +154,10 @@ XS.Main.Ztree.loadVillage = function (regId, ulevel)
                 XS.Main.Ztree.zoneFeatuers.village.push(feature);
             }
             //处理数据
-            XS.Main.Ztree.handleZoneData(regId, ulevel);
+            if(ulevel != XS.Main.ZoneLevel.city){
+                xs_ztree_isVillFinish = true;
+                XS.Main.Ztree.handleZoneData(regId, ulevel);
+            }
         }else{
             XS.CommonUtil.hideLoader();
             XS.CommonUtil.showMsgDialog("","加载数据失败！");
@@ -153,6 +172,15 @@ XS.Main.Ztree.loadVillage = function (regId, ulevel)
 }
 
 XS.Main.Ztree.handleZoneData = function(regId, ulevel){
+    if(ulevel != XS.Main.ZoneLevel.city){
+        if(!xs_ztree_isCountyFinish || !xs_ztree_isTownFinish || !xs_ztree_isVillFinish){
+            return;
+        }
+    }else{
+        if(!xs_ztree_isCountyFinish || !xs_ztree_isTownFinish){
+            return;
+        }
+    }
     var data = [];
     switch (ulevel)
     {
@@ -266,8 +294,8 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
                         {
                             var townId = XS.Main.Ztree.zoneFeatuers.town[i-1].data.乡镇代码;
                             if(XS.Main.Ztree.zoneFeatuers.town[i-1].data.县级代码 != node.xs_id){
-                                continue;
-                            }
+                            continue;
+                        }
                             var townObj = {
                                 "id":parseInt(node.id+''+i),
                                 "state":"closed",
