@@ -57,7 +57,7 @@ XS.CommonUtil.ajaxHttpReq = function(url, action, data, succCallback, failCallba
     $.ajax({
         type: "post",
         async: true,
-        timeout:10*1000,
+        timeout:100*1000,
         url: url + "/" + action+ "?jsoncallback=?",
         dataType: "jsonp",
         data:data,

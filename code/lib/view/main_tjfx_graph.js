@@ -204,7 +204,7 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                 if(XS.Main.Tjfx.Graph.featuersArr.county.data.length < 1){
 
                     XS.CommonUtil.showLoader();
-                    XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel, "SMID>0", function()
+                    XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel,parentCode, "SMID>0", function()
                         {
                             XS.CommonUtil.hideLoader();
                             if(XS.Main.Tjfx.Graph.featuersArr.county.data.length>0)
@@ -267,7 +267,7 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                         if (XS.Main.Tjfx.Graph.featuersArr.county.data.length < 1) {
 
                             XS.CommonUtil.showLoader();
-                            XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel, "SMID>0", function () {
+                            XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel,parentCode, "SMID>0", function () {
                                     XS.CommonUtil.hideLoader();
                                     if (XS.Main.Tjfx.Graph.featuersArr.county.data.length > 0) {
                                         XS.Main.Tjfx.Graph.addFeatures2Layer(XS.Main.Tjfx.Graph.featuersArr.county.data,XS.Main.Tjfx.Graph.CacheZoneInfos.county.data,0);
@@ -332,7 +332,7 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                     }
                     XS.Main.Tjfx.Graph.CacheZoneInfos.town = json;
                     XS.CommonUtil.showLoader();
-                    XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel, "县级代码=="+parentCode, function()
+                    XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel,parentCode, "县级代码=="+parentCode, function()
                         {
                             XS.CommonUtil.hideLoader();
                             if(XS.Main.Tjfx.Graph.featuersArr.town.length>0)
@@ -396,7 +396,7 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                     }
                     XS.Main.Tjfx.Graph.CacheZoneInfos.village = json;
                     XS.CommonUtil.showLoader();
-                    XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel, "Town_id=="+parentCode, function()
+                    XS.Main.Tjfx.Graph.loadZoneFeatuers(parentLevel,parentCode, "Town_id=="+parentCode, function()
                         {
                             XS.CommonUtil.hideLoader();
                             if(XS.Main.Tjfx.Graph.featuersArr.village.length>0)
@@ -457,7 +457,15 @@ XS.Main.Tjfx.Graph.themeParam = function(graph,fields,codomain,ViewBox,xShapeBla
 }
 
 //加载县、乡、村features
-XS.Main.Tjfx.Graph.loadZoneFeatuers = function(parentLevel, sql, succeedCallback, failCallback){
+XS.Main.Tjfx.Graph.loadZoneFeatuers = function(parentLevel,parentCode, sql, succeedCallback, failCallback){
+    switch (parentLevel) {
+        case XS.Main.ZoneLevel.county:
+            XS.Main.Tjfx.Graph.featuersArr.town = [];
+            break;
+        case XS.Main.ZoneLevel.town:
+            XS.Main.Tjfx.Graph.featuersArr.village = [];
+            break;
+    }
     var layerName = "";
     switch (parentLevel) {
         case XS.Main.ZoneLevel.city:
@@ -465,25 +473,32 @@ XS.Main.Tjfx.Graph.loadZoneFeatuers = function(parentLevel, sql, succeedCallback
                 succeedCallback();
                 return;
             }
+            if(XS.Main.Ztree.zoneFeatuers.county.length>0){
+                XS.Main.Tjfx.Graph.featuersArr.county.data = XS.Main.Ztree.zoneFeatuers.county;
+                succeedCallback();
+                return;
+            }
             layerName = "County_Code";
             break;
         case XS.Main.ZoneLevel.county:
+            XS.Main.Tjfx.Graph.featuersArr.town = XS.Main.cacheFindChildFeat(XS.Main.Ztree.zoneFeatuers.town,parentCode,"乡镇代码");
+            if(XS.Main.Tjfx.Graph.featuersArr.town.length>0){
+                succeedCallback();
+                return;
+            }
             layerName = "Twon_Code";
             break;
         case XS.Main.ZoneLevel.town:
+            XS.Main.Tjfx.Graph.featuersArr.village = XS.Main.cacheFindChildFeat(XS.Main.Ztree.zoneFeatuers.town,parentCode,"OldID");
+            if(XS.Main.Tjfx.Graph.featuersArr.village.length>0){
+                succeedCallback();
+                return;
+            }
             layerName = "Village_Code";
             break;
     }
     XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql, xs_MapInstance.bLayerUrl,function(queryEventArgs)
     {
-        switch (parentLevel) {
-            case XS.Main.ZoneLevel.county:
-                XS.Main.Tjfx.Graph.featuersArr.town = [];
-                break;
-            case XS.Main.ZoneLevel.town:
-                XS.Main.Tjfx.Graph.featuersArr.village = [];
-                break;
-        }
         var i, feature, result = queryEventArgs.result;
         if (result && result.recordsets&&result.recordsets[0].features.length>0) {
             for (i = 0; i < result.recordsets[0].features.length; i++) {

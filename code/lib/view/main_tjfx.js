@@ -51,7 +51,15 @@ XS.Main.Tjfx.showToolMenu = function(){
 }
 
 //加载县、乡、村features
-XS.Main.Tjfx.loadZoneFeatuers = function(level, sql, succeedCallback, failCallback){
+XS.Main.Tjfx.loadZoneFeatuers = function(level,parentId, sql, succeedCallback, failCallback){
+    switch (level) {
+        case XS.Main.ZoneLevel.county:
+            XS.Main.Tjfx.type_featuersArr.town = [];
+            break;
+        case XS.Main.ZoneLevel.town:
+            XS.Main.Tjfx.type_featuersArr.village = [];
+            break;
+    }
     var layerName = "";
     switch (level) {
         case XS.Main.ZoneLevel.city:
@@ -59,25 +67,32 @@ XS.Main.Tjfx.loadZoneFeatuers = function(level, sql, succeedCallback, failCallba
                 succeedCallback();
                 return;
             }
+            if(XS.Main.Ztree.zoneFeatuers.county.length>0){
+                XS.Main.Tjfx.type_featuersArr.county = XS.Main.Ztree.zoneFeatuers.county;
+                succeedCallback();
+                return;
+            }
             layerName = "County_Code";
         break;
         case XS.Main.ZoneLevel.county:
+            XS.Main.Tjfx.type_featuersArr.town = XS.Main.cacheFindChildFeat(XS.Main.Ztree.zoneFeatuers.town,parentId,"乡镇代码");
+            if(XS.Main.Tjfx.type_featuersArr.town.length>0){
+                succeedCallback();
+                return;
+            }
             layerName = "Twon_Code";
             break;
         case XS.Main.ZoneLevel.town:
+            XS.Main.Tjfx.type_featuersArr.village = XS.Main.cacheFindChildFeat(XS.Main.Ztree.zoneFeatuers.town,parentId,"OldID");
+            if(XS.Main.Tjfx.type_featuersArr.village.length>0){
+                succeedCallback();
+                return;
+            }
             layerName = "Village_Code";
             break;
     }
     XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql, xs_MapInstance.bLayerUrl,function(queryEventArgs)
     {
-        switch (level) {
-            case XS.Main.ZoneLevel.county:
-                XS.Main.Tjfx.type_featuersArr.town = [];
-                break;
-            case XS.Main.ZoneLevel.town:
-                XS.Main.Tjfx.type_featuersArr.village = [];
-                break;
-        }
         var i, feature, result = queryEventArgs.result;
         if (result && result.recordsets&&result.recordsets[0].features.length>0) {
             for (i = 0; i < result.recordsets[0].features.length; i++) {

@@ -352,6 +352,15 @@ XS.Main.Pkjc.pkdc = function(){
     }else if(xs_currentZoneLevel==XS.Main.ZoneLevel.village){
         if(xs_currentZoneFuture){
             xs_pkdc_currentName = xs_currentZoneFuture.data.vd_name;
+            xs_pkdc_preName = "";
+            for(var i=0;i<XS.Main.Ztree.zoneFeatuers.town.length;i++){
+                var cacheTownData = XS.Main.Ztree.zoneFeatuers.town[i].data;
+                if(cacheTownData.乡镇代码 == xs_clickMapFutureId.toString().slice(0,9)){
+                    xs_pkdc_preName = cacheTownData.乡镇名称;
+                    XS.Main.Pkjc.showInfoWin(XS.Main.ZoneLevel.village, cacheTownData.乡镇代码, xs_clickMapFutureId);
+                    return;
+                }
+            }
             if(XS.Main.CacheZoneInfos.town.countyId != xs_clickMapFutureId)
             {
                 var dataN = {pbno:xs_clickMapFutureId.toString().slice(0,6)};

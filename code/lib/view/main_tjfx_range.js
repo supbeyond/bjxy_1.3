@@ -129,7 +129,7 @@ XS.Main.Tjfx.range = function(level, parentId, type){
                 XS.Main.Tjfx.CacheZoneInfos.county = XS.Main.CacheZoneInfos.county;
                 //2.获取空间数据
                 XS.CommonUtil.showLoader();
-                XS.Main.Tjfx.loadZoneFeatuers(level, "SMID>0", function()
+                XS.Main.Tjfx.loadZoneFeatuers(level,parentId, "SMID>0", function()
                     {
                         XS.CommonUtil.hideLoader();
                         if(XS.Main.Tjfx.type_featuersArr.county.length>0)
@@ -155,7 +155,7 @@ XS.Main.Tjfx.range = function(level, parentId, type){
                         //2.获取空间数据
 
                         XS.CommonUtil.showLoader();
-                        XS.Main.Tjfx.loadZoneFeatuers(level, "SMID>0", function()
+                        XS.Main.Tjfx.loadZoneFeatuers(level,parentId, "SMID>0", function()
                             {
                                 XS.CommonUtil.hideLoader();
                                 if(XS.Main.Tjfx.type_featuersArr.county.length>0)
@@ -203,7 +203,7 @@ XS.Main.Tjfx.range = function(level, parentId, type){
                 {
                     XS.Main.Tjfx.CacheZoneInfos.town = json;
                     XS.CommonUtil.showLoader();
-                    XS.Main.Tjfx.loadZoneFeatuers(level, "县级代码=="+parentId, function()
+                    XS.Main.Tjfx.loadZoneFeatuers(level,parentId, "县级代码=="+parentId, function()
                         {
                             XS.CommonUtil.hideLoader();
                             if(XS.Main.Tjfx.type_featuersArr.town.length>0)
@@ -249,7 +249,7 @@ XS.Main.Tjfx.range = function(level, parentId, type){
                 if (json && json.length > 0) {
                     XS.Main.Tjfx.CacheZoneInfos.village = json;
                     XS.CommonUtil.showLoader();
-                    XS.Main.Tjfx.loadZoneFeatuers(level, "Town_id=="+parentId, function()
+                    XS.Main.Tjfx.loadZoneFeatuers(level,parentId, "Town_id=="+parentId, function()
                         {
                             XS.CommonUtil.hideLoader();
                             if(XS.Main.Tjfx.type_featuersArr.village.length>0)

@@ -13,7 +13,6 @@ var xs_clickMapFutureId = -1; //保存当前被选中的行政FutureID
 var xs_currentZoneLevel = -1; //记录当前行政等级
 var xs_isMapClickTypeNone = false; //判断单击地图是否是的类型为None
 var xs_isClickMapFinish = true;
-var xs_mouseMove_regionId = -1; //鼠标移动的目标ID
 //var xs_poorHLabelLayer = null;
 //行政区域点中样式
 var xs_stateZoneStyle = {
@@ -427,17 +426,14 @@ XS.Main.utfGridLayerMoveCallback = function (infoLookup, loc, pixel)
     }
     if (infoLookup) {
         var info;
-        for (var idx in infoLookup)
+        for (var idx=infoLookup.length-1;idx>=0;idx--)
         {
             info = infoLookup[idx];
             if (info && info.data)
             {
-                var isExistData = false;
-                var data = infoLookup[idx].data;
                 var scale = 1/xs_MapInstance.getMapObj().getScale();
                 if(scale>300000)
                 {
-                    xs_mouseMove_regionId = data.AdminCode;
                     //县County_Code.Name
                     if(info.data.vc_hh_num)
                     {
@@ -449,7 +445,6 @@ XS.Main.utfGridLayerMoveCallback = function (infoLookup, loc, pixel)
                     }
                 }else if(scale<=300000&&scale>80000)
                 {
-                    xs_mouseMove_regionId = data.乡镇代码;
                     if(info.data.乡镇代码)
                     {
                         if(xs_user_regionLevel<=XS.Main.ZoneLevel.town)
@@ -476,7 +471,6 @@ XS.Main.utfGridLayerMoveCallback = function (infoLookup, loc, pixel)
                     }
                 }else
                 {
-                    xs_mouseMove_regionId = data.OldID;
                     if(info.data.Town_id)
                     {
                         //村Village_Code.vd_name
@@ -512,6 +506,7 @@ XS.Main.utfGridLayerMoveCallback = function (infoLookup, loc, pixel)
                         }
                     }
                 }
+                var isExistData = false;
                 var cacheFeatures = [];
                 var idStr = "";
                 switch (idx){
@@ -529,32 +524,18 @@ XS.Main.utfGridLayerMoveCallback = function (infoLookup, loc, pixel)
                         break;
                 }
                 for(var i=0;i<cacheFeatures.length;i++){
-                    if(cacheFeatures.id == data[idStr]){
+                    if(cacheFeatures.id == info.data[idStr]){
                         isExistData = true;
                         break;
                     }
                 }
                 if(!isExistData){
-                    cacheFeatures.push({id:data[idStr],data:data});
+                    cacheFeatures.push({id:info.data[idStr],data:info.data});
                 }
             }
         }
     }
 };
-//缓存鼠标移动数据
-XS.Main.cashMouseData = function(cacheFeatures,infoLookup,regionNo,idStr){
-    var isExistData = false;
-    var data = infoLookup[regionNo];
-    for(var i=0;i<cacheFeatures.length;i++){
-        if(cacheFeatures.id == data[idStr]){
-            isExistData = true;
-            break;
-        }
-    }
-    if(!isExistData){
-        cacheFeatures.push({id:data[idStr],data:data});
-    }
-}
 /** CTV --County Town Village
  * @param level level:0--county ; 1--town; 2--village
  * @param pbno  父级区域ID
@@ -1034,26 +1015,28 @@ XS.Main.clickMapCallback = function(mouseEvent){
     var layerName = "";
     var targetFeature = null;
     var level = -1;
+    //console.log(xs_mouseMove_info);
+    var lonLat = xs_MapInstance.getMapObj().getLonLatFromPixel(mouseEvent.xy);
+    var point = new SuperMap.Geometry.Point(lonLat.lon, lonLat.lat);
     if(scale>300000){ //county
         level = XS.Main.ZoneLevel.county;
         layerName = "County_Code";
-        targetFeature = XS.Searchbox.findTargetFeature(XS.Main.Ztree.zoneFeatuers.county,xs_mouseMove_regionId,"AdminCode");
+        var cacheCounty = XS.Main.Ztree.zoneFeatuers.county;
+        targetFeature = XS.Main.getMapCacheFeat(XS.Main.Ztree.zoneFeatuers.county,point);
     }else if(scale<=300000&& scale>80000) //town
     {
         level = XS.Main.ZoneLevel.town;
         layerName = "Twon_Code";
-        targetFeature = XS.Searchbox.findTargetFeature(XS.Main.Ztree.zoneFeatuers.town,xs_mouseMove_regionId,"乡镇代码");
+        targetFeature = XS.Main.getMapCacheFeat(XS.Main.Ztree.zoneFeatuers.town,point);
     }else{ //village
         level = XS.Main.ZoneLevel.village;
         layerName = "Village_Code";
-        targetFeature = XS.Searchbox.findTargetFeature(XS.Main.Ztree.zoneFeatuers.village,xs_mouseMove_regionId,"OldID");
+        targetFeature = XS.Main.getMapCacheFeat(XS.Main.Ztree.zoneFeatuers.village,point);
     }
     if(targetFeature){
         XS.Main.featureAfter(level,targetFeature);
         return;
     }
-    var lonLat = xs_MapInstance.getMapObj().getLonLatFromPixel(mouseEvent.xy);
-    var point = new SuperMap.Geometry.Point(lonLat.lon, lonLat.lat);
     //geometry, dataSourceName, dataSetName, queryMode, mapUrl, processCompleted, processFailed
     XS.CommonUtil.showLoader();
     XS.MapQueryUtil.queryByGeometryParameters(point, XS.Constants.dataSourceName, layerName, SuperMap.REST.SpatialQueryMode.INTERSECT,xs_MapInstance.bLayerUrl, function(queryEventArgs){
@@ -1080,6 +1063,19 @@ XS.Main.clickMapCallback = function(mouseEvent){
         xs_isClickMapFinish = true;
         XS.CommonUtil.hideLoader();
     });
+}
+//根据鼠标点击的位置从缓存中取区域矢量要素
+XS.Main.getMapCacheFeat = function(cacheCounty,geometry){
+    var targetFeature = null;
+    for(var i=0;i<cacheCounty.length;i++){
+        var cacheGeometry = cacheCounty[i].geometry;
+        var isIn = cacheGeometry.intersects(geometry);
+        if(isIn){
+            targetFeature = cacheCounty[i];
+            break;
+        }
+    }
+    return targetFeature;
 }
 //点击地图获得feature之后的操作
 XS.Main.featureAfter = function(level,feature){
@@ -1292,7 +1288,7 @@ XS.Main.readyAddMarkers = function(centerPoint,level,currentId){
             XS.Main.addTownVillPlevelMarker2Layer(level, currentId);
             break;
         case XS.Main.ZoneLevel.village:
-            xs_MapInstance.getMapObj().setCenter(centerPoint, 13);
+            xs_MapInstance.getMapObj().setCenter(centerPoint, 11);
             //请求贫困户数据定位地图上去
             var data = {pbno: currentId};
             XS.CommonUtil.showLoader();
@@ -1323,24 +1319,26 @@ XS.Main.addTownVillPlevelMarker2Layer = function(superLevel, superId){
         case XS.Main.ZoneLevel.county:
             sql = "县级代码==";
             layerName = "Twon_Code";
-            for(var i=0;i<XS.Main.Ztree.zoneFeatuers.town.length;i++){
+            targetFeatures = XS.Main.cacheFindChildFeat(XS.Main.Ztree.zoneFeatuers.town,superId,"乡镇代码");
+            /*for(var i=0;i<XS.Main.Ztree.zoneFeatuers.town.length;i++){
                 var superIdV = XS.Main.Ztree.zoneFeatuers.town[i].data.乡镇代码;
                 if(Math.floor(superIdV/1000) != superId){
                     continue;
                 }
                 targetFeatures.push(XS.Main.Ztree.zoneFeatuers.town[i]);
-            }
+            }*/
             break;
         case XS.Main.ZoneLevel.town:
             sql = "Town_id==";
             layerName = "Village_Code";
-            for(var i=0;i<XS.Main.Ztree.zoneFeatuers.village.length;i++){
+            targetFeatures = XS.Main.cacheFindChildFeat(XS.Main.Ztree.zoneFeatuers.village,superId,"OldID");
+            /*for(var i=0;i<XS.Main.Ztree.zoneFeatuers.village.length;i++){
                 var superIdV = XS.Main.Ztree.zoneFeatuers.village[i].data.OldID;
                 if(superIdV.toString().slice(0,9) != superId){
                     continue;
                 }
                 targetFeatures.push(XS.Main.Ztree.zoneFeatuers.town[i]);
-            }
+            }*/
             break;
     }
     if(targetFeatures.length>0){
@@ -1360,6 +1358,21 @@ XS.Main.addTownVillPlevelMarker2Layer = function(superLevel, superId){
     }, function(e){
         XS.CommonUtil.hideLoader();
     });
+}
+//从根据父ID从缓存中寻找下级矢量要素feature
+XS.Main.cacheFindChildFeat = function(cacheArr,superId,superIdStr){
+    var targetFeatures = [];
+    var superIdNum = superId.toString().length;
+    for(var i=0;i<cacheArr.length;i++){
+        var superIdV = cacheArr[i].data[superIdStr];
+        if(superIdV){
+            superIdV = superIdV.slice(0,superIdNum);
+        }
+        if(superIdV == superId){
+            targetFeatures.push(cacheArr[i]);
+        }
+    }
+    return targetFeatures;
 }
 //向点击的区域准备数据
 XS.Main.readyAddRegionMarkersData = function (features,superLevel,superId) {
