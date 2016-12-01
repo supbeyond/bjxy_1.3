@@ -55,8 +55,8 @@ XS.CommonUtil.hideLoader = function(){
 //ajax请求数据
 XS.CommonUtil.ajaxHttpReq = function(url, action, data, succCallback, failCallback){
     $.ajax({
-        type: "get",
-        async: false,
+        type: "post",
+        async: true,
         timeout:10*1000,
         url: url + "/" + action+ "?jsoncallback=?",
         dataType: "jsonp",
