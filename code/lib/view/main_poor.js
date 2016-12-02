@@ -934,6 +934,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                 var regionIdF = "";
                 var superId = 0;
                 var currentLevel = -1;
+                var cacheFeature = null;
                 switch (params.data.xs_level){
                     case XS.Main.ZoneLevel.city:
                         if(params.data.xs_type == 0){
@@ -946,6 +947,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                             layerName = "County_Code";
                             superId = xs_cityID;
                             currentLevel = XS.Main.ZoneLevel.county;
+                            cacheFeature = XS.Searchbox.findTargetFeature(XS.Main.Ztree.zoneFeatuers.county,params.data.xs_code,"AdminCode");
                         }
                         break;
                     case XS.Main.ZoneLevel.county:
@@ -958,7 +960,6 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                                 xs_zone_vectorLayer.removeAllFeatures();
                                 //XS.CommonUtil.showMsgDialog("", "您的权限不够");
                             }
-                            break;
                         }else{
                             regionNameF = "乡镇名称";
                             regionIdF = "乡镇代码";
@@ -966,6 +967,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                             layerName = "Twon_Code";
                             superId = Math.floor(params.data.xs_code/1000);
                             currentLevel = XS.Main.ZoneLevel.town;
+                            cacheFeature = XS.Searchbox.findTargetFeature(XS.Main.Ztree.zoneFeatuers.town,params.data.xs_code,"乡镇代码");
                         }
                         break;
                     case XS.Main.ZoneLevel.town:
@@ -981,6 +983,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                                 layerName = "County_Code";
                                 superId = xs_cityID;
                                 currentLevel = XS.Main.ZoneLevel.county;
+                                cacheFeature = XS.Searchbox.findTargetFeature(XS.Main.Ztree.zoneFeatuers.county,countyCode,"AdminCode");
                             }
                             break;
                         }else{
@@ -990,6 +993,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                             layerName = "Village_Code";
                             superId = params.data.xs_code.slice(0,9);
                             currentLevel = XS.Main.ZoneLevel.village;
+                            cacheFeature = XS.Searchbox.findTargetFeature(XS.Main.Ztree.zoneFeatuers.village,params.data.xs_code,"OldID");
                         }
                         break;
                     case XS.Main.ZoneLevel.village:
@@ -1006,6 +1010,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                                 layerName = "Twon_Code";
                                 superId = Math.floor(townCode/1000);
                                 currentLevel = XS.Main.ZoneLevel.town;
+                                cacheFeature = XS.Searchbox.findTargetFeature(XS.Main.Ztree.zoneFeatuers.town,townCode,"乡镇代码");
                             }
                             break;
                         }else{
@@ -1014,9 +1019,14 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                         }
                         break;
                 }
+                if(cacheFeature){
+                    XS.Main.Poor.povertyRelocatFeature(cacheFeature,params,superId,currentLevel,regionNameF,regionIdF);
+                    return;
+                }
                 if(!sql && !layerName){
                     XS.Main.Poor.povertyRelocationClick(params);
-                }else{
+                }else
+                {
                     XS.CommonUtil.showLoader();
                     XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql,xs_MapInstance.bLayerUrl, function(queryEventArgs){
                         XS.CommonUtil.hideLoader();
@@ -1024,7 +1034,8 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                         if (result && result.recordsets&&result.recordsets[0].features.length>0) {
                             feature = result.recordsets[0].features[0];                           //加载数据到矢量图层中
                             if(feature){
-                                xs_currentZoneFuture = feature;
+                                XS.Main.Poor.povertyRelocatFeature(feature,params,superId,currentLevel,regionNameF,regionIdF);
+                             /*xs_currentZoneFuture = feature;
                                 feature.style = xs_stateZoneStyle;
                                 xs_zone_vectorLayer.removeAllFeatures();
                                 xs_zone_vectorLayer.addFeatures(feature);
@@ -1035,7 +1046,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                                 xs_pkdc_isFirstShowInfoWin = true;
                                 xs_superZoneCode = superId;
                                 xs_currentZoneLevel = currentLevel;
-                                XS.Main.Poor.povertyRelocationClick(params);
+                                XS.Main.Poor.povertyRelocationClick(params);*/
                             }else{
                                 XS.CommonUtil.showMsgDialog("", "未找到相关数据");
                             }
@@ -1065,7 +1076,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
             if(XS.Main.Tjfx.type_featuersArr.county.length>0){
                 XS.Main.Poor.preloc_handleData(level, parentId);
             }else{
-                XS.Main.Tjfx.loadZoneFeatuers(level, "SMID>0", function()
+                XS.Main.Tjfx.loadZoneFeatuers(level,parentId, "SMID>0", function()
                     {
                         if(XS.Main.Tjfx.type_featuersArr.county.length>0){
                             XS.Main.Poor.preloc_handleData(level, parentId);
@@ -1082,7 +1093,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
         case XS.Main.ZoneLevel.county:
             if(XS.Main.Tjfx.type_featuersArr.county.length>0)
             {
-                XS.Main.Tjfx.loadZoneFeatuers(level, "县级代码=="+parentId, function()
+                XS.Main.Tjfx.loadZoneFeatuers(level,parentId, "县级代码=="+parentId, function()
                     {
                         if(XS.Main.Tjfx.type_featuersArr.town.length>0)
                         {
@@ -1097,11 +1108,11 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                 );
             }else
             {
-                XS.Main.Tjfx.loadZoneFeatuers(XS.Main.ZoneLevel.city, "SMID>0", function()
+                XS.Main.Tjfx.loadZoneFeatuers(XS.Main.ZoneLevel.city,parentId, "SMID>0", function()
                     {
                         if(XS.Main.Tjfx.type_featuersArr.county.length>0)
                         {
-                            XS.Main.Tjfx.loadZoneFeatuers(level, "县级代码=="+parentId, function()
+                            XS.Main.Tjfx.loadZoneFeatuers(level,parentId, "县级代码=="+parentId, function()
                                 {
                                     if(XS.Main.Tjfx.type_featuersArr.town.length>0)
                                     {
@@ -1125,7 +1136,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
             }
             break;
         case XS.Main.ZoneLevel.town:
-            XS.Main.Tjfx.loadZoneFeatuers(level, "Town_id=="+parentId, function()
+            XS.Main.Tjfx.loadZoneFeatuers(level,parentId, "Town_id=="+parentId, function()
                 {
                     if(XS.Main.Tjfx.type_featuersArr.village.length>0)
                     {
@@ -1166,10 +1177,223 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
             break;
     }
 }
+//扶贫搬迁点击获得矢量要素Feature的处理事件
+XS.Main.Poor.povertyRelocatFeature = function(feature,params,superId,currentLevel,regionNameF,regionIdF){
+    xs_currentZoneFuture = feature;
+    feature.style = xs_stateZoneStyle;
+    xs_zone_vectorLayer.removeAllFeatures();
+    xs_zone_vectorLayer.addFeatures(feature);
 
+    xs_currentZoneName = feature.data[regionNameF];
+    xs_clickMapFutureId  = feature.data[regionIdF];
+    xs_currentZoneCode =  feature.data[regionIdF];
+    xs_pkdc_isFirstShowInfoWin = true;
+    xs_superZoneCode = superId;
+    xs_currentZoneLevel = currentLevel;
+    XS.Main.Poor.povertyRelocationClick(params);
+}
+//扶贫搬迁点击
+/*XS.Main.Poor.povertyRelocationClick = function(params) {
+ if (params.data.xs_type == 0) { //点击线--上一级
+ switch (params.data.xs_level) {
+ case XS.Main.ZoneLevel.city:
+ XS.CommonUtil.showMsgDialog("", "没有上一级");
+ break;
+ case XS.Main.ZoneLevel.county:
+ if (xs_user_regionLevel == XS.Main.ZoneLevel.city) {
+ XS.Main.Poor.povertyRelocation(params.data.xs_level - 1, xs_cityID);
+ } else {
+ XS.CommonUtil.showMsgDialog("", "您的权限不够");
+ }
+ break;
+ case XS.Main.ZoneLevel.town:
+ if (xs_user_regionLevel <= XS.Main.ZoneLevel.county) {
+ if (xs_user_regionLevel == XS.Main.ZoneLevel.county) {
+ XS.Main.Poor.povertyRelocation(params.data.xs_level - 1, xs_user_regionId);
+ } else {
+ //找县Id
+ XS.CommonUtil.showLoader();
+ var sql = "OldID==" + params.data.xs_code;
+ XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, "Village_Code", sql, xs_MapInstance.bLayerUrl, function (queryEventArgs) {
+ XS.CommonUtil.hideLoader();
+ var i, feature, result = queryEventArgs.result;
+ if (result && result.recordsets && result.recordsets[0].features.length > 0) {
+ var feature = result.recordsets[0].features[0];
+ XS.Main.Poor.povertyRelocation(params.data.xs_level - 1, feature.data.country_id);
+ }
+ }, function (e) {
+ XS.CommonUtil.hideLoader();
+ });
+ }
+ } else {
+ XS.CommonUtil.showMsgDialog("", "您的权限不够");
+ }
+ break;
+ case XS.Main.ZoneLevel.village:
+ if (xs_user_regionLevel <= XS.Main.ZoneLevel.town) {
+ if (xs_user_regionLevel == XS.Main.ZoneLevel.town) {
+ XS.Main.Poor.povertyRelocation(params.data.xs_level - 1, xs_user_regionId);
+ } else {
+ XS.CommonUtil.showLoader();
+ var sql = "OldID==" + params.data.xs_code;
+ XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, "Village_Code", sql, xs_MapInstance.bLayerUrl, function (queryEventArgs) {
+ XS.CommonUtil.hideLoader();
+ var i, feature, result = queryEventArgs.result;
+ if (result && result.recordsets && result.recordsets[0].features.length > 0) {
+ var feature = result.recordsets[0].features[0];
+ XS.Main.Poor.povertyRelocation(params.data.xs_level - 1, feature.data.Town_id);
+ }
+ }, function (e) {
+ XS.CommonUtil.hideLoader();
+ });
+ }
+ } else {
+ XS.CommonUtil.showMsgDialog("", "您的权限不够");
+ }
+ break;
+ case XS.Main.ZoneLevel.poor:
+ if (xs_user_regionLevel <= XS.Main.ZoneLevel.town) {
+ if (xs_user_regionLevel == XS.Main.ZoneLevel.town) {
+ XS.Main.Poor.povertyRelocation(params.data.xs_level - 2, xs_user_regionId);
+ } else {
+ XS.CommonUtil.showLoader();
+ var sql = "OldID==" + params.data.xs_code;
+ XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, "Village_Code", sql, xs_MapInstance.bLayerUrl, function (queryEventArgs) {
+ XS.CommonUtil.hideLoader();
+ var i, feature, result = queryEventArgs.result;
+ if (result && result.recordsets && result.recordsets[0].features.length > 0) {
+ var feature = result.recordsets[0].features[0];
+ XS.Main.Poor.povertyRelocation(params.data.xs_level - 2, feature.data.Town_id);
+ }
+ }, function (e) {
+ XS.CommonUtil.hideLoader();
+ });
+ }
+ } else {
+ XS.CommonUtil.showMsgDialog("", "您的权限不够");
+ }
+ break;
+ }
+ } else { //点击的点--下一级
+ if (params.data.xs_level >= XS.Main.ZoneLevel.village) {
+ //显示扶贫搬户的信息
+ var lat = "";
+ var lon = "";
+ var title = "搬迁户基本信息";
+ if (params.data.value == 0) {
+ lat = params.data.xs_info.flat;
+ lon = params.data.xs_info.flon;
+ } else {
+ lat = params.data.xs_info.tlat;
+ lon = params.data.xs_info.tlon;
+ }
+ var xy = XS.GeometryUtil.getPixelFromGeoXY(lon, lat, xs_MapInstance.getMapObj());
+ var content =
+ '<div style="width: 100%; background-color: #eee; box-sizing: border-box;">' +
+ "<a id='xs_poor_preloc_picBtn' href='javascript:void(0);' style='width: 80px; margin: 5px;margin-bottom: 0px;'>图片</a>" +
+ "<a id='xs_poor_preloc_videoBtn' href='javascript:void(0);'  style='width: 80px; margin: 5px;margin-bottom: 0px;'>视频</a>" +
+ '</div>' +
+ '<div id="xs_poor_preloc_detail_tab" style="width:200px; padding: 2px;box-sizing: border-box;"></div>';
+
+ XS.CommonUtil.openDialog("xs_main_detail_1", title, "icon-man", content, false, false, false, null, null, xy.x + 15, xy.y + 5, function () {
+ });
+
+ $('#xs_poor_preloc_picBtn').linkbutton({iconCls: 'e_icon-picture'});
+ $('#xs_poor_preloc_videoBtn').linkbutton({iconCls: 'e_icon-film'});
+ $('#xs_poor_preloc_picBtn').click(function () {//查看搬迁前后图片展示
+ var bpathArr = []; //前
+ var cpathArr = []; //后
+
+ bpathArr.push("../test/s_01.jpg");
+ bpathArr.push("../test/s_02.jpg");
+ bpathArr.push("../test/s_03.jpg");
+
+ cpathArr.push("../test/e_01.jpg");
+ cpathArr.push("../test/e_02.jpg");
+
+ var content =
+ '<div style="width: 100%; height: 100%;box-sizing: border-box;background-color:#000;">';
+
+ content += '<div style="width: 49%; height:99%;display: inline-block;box-sizing: border-box;"><div id="xs_poor_galleria_b" style="width: 100%; height:100%;color:#777;">';
+ for (var i in bpathArr) {
+ var path = bpathArr[i];
+ if (path.indexOf(".jpg") > 0 || path.indexOf(".JPG") > 0 || path.indexOf(".jpeg") > 0) {
+ content +=
+ '<a href="' + path + '">' +
+ '<img' +
+ ' src="' + path + '"' +
+ ' data-big=""' +
+ ' data-title=""' +
+ ' data-description=""' +
+ ' style="width: 100px; height: 100px;"' +
+ '>' +
+ '</a>';
+ }
+ }
+ content += '</div></div>';
+ content += '<div style="width: 2%; height:99%;display: inline-block;box-sizing: border-box;"><div style="width: 1px; height: 100%;background-color: #505050;"></div></div>';
+
+ content += '<div style="width: 49%; height:99%;display: inline-block;box-sizing: border-box;"><div id="xs_poor_galleria_c" style="width: 100%; height:100%;color:#777;">';
+ for (var i in cpathArr) {
+ var path = cpathArr[i];
+ if (path.indexOf(".jpg") > 0 || path.indexOf(".JPG") > 0 || path.indexOf(".jpeg") > 0) {
+ content +=
+ '<a href="' + path + '">' +
+ '<img' +
+ ' src="' + path + '"' +
+ ' data-big=""' +
+ ' data-title=""' +
+ ' data-description=""' +
+ ' style="width: 100px; height: 100px;"' +
+ '>' +
+ '</a>';
+ }
+ }
+ content += '</div></div>';
+
+ content += '</div>';
+ XS.CommonUtil.openDialog("xs_main_detail", "搬迁前-后图片展示", "icon-man", content, false, false, true, 1200, 550);
+ Galleria.run('#xs_poor_galleria_b');
+ Galleria.run('#xs_poor_galleria_c');
+
+
+ // XS.Main.Poor.showPic2Paths(obj.name, pathArr);
+ });
+ $('#xs_poor_preloc_videoBtn').click(function () { //搬迁前后视频展示
+ var bpath = "../test/s.3gp";
+ var cpath = "../test/e.mp4";
+
+ XS.Main.Poor.showVideo2Path1('搬迁前', bpath, (window.innerWidth / 2.0 - 600), 600, 600, 500, 500);
+ XS.Main.Poor.showVideo2Path2('搬迁后', cpath, (window.innerWidth / 2.0), 600, 600, 500, 500);
+ });
+
+ //基本信息
+ //xs_info
+ var obj = params.data.xs_info;
+ var objArr = [
+ {"name": "户主", "value": obj.name},
+ {"name": "扶贫单位", "value": obj.helpdepartment},
+ {"name": "负责人", "value": obj.helper},
+ {"name": "资助金", "value": obj.sum},
+ {"name": "原居地", "value": obj.from},
+ {"name": "现现地", "value": obj.to},
+ ];
+ $("#xs_poor_preloc_detail_tab").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr, ['value']), 1, 25, "color:#00bbee", ""));
+ } else {
+ XS.Main.Poor.povertyRelocation(params.data.xs_level + 1, params.data.xs_code);
+ }
+ }
+ }*/
 XS.Main.Poor.povertyRelocationClick = function(params) {
     if (params.data.xs_type == 0) { //点击线--上一级
-        switch (params.data.xs_level) {
+        if(params.data.xs_level == XS.Main.ZoneLevel.county){
+            XS.Main.Poor.povertyRelocation(params.data.xs_level - 1, xs_cityID);
+        }else if(params.data.xs_level == XS.Main.ZoneLevel.poor){
+            XS.Main.Poor.povertyRelocation(params.data.xs_level - 2, xs_clickMapFutureId);
+        }else{
+            XS.Main.Poor.povertyRelocation(params.data.xs_level - 1, xs_clickMapFutureId);
+        }
+        /*switch (params.data.xs_level) {
             case XS.Main.ZoneLevel.city:
                 XS.CommonUtil.showMsgDialog("", "没有上一级");
                 break;
@@ -1185,8 +1409,9 @@ XS.Main.Poor.povertyRelocationClick = function(params) {
                     if (xs_user_regionLevel == XS.Main.ZoneLevel.county) {
                         XS.Main.Poor.povertyRelocation(params.data.xs_level - 1, xs_user_regionId);
                     } else {
+                        XS.Main.Poor.povertyRelocation(params.data.xs_level - 1, xs_clickMapFutureId);
                         //找县Id
-                        XS.CommonUtil.showLoader();
+                        /!*XS.CommonUtil.showLoader();
                         var sql = "OldID==" + params.data.xs_code;
                         XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, "Village_Code", sql, xs_MapInstance.bLayerUrl, function (queryEventArgs) {
                             XS.CommonUtil.hideLoader();
@@ -1197,7 +1422,7 @@ XS.Main.Poor.povertyRelocationClick = function(params) {
                             }
                         }, function (e) {
                             XS.CommonUtil.hideLoader();
-                        });
+                        });*!/
                     }
                 } else {
                     XS.CommonUtil.showMsgDialog("", "您的权限不够");
@@ -1208,7 +1433,8 @@ XS.Main.Poor.povertyRelocationClick = function(params) {
                     if (xs_user_regionLevel == XS.Main.ZoneLevel.town) {
                         XS.Main.Poor.povertyRelocation(params.data.xs_level - 1, xs_user_regionId);
                     } else {
-                        XS.CommonUtil.showLoader();
+                        XS.Main.Poor.povertyRelocation(params.data.xs_level - 1, feature.data.Town_id);
+                        /!*XS.CommonUtil.showLoader();
                         var sql = "OldID==" + params.data.xs_code;
                         XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, "Village_Code", sql, xs_MapInstance.bLayerUrl, function (queryEventArgs) {
                             XS.CommonUtil.hideLoader();
@@ -1219,7 +1445,7 @@ XS.Main.Poor.povertyRelocationClick = function(params) {
                             }
                         }, function (e) {
                             XS.CommonUtil.hideLoader();
-                        });
+                        });*!/
                     }
                 } else {
                     XS.CommonUtil.showMsgDialog("", "您的权限不够");
@@ -1247,7 +1473,7 @@ XS.Main.Poor.povertyRelocationClick = function(params) {
                     XS.CommonUtil.showMsgDialog("", "您的权限不够");
                 }
                 break;
-        }
+        }*/
     } else { //点击的点--下一级
         if (params.data.xs_level >= XS.Main.ZoneLevel.village) {
             //显示扶贫搬户的信息
