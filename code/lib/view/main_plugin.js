@@ -1041,7 +1041,7 @@ XS.Main.clickMapCallback = function(mouseEvent){
     }
     //geometry, dataSourceName, dataSetName, queryMode, mapUrl, processCompleted, processFailed
     XS.CommonUtil.showLoader();
-    XS.MapQueryUtil.queryByGeometryParameters(point, XS.Constants.dataSourceName, layerName, SuperMap.REST.SpatialQueryMode.INTERSECT,xs_MapInstance.bLayerUrl, function(queryEventArgs){
+    XS.MapQueryUtil.queryByGeometryParameters(point, XS.Constants.dataSourceName, layerName, SuperMap.REST.SpatialQueryMode.INTERSECT,XS.Constants.map_query, function(queryEventArgs){
         var i, feature, result = queryEventArgs.result;
         if (result && result.recordsets&&result.recordsets[0].features.length>0) {
             for (i = 0; i < result.recordsets[0].features.length; i++) {
@@ -1356,7 +1356,7 @@ XS.Main.addTownVillPlevelMarker2Layer = function(superLevel, superId){
         return;
     }
     XS.CommonUtil.showLoader();
-    XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql+superId, xs_MapInstance.bLayerUrl,function(queryEventArgs)
+    XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql+superId, XS.Constants.map_query,function(queryEventArgs)
     {
         var i, feature, result = queryEventArgs.result;
         if (result && result.recordsets&&result.recordsets[0].features.length>0)

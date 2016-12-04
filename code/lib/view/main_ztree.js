@@ -55,7 +55,7 @@ XS.Main.Ztree.loadCounty = function (regId, ulevel)
             //XS.Main.Ztree.loadTown(regId, ulevel);
             return;
     }
-    XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql, xs_MapInstance.bLayerUrl,function(queryEventArgs)
+    XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql, XS.Constants.map_query,function(queryEventArgs)
     {
         var i, feature, result = queryEventArgs.result;
         if (result && result.recordsets&&result.recordsets[0]&&result.recordsets[0].features.length>0)
@@ -97,7 +97,7 @@ XS.Main.Ztree.loadTown = function (regId, ulevel)
             //XS.Main.Ztree.loadVillage(regId, ulevel);
             return;
     }
-    XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql, xs_MapInstance.bLayerUrl,function(queryEventArgs)
+    XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql, XS.Constants.map_query,function(queryEventArgs)
     {
         var i, feature, result = queryEventArgs.result;
         if (result && result.recordsets&&result.recordsets[0]&&result.recordsets[0].features.length>0)
@@ -143,7 +143,7 @@ XS.Main.Ztree.loadVillage = function (regId, ulevel)
             XS.Main.Ztree.handleZoneData(regId, ulevel);
             return;
     }
-    XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql, xs_MapInstance.bLayerUrl,function(queryEventArgs)
+    XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql, XS.Constants.map_query,function(queryEventArgs)
     {
         var i, feature, result = queryEventArgs.result;
         if (result && result.recordsets&&result.recordsets[0]&&result.recordsets[0].features.length>0)
@@ -314,7 +314,7 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
                             XS.CommonUtil.showLoader();
                             var sql = "Town_id="+node.xs_id;
                             var layerName = "Village_Code";
-                            XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql, xs_MapInstance.bLayerUrl,function(queryEventArgs)
+                            XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql, XS.Constants.map_query,function(queryEventArgs)
                             {
                                 var i, feature, result = queryEventArgs.result;
                                 if (result && result.recordsets&&result.recordsets[0].features.length>0)

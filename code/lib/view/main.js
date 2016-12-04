@@ -103,11 +103,11 @@ XS.Main.load = function(){
     }
 
     xs_MapInstance = new XS.MapInstance();
-    xs_MapInstance.bLayerUrl = XS.Constants.map_host+ XS.Constants.map_rest + XS.Constants.maps + XS.Constants.map_name;
+    xs_MapInstance.bLayerUrl = XS.Constants.map;
     xs_MapInstance.init();
 
     //--------------layer--------------------------
-    xs_utfGridCountyLayer = new SuperMap.Layer.UTFGrid("utfgridcounty",xs_MapInstance.bLayerUrl,
+    xs_utfGridCountyLayer = new SuperMap.Layer.UTFGrid("utfgridcounty",XS.Constants.map_query,
         {
             layerName: "County_Code@"+XS.Constants.dataSourceName,
             utfTileSize: 256,
@@ -117,7 +117,7 @@ XS.Main.load = function(){
             utfgridResolution: 128
         }
     );
-    xs_utfGridTownLayer = new SuperMap.Layer.UTFGrid("utfgridtown",xs_MapInstance.bLayerUrl,
+    xs_utfGridTownLayer = new SuperMap.Layer.UTFGrid("utfgridtown",XS.Constants.map_query,
         {
             layerName: "Twon_Code@"+XS.Constants.dataSourceName,
             utfTileSize: 256,
@@ -127,7 +127,7 @@ XS.Main.load = function(){
             utfgridResolution: 128
         }
     );
-    xs_utfGridVillageLayer = new SuperMap.Layer.UTFGrid("utfgridvillage",xs_MapInstance.bLayerUrl,
+    xs_utfGridVillageLayer = new SuperMap.Layer.UTFGrid("utfgridvillage",XS.Constants.map_query,
         {
             layerName: "Village_Code@"+XS.Constants.dataSourceName,
             utfTileSize: 256,
@@ -229,7 +229,7 @@ XS.Main.load = function(){
                     return;
                 }
                 //dataSourceName, dataSetName, attributeFilter, mapUrl, processCompleted, processFailed
-                XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql+xs_user_regionId, xs_MapInstance.bLayerUrl, function(queryEventArgs){
+                XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql+xs_user_regionId, XS.Constants.map_query, function(queryEventArgs){
                     var i, feature, result = queryEventArgs.result;
                     if (result && result.recordsets&&result.recordsets[0].features.length>0)
                     {

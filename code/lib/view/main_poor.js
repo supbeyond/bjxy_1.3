@@ -1030,7 +1030,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                 }else
                 {
                     XS.CommonUtil.showLoader();
-                    XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql,xs_MapInstance.bLayerUrl, function(queryEventArgs){
+                    XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql,XS.CommonUtil.map_query, function(queryEventArgs){
                         XS.CommonUtil.hideLoader();
                         var i, feature, result = queryEventArgs.result;
                         if (result && result.recordsets&&result.recordsets[0].features.length>0) {
@@ -1151,7 +1151,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                         }
                         xs_poor_superFeature = null;
                         var sql = "乡镇代码=="+parentId;
-                        XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, "Twon_Code", sql, xs_MapInstance.bLayerUrl,function(queryEventArgs)
+                        XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, "Twon_Code", sql, XS.Constants.map_query,function(queryEventArgs)
                         {
                             var i, feature, result = queryEventArgs.result;
                             if (result && result.recordsets&&result.recordsets[0].features.length>0) {

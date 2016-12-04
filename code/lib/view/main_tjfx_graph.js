@@ -496,7 +496,7 @@ XS.Main.Tjfx.Graph.loadZoneFeatuers = function(parentLevel,parentCode, sql, succ
             layerName = "Village_Code";
             break;
     }
-    XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql, xs_MapInstance.bLayerUrl,function(queryEventArgs)
+    XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql, XS.Constants.map_query,function(queryEventArgs)
     {
         var i, feature, result = queryEventArgs.result;
         if (result && result.recordsets&&result.recordsets[0].features.length>0) {

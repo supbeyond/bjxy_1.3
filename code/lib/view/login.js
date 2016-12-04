@@ -19,7 +19,6 @@ XS.Login.login = function(){
         return false;
     }
 
-
     xs_Username = xs_Username.trim();
     xs_Password = xs_Password.trim();
     //登陆

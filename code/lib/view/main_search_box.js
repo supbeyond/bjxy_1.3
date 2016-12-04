@@ -415,7 +415,7 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
         return;
     }
     XS.CommonUtil.showLoader();
-    XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql, xs_MapInstance.bLayerUrl,function(queryEventArgs)
+    XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql, XS.Constants.map_query,function(queryEventArgs)
     {
         XS.CommonUtil.hideLoader();
         var i, feature,features, result = queryEventArgs.result;
