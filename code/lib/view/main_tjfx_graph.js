@@ -53,8 +53,7 @@ XS.Main.Tjfx.Graph.graph = function(type){
     $("#xs_tjfx_leftMenuC").menu("hide");
     XS.Main.Pkjc.closeInfoDialog();
     XS.Main.Poor.clearRelocationLayer();
-    xs_markerLayer.clearMarkers();
-    xs_markerLayer.setVisibility(false);
+    XS.Main.clearMarker();
     XS.Searchbox.clearCon();
     XS.CommonUtil.closeDialog("xs_main_detail");
     xs_isShowUtfGridTip = false;
@@ -91,7 +90,7 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
     XS.Main.Pkjc.closeInfoDialog();
     XS.CommonUtil.closeDialog("xs_main_detail");
     xs_currentZoneFuture = null;
-    xs_zone_vectorLayer.removeAllFeatures();
+    XS.Main.clearVectorLayer();
 
     xs_isShowUtfGridTip = false;
     //xs_currentZoneLevel = parentLevel;

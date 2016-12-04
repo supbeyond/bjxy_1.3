@@ -23,7 +23,7 @@ XS.Main.Tjfx.range = function(level, parentId, type){
     XS.Main.Pkjc.closeInfoDialog();
     XS.CommonUtil.closeDialog("xs_main_detail");
     xs_currentZoneFuture = null;
-    xs_zone_vectorLayer.removeAllFeatures();
+    XS.Main.clearVectorLayer();
    // xs_currentZoneLevel = level;
     xs_tjfx_zoneLevel = level;
     xs_superZoneCode = -1;
@@ -33,8 +33,7 @@ XS.Main.Tjfx.range = function(level, parentId, type){
     xs_isShowUtfGridTip = false;
     XS.Main.hiddenDivTags();
     XS.Main.Tjfx.removeLayer();
-    xs_markerLayer.clearMarkers();
-    xs_markerLayer.setVisibility(false);
+    XS.Main.clearMarker();
     XS.Main.Poor.clearRelocationLayer();
     xs_clickMapType = XS.Main.clickMapType.tjfx_range;
 

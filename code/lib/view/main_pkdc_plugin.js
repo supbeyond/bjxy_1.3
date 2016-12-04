@@ -1835,6 +1835,9 @@ XS.Main.Pkjc.ananlyValueOfJson = function(json,target,field,maxField,radarIndica
             xs_pkdc_analyMax = xs_pkdc_analyMax<json[i][maxField] ? json[i][maxField] : xs_pkdc_analyMax;
         }
         for(var j=0;j<target.length;j++){
+            if(!json[i]){
+                continue;
+            }
             if(!isNaN(json[i][field[j]])){
                 target[j].push(json[i][field[j]].toFixed(2));
             }else{
@@ -2562,7 +2565,7 @@ XS.Main.Pkjc.townAnalyShow = function(json,index){
                     series[i][3].push(json[i][field[j]]);
                 }
             }
-            XS.Main.Pkjc.ciAnalyOpt([20,'五通(五通四有)'],['axis',['']],legend,[200,40,60,50],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
+            XS.Main.Pkjc.ciAnalyOpt([20,'五通(五通四有)'],['axis',['line']],legend,[200,40,60,50],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
             break;
         case 4 ://四有(五四)
             var field = ["BeautifulNum","CultureNum","EconomyNum","HealthRoomNum",];
@@ -2578,7 +2581,7 @@ XS.Main.Pkjc.townAnalyShow = function(json,index){
                     series[i][3].push(json[i][field[j]]);
                 }
             }
-            XS.Main.Pkjc.ciAnalyOpt([20,'四有(五通四有)'],['item',['']],legend,[200,40,60,50],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
+            XS.Main.Pkjc.ciAnalyOpt([20,'四有(五通四有)'],['axis',['line']],legend,[200,40,60,50],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
             break;
         case 5 ://四有(四五)
             var field = ["WaterSafeNum","ElectricSafeNum","HouseSafeNum","YardHardNum"];

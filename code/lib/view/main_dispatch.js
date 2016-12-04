@@ -41,9 +41,11 @@ XS.Main.Dispatchcmmd.dispatchCommd = function(){
  */
 var xs_dispatch_state = 1; //记录任务的状态 0表示修改 1表添加
 XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
+    XS.Main.functionBtnClk();
     XS.Main.Pkjc.closeInfoDialog();
     XS.Main.Poor.clearRelocationLayer();
     XS.Main.clearMap();
+    $("#xs_echartjs").empty().append('<script src="../base/echart/echarts.js"></script>');
     xs_dispatch_state = 1;
     var content = '<div id="xs_dc_tab" class="easyui-tabs" style="width:410px; height: 530px;box-sizing: border-box;">'+
         '<i id="xs_dc_loading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: 80px;z-index:5; visibility: hidden;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading"></i>'+

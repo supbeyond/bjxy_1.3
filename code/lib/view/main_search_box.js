@@ -361,12 +361,16 @@ XS.Searchbox.searchType = function(){
  */
 XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
     xs_poorLabelLayer.removeAllFeatures();
+    xs_currentZoneFuture = null;
+    xs_markerFeaturess = [];
+    XS.Main.clearVectorLayer();
     xs_markerLayer.clearMarkers();
-    xs_markerLayer.setVisibility(false);
+    xs_markerLayer.addMarker(xs_cityMarkerFeature);
     XS.Main.Poor.clearRelocationLayer();
     $("#xs_tjfx_range_Legend").remove();
 
     if(regionName == '贫困户' && xs_pkdc_cacheDataArr[poorHIndex].LONGITUDE && xs_pkdc_cacheDataArr[poorHIndex].LATITUDE){
+
         XS.Main.Poor.showPoor(xs_pkdc_cacheDataArr[poorHIndex].hid,null);
         return;
     }else if(regionName == '贫困户详情' && xs_pkdc_cacheDataArr[poorHIndex].LONGITUDE && xs_pkdc_cacheDataArr[poorHIndex].LATITUDE){
@@ -464,8 +468,12 @@ XS.Searchbox.featurePosition = function (level,feature,regionId,regionName,poorH
     //xs_MapInstance.getMapObj().zoomToExtent(feature.geometry.getBounds(),false);
     xs_currentZoneFuture = feature;
     feature.style = xs_stateZoneStyle;
-    xs_zone_vectorLayer.removeAllFeatures();
-    xs_zone_vectorLayer.addFeatures(feature);
+    XS.Main.clearVectorLayer();
+    if(xs_user_Features[0]){
+        xs_vectorLayer.addFeatures([feature,xs_user_Features[0]]);
+    }else{
+        xs_vectorLayer.addFeatures(feature);
+    }
     xs_currentZoneName = regionName;
     xs_clickMapFutureId  = regionId;
     xs_currentZoneCode =  regionId;
@@ -779,8 +787,5 @@ XS.Searchbox.BaseInfPanel = function(i,json,regionId,regionName){
             }
         }
         XS.Searchbox.baseInfoClick(level,regionIdV,regionNameV);
-    });
-    $(".xs_searchbox_nextSeleect").click(function(){
-
     });
 }

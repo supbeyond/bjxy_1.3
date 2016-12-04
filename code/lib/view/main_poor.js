@@ -50,7 +50,6 @@ XS.Main.Poor.showPoor = function(id,centerPointer){
 //显示贫困用户
 XS.Main.Poor.showPoors = function(objArr,centerPointer){
     xs_markerLayer.clearMarkers();
-    xs_markerLayer.setVisibility(false);
     XS.Main.Poor.clearRelocationLayer();
     if(objArr&&objArr.length>0){
         var dataArr = [];
@@ -887,8 +886,11 @@ var xs_poor_echart_option =
 var xs_poor_isUpOneLevel = false;
 XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
     XS.Main.hiddenLayers();
+    xs_markerFeaturess = [];
     xs_markerLayer.clearMarkers();
+    xs_markerLayer.addMarker(xs_cityMarkerFeature);
     xs_poorLabelLayer.removeAllFeatures();
+
 
     if($("#xs_utfGridC").length>0) $("#xs_utfGridC").css("display","none");
     if($("#xs_tjfx_range_Legend").length>0) $("#xs_tjfx_range_Legend").remove();
@@ -957,7 +959,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                                 return;
                             }else{
                                 xs_currentZoneFuture = null;
-                                xs_zone_vectorLayer.removeAllFeatures();
+                                XS.Main.clearVectorLayer();
                                 //XS.CommonUtil.showMsgDialog("", "您的权限不够");
                             }
                         }else{
@@ -1141,6 +1143,12 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                     if(XS.Main.Tjfx.type_featuersArr.village.length>0)
                     {
                       //xs_clickMapFutureId = feature.data.乡镇代码;
+                        var townFeature = XS.Searchbox.findTargetFeature(XS.Main.Ztree.zoneFeatuers.town,parentId,"乡镇代码");
+                        if(townFeature){
+                            xs_poor_superFeature = townFeature;
+                            XS.Main.Poor.preloc_handleData(level, parentId);
+                            return;
+                        }
                         xs_poor_superFeature = null;
                         var sql = "乡镇代码=="+parentId;
                         XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, "Twon_Code", sql, xs_MapInstance.bLayerUrl,function(queryEventArgs)
@@ -1181,8 +1189,12 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
 XS.Main.Poor.povertyRelocatFeature = function(feature,params,superId,currentLevel,regionNameF,regionIdF){
     xs_currentZoneFuture = feature;
     feature.style = xs_stateZoneStyle;
-    xs_zone_vectorLayer.removeAllFeatures();
-    xs_zone_vectorLayer.addFeatures(feature);
+    XS.Main.clearVectorLayer();
+    if(xs_user_Features[0]){
+        xs_vectorLayer.addFeatures([feature,xs_user_Features[0]]);
+    }else{
+        xs_vectorLayer.addFeatures(feature);
+    }
 
     xs_currentZoneName = feature.data[regionNameF];
     xs_clickMapFutureId  = feature.data[regionIdF];
@@ -1917,7 +1929,7 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
         XS.CommonUtil.closeDialog('xs_poor_info');
         XS.CommonUtil.closeDialog('xs_main_detail_1');
         xs_currentZoneFuture = null;
-        xs_zone_vectorLayer.removeAllFeatures();
+        XS.Main.clearVectorLayer();
         var centerPoint = xs_MapInstance.getMapCenterPoint();
         var data = {'name':obj.HHNAME, 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'镰刀湾村', 'flon':centerPoint.lon, 'flat':centerPoint.lat, 'to':obj.VILL, 'tlon':obj.LONGITUDE, 'tlat':obj.LATITUDE};
         XS.Main.Poor.povertyRelocation(XS.Main.ZoneLevel.poor, obj.VID, data);

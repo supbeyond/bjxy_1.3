@@ -65,19 +65,20 @@ var xs_utfGridController; //属性矢量瓦片控制器
 var xs_clusterControl; //聚散图层控制器
 
 var xs_vectorLayer; //矢量图层
-var xs_zone_vectorLayer; //矢量图层 专绘制被选中区域矢量图
-var xs_author_vectorLayer; //处理用户权限控制
+//var xs_zone_vectorLayer; //矢量图层 专绘制被选中区域矢量图
+//var xs_author_vectorLayer; //处理用户权限控制
 var xs_clusterLayer; //聚散图层
 
 var xs_animatorVectorLayer = null; //矢量动画图层
 var xs_markerLayer = null; //marker图层
 var xs_poorLabelLayer; //显示贫困户标签图层
-var xs_cityMarkerLayer; //显示毕节市标签图层
+//var xs_cityMarkerLayer; //显示毕节市标签图层
+var xs_cityMarkerFeature = null; //显示毕节市标签图层
 
 var xs_labelLayer = null; //标签图层
 
 var xs_tasker_animatorVectorLayer = null; //处理区域任务监督人的动画图层
-var xs_tasker_labelLayer = null; //处理区域任务监督人的标签图层动画图层
+//var xs_tasker_labelLayer = null; //处理区域任务监督人的标签图层动画图层
 
 XS.Main = {};
 XS.Main.load = function(){
@@ -137,8 +138,8 @@ XS.Main.load = function(){
         }
     );
     xs_vectorLayer = new SuperMap.Layer.Vector("vectorLayer");
-    xs_zone_vectorLayer = new SuperMap.Layer.Vector("zone_vectorLayer");
-    xs_author_vectorLayer = new SuperMap.Layer.Vector("author_vectorLayer");
+    //xs_zone_vectorLayer = new SuperMap.Layer.Vector("zone_vectorLayer");
+    //xs_author_vectorLayer = new SuperMap.Layer.Vector("author_vectorLayer");
     //聚散点图层
     xs_clusterLayer = new SuperMap.Layer.ClusterLayer("cluster");
 
@@ -162,10 +163,10 @@ XS.Main.load = function(){
         stroke: false,
         strokeColor:"#ff0000"
     };
-    xs_tasker_labelLayer = new SuperMap.Layer.Vector("tasker_label",{strategies: [strategy]});
+    //xs_tasker_labelLayer = new SuperMap.Layer.Vector("tasker_label",{strategies: [strategy]});
 
     xs_markerLayer = new SuperMap.Layer.Markers("markerlayer",{});
-    xs_cityMarkerLayer = new SuperMap.Layer.Markers("citymarkerlayer",{});
+    //xs_cityMarkerLayer = new SuperMap.Layer.Markers("citymarkerlayer",{});
     xs_poorLabelLayer = new SuperMap.Layer.Vector("poor_label",{strategies: [strategy]});//显示贫困户标签图层
 
     ///-------------controller---------------------
@@ -259,6 +260,7 @@ XS.Main.load = function(){
                                 }
                                 xs_currentZoneName = xs_userZoneName;
                                 xs_currentZoneCode = xs_user_regionId;
+                                break;
                             }
                         }
                         if(xs_user_Features.length<1){
@@ -269,8 +271,8 @@ XS.Main.load = function(){
                         }
                         XS.Main.addLayers();
 
-                        xs_author_vectorLayer.setVisibility(true);
-                        xs_author_vectorLayer.addFeatures(xs_user_Features);
+                        //xs_author_vectorLayer.setVisibility(true);
+                        xs_vectorLayer.addFeatures(xs_user_Features);
                         xs_MapInstance.getMapObj().zoomToExtent(xs_user_Features[0].geometry.getBounds(),true);
 
                     }else{
@@ -301,21 +303,21 @@ XS.Main.addLayers = function(){
         xs_utfGridCountyLayer,
         xs_utfGridTownLayer,
         xs_utfGridVillageLayer,
-        xs_author_vectorLayer,
-        xs_zone_vectorLayer,
-        xs_tasker_animatorVectorLayer,
-        xs_tasker_labelLayer,
         xs_vectorLayer,
+        xs_tasker_animatorVectorLayer,
+        xs_clusterLayer,
         xs_poorLabelLayer,
-        xs_markerLayer,
-        xs_cityMarkerLayer,
-        xs_clusterLayer
+        xs_markerLayer
+        //xs_author_vectorLayer,
+        //xs_zone_vectorLayer,
+        //xs_tasker_labelLayer,
+        //xs_cityMarkerLayer
     ]);
     xs_tasker_animatorVectorLayer.setVisibility(false);
-    xs_tasker_labelLayer.setVisibility(false);
-    xs_author_vectorLayer.setVisibility(false);
-    xs_markerLayer.setVisibility(false);
-    xs_author_vectorLayer.setVisibility(false);
+    //xs_tasker_labelLayer.setVisibility(false);
+    //xs_author_vectorLayer.setVisibility(false);
+    //xs_markerLayer.setVisibility(false);
+    //xs_author_vectorLayer.setVisibility(false);
 
     xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 0);
     xs_MapInstance.getMapObj().events.on({ "click": XS.Main.clickMapCallback});
@@ -323,7 +325,9 @@ XS.Main.addLayers = function(){
     xs_MapInstance.getMapObj().events.on({ "moveend": XS.Main.movedMapCallback});
 
     XS.Main.addCityMarker2Layer();
-    xs_userZoomBounds =xs_MapInstance.getMapObj().getExtent();
+    if(xs_user_regionLevel != XS.Main.ZoneLevel.city){
+        xs_userZoomBounds =xs_user_Features[0].geometry.getBounds();
+    }
 
     XS.Main.Ztree.load(xs_user_regionId,xs_user_regionLevel);
     XS.Searchbox.init();

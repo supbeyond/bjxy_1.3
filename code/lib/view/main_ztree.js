@@ -388,7 +388,7 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
 
                 xs_poorLabelLayer.removeAllFeatures();
                 xs_markerLayer.clearMarkers();
-                xs_markerLayer.setVisibility(false);
+                xs_markerFeaturess = [];
                 XS.Main.Poor.clearRelocationLayer();
                 XS.Main.clearMap();
                 $("#xs_tjfx_range_Legend").css("display", "none");
@@ -398,8 +398,12 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
                 if(node.xs_nlevel != 0){
                     xs_currentZoneFuture = feature;
                     feature.style = xs_stateZoneStyle;
-                    xs_zone_vectorLayer.removeAllFeatures();
-                    xs_zone_vectorLayer.addFeatures(feature);
+                    XS.Main.clearVectorLayer();
+                    if(xs_user_Features[0]){
+                        xs_vectorLayer.addFeatures([feature,xs_user_Features[0]]);
+                    }else{
+                        xs_vectorLayer.addFeatures(feature);
+                    }
 
                     xs_pkdc_isFirstShowInfoWin = true;
                     xs_currentZoneLevel = node.xs_nlevel;

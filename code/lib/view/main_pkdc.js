@@ -294,6 +294,7 @@ XS.Main.Pkjc.pkdc = function(){
         XS.CommonUtil.showMsgDialog("","数据加载未完成，请耐心等待");
         return;
     }
+    XS.Main.functionBtnClk();
     XS.Main.hiddenLayers();
     XS.Main.closeDialogs("xs_main_detail");
 
@@ -1165,7 +1166,7 @@ XS.Main.Pkjc.preAndCurrentName = function(preJson,currentJson,superId,superName,
  * @param zoneLevel 区域级别
  * @param stateCode 行政区域ID
  */
-XS.Main.Pkjc.clickDutyChain = function(zoneLevel, stateCode){
+XS.Main.Pkjc.clickDutyChain = function(zoneLevel, stateCode,currentName){
     //请求数据
     //{"__type":"WorkRegion:#WcfService2","region_fullname":"毕节市大方县",
     // "region_shortname":"大方县","regionid":"5224","workid":"522400045",
@@ -1202,7 +1203,7 @@ XS.Main.Pkjc.clickDutyChain = function(zoneLevel, stateCode){
                     obj.workpost = "";
                 }
                 var content = '<div id="xs_pkdc_orgchart_container" style="width:auto; min-width: 100%; height:100%; text-align: center;position: relative; top: 0px; left: 0px;line-height: 100%;vertical-align: middle;overflow:auto;background: #ffffff;"></div>';
-                XS.CommonUtil.openDialog("xs_main_detail", "责任链", "icon-man", content, false, true, true, 1000, 350,null,null,function(){
+                XS.CommonUtil.openDialog("xs_main_detail", currentName+"-责任链", "icon-man", content, false, true, true, 1000, 350,null,null,function(){
                     $("#xs_main_detail").dialog("destroy");
                     $("#xs_pkdc_msgWin").window("open");
                 });
@@ -1232,6 +1233,8 @@ XS.Main.Pkjc.clickDutyChain = function(zoneLevel, stateCode){
  * @param zoneLevel 区域级别
  * @param zoneCode 行政区域ID
  */
+//是否为任务人员轨迹
+var xs_pkdc_isTaskline = false;
 XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode, zoneName){
     XS.Main.Pkjc.minInfoWinDialog();
     XS.Main.Pkjc.closeInfoDialog();
@@ -1269,15 +1272,15 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode, zoneName){
         content += '</div>';
     //id, title, iconCls, content, resizable, maximizable, modal, width, height, left, top, closeCallback, maximizeCallback, minimizeCallback
     XS.CommonUtil.openDialog("xs_main_detail", zoneName + "-任务监控", "icon-man", content, false, true, false, 350, 550,0,null,function(){
-        if(xs_animatorVectorLayer != null){
-            xs_MapInstance.getMapObj().removeLayer(xs_animatorVectorLayer);
-            xs_animatorVectorLayer = null;
-        }
         $("#xs_main_detail").dialog("destroy");
         $("#xs_pkdc_msgWin").window("open");
         xs_clusterLayer.destroyCluster();
         xs_clusterControl.deactivate();
-        xs_vectorLayer.removeAllFeatures();
+        XS.Main.clearVectorLayer();
+        XS.Main.showMarker();
+        if(xs_pkdc_isTaskline){
+            XS.Main.returnBefore();
+        }
         XS.CommonUtil.closeDialog("xs_main_detail_1");
         xs_isShowUtfGridTip = true;
     });
@@ -1370,6 +1373,7 @@ XS.Main.Pkjc.onTaskRowSelecte = function (index, data){
 
 //轨迹查询
 XS.Main.Pkjc.task_queryLine = function(){
+    xs_pkdc_isTaskline = false;
     if(xs_pkdc_task_rdata == null){
         XS.CommonUtil.showMsgDialog("","请选择责任人");
         return;
@@ -1412,6 +1416,7 @@ XS.Main.Pkjc.task_queryLine = function(){
         };
         if(json && json.length>0)
         {
+            xs_pkdc_isTaskline = true;
             var pArr = [];
             var a_features = [];
             var p_features = [];
@@ -1498,7 +1503,9 @@ XS.Main.Pkjc.task_queryLine = function(){
         }else{
             XS.CommonUtil.showMsgDialog("","该责任人此时间内没有移动轨迹");
         }
-    },function(e){$("#xs_pkdc_task_loading").css({visibility:"hidden"});});
+    },function(e){
+        $("#xs_pkdc_task_loading").css({visibility:"hidden"});
+    });
 }
 
 
@@ -1510,11 +1517,11 @@ var xs_pkdc_tasker_isFirstReq = true; //是否首次查询
  */
 XS.Main.Pkjc.reqOnLineTasker = function(regionid){
     clearInterval(xs_pkjc_IntervalId);
-    xs_tasker_labelLayer.removeAllFeatures();
+    xs_poorLabelLayer.removeAllFeatures();
     xs_tasker_animatorVectorLayer.removeAllFeatures();
 
     xs_tasker_animatorVectorLayer.setVisibility(true);
-    xs_tasker_labelLayer.setVisibility(true);
+    xs_poorLabelLayer.setVisibility(true);
     XS.Main.clearMap();
     XS.Main.clearMarker();
 
@@ -1557,7 +1564,7 @@ XS.Main.Pkjc.reqOnLineTasker = function(regionid){
                 xs_pkdc_tasker_isFirstReq = false;
             }
 
-            xs_tasker_labelLayer.addFeatures(geotextFeatures);
+            xs_poorLabelLayer.addFeatures(geotextFeatures);
 
             xs_tasker_animatorVectorLayer.addFeatures(a_features);
             xs_tasker_animatorVectorLayer.animator.start();

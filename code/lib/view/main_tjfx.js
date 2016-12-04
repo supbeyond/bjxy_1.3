@@ -83,7 +83,7 @@ XS.Main.Tjfx.loadZoneFeatuers = function(level,parentId, sql, succeedCallback, f
             layerName = "Twon_Code";
             break;
         case XS.Main.ZoneLevel.town:
-            XS.Main.Tjfx.type_featuersArr.village = XS.Main.cacheFindChildFeat(XS.Main.Ztree.zoneFeatuers.town,parentId,"OldID");
+            XS.Main.Tjfx.type_featuersArr.village = XS.Main.cacheFindChildFeat(XS.Main.Ztree.zoneFeatuers.village,parentId,"OldID");
             if(XS.Main.Tjfx.type_featuersArr.village.length>0){
                 succeedCallback();
                 return;
@@ -120,7 +120,7 @@ XS.Main.Tjfx.loadZoneFeatuers = function(level,parentId, sql, succeedCallback, f
 
 //清除 图层
 XS.Main.Tjfx.removeLayer = function(){
-        $("#xs_tjfx_toolmenuC").dialog('close');
+    $("#xs_tjfx_toolmenuC").dialog('close');
     if(xs_labelLayer != null){
         xs_MapInstance.getMapObj().removeLayer(xs_labelLayer);
         xs_labelLayer = null;
