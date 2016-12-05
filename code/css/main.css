@@ -520,11 +520,16 @@ html, body{
 .xs_rb_btn:hover{
     color: #0e92ee;
 }
+#xs_rb_btn_screen{
+     bottom: 156px;
+ }
+#xs_rb_btn_tools{
+    bottom: 128px;
+}
 #xs_rb_btn_ztree{
     bottom: 100px;
 }
-
-#xs_rb_btn_tools{
+#xs_rb_btn_homePage{
     bottom: 72px;
 }
 
