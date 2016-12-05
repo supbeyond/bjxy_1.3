@@ -552,7 +552,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                             "<a id='xs_pkdc_dataAnalysis' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;color: #ffffff;'>数据分析</a>" +
                             "<a id='xs_pkdc_dutyMonitor' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;color: #ffffff;'>责任监控</a>" +
                             "<a id='xs_pkdc_taskMonitor' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;color: #ffffff;'>任务监控</a>" +
-                            "<a id='xs_pkdc_itemFund' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;;color: #ffffff;'>项目资金</a>" +
+                            "<a id='xs_pkdc_itemFund' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;;color: #ffffff;'>帮扶措施</a>" +
                             "<a id='xs_pkdc_itemRelocate' href='javascript:void(0);'  style='background: #304655;color: #ffffff;'>扶贫搬迁</a>" +
                         "</div>" +
                     "</div>" +

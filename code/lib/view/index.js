@@ -44,6 +44,15 @@
             document.getElementsByTagName("HEAD")[0].appendChild(link);
         }
     }
+    /*function loadSMLibs(){
+        inputScript('../base/map/libs/SuperMap-8.0.1-13225.js');
+        inputCSS("../base/map/theme/default/style.css");
+        inputCSS("../base/map/theme/default/google.css");
+    }
+    function loadLocalization(){
+        inputScript('../base/map/theme/Lang/zh_CN.js');
+    }*/
+    /*loadSMLibs();loadLocalization();*/
     //加载类库资源文件
     function loadLibs() {
 

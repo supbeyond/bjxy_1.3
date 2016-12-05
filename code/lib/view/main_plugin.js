@@ -250,6 +250,27 @@ XS.Main.init = function(){
         XS.Main.showLeftZtree();
     });
 
+    //右下-返回首页
+    $('#xs_rb_btn_homePage').tooltip({
+        position: 'left',
+        content: '<span style="color:#3f3f3f">返回首页</span>',
+        onShow: function(){
+            $(this).tooltip('tip').css({
+                backgroundColor: '#fff',
+                opacity:0.8,
+                borderColor: '#efefef'
+            });
+        }
+    });
+    $('#xs_rb_btn_homePage').click(function(){
+        if(xs_user_regionLevel == XS.Main.ZoneLevel.city){
+            xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 0);
+        }else{
+            xs_MapInstance.getMapObj().zoomToExtent(xs_userZoomBounds, true);
+        }
+        XS.Main.depClearMap();
+    });
+
     //右下-工具栏
     $('#xs_rb_btn_tools').tooltip({
         position: 'left',
@@ -428,7 +449,7 @@ XS.Main.utfGridLayerMoveCallback = function (infoLookup, loc, pixel)
     }
     if (infoLookup) {
         var info;
-        for (var idx=infoLookup.length-1;idx>=0;idx--)
+        for (var idx in infoLookup)
         {
             info = infoLookup[idx];
             if (info && info.data)
@@ -1743,11 +1764,6 @@ XS.Main.depClearMap = function() {
     xs_markerFeaturess = [];
     xs_isClearMarkers = false;
     if($("#xs_tjfx_range_Legend").length>0) $("#xs_tjfx_range_Legend").remove();
-        if(xs_user_regionLevel == XS.Main.ZoneLevel.city){
-        xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 0);
-    }else{
-        xs_MapInstance.getMapObj().zoomToExtent(xs_userZoomBounds, true);
-    }
 }
 //清除xs_markerLayer、xs_poorLabelLayer和图例
 var xs_isClearMarkers = false;

@@ -1962,14 +1962,14 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
         title:'收入情况',
         content:"<div id='xs_poor_detail_tab_income_info' style='padding: 5px; height: 100%; box-sizing: border-box;'></div>"
     });
-    $('#xs_poor_detail_tab').tabs('add',{
+    /*$('#xs_poor_detail_tab').tabs('add',{
         title:'支出情况',
         content:"<div id='xs_poor_detail_tab_outcome_info' style='padding: 5px; height: 100%; box-sizing: border-box;'></div>"
     });
     $('#xs_poor_detail_tab').tabs('add',{
         title:'种植信息',
         content:"<div id='xs_poor_detail_tab_plant_info' style='padding: 5px; height: 100%; box-sizing: border-box;'></div>"
-    });
+    });*/
 
     $('#xs_poor_detail_tab').tabs("select",0);
 

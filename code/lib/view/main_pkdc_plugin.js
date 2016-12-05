@@ -279,7 +279,7 @@ var xs_pkdc_cashAnalyData = {
     city:{drinkWater:"",move:"",trainAnaly:"",socialProtect:"",dangerHouse:"",outPoor:"",poorReason:"",cultureDegree:""},
     county:{cultureDegree:"",poorReason:"",helpMeasure:"",fiveFour:"",fourFive:""},
     town:{cultureDegree:"",poorReason:"",helpMeasure:"",fiveFour:"",fourFive:""},
-    vill:{cultureDegree:"",poorReason:"",helpMeasure:"",fiveFour:"",fourFive:"",outPooreVolve:""}
+    vill:{cultureDegree:"",poorReason:"",helpMeasure:"",fiveFour:""}//,fourFive:"",outPooreVolve:""}
 };
 
 var xs_pkdc_analyMax = 0;
@@ -1282,10 +1282,10 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
         });
     }else if(level == XS.Main.ZoneLevel.village)
     {
-        xs_pkdc_cashAnalyData.vill = {cultureDegree:"",poorReason:"",helpMeasure:"",fiveFour:"",fourFive:"",outPooreVolve:""};
+        xs_pkdc_cashAnalyData.vill = {cultureDegree:"",poorReason:"",helpMeasure:"",fiveFour:""}//,fourFive:"",outPooreVolve:""};
         xs_pkdc_AnalysTabsCInit = null;
         xs_pkdc_AnalysTabsChartArr = [];
-        var tabTile = ["文化程度", "致贫原因", "帮扶措施", "五通四有", "四有五覆盖","脱贫进展"];
+        var tabTile = ["文化程度", "致贫原因", "帮扶措施", "五通四有"]//, "四有五覆盖","脱贫进展"];
         var content = '<div style="padding: 2px 2px 2px 0px;box-sizing: border-box;height: 100%;">' +
             XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",true,true,800,545,90,40) +
             '</div>';
@@ -1369,7 +1369,7 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
                             action = "QueryVillFiveFourById";
                         }
                         break;
-                    case 4 ://四有五覆盖
+                    /*case 4 ://四有五覆盖
                         if(xs_pkdc_cashAnalyData.vill.fourFive){
                             XS.Main.Pkjc.villAnalyShow(xs_pkdc_cashAnalyData.vill.fourFive,index);
                         }else{
@@ -1382,7 +1382,7 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
                         }else{
                             action = "QueryFourFiveByAreaId";
                         }
-                        break;
+                        break;*/
                 }
                 if(action){
                     data = {pd_id:currentCode,pid:currentCode,cid:currentCode,vid:currentCode};
@@ -1404,12 +1404,12 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
                                 case 3 ://五通四有
                                     xs_pkdc_cashAnalyData.vill.fiveFour =json;
                                     break;
-                                case 4 ://四有五覆盖
+                                /*case 4 ://四有五覆盖
                                     xs_pkdc_cashAnalyData.vill.fourFive =json;
                                     break;
                                 case 5 ://脱贫进展
                                     xs_pkdc_cashAnalyData.vill.outPooreVolve =json;
-                                    break;
+                                    break;*/
                             }
                             XS.Main.Pkjc.villAnalyShow(json,index);
                         }else{
@@ -2682,7 +2682,7 @@ XS.Main.Pkjc.villAnalyShow = function(json,index){
              }
              XS.Main.Pkjc.ciAnalyOpt([5,'五通四有'],['axis',['line']],legend,[200,80,60,40],xAxis,[['','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);*/
             break;
-        case 4 ://四有五覆盖
+        /*case 4 ://四有五覆盖
             var field = ["CoMedicNum","EduHelpNum","ElectricSafeNum","HouseSafeNum","IndustyNum","InsureNum","WaterSafeNum","WorkSkillNum","YardHardNum","EnroadHardNum"];
             var xAxis = ['','category',["新合作医疗","教育帮扶","用电安全","住房安全","有产业支持","参加保险","饮水安全","劳动技能","院坝硬化","入户路硬化"]];
             var legend = [60,[],[]];
@@ -2699,6 +2699,6 @@ XS.Main.Pkjc.villAnalyShow = function(json,index){
             break;
         case 5 ://脱贫进展
 
-            break;
+            break;*/
     }
 }
