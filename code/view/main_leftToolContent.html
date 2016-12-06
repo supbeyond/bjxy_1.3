@@ -1,4 +1,14 @@
 <style>
+    #xs_l_toolist{
+        background: transparent;
+        border-width: 0px;
+        width: 100%;
+        height: 100%;
+        position: relative;
+        overflow-y: hidden;
+        overflow-x: hidden;
+        /*border: 1px solid #ff0000;*/
+    }
     #xs_l_toolist div{
         display: inline-block;
         box-sizing: border-box;
@@ -47,9 +57,12 @@
         -1px 1px 1px #282828;*/
     }
 </style>
-<div id="xs_l_toolist" style="background: transparent; border-width: 0px; width: 100%; height: 100%;position: relative;overflow-y: hidden;overflow-x: hidden;">
-    <div href="#" onclick="XS.Main.Pkjc.pkdc();" class="easyui-linkbutton" data-options="iconCls:'icon-main_pkdc',iconAlign:'top',size:'large'" style="margin-right: 45px;margin-left: 0px;">贫困洞察</div>
-    <div href="#" onclick="XS.Main.RightClickMenuHandler('sjfx');" class="easyui-linkbutton" data-options="iconCls:'icon-main_sjcl',iconAlign:'top',size:'large'" style="margin-right: 45px;">数据分析</div>
-    <div href="#" onclick="XS.Main.Dispatchcmmd.dispatchCommd();" class="easyui-linkbutton" data-options="iconCls:'icon-main_gtzz',iconAlign:'top',size:'large'" style="margin-right: 45px;">调度指挥</div>
-    <div href="#" onclick="XS.Main.Tjfx.showToolMenu();" class="easyui-linkbutton" data-options="iconCls:'icon-main_tjfx',iconAlign:'top',size:'large'" style="/*border-top-right-radius: 5px*/">统计分析</div>
+<div id="xs_l_toolist">
+    <div href="#" onclick="XS.Main.Pkjc.pkdc();" class="easyui-linkbutton" data-options="iconCls:'icon-main_pkdc',iconAlign:'top',size:'large'" style="margin-right: 5px;margin-left: 0px;">贫困洞察</div>
+    <div href="#" onclick="XS.Main.Dispatchcmmd.dispatchCommd();" class="easyui-linkbutton" data-options="iconCls:'xs_pkdc_money',iconAlign:'top',size:'large'" style="margin-right: 5px;">帮扶措施</div>
+    <div href="#" onclick="XS.Main.Dispatchcmmd.dispatchCommd();" class="easyui-linkbutton" data-options="iconCls:'xs_main_dudh',iconAlign:'top',size:'large'" style="margin-right: 5px;">调度指挥</div>
+    <div href="#" onclick="XS.Main.Dispatchcmmd.dispatchCommd();" class="easyui-linkbutton" data-options="iconCls:'xs_pkdc_task',iconAlign:'top',size:'large'" style="margin-right: 5px;">责任监控</div>
+    <div href="#" onclick="XS.Main.Dispatchcmmd.dispatchCommd();" class="easyui-linkbutton" data-options="iconCls:'icon-main_gtzz',iconAlign:'top',size:'large'" style="margin-right: 5px;">任务监控</div>
+    <div href="#" onclick="XS.Main.RightClickMenuHandler('sjfx');" class="easyui-linkbutton" data-options="iconCls:'xs_pkdc_family',iconAlign:'top',size:'large'" style="margin-right: 5px;">易地搬迁</div>
+    <div href="#" onclick="XS.Main.Tjfx.showToolMenu();" class="easyui-linkbutton" data-options="iconCls:'icon-main_sjcl',iconAlign:'top',size:'large'" style="/*border-top-right-radius: 5px*/">统计分析</div>
 </div>
