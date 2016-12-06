@@ -17,14 +17,18 @@
     background:url('../img/icon/xs_pkdc_chart.png') no-repeat center center;
 }
 .xs_pkdc_money{
-    background:url('../img/icon/xs_pkdc_money.png') no-repeat center center;
+    background:url('../img/icon/xs_pkdc_money_white.png') no-repeat center center;
 }
+.xs_main_dudh{
+    background:url('../img/icon/xs_main_dudh.png') no-repeat center center;
+}
+
 .xs_pkdc_task{
-    background:url('../img/icon/xs_pkdc_task.png') no-repeat center center;
+    background:url('../img/icon/xs_pkdc_task_white.png') no-repeat center center;
 }
 
 .xs_pkdc_family{
-    background:url('../img/icon/xs_pkjc_family.png') no-repeat center center;
+    background:url('../img/icon/xs_pkjc_family_white.png') no-repeat center center;
 }
 
 .xs_poor_rotate{
