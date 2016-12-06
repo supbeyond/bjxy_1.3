@@ -85,7 +85,7 @@ XS.Main.Pkjc.gaugeOption = {
             name: '贫困人口',
             type: 'gauge',
             center: ['20%', '50%'],
-            radius: '35%',
+            radius: '43%',
             min: 0,
             max: 10,
             splitNumber: 10,
@@ -130,7 +130,7 @@ XS.Main.Pkjc.gaugeOption = {
             name: '贫困户',
             type: 'gauge',
             center: ['80%', '50%'],
-            radius: '35%',
+            radius: '42%',
             min: 0,
             max: 10,
             splitNumber: 10,
@@ -404,12 +404,12 @@ XS.Main.Pkjc.showGaugeData = function(pop, ratio, family){
     if(!xs_pkdc_GaugeChart)
     {
         var gaugeTag = "<div id='xs_pkdc_gaugeC' style='z-index: 998;'>" +
-            "<div id='xs_pkdc_gauge_bg1' style='width: 104px; height: 104px; position: absolute; top: 97px; right: 300px; z-index: 998;background: #15144a; border-radius: 53px;color: #00c400;font-size: 10px;line-height: 150px;text-align: center;'>人口</div>"+
-            "<div id='xs_pkdc_gauge_bg1_pop' style='width: 104px; height: 15px;line-height: 15px;text-align: center; position: absolute; top: 178px; right: 300px; z-index: 999;color: #00bbee;font-size: 10px;text-align: center;'></div>"+
-            "<div id='xs_pkdc_gauge_bg2' style='width: 136px; height: 136px; position: absolute; top: 78px; right: 152px; z-index: 998;background: #ffffff; border-radius: 68px;color: #ff0000;font-size: 13px;line-height: 100px;text-align: center;'>贫困率</div>"+
-            "<div id='xs_pkdc_gauge_bg3' style='width: 104px; height: 104px; position: absolute; top: 98px; right: 36px; z-index: 998;background: #123c66; border-radius: 53px;color: #00c400;font-size: 10px;line-height: 147px;text-align: center;'>户数</div>"+
-            "<div id='xs_pkdc_gauge_bg3_hub' style='width: 104px; height: 15px;line-height: 15px;text-align: center; position: absolute; top: 178px; right: 36px; z-index: 999;color: #00bbee;font-size: 10px;text-align: center;'></div>"+
-            "<div id='xs_pkdc_gauge' style='width: 440px; height: 300px; position: absolute; top: 0px; right: 0px; z-index: 998; border: 0px;'></div>" +
+            "<div id='xs_pkdc_gauge_bg1' style='width: 120px; height: 120px; position: absolute; top: 90px; right: 340px; z-index: 998;background: #15144a; border-radius: 60px;color: #00c400;font-size: 8px;line-height: 162px;text-align: center;'>贫困人口</div>"+
+            "<div id='xs_pkdc_gauge_bg1_pop' style='width: 120px; height: 15px;line-height: 15px;text-align: center; position: absolute; top: 180px; right: 340px; z-index: 999;color: #00bbee;font-size: 10px;text-align: center;'></div>"+
+            "<div id='xs_pkdc_gauge_bg2' style='width: 136px; height: 136px; position: absolute; top: 78px; right: 182px; z-index: 998;background: #ffffff; border-radius: 68px;color: #ff244e;font-size: 13px;line-height: 110px;text-align: center;'>贫困发生率</div>"+
+            "<div id='xs_pkdc_gauge_bg3' style='width: 110px; height: 110px; position: absolute; top: 95px; right: 45px; z-index: 998;background: #123c66; border-radius: 55px;color: #00c400;font-size: 8px;line-height: 147px;text-align: center;'>贫困户</div>"+
+            "<div id='xs_pkdc_gauge_bg3_hub' style='width: 104px; height: 15px;line-height: 15px;text-align: center; position: absolute; top: 178px; right: 47px; z-index: 999;color: #00bbee;font-size: 10px;text-align: center;'></div>"+
+            "<div id='xs_pkdc_gauge' style='width: 500px; height: 300px; position: absolute; top: 0px; right: 0px; z-index: 998; border: 0px;'></div>" +
             "</div>";
 
         $("#xs_MapContainer").append(gaugeTag);
@@ -508,12 +508,13 @@ var xs_pkdc_currentStateCode = -1; //当前ID
 var xs_pkdc_superStateCode = -1; //上一级Id
 var xs_pkdc_cacheDataArr = []; //数据缓存
 var xs_pkdc_zoneLevel = -1;
+var xs_pkdc_isloadedchart2 = false; //是否加载echart2
 //点击仪表盘显示下级信息窗口 superId:通过查找当前的区域的信息，id 通过当前的ID查找下一级的信息
 XS.Main.Pkjc.showInfoWin = function(level, superId, id){
    // XS.LogUtil.log($("#xs_pkdc_msgWin"));
     xs_pkdc_isShowInfoWin = true;
     xs_pkdc_isFirstShowInfoWin = false;
-    $("#xs_echartjs").empty().append('<script src="../base/echart/echarts.js"></script>');
+
     xs_pkdc_isWinMin = false;
     xs_pkdc_superStateCode = superId;
     xs_pkdc_currentStateCode = id;
@@ -548,12 +549,12 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                 '<td>' +
                     "<div  id='xs_pkdc_msg_tabC' style='width: 100%; height: 100%;'>" +
                         "<div  id='xs_pkdc_msg_btnC' style='width: 100%; height: 100%;text-align: center;padding-top: 5px;'>" +
-                            "<a id='xs_pkdc_details' href='javascript:void(0);'  style='background: #304655;margin-right: 1px; color: #ffffff;'>详情</a>" +
-                            "<a id='xs_pkdc_dataAnalysis' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;color: #ffffff;'>数据分析</a>" +
-                            "<a id='xs_pkdc_dutyMonitor' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;color: #ffffff;'>责任监控</a>" +
+                            "<a id='xs_pkdc_details' href='javascript:void(0);'  style='background: #304655;margin-right: 10px; color: #ffffff;'>详情</a>" +
+                            "<a id='xs_pkdc_dataAnalysis' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;color: #ffffff;'>大数据分析</a>" +
+                          /*  "<a id='xs_pkdc_dutyMonitor' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;color: #ffffff;'>责任监控</a>" +
                             "<a id='xs_pkdc_taskMonitor' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;color: #ffffff;'>任务监控</a>" +
-                            "<a id='xs_pkdc_itemFund' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;;color: #ffffff;'>帮扶措施</a>" +
-                            "<a id='xs_pkdc_itemRelocate' href='javascript:void(0);'  style='background: #304655;color: #ffffff;'>扶贫搬迁</a>" +
+                            "<a id='xs_pkdc_itemFund' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;;color: #ffffff;'>帮扶措施</a>" +*/
+                            /*"<a id='xs_pkdc_itemRelocate' href='javascript:void(0);'  style='background: #304655;color: #ffffff;'>易地扶贫搬迁</a>" +*/
                         "</div>" +
                     "</div>" +
                 '</td>' +
@@ -694,7 +695,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
             XS.Main.Poor.clearRelocationLayer();
             XS.Main.Pkjc.clickTaskMonitor(xs_pkdc_zoneLevel, xs_pkdc_currentStateCode,xs_pkdc_currentName);
         });
-        //项目资金点击
+        //帮扶措施
         $('#xs_pkdc_itemFund').click(function(){
             XS.Main.Pkjc.clickItemFund(xs_pkdc_currentName);
         });
@@ -711,7 +712,12 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
     $('#xs_pkdc_msgWin').window({"title":xs_pkdc_currentName + "-贫困洞察"/*, width:1020,height:600*/}).window('open');
     $("#xs_pkdc_backSuperBtn").linkbutton({text: xs_pkdc_preName});
     $("#xs_pkdc_msg_pieC").css("display","block");
-
+    if(document.getElementsByClassName("xs_chart2tag")){
+        if(!xs_pkdc_isloadedchart2){
+            xs_pkdc_isloadedchart2 = true;
+            $("#xs_echartjs").empty().append('<script src="../base/echart/echarts.min.js"></script>');
+        }
+    }
     if(!xs_pkdc_PieChart){
         xs_pkdc_PieChart = echarts.init(document.getElementById("xs_pkdc_msg_pieC"));
     }

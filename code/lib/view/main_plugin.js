@@ -157,9 +157,15 @@ var xs_rbbtn_isfullscreen = false; //是否是全屏
 XS.Main.init = function(){
     //xs_leftToolBarC
     //xs_tjfx_leftMenu
-    //$("#xs_leftToolBarC").css("left", window.outerWidth/2.0-315);
+    var bodyOffsetWidth = document.body.offsetWidth;
+    if(bodyOffsetWidth > 800){
+        $("#xs_leftToolBarC").css({left: (bodyOffsetWidth - 800)/2.0});
+    }else{
+        $("#xs_leftToolBarC").css({left: 0});
+    }
+    //点击统计分析弹出专题菜单
     $("#xs_tjfx_leftMenu").css({
-        "left":window.outerWidth/2.0+250
+        "left":window.outerWidth/2.0+330
     });
     //左边工具栏
     $("#xs_leftToolPanel").panel(
@@ -304,16 +310,10 @@ var xs_btoolbar_isClosing = false;
 //滑出底工具菜单
 XS.Main.showBottomToolBar = function(){
     if((!xs_btoolbar_isShowing)&&((!xs_btoolbar_isClosing))){
-        var bodyOffsetWidth = document.body.offsetWidth;
-        if(bodyOffsetWidth > 575){
-            $("#xs_leftToolBarC").css({left: (bodyOffsetWidth - 575)/2.0});
-        }else{
-            $("#xs_leftToolBarC").css({left: 0});
-        }
         xs_btoolbar_isShowing = true;
         $("#xs_utfGridC").css("display","none"); //关闭显示窗口
         //$("#xs_leftToolBarC").css({width:document.body.offsetHeight});
-        $("#xs_leftToolBarC").stop(true, false).animate({"bottom": -30}, 200, function(msg){
+        $("#xs_leftToolBarC").stop(true, false).animate({"bottom": -35}, 200, function(msg){
             xs_btoolbar_isShowing = false;
         });
     }

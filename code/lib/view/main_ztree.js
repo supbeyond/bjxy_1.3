@@ -42,6 +42,7 @@ XS.Main.Ztree.load = function(regId, ulevel)
 
 XS.Main.Ztree.loadCounty = function (regId, ulevel)
 {
+    //缓存管理员数据
     var sql = "";
     var layerName = "County_Code";
     switch (ulevel) {

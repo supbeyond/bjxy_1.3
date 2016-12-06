@@ -899,8 +899,8 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
     xs_isShowUtfGridTip = false;
     XS.Main.Pkjc.minInfoWinDialog();
     XS.Main.Pkjc.closeGaugeData();
-
-    $("#xs_echartjs").empty().append('<script src="../base/echart2/dist/echarts-all.js"></script>');
+    xs_pkdc_isloadedchart2 = false;
+    $("#xs_echartjs").empty().append('<label class="xs_chart2tag"></label><script src="../base/echart2/dist/echarts-all.js"></script>');
     if(xs_poor_elementsLayer==null)
     {
         xs_poor_elementsLayer = new SuperMap.Layer.Elements("xs_poor_elementsLayer");

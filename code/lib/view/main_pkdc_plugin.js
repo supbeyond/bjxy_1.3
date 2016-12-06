@@ -1429,7 +1429,7 @@ XS.Main.Pkjc.clickItemFund = function(currentName){
     XS.Main.Poor.clearRelocationLayer();
     xs_pkdc_itemFundDgridJson = [];
     XS.Main.Pkjc.minInfoWinDialog();
-    var content = '<script id="echarts_all" src="../base/echart2/dist/echarts-all.js"></script>' +
+    var content = '<label class="xs_chart2tag"></label><script id="echarts_all" src="../base/echart2/dist/echarts-all.js"></script>' +
         '<div style="width:100%;height: 100%;padding:5px 5px 5px 0px;box-sizing: border-box;">' +
             '<div id="xs_pkdc_itemFund1" style="width:100%;height:100%;box-sizing: border-box;">' +
                 /*'<i id="xs_pkdc_itemFound_loading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: -25px;visibility: hidden;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading">' +
@@ -1450,7 +1450,7 @@ XS.Main.Pkjc.clickItemFund = function(currentName){
                 "</div>" +
             '</div>' +
         '</div>';
-    XS.CommonUtil.openDialog("xs_main_detail", currentName + "-项目资金", "icon-man", content, false, true, false, 700,600,0,null,function(){
+    XS.CommonUtil.openDialog("xs_main_detail", currentName + "-帮扶措施", "icon-man", content, false, true, false, 700,600,0,null,function(){
         $("#xs_echartjs").empty().append('<script src="../base/echart/echarts.js"></script>');
         $("#xs_main_detail").dialog("destroy");
         $("#xs_pkdc_msgWin").window("open");
