@@ -44,15 +44,6 @@
             document.getElementsByTagName("HEAD")[0].appendChild(link);
         }
     }
-    /*function loadSMLibs(){
-        inputScript('../base/map/libs/SuperMap-8.0.1-13225.js');
-        inputCSS("../base/map/theme/default/style.css");
-        inputCSS("../base/map/theme/default/google.css");
-    }
-    function loadLocalization(){
-        inputScript('../base/map/theme/Lang/zh_CN.js');
-    }*/
-    /*loadSMLibs();loadLocalization();*/
     //加载类库资源文件
     function loadLibs() {
 
@@ -64,7 +55,7 @@
         inputCSS("./css/ui_loader.css");
 
         inputScript('./base/easyui/jquery.easyui-1.4.3.min.js',false);
-        inputScript('./base/easyui/locale/easyui-lang-zh_CN.min.js',false);
+        inputScript('./base/easyui/locale/easyui-lang-zh_CN.js',false);
         inputScript('./base/other/enc.js',false);
         inputScript('./base/other/aes.js',false);
 

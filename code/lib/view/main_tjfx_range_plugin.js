@@ -195,6 +195,10 @@ var xs_poor_legendbegoreH = 0;
 var xs_poor_isLegendClickSingle = true;
 //创建图例
 XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
+    if(document.getElementById("xs_tjfx_range_Legend")){
+        $("#xs_tjfx_range_Legend").remove();
+    }
+
     xs_poor_legendbegoreH = 0;
     xs_poor_isLegendClickSingle = true;
 
@@ -400,6 +404,9 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
         }
     }
     tag += '</table></div></div>';
+
+    $("#xs_mainC").append(tag);
+    XS.Main.addDivHover2HiddenUTFGridTip("xs_tjfx_range_Legend");
 
     return tag;
 }

@@ -197,7 +197,6 @@ XS.Main.load = function(){
     });
     xs_MapInstance.getMapObj().addControl(xs_clusterControl);
     xs_clusterControl.activate();
-
     //初始化图层
     //地图加载完毕
     xs_MapInstance.getBLayer().events.on({

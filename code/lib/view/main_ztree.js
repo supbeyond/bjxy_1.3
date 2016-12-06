@@ -85,6 +85,7 @@ XS.Main.Ztree.loadTown = function (regId, ulevel)
     var layerName = "Twon_Code";
     switch (ulevel) {
         case XS.Main.ZoneLevel.city:
+            return
             sql = "SMID>0";
             break;
         case XS.Main.ZoneLevel.county:
@@ -177,7 +178,7 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
             return;
         }
     }else{
-        if(!xs_ztree_isCountyFinish || !xs_ztree_isTownFinish){
+        if(!xs_ztree_isCountyFinish){
             return;
         }
     }

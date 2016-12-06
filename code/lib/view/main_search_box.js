@@ -365,12 +365,38 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
     xs_markerFeaturess = [];
     XS.Main.clearVectorLayer();
     xs_markerLayer.clearMarkers();
-    xs_markerLayer.addMarker(xs_cityMarkerFeature);
     XS.Main.Poor.clearRelocationLayer();
     $("#xs_tjfx_range_Legend").remove();
+    var targetMarker = null;
+    switch (level){
+        case XS.Main.ZoneLevel.town:
+            targetMarker = XS.Searchbox.getMakerOfCache(level,regionId.slice(0,6),regionId);
+            break;
+        case XS.Main.ZoneLevel.village:
+            targetMarker = XS.Searchbox.getMakerOfCache(level,regionId.slice(0,9),regionId);
+            if(targetMarker){
+                xs_markerLayer.addMarker(targetMarker);
+                XS.Searchbox.featurePosition(level,targetMarker.data.xs_feature,regionId,regionName,poorHIndex,targetMarker);
+                return;
+            }
+            break;
+        case XS.Main.ZoneLevel.poor:
+            targetMarker = XS.Searchbox.getMakerOfCache(level,regionId,xs_pkdc_cacheDataArr[poorHIndex].hid);
+            if(targetMarker){
+                XS.Searchbox.cachePositionMarker(level,xs_pkdc_cacheDataArr[poorHIndex].hid,targetMarker);
+                xs_markerLayer.addMarker(targetMarker);
+                xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(targetMarker.data.LONGITUDE, targetMarker.data.LATITUDE), 10);
+                var geoText = new SuperMap.Geometry.GeoText(targetMarker.data.LONGITUDE, targetMarker.data.LATITUDE, targetMarker.data.name);
+                var geotextFeature = new SuperMap.Feature.Vector(geoText);
+                xs_poorLabelLayer.removeAllFeatures();
+                xs_poorLabelLayer.addFeatures(geotextFeature);
+                xs_poorLabelLayer.setVisibility(true);
+                return;
+            }
+            break;
+    }
 
     if(regionName == '贫困户' && xs_pkdc_cacheDataArr[poorHIndex].LONGITUDE && xs_pkdc_cacheDataArr[poorHIndex].LATITUDE){
-
         XS.Main.Poor.showPoor(xs_pkdc_cacheDataArr[poorHIndex].hid,null);
         return;
     }else if(regionName == '贫困户详情' && xs_pkdc_cacheDataArr[poorHIndex].LONGITUDE && xs_pkdc_cacheDataArr[poorHIndex].LATITUDE){
@@ -382,7 +408,6 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
     var layerName = "";
     var sql = "";
     var regionIdStr = ""
-    var targetFeature = null;
     switch (level){
         case XS.Main.ZoneLevel.county:
         {
@@ -411,7 +436,12 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
         }
     }
     if(targetFeature){
-        XS.Searchbox.featurePosition(level,targetFeature,regionId,regionName,poorHIndex);
+        if(targetMarker){
+            xs_markerLayer.addMarker(targetMarker);
+            XS.Searchbox.featurePosition(level,targetFeature,regionId,regionName,poorHIndex,targetMarker);
+        }else{
+            XS.Searchbox.featurePosition(level,targetFeature,regionId,regionName,poorHIndex);
+        }
         return;
     }
     XS.CommonUtil.showLoader();
@@ -436,7 +466,12 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
                 XS.CommonUtil.showMsgDialog("","未找到相关数据！");
                 return;
             }
-            XS.Searchbox.featurePosition(level,feature,regionId,regionName,poorHIndex);
+            if(targetMarker){
+                xs_markerLayer.addMarker(targetMarker);
+                XS.Searchbox.featurePosition(level,feature,regionId,regionName,poorHIndex,targetMarker);
+            }else{
+                XS.Searchbox.featurePosition(level,feature,regionId,regionName,poorHIndex);
+            }
         }else{
             xs_isClickMapFinish = true;
             XS.CommonUtil.hideLoader();
@@ -451,7 +486,7 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
     });
 }
 //获得目标feauture之后的定位操作
-XS.Searchbox.featurePosition = function (level,feature,regionId,regionName,poorHIndex){
+XS.Searchbox.featurePosition = function (level,feature,regionId,regionName,poorHIndex,marker){
     if(regionName == '贫困户'){
         xs_isClickMapFinish = true;
         var centerPointer = feature.geometry.getBounds().getCenterLonLat();
@@ -490,6 +525,11 @@ XS.Searchbox.featurePosition = function (level,feature,regionId,regionName,poorH
             xs_currentZoneLevel = XS.Main.ZoneLevel.town;
             xs_isClickMapFinish = true;
             xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 6);
+            if(marker){
+                XS.Searchbox.cachePositionMarker(level,xs_currentZoneCode,marker);
+                return;
+            }
+            feature.data.xs_position = true;
             XS.Main.readyAddRegionMarkersData([feature],xs_currentZoneLevel-1,xs_superZoneCode);
             //XS.Main.addTownVillPlevelMarker2Layer(xs_currentZoneLevel-1, xs_superZoneCode,regionId);
             break;
@@ -498,6 +538,11 @@ XS.Searchbox.featurePosition = function (level,feature,regionId,regionName,poorH
             xs_currentZoneLevel = XS.Main.ZoneLevel.village;
             xs_isClickMapFinish = true;
             xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 9);
+            if(marker){
+                XS.Searchbox.cachePositionMarker(level,xs_currentZoneCode,marker);
+                return;
+            }
+            feature.data.xs_position = true;
             XS.Main.readyAddRegionMarkersData([feature],xs_currentZoneLevel-1,xs_superZoneCode);
             //XS.Main.addTownVillPlevelMarker2Layer(xs_currentZoneLevel-1, xs_superZoneCode,regionId);
             break;
@@ -788,4 +833,84 @@ XS.Searchbox.BaseInfPanel = function(i,json,regionId,regionName){
         }
         XS.Searchbox.baseInfoClick(level,regionIdV,regionNameV);
     });
+}
+//从markers缓存中获取目标marker
+XS.Searchbox.getMakerOfCache = function(level,superId,currentId){
+    var targetMarker = null;
+    switch (level){
+        case XS.Main.ZoneLevel.town:
+            if(XS.Main.Markers.town.superId == currentId){
+                targetMarker = XS.Main.Markers.town.data[0];
+            }
+            if(XS.Main.Markers.town.superId == superId && XS.Main.Markers.town.data.length>0){
+                for(var i=0;i<XS.Main.Markers.town.data.length;i++){
+                    if(XS.Main.Markers.town.data[i].data.TOWB_ID == currentId){
+                        targetMarker = XS.Main.Markers.town.data[i];
+                        break;
+                    }
+                }
+            }
+            break;
+        case XS.Main.ZoneLevel.village:
+            if(XS.Main.Markers.vill.superId == currentId){
+                targetMarker = XS.Main.Markers.vill.data[0];
+            }
+            if(XS.Main.Markers.vill.superId == superId && XS.Main.Markers.vill.data.length>0){
+                for(var i=0;i<XS.Main.Markers.vill.data.length;i++){
+                    if(XS.Main.Markers.vill.data[i].data.VBI__ID == currentId){
+                        targetMarker = XS.Main.Markers.vill.data[i];
+                        break;
+                    }
+                }
+            }
+            break;
+        case XS.Main.ZoneLevel.poor:
+            if(XS.Main.Markers.poor.superId == currentId){
+                targetMarker = XS.Main.Markers.poor.data[0];
+            }
+            if(XS.Main.Markers.poor.superId == superId && XS.Main.Markers.poor.data.length>0){
+                for(var i=0;i<XS.Main.Markers.poor.data.length;i++){
+                    if(XS.Main.Markers.poor.data[i].data.hid == currentId){
+                        targetMarker = XS.Main.Markers.poor.data[i];
+                        break;
+                    }
+                }
+            }
+            break;
+    }
+    return targetMarker;
+}
+//缓存定位的marker
+XS.Searchbox.cachePositionMarker = function(level,currentId,marker){
+    switch (level){
+        case XS.Main.ZoneLevel.town:
+            XS.Main.Markers.town.data = [marker];
+            XS.Main.Markers.town.superId = currentId;
+            if(XS.Main.Markers.vill.superId != currentId){
+                XS.Main.Markers.vill.data = [];
+                XS.Main.Markers.vill.superId = "";
+                XS.Main.Markers.poor.data = [];
+                XS.Main.Markers.poor.superId = "";
+            }
+            break;
+        case XS.Main.ZoneLevel.village:
+            XS.Main.Markers.town.data = [];
+            XS.Main.Markers.town.superId = "";
+            XS.Main.Markers.vill.data = [marker];
+            XS.Main.Markers.vill.superId = currentId;
+            if(XS.Main.Markers.poor.superId != currentId){
+                XS.Main.Markers.poor.data = [];                XS.Main.Markers.poor.superId = "";
+            }
+            break;
+        case XS.Main.ZoneLevel.poor:
+            XS.Main.Markers.town.data = [];
+            XS.Main.Markers.town.superId = "";
+            XS.Main.Markers.vill.data = [];
+            XS.Main.Markers.vill.superId = "";
+            XS.Main.Markers.poor.data = [marker];
+            XS.Main.Markers.poor.superId = currentId;
+            break;
+    }
+    xs_markerLayer.clearMarkers();
+    xs_markerLayer.addMarker(marker);
 }
