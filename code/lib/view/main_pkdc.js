@@ -669,7 +669,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
 
         //扶贫意见事件处理
         $('#xs_pkdc_poorAdviceBtn').click(function(){
-            XS.Main.showAdvanceFeedDialog(id);
+            XS.Main.showAdvanceFeedDialog(id, xs_pkdc_currentName, xs_pkdc_zoneLevel);
         });
         //详情点击
         $('#xs_pkdc_details').click(function(){

@@ -1971,14 +1971,20 @@ XS.Main.functionBtnClk = function(){
     }
 }
 //意见反馈
-XS.Main.showAdvanceFeedDialog = function(regionid){
+XS.Main.showAdvanceFeedDialog = function(regionid, regionName, regionlevel){
+        var title = "意见反馈( ";
+        if(regionlevel==XS.Main.ZoneLevel.poor){
+            title += "贫困户:";
+        }
+        title += regionName;
+        title += " )";
     var htmlContent =
         '<div style="width: 100%; height: 100%; display: inline-block; box-sizing: border-box; padding: 5px;">' +
-            '<input id="xs_main_ipt_advance" class="easyui-textbox easyui-resizable" data-options="multiline:true,prompt:\'请输入意见\'" style="width:100%;height:200px">'+
+            '<input id="xs_main_ipt_advance" class="easyui-textbox easyui-resizable" data-options="multiline:true,prompt:\'请领导提出宝贵意见！\'" style="width:100%;height:200px">'+
             '<a id="xs_main_btn_advance" href="javascript:0;" class="easyui-linkbutton" style="margin-top: 10px; margin-left: 340px;"><span style="width:120px; height: 40px; text-align: center;line-height: 40px;font-size: 25px;font-weight: bold; display: inline-block;">提交</span></a>'
         '</div>';
 
-    XS.CommonUtil.openDialog("xs_main_detail_11", "意见反馈", "icon-man", htmlContent, false, false, true, 500, 300);
+    XS.CommonUtil.openDialog("xs_main_detail_11", title, "icon-man", htmlContent, false, false, true, 500, 300);
     $("#xs_main_btn_advance").click(function(){
         var advance = $("#xs_main_ipt_advance").val();
         if(XS.StrUtil.isEmpty(advance)){

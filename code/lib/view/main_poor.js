@@ -206,12 +206,12 @@ XS.Main.Poor.clickClusterCallback = function(obj){
         },function(e){XS.CommonUtil.hideLoader();});
     }*/
     XS.CommonUtil.showLoader();
-    var data = {Hid: obj.hid};
-    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTempHouseNinfoByHId", data, function (json) {
+    var data = {pbno: obj.hid};
+    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryHousePeoByIdHID", data, function (json) {
         XS.CommonUtil.hideLoader();
         if (json && json.length>0) {
-            json[0].LONGITUDE = obj.LONGITUDE;
-            json[0].LATITUDE = obj.LATITUDE;
+            json[0].LONGITUDE = obj.HB_LONGITUDE;
+            json[0].LATITUDE = obj.HB_LATITUDE;
             XS.Main.Poor.showPoorInfo(json[0]);
         }
     },function(e){XS.CommonUtil.hideLoader();});
@@ -229,14 +229,14 @@ XS.Main.Poor.showPoorInfo = function(obj){
             '</div>' +
         '</div>';
     //id, title, iconCls, content, resizable, maximizable, modal, width, height, left, top, closeCallback, maximizeCallback, minimizeCallback
-    XS.CommonUtil.openDialog("xs_poor_info", obj.HHNAME, "icon-man", content, false, false, false, null, 225,window.outerWidth/2.0);
+    XS.CommonUtil.openDialog("xs_poor_info", obj.HB_NAME, "icon-man", content, false, false, false, null, 225,window.outerWidth/2.0);
     var jsonObj = [
-        {"name":"户编号","value":obj.PB_HHID},
-        {"name":"户主姓名","value":obj.HHNAME},
-        {"name":"电话","value":obj.PHONE},
-        {"name":"贫困类型","value":obj.PTYPE},
-        {"name":"致贫原因","value":obj.MAIN_REASON},
-        {"name":"人口","value":obj.POP}
+        {"name":"户编号","value":obj.HB_ID},
+        {"name":"户主姓名","value":obj.HB_NAME},
+        {"name":"电话","value":obj.Hb_Tel},
+        {"name":"贫困类型","value":obj.HB_TYPE},
+        {"name":"致贫原因","value":obj.HB_REASON},
+        {"name":"人口","value":obj.PERSON_NUM}
         /*{"name":"主要原因","value":obj.MAIN_REASON},
         {"name":"次要原因","value":obj.OTHER_REASON},
         {"name":"脱贫状态","value":obj.OUTPOORTAT},
@@ -274,13 +274,13 @@ XS.Main.Poor.showPoorInfo = function(obj){
                 {field:'value',width:'75%'}
             ]],
             toolbar: [
-                {
+               /* {
                     iconCls: 'e_icon-picture',
                     text: '扶贫动态',
                     handler: function () {
                         XS.Main.Poor.helpDynamic(obj);
                     }
-                },
+                },*/
                /* '-',
                 {
                     iconCls: 'e_icon-film',
@@ -293,15 +293,15 @@ XS.Main.Poor.showPoorInfo = function(obj){
                 '-',
                 {
                     iconCls: 'icon-man',
-                    text: '脱贫管理',
+                    text: '四有五覆盖',
                     handler: function () {
-                        XS.Main.Poor.show45State(obj.PB_HHID,obj.HHNAME);
+                        XS.Main.Poor.show45State(obj.HB_ID,obj.HB_NAME);
                     }
                 },
                 '-',
                 {
                     iconCls: 'icon-more',
-                    text: '详情',
+                    text: '<span style="width: 70px;">详情</span>',
                     handler: function () {
                        // XS.CommonUtil.showMsgDialog("", "扶贫意见");
                         XS.Main.Poor.showPoorDetailInfo(obj);
@@ -310,7 +310,7 @@ XS.Main.Poor.showPoorInfo = function(obj){
             ]
         });
 
-    var data = {pdid: obj.PB_HHID};
+    var data = {pdid: obj.HB_NAME};
     //获取贫困户头像
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryRegionFileByHeadid", data, function (json) {
         if (json && json.length>0)
@@ -323,7 +323,7 @@ XS.Main.Poor.showPoorInfo = function(obj){
 //帮扶动态
 XS.Main.Poor.helpDynamic = function(obj){
     var content = '<div id="xs_poor_detail_tab" class="easyui-tabs" style="width:450px; height: 170px;"></div>';
-    XS.CommonUtil.openDialog("xs_main_detail_1", obj.HHNAME, "icon-man", content, false, false, false);
+    XS.CommonUtil.openDialog("xs_main_detail_1", obj.HB_NAME, "icon-man", content, false, false, false);
     $('#xs_poor_detail_tab').tabs('add',{
         title:'扶贫责任人',
         content:"<div id='xs_poor_detail_tab_tasker' style='padding: 5px; height: 100%; box-sizing: border-box;'></div>"
@@ -336,7 +336,7 @@ XS.Main.Poor.helpDynamic = function(obj){
     });
     $('#xs_poor_detail_tab').tabs("select",0);
 
-    var data = {hid: obj.PB_HHID};
+    var data = {hid: obj.HB_ID};
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTempHouseHelpById", data, function (json) {
         if(json && json.length>0){
             //基本信息
@@ -345,11 +345,11 @@ XS.Main.Poor.helpDynamic = function(obj){
                 {"name": "单位名称", "value": json[0].NHP_HELPUNIT},
                 {"name": "联系电话", "value": json[0].NHP_TEL}
             ];
-            $("#xs_poor_detail_tab_tasker").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 1, 40,"color:#00bbee",""));
+            $("#xs_poor_detail_tab_tasker").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 1, 40,"", "color:#00bbee;min-width=60px;"));
         }
     });
 
-    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTempFourFiveByHId", {Hid: obj.PB_HHID}, function (json)
+    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTempFourFiveByHId", {Hid: obj.HB_ID}, function (json)
     {
         if (json && json.length>0)
         {
@@ -358,7 +358,7 @@ XS.Main.Poor.helpDynamic = function(obj){
                 {"name": "帮扶项目", "value": json[0].SOLVINGINDUSTING},
                 {"name": "帮扶规模", "value": json[0].SOLVINGINDUSTINGSIZE}
             ];
-            $("#xs_poor_detail_tab_project").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 1, 60,"color:#00bbee",""));
+            $("#xs_poor_detail_tab_project").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 1, 60,"", "color:#00bbee;min-width=60px;"));
         }
     },function(e){});
 }
@@ -1904,9 +1904,9 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
     "<a id='xs_poor_picBtn' href='javascript:void(0);' style='width: 80px; margin: 5px;'>图片</a>" +
     "<a id='xs_poor_videoBtn' href='javascript:void(0);'  style='width: 80px; margin: 5px;'>视频</a>" +
     "<a id='xs_poor_msgBtn' href='javascript:void(0);'  style='width: 80px; margin: 5px;'>扶贫意见</a>" +
-    "<a id='xs_poor_relocateBtn' href='javascript:void(0);'  style='width: 80px; margin: 5px;'>扶贫搬迁</a>" +
+   /* "<a id='xs_poor_relocateBtn' href='javascript:void(0);'  style='width: 80px; margin: 5px;'>扶贫搬迁</a>" +*/
     '</div><div id="xs_poor_detail_tab" class="easyui-tabs" style="width:600px; height: 250px;"></div>';
-    XS.CommonUtil.openDialog("xs_main_detail_1", obj.HHNAME, "icon-man", content, false, false, false);
+    XS.CommonUtil.openDialog("xs_main_detail_1", obj.HB_NAME, "icon-man", content, false, false, false);
 
     $('#xs_poor_picBtn').linkbutton({iconCls:'e_icon-picture'});
     $('#xs_poor_videoBtn').linkbutton({iconCls:'e_icon-film'});
@@ -1914,14 +1914,15 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
     $('#xs_poor_relocateBtn').linkbutton({iconCls:'xs_fpbq_family_min'});
 
     $('#xs_poor_picBtn').click(function(){
-        XS.Main.Poor.showPic(obj.PB_HHID,obj.HHNAME);
+        XS.Main.Poor.showPic(obj.HB_ID,obj.HB_NAME);
     });
     $('#xs_poor_videoBtn').click(function(){
-        XS.Main.Poor.playVideo(obj.PB_HHID,obj.HHNAME);
+        XS.Main.Poor.playVideo(obj.HB_ID,obj.HB_NAME);
     });
     $('#xs_poor_msgBtn').click(function(){
-        XS.Main.showAdvanceFeedDialog(obj.PB_HHID);
+        XS.Main.showAdvanceFeedDialog(obj.HB_ID, obj.HB_NAME, XS.Main.ZoneLevel.poor);
     });
+    //扶贫搬迁测试数据
     $('#xs_poor_relocateBtn').click(function(){ //扶贫搬迁xs
         XS.CommonUtil.closeDialog('xs_poor_info');
         XS.CommonUtil.closeDialog('xs_main_detail_1');
@@ -1972,30 +1973,23 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
 
     //基本信息
    var objArr = [
-       {"name": "户编号", "value": obj.PB_HHID},
-       {"name": "户主姓名", "value": obj.HHNAME},
-       {"name": "电话", "value": obj.PHONE},
-       {"name": "贫困类型", "value": obj.PTYPE},
-       {"name": "致贫原因", "value": obj.MAIN_REASON},
-       {"name": "人口", "value": obj.POP},
-       {"name": "主要原因", "value": obj.MAIN_REASON},
-       {"name": "次要原因", "value": obj.OTHER_REASON},
-       {"name": "贫困标准", "value": obj.PSTANDARD},
-       {"name": "消费用品", "value": obj.CONSUMES},
-       {"name": "采访人", "value": obj.MODITOR},
-       {"name": "采访日期", "value": obj.MODIDATE},
-       {"name": "市", "value": obj.CITY},
-       {"name": "县", "value": obj.COUNTY},
-       {"name": "乡", "value": obj.TOWN},
-       {"name": "村", "value": obj.VILL},
-       {"name": "组", "value": obj.VGROUP}
+       {"name": "户编号", "value": obj.HB_ID},
+       {"name": "户主姓名", "value": obj.HB_NAME},
+       {"name": "电话", "value": obj.Hb_Tel},
+       {"name": "贫困类型", "value": obj.HB_TYPE},
+       {"name": "致贫原因", "value": obj.HB_REASON},
+       {"name": "人口", "value": obj.PERSON_NUM},
+       {"name": "识别标准", "value": obj.HB_STANDARD},
+       {"name": "脱贫标识", "value": obj.HB_OUTOFPOOR},
+       {"name": "经度", "value": obj.HB_LONGITUDE},
+       {"name": "纬度", "value": obj.HB_LATITUDE}
    ];
-    $("#xs_poor_detail_tab_info").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 3, 34,"color:#00bbee",""));
+    $("#xs_poor_detail_tab_info").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 3, 34,"", "color:#00bbee"));
 
     //家庭成员
     //xs_poor_detail_tab_member
     //QueryPeopleBaseByHId(Hid)
-    var data = {Hid: obj.PB_HHID};
+    var data = {Hid: obj.HB_ID, pbno:obj.HB_ID, pd_id:obj.HB_ID};
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryPeopleBaseByHId", data, function (json) {
         if(json && json.length>0){
             //{"age":0,"healthy":"健康","id":1,"idcord":"522424198107153617",
@@ -2020,25 +2014,24 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
         }
     });
 
-    //生活环境
+    //生活环境QueryHouseCondByFid
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryHouseCondByFid", data, function (json) {
         if(json && json.length>0){
             var obj = json[0];
             var objArr = [
-                {"name":"饮水困难","value":obj.HC_DIFF_WATER},
                 {"name":"通电","value":obj.HC_ELECTRIC},
-                {"name":"燃料类型","value":obj.HC_FUEL},
-                {"name":"采集时间","value":obj.HC_GDATE},
-                {"name":"入户路类型","value":obj.HC_INDOOR_ROAD},
-                {"name":"宽带入户","value":obj.HC_IN_BAND},
-                {"name":"电商覆盖","value":obj.HC_ISTAOBAO},
                 {"name":"通广播电视","value":obj.HC_TELEVISION},
-                {"name":"安全用水","value":obj.HC_SAFE_WATER},
+                {"name":"燃料类型","value":obj.HC_FUEL},
                 {"name":"饮水情况","value":obj.HC_WATER_STATE},
+                {"name":"燃料类型","value":obj.HC_FUEL},
+                {"name":"院坝是否硬化","value":obj.ISHARDYARD},
+                {"name":"安全用水","value":obj.HC_SAFE_WATER},
+                {"name":"入户路类型","value":obj.HC_INDOOR_ROAD},
                 {"name":"距离村主路","value":obj.HC_BIGROAD},
-                {"name":"距离村主路","value":obj.Hc_vill_distan}
+                {"name":"入户路是否硬化","value":obj.ISHARDROAD},
+                {"name":"最近乡镇距离","value":obj.Hc_vill_distan}
             ];
-            $("#xs_poor_detail_tab_environment").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 3, 50,"color:#00bbee",""));
+            $("#xs_poor_detail_tab_environment").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 3, 50,"", "color:#00bbee"));
         }
     });
 
@@ -2049,12 +2042,11 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
             var objArr = [
                 {"name":"住房面积(m²)","value":obj.HH_HOUSE_AREA},
                 {"name":"建房时间","value":obj.HH_HDATE},
-                {"name":"房屋档次","value":obj.HH_HSTATE},
-                {"name":"采集时间","value":obj.HH_GDATE},
                 {"name":"主要结构","value":obj.HH_MAINSTRU},
-                {"name":"有无卫生厕所","value":obj.HH_HWC}
+                {"name":"有无卫生厕所","value":obj.HH_HWC},
+                {"name":"是否政府补助危改放或易地扶贫搬迁户","value":obj.ISHELPHOUSE},
             ];
-            $("#xs_poor_detail_tab_hose_info").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 2, 68,"color:#00bbee",""));
+            $("#xs_poor_detail_tab_hose_info").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 2, 68,"","color:#00bbee"));
         }
     });
 
@@ -2064,18 +2056,17 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
             var obj = json[0];
 
             var objArr = [
-                {"name":"田","value":obj.HDY_FIELD},
-                {"name":"牧草地面积","value":obj.HDY_GRASS},
-                {"name":"林果面积","value":obj.HDY_FRUIT},
-                {"name":"采集时间","value":obj.HDY_GDATE},
-                {"name":"水田面积","value":obj.HDY_WATER_AREA},
-                {"name":"林地面积","value":obj.HDY_FOREST},
-                {"name":"灌溉面积","value":obj.HDY_IRRI},
-                {"name":"退耕还林","value":obj.HDY_TGHL},
-                {"name":"土","value":obj.HDY_LAND},
-                {"name":"耕地面积","value":obj.HDY_TOTAL_EARTH}
+                {"name":"<span style='color:#00c400;'>耕地面积(㎡)</span>","value":obj.HDY_TOTAL_EARTH},
+                {"name":"a.有效灌溉面积(㎡)","value":obj.HDY_IRRI},
+                {"name":"b.田(㎡)","value":obj.HDY_FIELD},
+                {"name":"c.土(㎡)","value":obj.HDY_LAND},
+                {"name":"<span style='color:#00c400;'>林地面积(㎡)</span>","value":obj.HDY_FOREST},
+                {"name":"a.退耕还林面积(㎡)","value":obj.HDY_TGHL},
+                {"name":"b.林果面积(㎡)","value":obj.HDY_FRUIT},
+                {"name":"<span style='color:#00c400;'>牧草地面积(㎡)</span>","value":obj.HDY_GRASS},
+                {"name":"<span style='color:#00c400;'>水田面积(㎡)</span>","value":obj.HDY_WATER_AREA}
             ];
-            $("#xs_poor_detail_tab_soil_info").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 4, 68,"color:#00bbee",""));
+            $("#xs_poor_detail_tab_soil_info").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 3, 68,"","color:#00bbee;min-width:50px;"));
         }
     });
 
@@ -2085,28 +2076,35 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
         if(json && json.length>0){
             var obj = json[0];
             var objArr = [
-                {"name":"采集时间","value":obj.HI_GDATE},
-                {"name":"低保","value":obj.HI_LOW},
-                {"name":"医疗救助金","value":obj.HI_MEDHELP},
-                {"name":"新农合医疗","value":obj.HI_MEDIC},
-                {"name":"五保","value":obj.HI_OLD},
-                {"name":"计划生育金","value":obj.HI_ONECHILD},
-                {"name":"生态补偿金","value":obj.HI_ECO},
-                {"name":"补贴","value":obj.HI_OTHER},
-                {"name":"家庭年收入","value":obj.HI_INWHOLE},
-                {"name":"家庭年人均纯收","value":obj.HI_PUREAVG},
-                {"name":"家庭年纯收入","value":obj.HI_PUREWHOLE},
-                {"name":"经营性收入","value":obj.HI_PRODUCT},
-                {"name":"财产性收入","value":obj.HI_PROPERTY},
-                {"name":"工资性收入","value":obj.HI_WORK},
-                {"name":"HI_ENDOW","value":obj.HI_ENDOW}
+                {"name":"<span style='color:#00c400;'>家庭年收入(元)</span>","value":obj.HI_INWHOLE},
+                {"name":"<span style='color:#00c400;'>家庭年纯收入(元)</span>","value":obj.HI_PUREWHOLE},
+                {"name":"<span style='color:#00c400;'>家庭年人均纯收入(元)</span>","value":obj.HI_PUREAVG},
+                {"name":"<span style='color:#00c400;'>全家工资性收入(元)</span>","value":obj.HI_WORK},
+                {"name":"<span style='color:#00c400;'>全家生产经营性收入(元)</span>","value":obj.HI_PRODUCT},
+                {"name":"<span style='color:#00c400;'>财产性收入(元)</span>","value":obj.HI_PROPERTY},
+                {"name":"<span style='color:#00c400;'>五保供养金(元)</span>","value":obj.HI_ENDOW},
+                {"name":"<span style='color:#00c400;'>各类补贴(元)</span>","value":obj.HI_OTHER},
+                {"name":"a.计划生育金(元)","value":obj.HI_ONECHILD},
+                {"name":"b.低保金(元)","value":obj.HI_LOW},
+                {"name":"c.养老保险金(元)","value":obj.HI_OLD},
+                {"name":"d.新农合报销医疗费(元)","value":obj.HI_MEDIC},
+                {"name":"e.医疗救助金(元)","value":obj.HI_MEDHELP},
+                {"name":"f.生态补偿金(元)","value":obj.HI_ECO}
             ];
-            $("#xs_poor_detail_tab_income_info").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 3, 40,"color:#00bbee",""));
+            $("#xs_poor_detail_tab_income_info").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 3, 40,"","color:#00bbee;min-width:50px;"));
         }
     });
 }
 
-//自动创建表格
+/**
+ * 自动创建表格
+ * @param objArr key-value 数组
+ * @param colls 每行有多少列
+ * @param rowH 行高
+ * @param nameCollStyle 属性样式
+ * @param valueCollStyle 值列样式
+ * @returns {string}
+ */
 XS.Main.Poor.createTable = function(objArr, colls, rowH, nameCollStyle, valueCollStyle){
     var content =
         '<div class="datagrid-wrap panel-body panel-body-noheader" style="width: 100%; height: auto; margin-top: 5px;">'+

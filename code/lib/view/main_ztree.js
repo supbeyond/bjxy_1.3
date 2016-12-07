@@ -10,7 +10,7 @@ XS.Main.Ztree.zoneFeatuers = {
     town:[],
     village:[]
 };
-var xs_ztree_isInitedData = false;
+var xs_ztree_isInitedData = false; //是否正在初始化数据
 var xs_ztree_isCountyFinish = false;
 var xs_ztree_isTownFinish = false;
 var xs_ztree_isVillFinish = false;
