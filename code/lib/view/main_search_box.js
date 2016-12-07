@@ -897,7 +897,8 @@ XS.Searchbox.cachePositionMarker = function(level,currentId,marker){
             XS.Main.Markers.vill.data = [marker];
             XS.Main.Markers.vill.superId = currentId;
             if(XS.Main.Markers.poor.superId != currentId){
-                XS.Main.Markers.poor.data = [];                XS.Main.Markers.poor.superId = "";
+                XS.Main.Markers.poor.data = [];
+                XS.Main.Markers.poor.superId = "";
             }
             break;
         case XS.Main.ZoneLevel.poor:

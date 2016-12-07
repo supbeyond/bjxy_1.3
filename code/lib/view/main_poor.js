@@ -1031,7 +1031,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
                 }else
                 {
                     XS.CommonUtil.showLoader();
-                    XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql,XS.CommonUtil.map_query, function(queryEventArgs){
+                    XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql,XS.Constants.map_query, function(queryEventArgs){
                         XS.CommonUtil.hideLoader();
                         var i, feature, result = queryEventArgs.result;
                         if (result && result.recordsets&&result.recordsets[0].features.length>0) {
@@ -1625,6 +1625,8 @@ XS.Main.Poor.preloc_handleVill = function(level, parentId){
         if(xs_poor_detail_is_relocationdialog_open)
         {
             xs_poor_detail_is_relocationdialog_open = false;
+            xs_currentZoneFuture = null;
+            XS.Main.clearVectorLayer();
             //XS.Main.Poor.clearRelocationLayer();
         }
     });
@@ -1671,7 +1673,6 @@ XS.Main.Poor.clearRelocationLayer = function(){
 }
 
 //扶贫搬迁-数据处理
-var xs_poor_timeoutId = null;
 XS.Main.Poor.preloc_handleData = function(level, parentId, relocatorData){
     var geoCoord = {};
     var lineData = [];
@@ -1687,8 +1688,7 @@ XS.Main.Poor.preloc_handleData = function(level, parentId, relocatorData){
     switch (level)
     {
         case XS.Main.ZoneLevel.city:
-            clearTimeout(xs_poor_timeoutId)
-            xs_poor_timeoutId = setTimeout(function(){
+            setTimeout(function(){
                 xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 0);
             },500);
             superName = "毕节";
@@ -1710,8 +1710,7 @@ XS.Main.Poor.preloc_handleData = function(level, parentId, relocatorData){
             {
                 var centerPoint = feature.geometry.getBounds().getCenterLonLat();
 
-                clearTimeout(xs_poor_timeoutId)
-                xs_poor_timeoutId = setTimeout(function(){
+                setTimeout(function(){
                     xs_MapInstance.getMapObj().setCenter(centerPoint, 5);
                 },500);
 
@@ -1727,9 +1726,7 @@ XS.Main.Poor.preloc_handleData = function(level, parentId, relocatorData){
         case XS.Main.ZoneLevel.town:
 
             var centerPoint = xs_poor_superFeature.geometry.getBounds().getCenterLonLat();
-
-            clearTimeout(xs_poor_timeoutId)
-            xs_poor_timeoutId = setTimeout(function(){
+            setTimeout(function(){
                 xs_MapInstance.getMapObj().setCenter(centerPoint, 8);
             },500);
 
@@ -1742,9 +1739,8 @@ XS.Main.Poor.preloc_handleData = function(level, parentId, relocatorData){
     }
 
     if(level>=XS.Main.ZoneLevel.village)
-    {
-        clearTimeout(xs_poor_timeoutId)
-        xs_poor_timeoutId = setTimeout(function(){
+        {
+        setTimeout(function(){
             xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(relocatorData.tlon , relocatorData.tlat), 8);
         },500);
         //显示搬迁户数据
