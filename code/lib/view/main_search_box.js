@@ -375,7 +375,6 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
         case XS.Main.ZoneLevel.village:
             targetMarker = XS.Searchbox.getMakerOfCache(level,regionId.slice(0,9),regionId);
             if(targetMarker){
-                xs_markerLayer.addMarker(targetMarker);
                 XS.Searchbox.featurePosition(level,targetMarker.data.xs_feature,regionId,regionName,poorHIndex,targetMarker);
                 return;
             }
@@ -385,7 +384,6 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
                 targetMarker = XS.Searchbox.getMakerOfCache(level,regionId,xs_pkdc_cacheDataArr[poorHIndex].hid);
                 if(targetMarker){
                     XS.Searchbox.cachePositionMarker(level,xs_pkdc_cacheDataArr[poorHIndex].hid,targetMarker);
-                    xs_markerLayer.addMarker(targetMarker);
                     xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(targetMarker.data.LONGITUDE, targetMarker.data.LATITUDE), 10);
                     var geoText = new SuperMap.Geometry.GeoText(targetMarker.data.LONGITUDE, targetMarker.data.LATITUDE, targetMarker.data.name);
                     var geotextFeature = new SuperMap.Feature.Vector(geoText);
@@ -439,7 +437,6 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
     }
     if(targetFeature){
         if(targetMarker){
-            xs_markerLayer.addMarker(targetMarker);
             XS.Searchbox.featurePosition(level,targetFeature,regionId,regionName,poorHIndex,targetMarker);
         }else{
             XS.Searchbox.featurePosition(level,targetFeature,regionId,regionName,poorHIndex);
@@ -469,7 +466,6 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
                 return;
             }
             if(targetMarker){
-                xs_markerLayer.addMarker(targetMarker);
                 XS.Searchbox.featurePosition(level,feature,regionId,regionName,poorHIndex,targetMarker);
             }else{
                 XS.Searchbox.featurePosition(level,feature,regionId,regionName,poorHIndex);

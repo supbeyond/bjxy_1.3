@@ -284,7 +284,7 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
         animate:false,
         onBeforeExpand:function(node)
         {
-            if(node.children&&node.children.length==0)
+            /*if(node.children&&node.children.length==0)
             {
                 //取下一级数据 县、镇
                 if(node.xs_nlevel>0&&node.xs_nlevel<3)
@@ -376,6 +376,125 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
                         data: data
                     });
                 }
+            }*/
+            if (node.children && node.children.length == 0) {
+                var data = [];
+                if (xs_user_regionLevel == XS.Main.ZoneLevel.city) //请求数据
+                {
+                    if(node.xs_nlevel == 1)//县
+                    {
+                        XS.CommonUtil.showLoader();
+                        var sql = "县级代码=" + node.xs_id;
+                        var layerName = "Twon_Code";
+                        XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql, XS.Constants.map_query, function (queryEventArgs) {
+                            var i, feature, result = queryEventArgs.result;
+                            if (result && result.recordsets && result.recordsets[0].features.length > 0) {
+                                for (i = 0; i < result.recordsets[0].features.length; i++) {
+                                    feature = result.recordsets[0].features[i];
+                                    var townObj = {
+                                        "id": parseInt(node.id + '' + i),
+                                        "state": "closed",
+                                        xs_nlevel: 2,
+                                        xs_id: feature.data.乡镇代码,
+                                        xs_feature: feature,
+                                        "text": feature.data.乡镇名称,
+                                        "children": []
+                                    }
+                                    data.push(townObj);
+                                }
+                                //处理数据
+                                //getChildren
+                                XS.CommonUtil.hideLoader();
+                                if (node.children && node.children.length == 0) {
+                                    $('#xs_main_ztree').tree('append', {
+                                        parent: node.target,
+                                        data: data
+                                    });
+                                }
+
+                                $('#xs_main_ztree').tree('collapse', node.target).tree('expand', node.target).tree('expandTo', node.target);
+                            } else {
+                                XS.CommonUtil.hideLoader();
+                                XS.CommonUtil.showMsgDialog("", "加载数据失败！");
+                            }
+                        }, function (e) {
+                            XS.CommonUtil.hideLoader();
+                            XS.CommonUtil.showMsgDialog("", "加载数据失败！");
+                        });
+                    }else{
+                        XS.CommonUtil.showLoader();
+                        var sql = "Town_id=" + node.xs_id;
+                        var layerName = "Village_Code";
+                        XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, layerName, sql, XS.Constants.map_query, function (queryEventArgs) {
+                            var i, feature, result = queryEventArgs.result;
+                            if (result && result.recordsets && result.recordsets[0].features.length > 0) {
+                                for (i = 0; i < result.recordsets[0].features.length; i++) {
+                                    feature = result.recordsets[0].features[i];
+                                    var townObj = {
+                                        "id": parseInt(node.id + '' + (i + 1)),
+                                        xs_feature: feature,
+                                        xs_nlevel: 3,
+                                        "text": feature.data.vd_name
+                                    }
+                                    data.push(townObj);
+                                }
+                                //处理数据
+                                //getChildren
+                                XS.CommonUtil.hideLoader();
+                                if (node.children && node.children.length == 0) {
+                                    $('#xs_main_ztree').tree('append', {
+                                        parent: node.target,
+                                        data: data
+                                    });
+                                }
+                                $('#xs_main_ztree').tree('collapse', node.target).tree('expand', node.target).tree('expandTo', node.target);
+                            } else {
+                                XS.CommonUtil.hideLoader();
+                                XS.CommonUtil.showMsgDialog("", "加载数据失败！");
+                            }
+                        }, function (e) {
+                            XS.CommonUtil.hideLoader();
+                            XS.CommonUtil.showMsgDialog("", "加载数据失败！");
+                        });
+                    }
+                }else{
+                    if (node.xs_nlevel == 1) { //县
+                        for (var i = 1; i <= XS.Main.Ztree.zoneFeatuers.town.length; i++) {
+                            var townId = XS.Main.Ztree.zoneFeatuers.town[i - 1].data.乡镇代码;
+                            if (XS.Main.Ztree.zoneFeatuers.town[i - 1].data.县级代码 != node.xs_id) {
+                                continue;
+                            }
+                            var townObj = {
+                                "id": parseInt(node.id + '' + i),
+                                "state": "closed",
+                                xs_nlevel: 2,
+                                xs_id: townId,
+                                xs_feature: XS.Main.Ztree.zoneFeatuers.town[i - 1],
+                                "text": XS.Main.Ztree.zoneFeatuers.town[i - 1].data.乡镇名称,
+                                "children": []
+                            }
+                            data.push(townObj);
+                        }
+                    } else { //镇
+                        for (var i = 1; i <= XS.Main.Ztree.zoneFeatuers.village.length; i++) {
+                            //Town_id
+                            if (XS.Main.Ztree.zoneFeatuers.village[i - 1].data.Town_id != node.xs_id) {
+                                continue;
+                            }
+                            var villObj = {
+                                "id": parseInt(node.id + '' + i),
+                                xs_feature: XS.Main.Ztree.zoneFeatuers.village[i - 1],
+                                xs_nlevel: 3,
+                                "text": XS.Main.Ztree.zoneFeatuers.village[i - 1].data.vd_name
+                            }
+                            data.push(villObj);
+                        }
+                    }
+                    $('#xs_main_ztree').tree('append', {
+                        parent: node.target,
+                        data: data
+                    });
+                }
             }
             if(node){
                 $('#xs_main_ztree').tree('collapseAll');
@@ -397,24 +516,20 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
                 XS.Main.showBottomToolBar();
 
                 var feature = node.xs_feature;
-                if(node.xs_nlevel != 0){
+                if(feature){
                     xs_currentZoneFuture = feature;
                     feature.style = xs_stateZoneStyle;
-                    XS.Main.clearVectorLayer();
-                    if(xs_user_Features[0]){
-                        xs_vectorLayer.addFeatures([feature,xs_user_Features[0]]);
-                    }else{
-                        xs_vectorLayer.addFeatures(feature);
-                    }
-
-                    xs_pkdc_isFirstShowInfoWin = true;
-                    xs_currentZoneLevel = node.xs_nlevel;
-                    xs_currentZoneName = node.text;
                     xs_MapInstance.getMapObj().zoomToExtent(feature.geometry.getBounds(),false);
                 }
+                XS.Main.clearVectorLayer();
+                xs_pkdc_isFirstShowInfoWin = true;
+                xs_currentZoneLevel = node.xs_nlevel;
+                xs_currentZoneName = node.text;
+                xs_currentZoneCode = node.xs_id;
+                var targetMarker = null;
 
                 switch (node.xs_nlevel){
-                    case 0://ctity
+                    case 0://city
                     {
                         xs_currentZoneLevel = node.xs_nlevel;
                         XS.Main.showBottomToolBar();
@@ -441,6 +556,12 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
                         xs_superZoneCode = Math.floor(node.xs_id/1000);
                         xs_clickMapFutureId  = node.xs_id;
                         xs_currentZoneCode =  node.xs_id;
+                        targetMarker = XS.Searchbox.getMakerOfCache(xs_currentZoneLevel,xs_superZoneCode,xs_currentZoneCode);
+                        if(targetMarker){
+                            XS.Searchbox.cachePositionMarker(xs_currentZoneLevel,xs_currentZoneCode,targetMarker);
+                            return;
+                        }
+                        feature.data.xs_position = true;
                         XS.Main.readyAddRegionMarkersData([feature],xs_currentZoneLevel-1,xs_superZoneCode);
                         break;
                     }
@@ -449,11 +570,16 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
                         xs_superZoneCode = feature.data.OldID.toString().slice(0,9);
                         xs_clickMapFutureId  = feature.data.OldID;
                         xs_currentZoneCode =  feature.data.OldID;
+                        targetMarker = XS.Searchbox.getMakerOfCache(xs_currentZoneLevel,xs_superZoneCode,xs_currentZoneCode);
+                        if(targetMarker){
+                            XS.Searchbox.cachePositionMarker(xs_currentZoneLevel,xs_currentZoneCode,targetMarker);
+                            return;
+                        }
+                        feature.data.xs_position = true;
                         XS.Main.readyAddRegionMarkersData([feature],xs_currentZoneLevel-1,xs_superZoneCode);
                         break;
                     }
                 }
-                xs_currentZoneCode = node.xs_id;
                 if(document.getElementById('xs_dcs_receiver')){
                     $("#xs_dcs_receiver").textbox('setValue', xs_currentZoneName);
                 }

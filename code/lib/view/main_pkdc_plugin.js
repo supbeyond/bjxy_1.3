@@ -1463,8 +1463,7 @@ XS.Main.Pkjc.clickItemFund = function(currentCode,currentName){
         $('#xs_pkdc_itemFundDgridDom').datagrid(XS.Main.Pkjc.ItemFoundGridOpt(pageOption.pageNumber,10));
         pager = $("#xs_pkdc_itemFundDgridDom").datagrid("getPager");
         pager.pagination(XS.Main.Pkjc.ItemFoundPageOpt(pageOption.pageNumber));
-    },null,function()
-    {
+    },null,function(){
         $("#xs_pkdc_itemFundRowDataTreeC").css("width","400px");
         xs_pkdc_itemFoundChart.resize();
 
@@ -1488,7 +1487,7 @@ XS.Main.Pkjc.clickItemFund = function(currentCode,currentName){
             var pager = $("#xs_pkdc_itemFundDgridDom").datagrid("getPager");
             pager.pagination(XS.Main.Pkjc.ItemFoundPageOpt(1));
 
-            XS.Main.Pkjc.selectItemFoundRowData(0,json[0]);
+            XS.Main.Pkjc.selectItemFoundRowData(0,json[0],currentCode);
         }else{
             var xs_pkdc_itemFund1H = $('#xs_pkdc_itemFund1').height() + 'px';
             var xs_pkdc_itemFundFair = '<div style="color:#ff0000;font-size: 40px;text-align:center;line-height: ' + xs_pkdc_itemFund1H  + ';">暂无相关数据</div>';

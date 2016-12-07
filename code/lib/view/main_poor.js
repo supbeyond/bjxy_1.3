@@ -88,6 +88,7 @@ XS.Main.Poor.showPoors = function(objArr,centerPointer){
  * @param objArr
  * @param type
  */
+var xs_poorHLabel = [];
 XS.Main.readyAddMarkerData = function(objArr){
     //XS.Main.clearMap();
     //XS.Main.Poor.clearRelocationLayer();
@@ -97,7 +98,7 @@ XS.Main.readyAddMarkerData = function(objArr){
     if(!(objArr&&objArr.length>0)){
         return;
     }
-
+    xs_poorHLabel = [];
     if(document.getElementById("xs_tjfx_range_Legend")){
         $("#xs_tjfx_range_Legend").remove();
     }
@@ -134,8 +135,8 @@ XS.Main.readyAddMarkerData = function(objArr){
         var geoText = new SuperMap.Geometry.GeoText(obj.LONGITUDE, obj.LATITUDE, obj.name);
         var geotextFeature = new SuperMap.Feature.Vector(geoText);
         geotextFeatures.push(geotextFeature);
-
     }
+    xs_poorHLabel = geotextFeatures;
     xs_poorLabelLayer.addFeatures(geotextFeatures);
     xs_poorLabelLayer.setVisibility(true);
     //xs_clusterLayer.addFeatures(features);

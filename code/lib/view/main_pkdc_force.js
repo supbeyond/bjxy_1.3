@@ -74,7 +74,7 @@ var xs_pkdc_itemFoundChart = null;
      var projectName = rowData.PROJECTNAME;
      xs_pkdc_itemFoundFJsonData = [[],[],[],[]];
      xs_pkdc_itemFoundFJsonData_update = [[],[],[],[]];
-    var data = {regionid: xs_pkdc_currentStateCode};
+    var data = {regionid: xs_currentZoneCode};
      $("#xs_pkdc_itemFound_rowLoading").css({"visibility":"visible"});
      XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryProjecFundByRegionidLike", data, function(json){
          if(json && json.length > 0){

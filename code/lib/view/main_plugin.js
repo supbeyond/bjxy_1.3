@@ -422,7 +422,13 @@ XS.Main.RightClickMenuHandler = function(name){
         }
         case 'fpcs': //扶贫措施
         {
-            XS.Main.Pkjc.clickItemFund(xs_pkdc_currentName);
+            if(xs_currentZoneFuture){
+                XS.Main.Pkjc.clickItemFund(xs_currentZoneCode,xs_currentZoneName);
+            }else{
+                xs_currentZoneCode = xs_user_regionId;
+                xs_currentZoneName = xs_userZoneName;
+                XS.Main.Pkjc.clickItemFund(xs_currentZoneCode,xs_currentZoneName);
+            }
             break;
         }
     }
@@ -1305,8 +1311,13 @@ XS.Main.zoomedMapCallback = function(e){
                 }
             }
         }else{//poor
-            if(XS.Main.Markers.poor.data.length>0){
-                XS.Main.addCacheMarker2Layer(XS.Main.Markers.poor.data);
+            var poorHMarker = XS.Main.Markers.poor.data;
+            if(poorHMarker.length>0){
+                XS.Main.addCacheMarker2Layer(poorHMarker);
+                if(poorHMarker[0].data.xt_ctype != XS.Main.ClusterPointerStyle.poor_info_obj){
+                    xs_poorLabelLayer.removeAllFeatures();
+                    xs_poorLabelLayer.addFeatures(xs_poorHLabel);
+                }
                 xs_poorLabelLayer.setVisibility(true);
                 if(!xs_tjfx_themeLayer && !xs_tjfx_graph_themeLayer){
                     $("#xs_tjfx_range_Legend").remove();
