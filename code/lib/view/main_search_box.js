@@ -381,17 +381,19 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
             }
             break;
         case XS.Main.ZoneLevel.poor:
-            targetMarker = XS.Searchbox.getMakerOfCache(level,regionId,xs_pkdc_cacheDataArr[poorHIndex].hid);
-            if(targetMarker){
-                XS.Searchbox.cachePositionMarker(level,xs_pkdc_cacheDataArr[poorHIndex].hid,targetMarker);
-                xs_markerLayer.addMarker(targetMarker);
-                xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(targetMarker.data.LONGITUDE, targetMarker.data.LATITUDE), 10);
-                var geoText = new SuperMap.Geometry.GeoText(targetMarker.data.LONGITUDE, targetMarker.data.LATITUDE, targetMarker.data.name);
-                var geotextFeature = new SuperMap.Feature.Vector(geoText);
-                xs_poorLabelLayer.removeAllFeatures();
-                xs_poorLabelLayer.addFeatures(geotextFeature);
-                xs_poorLabelLayer.setVisibility(true);
-                return;
+            if(regionName == '贫困户'){
+                targetMarker = XS.Searchbox.getMakerOfCache(level,regionId,xs_pkdc_cacheDataArr[poorHIndex].hid);
+                if(targetMarker){
+                    XS.Searchbox.cachePositionMarker(level,xs_pkdc_cacheDataArr[poorHIndex].hid,targetMarker);
+                    xs_markerLayer.addMarker(targetMarker);
+                    xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(targetMarker.data.LONGITUDE, targetMarker.data.LATITUDE), 10);
+                    var geoText = new SuperMap.Geometry.GeoText(targetMarker.data.LONGITUDE, targetMarker.data.LATITUDE, targetMarker.data.name);
+                    var geotextFeature = new SuperMap.Feature.Vector(geoText);
+                    xs_poorLabelLayer.removeAllFeatures();
+                    xs_poorLabelLayer.addFeatures(geotextFeature);
+                    xs_poorLabelLayer.setVisibility(true);
+                    return;
+                }
             }
             break;
     }

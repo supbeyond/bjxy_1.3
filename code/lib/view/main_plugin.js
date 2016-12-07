@@ -70,7 +70,7 @@ XS.Main.Markers = {
     county:{superId:"",data:[]},
     town:{superId:"",data:[]},
     vill:{superId:"",data:[]},
-    poor:{superId:"",data:[],name:[]}
+    poor:{superId:"",data:[]}
 };
 
 $(function(){
@@ -1381,7 +1381,7 @@ XS.Main.clearMarCache = function(superLevel,superId,isPosition){
             XS.Main.Markers.poor.data = [];
             break;
         case XS.Main.ZoneLevel.town:
-            if(superId.slice(0,6) != XS.Main.Markers.town.superId && superId != XS.Main.Markers.town.superId){
+            if(superId.toString().slice(0,6) != XS.Main.Markers.town.superId && superId != XS.Main.Markers.town.superId){
                 XS.Main.Markers.town.data = [];
             }
             XS.Main.Markers.vill.data = [];
@@ -1390,7 +1390,7 @@ XS.Main.clearMarCache = function(superLevel,superId,isPosition){
             break;
         case XS.Main.ZoneLevel.village:
             var isParent = false;
-            if(XS.Main.Markers.vill.data.length>0 && XS.Main.Markers.vill.superId == superId.slice(0,9)){
+            if(XS.Main.Markers.vill.data.length>0 && XS.Main.Markers.vill.superId == superId.toString().slice(0,9)){
                 for(var i=0;i<XS.Main.Markers.vill.data.length;i++){
                     if(XS.Main.Markers.vill.data[i].data.VBI__ID == superId){
                         isParent = true;
@@ -1401,7 +1401,7 @@ XS.Main.clearMarCache = function(superLevel,superId,isPosition){
             if(!isParent){
                 XS.Main.Markers.town.data = [];
             }
-            if(superId.slice(0,9) != XS.Main.Markers.vill.superId && superId != XS.Main.Markers.vill.superId){
+            if(superId.toString().slice(0,9) != XS.Main.Markers.vill.superId && superId != XS.Main.Markers.vill.superId){
                 XS.Main.Markers.vill.data = [];
             }
             XS.Main.Markers.poor.data = [];
@@ -1852,7 +1852,7 @@ XS.Main.depClearMap = function() {
     XS.Main.Pkjc.closeInfoDialog();
     xs_currentZoneFuture = null;
     XS.Main.clearVectorLayer();
-
+    XS.Main.depClearMarkers();
     clearInterval(xs_pkjc_IntervalId);
     //xs_tasker_labelLayer.removeAllFeatures();
     xs_tasker_animatorVectorLayer.removeAllFeatures();
@@ -1881,6 +1881,12 @@ XS.Main.showMarker = function(){
     }
     xs_poorLabelLayer.setVisibility(true);
     if($("#xs_tjfx_range_Legend").length>0) $("#xs_tjfx_range_Legend").css("display","block");
+}
+//清空marker缓存
+XS.Main.depClearMarkers = function(){
+    XS.Main.Markers.town = {superId:"",data:[]};
+    XS.Main.Markers.vill = {superId:"",data:[]};
+    XS.Main.Markers.poor = {superId:"",data:[]};
 }
 //回到选中状态或默认状态
 XS.Main.returnBefore = function(){
