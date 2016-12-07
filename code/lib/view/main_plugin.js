@@ -1287,7 +1287,7 @@ XS.Main.zoomedMapCallback = function(e){
                 XS.Main.addCacheMarker2Layer(XS.Main.Markers.town.data);
                 if(!xs_tjfx_themeLayer && !xs_tjfx_graph_themeLayer){
                     $("#xs_tjfx_range_Legend").remove();
-                    XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.county);
+                    XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.county,'贫困级别');
                 }
             }else{
                 if(!xs_tjfx_themeLayer && !xs_tjfx_graph_themeLayer && !xs_pkdc_isTaskline){
@@ -1302,7 +1302,7 @@ XS.Main.zoomedMapCallback = function(e){
                 XS.Main.addCacheMarker2Layer(XS.Main.Markers.vill.data);
                 if(!xs_tjfx_themeLayer && !xs_tjfx_graph_themeLayer){
                     $("#xs_tjfx_range_Legend").remove();
-                    XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.town);
+                    XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.town,'贫困类型');
                 }
             }else{
                 if(!xs_tjfx_themeLayer && !xs_tjfx_graph_themeLayer && !xs_pkdc_isTaskline){
@@ -1321,7 +1321,7 @@ XS.Main.zoomedMapCallback = function(e){
                 xs_poorLabelLayer.setVisibility(true);
                 if(!xs_tjfx_themeLayer && !xs_tjfx_graph_themeLayer){
                     $("#xs_tjfx_range_Legend").remove();
-                    XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.village);
+                    XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.village,'致贫原因');
                 }
             }else{
                 if(!xs_tjfx_themeLayer && !xs_tjfx_graph_themeLayer && !xs_pkdc_isTaskline){
@@ -1523,7 +1523,6 @@ XS.Main.cacheFindChildFeat = function(cacheArr,superId,superIdStr){
 }
 //向点击的区域准备数据
 XS.Main.readyAddRegionMarkersData = function (features,superLevel,superId) {
-    XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,superLevel);
     var lonLatArr = [];
     var action = "";
 
@@ -1744,6 +1743,7 @@ XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, 
 
         switch (superLevel){
             case XS.Main.ZoneLevel.county:
+                XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,superLevel,'贫困级别');
                 if(data.xs_feature.data.xs_position){
                     XS.Searchbox.cachePositionMarker(superLevel+1,data.TOWB_ID,marker);
                 }else{
@@ -1751,6 +1751,7 @@ XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, 
                 }
                 break;
             case XS.Main.ZoneLevel.town:
+                XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,superLevel,'贫困类型');
                 if(data.xs_feature.data.xs_position){
                     XS.Searchbox.cachePositionMarker(superLevel+1,data.VBI__ID,marker);
                 }else{
@@ -1758,6 +1759,7 @@ XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, 
                 }
                 break;
             case XS.Main.ZoneLevel.village:
+                XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,superLevel,'致贫原因');
                 if(data.xt_ctype == XS.Main.ClusterPointerStyle.poor_info_obj){
                     XS.Searchbox.cachePositionMarker(superLevel+1,data.hid,marker);
                 }else{

@@ -78,14 +78,23 @@ XS.Main.Tjfx.range = function(level, parentId, type){
     //专题图 字段
     xs_tjfx_themeLayer.themeField = "xs_tjfx_range";
 
-    if(document.getElementById("xs_tjfx_range_Legend")){
-        $("#xs_tjfx_range_Legend").remove();
-    }
-
     xs_tjfx_themeLayer.styleGroups = XS.Main.Tjfx.range_createRangeStyleGroups(type,level);
-    $("#xs_mainC").append(XS.Main.Tjfx.range_createRangeLegendTag(type,level));
-
-    $("#xs_tjfx_range_Legend").css("display", "block");
+    var tuliName = "";
+    switch (type){
+        case XS.Main.Tjfx.type.range_pkfsx:
+            tuliName = "贫困发生率";
+            break;
+        case XS.Main.Tjfx.type.range_tpx:
+            tuliName = "脱贫率";
+            break;
+        case XS.Main.Tjfx.type.range_wfx:
+            tuliName = "危房率";
+            break;
+        case XS.Main.Tjfx.type.range_fpbqx:
+            tuliName = "扶贫搬迁率";
+            break;
+    }
+    XS.Main.Tjfx.range_createRangeLegendTag(type,level,tuliName);
 
     // 注册 mousemove 事件
     xs_tjfx_themeLayer.on("mousemove", XS.Main.Tjfx.range_themeLayerMouseOverCallback);

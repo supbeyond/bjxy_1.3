@@ -168,12 +168,28 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
     xs_tjfx_graph_themeLayer.setOpacity(0.9);
     xs_tjfx_graph_themeLayer.isOverLay = true;
 
-    if(document.getElementById("xs_tjfx_range_Legend")){
-        $("#xs_tjfx_range_Legend").remove();
+    var tuliName = "";
+    switch (type){
+        case XS.Main.Tjfx.type.pie:
+            tuliName = "土地类型";
+            break;
+        case XS.Main.Tjfx.type.bar.social:
+            tuliName = "社保类型";
+            break;
+        case XS.Main.Tjfx.type.bar.fourOf45:
+            tuliName = "四有";
+            break;
+        case XS.Main.Tjfx.type.bar.fiveOf45:
+            tuliName = "五覆盖";
+            break;
+        case XS.Main.Tjfx.type.bar.fiveOf54:
+            tuliName = "五通";
+            break;
+        case XS.Main.Tjfx.type.bar.fourOf54:
+            tuliName = "四有";
+            break;
     }
-
-    $("#xs_mainC").append(XS.Main.Tjfx.range_createRangeLegendTag(type,parentLevel));
-    $("#xs_tjfx_range_Legend").css("display", "block");
+    XS.Main.Tjfx.range_createRangeLegendTag(type,parentLevel,tuliName);
 
     // 注册专题图 mousemove, mouseout事件(注意：专题图图层对象自带 on 函数，没有 events 对象)
     xs_tjfx_graph_themeLayer.on("mousemove", XS.Main.Tjfx.Graph.showInfoWin);

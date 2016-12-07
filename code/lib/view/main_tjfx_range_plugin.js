@@ -194,7 +194,7 @@ XS.Main.Tjfx.range_createRangeStyleGroups = function(type, level){
 var xs_poor_legendbegoreH = 0;
 var xs_poor_isLegendClickSingle = true;
 //创建图例
-XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
+XS.Main.Tjfx.range_createRangeLegendTag = function(type, level,tuliName){
     if(document.getElementById("xs_tjfx_range_Legend")){
         $("#xs_tjfx_range_Legend").remove();
     }
@@ -209,7 +209,7 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level){
                     '<a href="javascript:void(0)" id="xs_poor_legendClose" onclick="XS.Main.Tjfx.legendClose();"></a>' +
             '</div>'+
             '<div style="background: #bbbbFF;">' +
-                '<span style="position: relative;right: 45px;">贫困类型</span>' +
+                '<span style="position: relative;right: 45px;">' + tuliName + '</span>' +
                 '<span style="position: relative;left: 17px;">图标</span>' +
             '</div>' +
             '<div class="legendContent">';
