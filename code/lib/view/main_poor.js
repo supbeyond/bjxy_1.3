@@ -1565,7 +1565,7 @@ XS.Main.Poor.povertyRelocationClick = function(params) {
                 content += '</div></div>';
 
                 content += '</div>';
-                XS.CommonUtil.openDialog("xs_main_detail", "搬迁前-后图片展示", "icon-man", content, false, false, true, 1200, 550);
+                XS.CommonUtil.openDialog("xs_main_detail", "易地扶贫搬迁(搬迁前-后对比)", "icon-man", content, false, false, true, 1200, 550);
                 Galleria.run('#xs_poor_galleria_b');
                 Galleria.run('#xs_poor_galleria_c');
 
@@ -1576,8 +1576,8 @@ XS.Main.Poor.povertyRelocationClick = function(params) {
                 var bpath = "../test/s.3gp";
                 var cpath = "../test/e.mp4";
 
-                XS.Main.Poor.showVideo2Path1('搬迁前', bpath, (window.innerWidth / 2.0 - 600), 600, 600, 500, 500);
-                XS.Main.Poor.showVideo2Path2('搬迁后', cpath, (window.innerWidth / 2.0), 600, 600, 500, 500);
+                XS.Main.Poor.showVideo2Path1('易地扶贫搬迁(搬迁前)', bpath, (window.innerWidth / 2.0 - 600), 600, 600, 500, 500);
+                XS.Main.Poor.showVideo2Path2('易地扶贫搬迁(搬迁后)', cpath, (window.innerWidth / 2.0), 600, 600, 500, 500);
             });
 
             //基本信息
@@ -1586,7 +1586,7 @@ XS.Main.Poor.povertyRelocationClick = function(params) {
             var objArr = [
                 {"name": "户主", "value": obj.name},
                 {"name": "扶贫单位", "value": obj.helpdepartment},
-                {"name": "负责人", "value": obj.helper},
+               /* {"name": "负责人", "value": obj.helper},*/
                 {"name": "资助金", "value": obj.sum},
                 {"name": "原居地", "value": obj.from},
                 {"name": "现现地", "value": obj.to},
@@ -1607,11 +1607,11 @@ XS.Main.Poor.preloc_handleVill = function(level, parentId){
     if($("#xs_utfGridC").length>0) $("#xs_utfGridC").css("display","none");
     XS.CommonUtil.hideLoader();
     var testObj = [
-        {'name':'张三', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'镰刀湾村', 'flon':105.43084410858, 'flat':27.7626084993159, 'to':'青林村', 'tlon':105.40357648564, 'tlat':27.7557783311176, 'fpic':'','fv':'','tpic':'','tv':''},
-        {'name':'李四', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'煤冲村', 'flon':105.283967412228, 'flat':27.2141378668798, 'to':'核桃村', 'tlon':105.272751223953, 'tlat':27.2173935617529, 'fpic':'','fv':'','tpic':'','tv':''},
-        {'name':'王二', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'沙朗村', 'flon':105.34166954055, 'flat':27.2097694416046, 'to':'双堰村', 'tlon':105.286757418278, 'tlat':27.195028364937, 'fpic':'','fv':'','tpic':'','tv':''},
-        {'name':'赵七', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'常丰村', 'flon':105.427392355285, 'flat':27.1832865727689, 'to':'岔河村', 'tlon':105.364960147198, 'tlat':27.1834449228978, 'fpic':'','fv':'','tpic':'','tv':''},
-        {'name':'孙五', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'塘丰村', 'flon':105.396583630234, 'flat':27.1804027318534, 'to':'晨思村', 'tlon':105.351825839819, 'tlat':27.1919977053125, 'fpic':'','fv':'','tpic':'','tv':''}
+        {'name':'李彬', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'镰刀湾村', 'flon':105.43084410858, 'flat':27.7626084993159, 'to':'青林村', 'tlon':105.40357648564, 'tlat':27.7557783311176, 'fpic':'','fv':'','tpic':'','tv':''},
+        {'name':'王成 ', 'sum':4000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'煤冲村', 'flon':105.283967412228, 'flat':27.2141378668798, 'to':'核桃村', 'tlon':105.272751223953, 'tlat':27.2173935617529, 'fpic':'','fv':'','tpic':'','tv':''},
+        {'name':'杨晓君', 'sum':8000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'沙朗村', 'flon':105.34166954055, 'flat':27.2097694416046, 'to':'双堰村', 'tlon':105.286757418278, 'tlat':27.195028364937, 'fpic':'','fv':'','tpic':'','tv':''},
+        {'name':'陈育勋', 'sum':6000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'常丰村', 'flon':105.427392355285, 'flat':27.1832865727689, 'to':'岔河村', 'tlon':105.364960147198, 'tlat':27.1834449228978, 'fpic':'','fv':'','tpic':'','tv':''},
+        {'name':'马贤军', 'sum':6000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'塘丰村', 'flon':105.396583630234, 'flat':27.1804027318534, 'to':'晨思村', 'tlon':105.351825839819, 'tlat':27.1919977053125, 'fpic':'','fv':'','tpic':'','tv':''}
     ];
     //1.搬迁人口列表
     var content =
