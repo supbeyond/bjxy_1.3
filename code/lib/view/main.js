@@ -121,10 +121,10 @@ XS.Main.load = function(){
         {
             layerName: "Twon_Code@"+XS.Constants.dataSourceName,
             utfTileSize: 256,
-            pixcell: 128,
+            pixcell: 64,
             isUseCache: true
         },{
-            utfgridResolution: 128
+            utfgridResolution: 64
         }
     );
     xs_utfGridVillageLayer = new SuperMap.Layer.UTFGrid("utfgridvillage",XS.Constants.map_query,

@@ -888,7 +888,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
     XS.Main.hiddenLayers();
     xs_markerFeaturess = [];
     xs_markerLayer.clearMarkers();
-    xs_markerLayer.addMarker(xs_cityMarkerFeature);
+   // xs_markerLayer.addMarker(xs_cityMarkerFeature);
     xs_poorLabelLayer.removeAllFeatures();
 
 

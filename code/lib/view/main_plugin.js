@@ -358,43 +358,75 @@ XS.Main.hideLeftZtree = function(){
 }
 
 
-//右击-菜单点击事件
+//右击-菜单点击事件(点击底部功能按钮)
 XS.Main.RightClickMenuHandler = function(name){
     XS.CommonUtil.closeDialog("xs_main_fmenu_dialog");
-    if(name == 'exit'){
-        XS.Login.logout();
-    }
-    else if(name == 'toolbar'){
-        //XS.Main.showLeftToolBar();
-    }
-    else if(name== 'pkdc'){
-        XS.Main.Pkjc.pkdc();
-    }
-    else if(name == 'zrjk'){
-        if(xs_currentZoneFuture != null){
-            XS.Main.Pkjc.clickDutyChain(xs_currentZoneLevel, xs_currentZoneCode);
-        }else{
-          //  XS.CommonUtil.showMsgDialog("","请先选中区域");
-            XS.Main.Pkjc.clickDutyChain(xs_user_regionLevel,xs_user_regionId);
+    switch (name){
+        case 'exit':  //退出系统
+        {
+            XS.Login.logout();
+            break;
+        }
+        case 'toolbar': //显示底部功能菜单
+        {
+            XS.Main.showBottomToolBar();
+            break;
+        }
+        case 'pkdc': //显示贫困洞察
+        {
+            XS.Main.Pkjc.pkdc();
+            break;
+        }
+        case 'zrjk': //责任监控
+        {
+            if(xs_currentZoneFuture != null){
+                XS.Main.Pkjc.clickDutyChain(xs_currentZoneLevel, xs_currentZoneCode);
+            }else{
+                //  XS.CommonUtil.showMsgDialog("","请先选中区域");
+                XS.Main.Pkjc.clickDutyChain(xs_user_regionLevel,xs_user_regionId);
+            }
+            break;
+        }
+        case 'rwjk': //任务监控
+        {
+            if(xs_currentZoneFuture != null){
+                XS.Main.Pkjc.clickTaskMonitor(xs_currentZoneLevel, xs_currentZoneCode, xs_currentZoneName);
+            }else{
+                //  XS.CommonUtil.showMsgDialog("","请先选中区域");
+                XS.Main.Pkjc.clickTaskMonitor(xs_user_regionLevel,xs_user_regionId,xs_userZoneName);
+            }
+            break;
+        }
+        case 'sjfx'://数据分析
+        {
+            $("#xs_echartjs").empty().append('<script src="../base/echart/echarts.js"></script>');
+            XS.Main.functionBtnClk();
+            if(xs_currentZoneFuture != null){
+                //XS.Main.Pkjc.clickAnalysis(xs_pkdc_zoneLevel,xs_pkdc_currentStateCode);
+                XS.Main.Pkjc.clickAnalysis(xs_currentZoneLevel,xs_currentZoneCode,xs_currentZoneName);
+            }else{
+                XS.Main.Pkjc.clickAnalysis(xs_user_regionLevel,xs_user_regionId,xs_userZoneName);
+            }
+            break;
+        }
+        case 'ydbq': //易地搬迁
+        {
+            XS.Main.Pkjc.closeInfoDialog();
+            XS.Main.Poor.clearRelocationLayer();
+            if(xs_currentZoneFuture != null){
+                XS.Main.Poor.povertyRelocation(xs_currentZoneLevel, xs_currentZoneCode);
+            }else{
+                XS.Main.Poor.povertyRelocation(xs_user_regionLevel, xs_user_regionId);
+            }
+            break;
+        }
+        case 'fpcs': //扶贫措施
+        {
+            XS.Main.Pkjc.clickItemFund(xs_pkdc_currentName);
+            break;
         }
     }
-    else if(name == 'rwjk'){
-        if(xs_currentZoneFuture != null){
-            XS.Main.Pkjc.clickTaskMonitor(xs_currentZoneLevel, xs_currentZoneCode, xs_currentZoneName);
-        }else{
-          //  XS.CommonUtil.showMsgDialog("","请先选中区域");
-            XS.Main.Pkjc.clickTaskMonitor(xs_user_regionLevel,xs_user_regionId,xs_userZoneName);
-        }
-    }else if(name == 'sjfx'){
-        $("#xs_echartjs").empty().append('<script src="../base/echart/echarts.js"></script>');
-        XS.Main.functionBtnClk();
-        if(xs_currentZoneFuture != null){
-            //XS.Main.Pkjc.clickAnalysis(xs_pkdc_zoneLevel,xs_pkdc_currentStateCode);
-            XS.Main.Pkjc.clickAnalysis(xs_currentZoneLevel,xs_currentZoneCode,xs_currentZoneName);
-        }else{
-            XS.Main.Pkjc.clickAnalysis(xs_user_regionLevel,xs_user_regionId,xs_userZoneName);
-        }
-    }
+
 }
 
 //县、镇、村属性矢量瓦片鼠标移动事件处理
