@@ -36,7 +36,7 @@ XS.Main.Pkjc.detailKV = {
             },
             {
                 name:["参加新农合人数","参加居民养老人数","享受农村低保人数","劳动力","参加培训人数","省内务工人数",
-                    "省外务工人数","参培务工人数","参合贫困户","需异地搬迁户","需异地搬迁人数","未安全饮用水人数"],
+                    "省外务工人数","参培务工人数","参合贫困户","需易地搬迁户","需易地搬迁人数","未安全饮用水人数"],
                 value:["CPS_MEDICAL_POP","CPS_OLDINSURE_POP","CPS_LOWGARAN_POP","CPS_LABOR_NUM","CPS_LTRAINED_NUM",
                     "CPS_IN_LABOR","CPS_OUT_LABOR","CPS_LTRAINED_LABOR","CPS_JOINORG_HHNUM","CPS_MOVE_HHNUM","CPS_MOVE_POP",
                     "CPS_NOWATER_POP"]
@@ -64,37 +64,37 @@ XS.Main.Pkjc.detailKV = {
         ]
     },
     county:{
-        title:["基本信息","土地信息","经济收入","人口统计","人口统计2","重点工作","专项扶贫","帮扶信息"],
+        title:["基本信息","土地信息","经济情况","人口统计","人口统计2","重点工作","专项扶贫","帮扶信息"],
         tabs:[
             {
-                name:["县","县编号","面积(km²)","贫困类型","经度","纬度","镇","贫困镇","行政村","贫困村","户","贫困户","总人口","贫困人口","贫困发生率(%)"],
+                name:["县","县编号","区划面积(km²)","贫困类型","经度","纬度","乡(镇、办事处)数(个)","贫困乡(镇)数(个)","行政村数(个)","贫困村数(个)","年末总户数(户)","贫困户数(户)","年末总人口(人)","贫困人口(人)","贫困发生率(%)"],
                 value:["CBI_NAME","CBI_ID","CBI_AREA","CBI_type","CBI_LONGITUDE","CBI_LATITUDE","CBI_TOWNS_NUM","CBI_PoorTOWNS_NUM",
                     "CBI_VILLAGE_NUM","CBI_PoorVILLAGE_NUM","cps_hhnum","cps_poor_hhnum","cps_pop","cps_poor_pop","cps_Poverty_rate"],
             },
             {
-                name:["耕地面积","基本农田面积","有效灌溉面积","林地面积","退耕还林面积","林果面积","牧草地面积","水域面积","荒漠化面积",
-                    "石漠化面积","退耕还草面积","森林覆盖率(%)"],
+                name:["耕地面积(公顷)","基本农田面积(公顷)","有效灌溉面积(公顷)","林地面积(公顷)","退耕还林面积(公顷)","林果面积(公顷)","牧草地面积(公顷)","水域面积(公顷)","荒漠化面积(公顷)",
+                    "石漠化面积(公顷)","退耕还草面积(公顷)","森林覆盖率(%)"],
                 value:["CBS_CULLAND_AREA","CBS_BASIC_FARMLAND","CBS_IRRIGATE_AREA","CBS_FOREST_AREA",
                         "CBS_REFOREST_AREA","CBS_ORCHARD_AREA","CBS_PASTURE_AREA","CBS_WATER_AREA","CBS_DESERT_AREA",
                         "CBS_ROCKY_AREA","CBS_REGRASS_AREA","CBS_FOREST_RATE"]
             },
             {
-                name:["GDP","第一产业","第二产业","第三产业","公财预算收入","公财预算支出","公财扶贫预算支出",
-                    "教育部门资金投入","二级公路里程","高速公路里程","人均纯收入","人均纯收入增长率(%)","地方生产总值增长率(%)"],
+                name:["地方生产总值GDP(万元)","第一产业(万元)","第二产业(万元)","第三产业(万元)","地方公财预算收入(万元)","地方公财预算支出(万元)","地方公财扶贫预算支出(万元)",
+                    "教育部门资金投入(万元)","二级及以上公路里程(公里)","高速公路里程(万元)","农村居民人均纯收入(元)","农村居民人均纯收入增长率(%)","地方生产总值增长率(%)"],
                 value:["CBS_GDP","CBS_FIRST_INDUSTRY","CBS_SECOND_INDUSTRY","CBS_THIRD_INDUSTRY",
                     "CBS_LOCAL_REVENUE","CBS_LOCAL_EXPEND","CBS_LOCAL_POVERTY_EXPEND","CBS_EDU_INVEST","CBS_TWOWAY_MILE",
                     "CBS_HIGHWAY_MILE","CBS_FARMERS_PERNET","CBS_PERNET_RATE","CBS_GDP_RATE"]
             },
             {
-                name:["乡镇个数","行政村数","贫困村数","年末总人口","年末总户数","贫困人口","贫困户",
-                    "贫困发生率(%)","脱贫村","脱贫户","脱贫人口","少数民族","无房户","危房户","危房改造户"],
+                name:["乡(镇、办事处)数(个)","行政村数(个)","贫困村数(个)","年末总人口(人)","年末总户数(户)","贫困人口(人)","贫困户(户)",
+                    "贫困发生率(%)","脱贫村(个)","脱贫户(户)","脱贫人口(人)","少数民族人口(人)","无房户(户)","危房户(户)","危房改造户(户)"],
                 value:["CPS_TOWNSNUM","CPS_VILLNUM","CPS_POORVILL_NUM","CPS_YEAR_POP","CPS_YEAR_HHNUM","CPS_POOR_POP",
                     "CPS_POOR_HHNUM","CPS_POVERTY_RATE","CPS_OUTPOV_VILLNUM","CPS_OUTPOV_HHNUM","CPS_OUTPOV_POP","VC_MINORITY_NUM",
                     "CPS_NOROOM_HHNUM","CPS_DANGROOM_HHNUM","CPS_RECONSTRU_HHNUM"]
             },
             {
                 name:["参加新农合人数","参加居民养老人数","享受农村低保人数","劳动力","参加培训人数","省内务工人数",
-                    "省外务工人数","参培务工人数","参合贫困户","需异地搬迁户","需异地搬迁人数","未安全饮用水人数"],
+                    "省外务工人数","参培务工人数","参合贫困户","需易地搬迁户","需易地搬迁人数","未安全饮用水人数"],
                 value:["CPS_MEDICAL_POP","CPS_OLDINSURE_POP","CPS_LOWGARAN_POP","CPS_LABOR_NUM","CPS_LTRAINED_NUM",
                     "CPS_IN_LABOR","CPS_OUT_LABOR","CPS_LTRAINED_LABOR","CPS_JOINORG_HHNUM","CPS_MOVE_HHNUM","CPS_MOVE_POP",
                     "CPS_NOWATER_POP"]
@@ -133,7 +133,7 @@ XS.Main.Pkjc.detailKV = {
             {
                 name:["行政村数","贫困村数","参加新农合人数","总人口数","年末总户数","参加居民养老人数","贫困人口数",
                     "贫困户数","贫困发生率(%)","少数民族人数","省内务工人数","省外务工人数","享受农村低保人数",
-                    "劳动力人数","参加培训人数","参培外出务工人数","参合贫困户数","需异地搬迁户","需异地搬迁人数","无房户","未安全饮水人数",
+                    "劳动力人数","参加培训人数","参培外出务工人数","参合贫困户数","需易地搬迁户","需易地搬迁人数","无房户","未安全饮水人数",
                     "危房改造户"],
                 value:["TBS_VILLAGE_NUM","TBS_POORVILL_NUM","TBS_MEDICAL_POP","TBS_TOTAL_POP","TBS_YEAR_HOUSEHOLDS",
                     "TBS_ENDOW_POP","TBS_TOTAL_POORERS","TBS_TOTAL_POORHH","TBS_RATE_POOR","TBS_MINORITY_NUM","TBS_IN_LABOR",
@@ -172,7 +172,7 @@ XS.Main.Pkjc.detailKV = {
             },
             {
                 name:["采集时间","总户数","总人口数","贫困户数","贫困人口数","五保人数","低保人数","少数民族","妇女人数",
-                    "残疾人数","劳动力人数","参加培训人数","异地搬迁扶贫户","未实现饮水安全户","危房改造户","在校大学生数","在校高中数"],
+                    "残疾人数","劳动力人数","参加培训人数","易地搬迁扶贫户","未实现饮水安全户","危房改造户","在校大学生数","在校高中数"],
                 value:["VC_YEAR","VC_HH_NUM","VC_TOTAL_PEOPLE","VC_POOR_NUM","VC_POOR_PEOPLE","VC_FIVE_PEOPLE","VC_LOWINC_PEOPLE",
                     "VC_MINORITY_NUM","VC_WOMEN_NUM","VC_DISABLED_NUM","VC_LABOR_NUM","VC_LTRAINED_NUM","VC_MOVE_HHNUM","VC_NOWATER_HHNUM",
                     "VC_RECONSTRU_HHNUM","VC_COLLEGE_STUDNUMBER","VC_SENIOR_STUDNUMBER"]
@@ -516,7 +516,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc,cashTownV
                             action = "QueryCountyBasicStatByFId";
                         }
                         break;
-                    case 2 ://经济收入
+                    case 2 ://经济情况
                         if(xs_pkdc_cashDetailData.county.income){
                             XS.Main.Pkjc.countyDetailShow(xs_pkdc_cashDetailData.county.income,index);
                         }else{
@@ -822,7 +822,7 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
     var xs_pkdc_analyIndex = 0;
     if(level == XS.Main.ZoneLevel.city)//(titleAttr,tabsId,position,isFit,plain,width,height,headerWidth,tabHeight)
     {
-        var tabTile = ["饮水分析","异地搬迁","培训分析","社会保障","危房情况","脱贫分析","致贫原因","文化程度"];
+        var tabTile = ["饮水分析","易地搬迁","培训分析","社会保障","危房情况","脱贫分析","致贫原因","文化程度"];
         var content = '<div id="xs_pkdc_AnalysTabsC" style="padding: 2px 2px 2px 0px;box-sizing: border-box;height: 100%;">' +
                 XS.Main.Pkjc.tabsContent(tabTile,"xs_pkdc_AnalysTabs","left",true,true,585,560,90,40) +
             '</div>';
@@ -889,7 +889,7 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
                             action = "QueryUnSafeWaterBycount";
                         }
                         break;
-                    case 1 ://异地搬迁
+                    case 1 ://易地搬迁
                         if(xs_pkdc_cashAnalyData.city.move){
                             XS.Main.Pkjc.cityAnalyShow(xs_pkdc_cashAnalyData.city.move,index);
                         }else{
@@ -950,7 +950,7 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
                                 case 0 ://饮水分析
                                     xs_pkdc_cashAnalyData.city.drinkWater = json;
                                     break;
-                                case 1 ://异地搬迁
+                                case 1 ://易地搬迁
                                     xs_pkdc_cashAnalyData.city.move = json;
                                     break;
                                 case 2 ://培训分析
@@ -1424,7 +1424,7 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
 }
 //项目资金点击函数
 var xs_pkdc_itemFundDgridJson = [];
-XS.Main.Pkjc.clickItemFund = function(currentName){
+XS.Main.Pkjc.clickItemFund = function(currentCode,currentName){
     XS.Main.Pkjc.closeInfoDialog();
     XS.Main.Poor.clearRelocationLayer();
     xs_pkdc_itemFundDgridJson = [];
@@ -1477,7 +1477,7 @@ XS.Main.Pkjc.clickItemFund = function(currentName){
     XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
 
     $("#xs_pkdc_itemFound_rowLoading").css({"visibility":"visible"});
-    var data = {regionid:xs_pkdc_currentStateCode};
+    var data = {regionid:currentCode};
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryProjecFundByRegionid", data, function(json) {
         $("#xs_pkdc_itemFound_rowLoading").css({"visibility":"hidden"});
         if(json && json.length > 0){
@@ -1618,7 +1618,9 @@ XS.Main.Pkjc.tabsContentPie = function(titleName,indexArr,domId,otherIndexArr,ot
     for (var i = 0; i < indexArr.length; i++) {
         XS.Main.Pkjc.DetailPieOpt.series[0].data.push(xs_pkdc_btnCliDatagridObj[indexArr[i]]);
         pieSum += xs_pkdc_btnCliDatagridObj[indexArr[i]].value;
-        XS.Main.Pkjc.DetailPieOpt.legend.data.push(xs_pkdc_btnCliDatagridObj[indexArr[i]].name);
+        var name = xs_pkdc_btnCliDatagridObj[indexArr[i]].name;
+        var legendV = name.slice(0,name.indexOf('(',-1));
+        XS.Main.Pkjc.DetailPieOpt.legend.data.push(name);//.slice(0,name.indexOf('(',-1)));
     }
     XS.Main.Pkjc.DetailPieOpt.series[0].data = XS.Main.Pkjc.pieLabelPos(XS.Main.Pkjc.DetailPieOpt.series[0].data,pieSum);
     xs_pkdc_AnalysTabsCInit = echarts.init(document.getElementById(domId));
@@ -2152,13 +2154,13 @@ XS.Main.Pkjc.countyDetailShow = function(json,index){
         XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.county.tabs[index].name, XS.Main.Pkjc.detailKV.county.tabs[index].value, 2, 50);
         return;
     }
-    XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.county.tabs[index].name, XS.Main.Pkjc.detailKV.county.tabs[index].value, 3, 35);
+    XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.county.tabs[index].name, XS.Main.Pkjc.detailKV.county.tabs[index].value, 2, 35);
     switch (index) {
         case 1 ://土地信息
             //土地信息的pie显示
             XS.Main.Pkjc.tabsContentPie("国有土地分布图", [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10], "xs_pkdc_tabsContentPie", [], "");
             break;
-        case 2 ://经济收入
+        case 2 ://经济情况
             //经济收入的三大产业pie显示
             XS.Main.Pkjc.tabsContentPie("国民生产总值分布情况", [1, 2, 3], "xs_pkdc_tabsContentPie", [], "");
             break;
@@ -2290,25 +2292,25 @@ XS.Main.Pkjc.cityAnalyShow = function(json,index){
                 [['人数','value'],['(%)','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
 
             break;
-        case 1 ://异地搬迁
+        case 1 ://易地搬迁
             /*$("#xs_pkdc_AnalysTabsChart").append('<div id="xs_pkdc_AnalysTabsChart1" style="width:100%;height: 500px;box-sizing: border-box"></div>');
             $("#xs_pkdc_AnalysTabsChart").append('<div id="xs_pkdc_AnalysTabsChart2" style="width:100%;height: 400px;box-sizing: border-box"></div>');
             var radar = ['60%',["50%","55%"],[[],[]]];
-            var radarSeries = [['异地搬迁户数 vs 异地搬迁人数','radar',[['异地搬迁户数',[]],['异地搬迁人数',[]]]]];
+            var radarSeries = [['易地搬迁户数 vs 易地搬迁人数','radar',[['易地搬迁户数',[]],['易地搬迁人数',[]]]]];
 
             var xAxis = ['','category',[],true];
-            var lineSeries = [['异地搬迁率','line',0,[],false]];
+            var lineSeries = [['易地搬迁率','line',0,[],false]];
             XS.Main.Pkjc.ananlyValueOfJson(json,[radar[2][0],radarSeries[0][2][0][1],radarSeries[0][2][1][1],xAxis[2],lineSeries[0][3]],
                 ['REGION_Name','MoveHnum','MovePnum','REGION_Name','MoveRate'],'MovePnum',radar[2]);
-            XS.Main.Pkjc.ciAnalyOpt([5,'异地搬迁'],['',[]],[40,["异地搬迁户数","异地搬迁人数"]],[],[],[],radar,[],radarSeries,"xs_pkdc_AnalysTabsChart1");
-            XS.Main.Pkjc.ciAnalyOpt([0,"异地搬迁率"],['item',['']],[],[40,40,40,30],xAxis,[['(%)','value']],[],[],lineSeries,"xs_pkdc_AnalysTabsChart2");*/
+            XS.Main.Pkjc.ciAnalyOpt([5,'易地搬迁'],['',[]],[40,["易地搬迁户数","易地搬迁人数"]],[],[],[],radar,[],radarSeries,"xs_pkdc_AnalysTabsChart1");
+            XS.Main.Pkjc.ciAnalyOpt([0,"易地搬迁率"],['item',['']],[],[40,40,40,30],xAxis,[['(%)','value']],[],[],lineSeries,"xs_pkdc_AnalysTabsChart2");*/
 
             var xAxis = ['','category',[],true];
-            var series = [["异地搬迁户数",'bar',0,[],null],["异地搬迁人数",'bar',0,[],null],["异地搬迁率(%)",'line',1,[],false]];
+            var series = [["易地搬迁户数",'bar',0,[],null],["易地搬迁人数",'bar',0,[],null],["易地搬迁率(%)",'line',1,[],false]];
 
             XS.Main.Pkjc.ananlyValueOfJson(json,[xAxis[2],series[0][3],series[1][3],series[2][3]],['REGION_Name','MoveHnum','MovePnum','MoveRate'],'',[]);
             //(title,tooltip,legend,grid,xAxis,yAxis,radar,polar,series,initChart,color)
-            XS.Main.Pkjc.ciAnalyOpt([5,'异地搬迁'],['axis',['line']],[40,["异地搬迁户数","异地搬迁人数"]],[100,40,60,40],xAxis,
+            XS.Main.Pkjc.ciAnalyOpt([5,'易地搬迁'],['axis',['line']],[40,["易地搬迁户数","易地搬迁人数"]],[100,40,60,40],xAxis,
                 [['人数','value'],['(%)','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
 
             break;
@@ -2432,9 +2434,9 @@ XS.Main.Pkjc.countyAnalyShow = function(json,index){
             XS.Main.Pkjc.ciAnalyOpt([5,'致贫原因'],['axis',['shadow']],['致贫原因'],[40,40,120,60],['人数','value'],yAxis,[],[],series,"xs_pkdc_AnalysTabsChart");
             break;
         case 2 ://帮扶措施
-            var legend = [40,["帮扶措施","低保人数","参加培训人数","异地扶贫搬迁人数"]];
-            var xAxis = ['','category',["低保人数","参加培训人数","异地扶贫搬迁户","异地扶贫搬迁人数","危房改造户"],true];//['危房发生率','pie',[[],[]],[0, 60],['70%', '35%'],false]
-            var series = [['帮扶措施','bar',0,[],false,true,'top'],['帮扶措施','pie',[["低保人数","参加培训人数","异地扶贫搬迁人数"],[]],[0, 60],['70%', '35%'],false]];
+            var legend = [40,["帮扶措施","低保人数","参加培训人数","易地扶贫搬迁人数"]];
+            var xAxis = ['','category',["低保人数","参加培训人数","易地扶贫搬迁户","易地扶贫搬迁人数","危房改造户"],true];//['危房发生率','pie',[[],[]],[0, 60],['70%', '35%'],false]
+            var series = [['帮扶措施','bar',0,[],false,true,'top'],['帮扶措施','pie',[["低保人数","参加培训人数","易地扶贫搬迁人数"],[]],[0, 60],['70%', '35%'],false]];
             XS.Main.Pkjc.ananlyValueOfJson(json,[series[0][3],series[0][3],series[0][3],series[0][3],series[0][3],
                     series[1][2][1],series[1][2][1],series[1][2][1]],
                 ['cps_lowgaran_pop','cps_ltrained_num','cps_move_hhnum','cps_move_pop','cps_reconstru_hhnum',
@@ -2544,7 +2546,7 @@ XS.Main.Pkjc.townAnalyShow = function(json,index){
             XS.Main.Pkjc.ciAnalyOpt([5,'致贫原因'],['axis',['shadow']],['致贫原因'],[40,40,120,60],['人数','value'],yAxis,[],[],series,"xs_pkdc_AnalysTabsChart");
             break;
         case 2 ://帮扶措施
-            var legend = [40,["低保人数","参加培训人数","异地扶贫搬迁户","异地扶贫搬迁人数","危房改造户"]];
+            var legend = [40,["低保人数","参加培训人数","易地扶贫搬迁户","易地扶贫搬迁人数","危房改造户"]];
             var xAxis = ['','category',legend[1],true];
             var series = [['帮扶措施','bar',0,[],false,true,'top']];
             XS.Main.Pkjc.ananlyValueOfJson(json,[series[0][3],series[0][3],series[0][3],series[0][3],series[0][3]],
@@ -2658,7 +2660,7 @@ XS.Main.Pkjc.villAnalyShow = function(json,index){
             XS.Main.Pkjc.ciAnalyOpt([5,'致贫原因'],['axis',['shadow']],['致贫原因'],[40,40,120,60],['人数','value'],yAxis,[],[],series,"xs_pkdc_AnalysTabsChart");
             break;
         case 2 ://帮扶措施
-            var legend = [40,["低保人数","参加培训人数","异地扶贫搬迁户","异地扶贫搬迁人数","危房改造户"]];
+            var legend = [40,["低保人数","参加培训人数","易地扶贫搬迁户","易地扶贫搬迁人数","危房改造户"]];
             var xAxis = ['','category',legend[1],true];
             var series = [['帮扶措施','bar',0,[],null]];
             XS.Main.Pkjc.ananlyValueOfJson(json,[series[0][3],series[0][3],series[0][3],series[0][3],series[0][3]],

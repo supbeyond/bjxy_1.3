@@ -697,7 +697,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         });
         //帮扶措施
         $('#xs_pkdc_itemFund').click(function(){
-            XS.Main.Pkjc.clickItemFund(xs_pkdc_currentName);
+            XS.Main.Pkjc.clickItemFund(xs_pkdc_currentStateCode,xs_pkdc_currentName);
         });
         //扶贫搬迁点击
         $("#xs_pkdc_itemRelocate").click(function(){
