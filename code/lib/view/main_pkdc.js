@@ -512,6 +512,7 @@ var xs_pkdc_isloadedchart2 = false; //是否加载echart2
 //点击仪表盘显示下级信息窗口 superId:通过查找当前的区域的信息，id 通过当前的ID查找下一级的信息
 XS.Main.Pkjc.showInfoWin = function(level, superId, id){
    // XS.LogUtil.log($("#xs_pkdc_msgWin"));
+    XS.CommonUtil.showLoader();
     xs_pkdc_isShowInfoWin = true;
     xs_pkdc_isFirstShowInfoWin = false;
 
@@ -526,18 +527,20 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         var winTag =
         "<div id='xs_pkdc_msgWin' style='width: 100%; height: 100%;box-sizing: border-box;'>" +
         '<table cellpadding="2" bordercolor="#DBDBDB" border="1" style="border-collapse: collapse;width: 100%; height: 100%;font-size: 13px;">' +
-            '<tr style="height: 30px;">' +
+            '<tr style="height: 60px;">' +
                 '<td>' +
-                    "<div id='xs_pkdc_linkButtonC' style='padding-top:2px;vertical-align: middle;'>" +
-                        "<a id='xs_pkdc_backSuperBtn' href='javascript:void(0);' style='width: 80px;height:25px; margin-left:5px; display: inline-block;'>上一级</a>" +
+                    "<div id='xs_pkdc_linkButtonC' style='padding-top:-2px;vertical-align: middle;'>" +
+                        "<a id='xs_pkdc_backSuperBtn' href='javascript:void(0);' style='width: 80px;height:35px; margin-left:5px; display: inline-block;'>上一级</a>" +
                         //"<a id='xs_pkdc_positionBtn' href='javascript:void(0);'  style='width: 80px;height:25px; margin-left:20px; display: inline-block;'>定位</a>" +
-                        "<a id='xs_pkdc_poorAdviceBtn' href='javascript:void(0);'  style='width: 80px;height:25px; margin-left:20px; display: inline-block;'>扶贫意见</a>" +
+                        "<a id='xs_pkdc_poorAdviceBtn' href='javascript:void(0);'  style='width: 80px;height:35px; margin-left:5px; display: inline-block;'>扶贫意见</a>" +
+                        "<a id='xs_pkdc_details' href='javascript:void(0);'  style='width: 80px;height:35px; margin-left:5px; display: inline-block;'>详情</a>" +
+                        "<a id='xs_pkdc_dataAnalysis' href='javascript:void(0);'  style='width: 80px;height:35px; margin-left:5px; display: inline-block;'>数据分析</a>" +
                     "</div>" +
                 '</td>' +
             '</tr>'+
-            '<tr style="height: 430px;">' +
+            '<tr style="height: 470px;">' +
                 '<td>' +
-                    "<div style='width: 100%;height: 430px;position: relative;'>"+
+                    "<div style='width: 100%;height: 470px;position: relative;'>"+
                         "<div id='xs_pkdc_mgsLeft' style='width:100%; height:100%;overflow:auto;'>" +
                             "<div id='xs_pkdc_msg_barC'  style='width: 560px;height: auto;'></div>" +
                         "</div>" +
@@ -545,34 +548,39 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                     "</div>"+
                 '</td>' +
             '</tr>'+
-            '<tr style="height: 70px;">' +
+           /* '<tr style="height: 70px;">' +
                 '<td>' +
                     "<div  id='xs_pkdc_msg_tabC' style='width: 100%; height: 100%;'>" +
                         "<div  id='xs_pkdc_msg_btnC' style='width: 100%; height: 100%;text-align: center;padding-top: 5px;'>" +
                             "<a id='xs_pkdc_details' href='javascript:void(0);'  style='background: #304655;margin-right: 10px; color: #ffffff;'>详情</a>" +
                             "<a id='xs_pkdc_dataAnalysis' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;color: #ffffff;'>大数据分析</a>" +
-                          /*  "<a id='xs_pkdc_dutyMonitor' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;color: #ffffff;'>责任监控</a>" +
+                          *//*  "<a id='xs_pkdc_dutyMonitor' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;color: #ffffff;'>责任监控</a>" +
                             "<a id='xs_pkdc_taskMonitor' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;color: #ffffff;'>任务监控</a>" +
-                            "<a id='xs_pkdc_itemFund' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;;color: #ffffff;'>帮扶措施</a>" +*/
-                            /*"<a id='xs_pkdc_itemRelocate' href='javascript:void(0);'  style='background: #304655;color: #ffffff;'>易地扶贫搬迁</a>" +*/
+                            "<a id='xs_pkdc_itemFund' href='javascript:void(0);'  style='background: #304655;margin-right: 1px;;color: #ffffff;'>帮扶措施</a>" +*//*
+                            *//*"<a id='xs_pkdc_itemRelocate' href='javascript:void(0);'  style='background: #304655;color: #ffffff;'>易地扶贫搬迁</a>" +*//*
                         "</div>" +
                     "</div>" +
                 '</td>' +
-            '</tr>'+
+            '</tr>'+*/
         "</table>" +
         "</div>";
         $("#xs_MapContainer").append(winTag);
 
         //底部按钮
-        $('#xs_pkdc_details').linkbutton({iconCls:'xs_pkdc_chart',iconAlign:'top',size:'large',width:80,height:64});
+      /*  $('#xs_pkdc_details').linkbutton({iconCls:'xs_pkdc_chart',iconAlign:'top',size:'large',width:80,height:64});
         $('#xs_pkdc_dataAnalysis').linkbutton({iconCls:'icon-main_tjfx',iconAlign:'top',size:'large',width:80,height:64});
         $('#xs_pkdc_dutyMonitor').linkbutton({iconCls:'icon-main_gtzz',iconAlign:'top',size:'large',width:80,height:64});
         $('#xs_pkdc_taskMonitor').linkbutton({iconCls:'xs_pkdc_task',iconAlign:'top',size:'large',width:80,height:64});
         $('#xs_pkdc_itemFund').linkbutton({iconCls:'xs_pkdc_money',iconAlign:'top',size:'large',width:80,height:64});
-        $('#xs_pkdc_itemRelocate').linkbutton({iconCls:'xs_pkdc_family',iconAlign:'top',size:'large',width:80,height:64});
+        $('#xs_pkdc_itemRelocate').linkbutton({iconCls:'xs_pkdc_family',iconAlign:'top',size:'large',width:80,height:64});*/
 
         //返回上一级
         $('#xs_pkdc_backSuperBtn').linkbutton({iconCls:'icon-back'});
+
+        //详情
+        $('#xs_pkdc_details').linkbutton({iconCls:'xs_pkdc_chart_min'});
+        //数据分析
+        $('#xs_pkdc_dataAnalysis').linkbutton({iconCls:'icon-main_tjfx_min'});
         //定位
         //$('#xs_pkdc_positionBtn').linkbutton({iconCls:'icon-main_position'});
         //扶贫意见
@@ -819,7 +827,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
             }
         });
 
-        var xs_pkdc_poorHBtn = "<a id='xs_pkdc_poorHbBtn' href='javascript:void(0);'  style='width: 80px;height:25px; margin-left:20px;display: inline-block;'>贫困户</a>";
+        var xs_pkdc_poorHBtn = "<a id='xs_pkdc_poorHbBtn' href='javascript:void(0);'  style='width: 80px;height:35px; margin-left:5px;display: inline-block;'>贫困户</a>";
         $('#xs_pkdc_linkButtonC').append(xs_pkdc_poorHBtn);
         $('#xs_pkdc_poorHbBtn').linkbutton({iconCls:'icon-man'});
         $('#xs_pkdc_poorHbBtn').click(function(){
@@ -827,7 +835,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                 $('#xs_pkdc_poorHbBtn').linkbutton({text:"基本信息"});
                 xs_pkdc_detailClickNum = 1;
 
-                var xs_pkdc_positionBtn = "<a id='xs_pkdc_positionBtn' href='javascript:void(0);'  style='width: 80px;height:25px; margin-left:20px;'>定位</a>";
+                var xs_pkdc_positionBtn = "<a id='xs_pkdc_positionBtn' href='javascript:void(0);'  style='width: 80px;height:35px; margin-left:5px;'>定位</a>";
                 $('#xs_pkdc_linkButtonC').append(xs_pkdc_positionBtn);
                 $('#xs_pkdc_positionBtn').linkbutton({iconCls:'icon-main_position'});
                 $('#xs_pkdc_positionBtn').click(function(){
@@ -841,7 +849,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                 var xs_pkdc_village = '<table id="xs_pkdc_village" class="easyui-datagrid" style="width:100%;height:100%;overflow: hidden;"></table>';
                 $("#xs_pkdc_msg_barC").empty().append(xs_pkdc_village);
                 if(id != XS.Main.CacheZoneInfos.poorH.villageId){
-                    var dataN = {pbno: id,pageNo:1,pageSize:15};
+                    var dataN = {pbno: id,pageNo:1,pageSize:16};
                     $("#xs_pkdc_msgWin_p").css("display", "block");
                     //http://61.159.185.196:7060/Service2.svc/QueryHousePeoByHidOfPage?pbno=52242810102&pageNo=1
                     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryHousePeoByHidOfPage", dataN, function(json){
@@ -868,7 +876,7 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
             }
         });
     }
-
+    XS.CommonUtil.hideLoader();
 }
 
 //点击左贫困柱Bar图时更新右贫困率饼图
