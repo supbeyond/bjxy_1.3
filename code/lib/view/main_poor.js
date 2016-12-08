@@ -1601,7 +1601,7 @@ XS.Main.Poor.povertyRelocationClick = function(params) {
 //扶贫搬迁-村级展示
 var xs_poor_detail_is_relocationdialog_open = false;
 XS.Main.Poor.preloc_handleVill = function(level, parentId){
-    xs_clickMapType = XS.Main.clickMapType.poor_povertyrelocation;
+  //  xs_clickMapType = XS.Main.clickMapType.poor_povertyrelocation;
     xs_poor_detail_is_relocationdialog_open = false;
     xs_poor_elementsLayer.setVisibility(true);
     if($("#xs_utfGridC").length>0) $("#xs_utfGridC").css("display","none");
