@@ -10,11 +10,17 @@
 .icon-main_tjfx{
     background:url('../img/icon/xs_main_tjfx.png') no-repeat center center;
 }
+.icon-main_tjfx_min{
+    background:url('../img/icon/xs_main_tjfx_16.png') no-repeat center center;
+}
 .icon-main_position{
     background:url('../img/icon/xs_main_marker.png') no-repeat center center;
 }
 .xs_pkdc_chart{
     background:url('../img/icon/xs_pkdc_chart.png') no-repeat center center;
+}
+.xs_pkdc_chart_min{
+    background:url('../img/icon/xs_pkdc_chart_16.png') no-repeat center center;
 }
 .xs_pkdc_money{
     background:url('../img/icon/xs_pkdc_money_white.png') no-repeat center center;
