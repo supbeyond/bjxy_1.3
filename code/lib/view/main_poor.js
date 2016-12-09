@@ -2056,17 +2056,30 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
             var obj = json[0];
 
             var objArr = [
-                {"name":"<span style='color:#00c400;'>耕地面积(㎡)</span>","value":obj.HDY_TOTAL_EARTH},
-                {"name":"a.有效灌溉面积(㎡)","value":obj.HDY_IRRI},
-                {"name":"b.田(㎡)","value":obj.HDY_FIELD},
-                {"name":"c.土(㎡)","value":obj.HDY_LAND},
-                {"name":"<span style='color:#00c400;'>林地面积(㎡)</span>","value":obj.HDY_FOREST},
-                {"name":"a.退耕还林面积(㎡)","value":obj.HDY_TGHL},
-                {"name":"b.林果面积(㎡)","value":obj.HDY_FRUIT},
-                {"name":"<span style='color:#00c400;'>牧草地面积(㎡)</span>","value":obj.HDY_GRASS},
-                {"name":"<span style='color:#00c400;'>水田面积(㎡)</span>","value":obj.HDY_WATER_AREA}
+                {"name":"<span style='color:#000000;'>牧草地面积(㎡)</span>","cspan":2},
+                {"name":obj.HDY_GRASS,"cspan":1},
+                {"name":"<span style='color:#000000;'>水田面积(㎡)</span>","cspan":2},
+                {"name":obj.HDY_WATER_AREA,"cspan":1},
+
+                {"name":"<span style='color:#00c400;'>林地面积(㎡)</span>","cspan":3},
+                {"name":obj.HDY_FOREST,"cspan":3},
+                {"name":"<span style='color:#ff0000;'>a.退耕还林面积(㎡)</span>","cspan":2},
+                {"name":obj.HDY_TGHL,"cspan":1},
+                {"name":"<span style='color:#ff0000;'>b.林果面积(㎡)</span>","cspan":2},
+                {"name":obj.HDY_FRUIT,"cspan":1},
+
+                {"name":"<span style='color:#00c400;'>耕地面积(㎡)</span>","cspan":3},
+                {"name":obj.HDY_TOTAL_EARTH,"cspan":3},
+                {"name":"<span style='color:#ff0000;'>a.有效灌溉面积(㎡)</span>","cspan":1},
+                {"name":obj.HDY_IRRI,"cspan":1},
+                {"name":"<span style='color:#ff0000;'>b.田(㎡)</span>","cspan":1},
+                {"name":obj.HDY_FIELD,"cspan":1},
+                {"name":"<span style='color:#ff0000;'>c.土(㎡)</span>","cspan":1},
+                {"name":obj.HDY_LAND,"cspan":1},
             ];
-            $("#xs_poor_detail_tab_soil_info").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 3, 68,"","color:#00bbee;min-width:50px;"));
+            var tstr = XS.Main.Poor.createTableCollspan(objArr, 6, 40,"color:#00bbee;min-width:20px;");
+
+            $("#xs_poor_detail_tab_soil_info").empty().append(tstr);
         }
     });
 
@@ -2076,48 +2089,78 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
         if(json && json.length>0){
             var obj = json[0];
             var objArr = [
-                {"name":"<span style='color:#00c400;'>家庭年收入(元)</span>","value":obj.HI_INWHOLE},
-                {"name":"<span style='color:#00c400;'>家庭年纯收入(元)</span>","value":obj.HI_PUREWHOLE},
-                {"name":"<span style='color:#00c400;'>家庭年人均纯收入(元)</span>","value":obj.HI_PUREAVG},
-                {"name":"<span style='color:#00c400;'>全家工资性收入(元)</span>","value":obj.HI_WORK},
-                {"name":"<span style='color:#00c400;'>全家生产经营性收入(元)</span>","value":obj.HI_PRODUCT},
-                {"name":"<span style='color:#00c400;'>财产性收入(元)</span>","value":obj.HI_PROPERTY},
-                {"name":"<span style='color:#00c400;'>五保供养金(元)</span>","value":obj.HI_ENDOW},
-                {"name":"<span style='color:#00c400;'>各类补贴(元)</span>","value":obj.HI_OTHER},
-                {"name":"a.计划生育金(元)","value":obj.HI_ONECHILD},
-                {"name":"b.低保金(元)","value":obj.HI_LOW},
-                {"name":"c.养老保险金(元)","value":obj.HI_OLD},
-                {"name":"d.新农合报销医疗费(元)","value":obj.HI_MEDIC},
-                {"name":"e.医疗救助金(元)","value":obj.HI_MEDHELP},
-                {"name":"f.生态补偿金(元)","value":obj.HI_ECO}
+                {"name":"<span style='color:#000000;'>家庭年收入(元)</span>","cspan":1},
+                {"name":obj.HI_INWHOLE,"cspan":1},
+
+                {"name":"<span style='color:#000000;'>家庭年纯收入(元)</span>","cspan":1},
+                {"name":obj.HI_PUREWHOLE,"cspan":1},
+
+                {"name":"<span style='color:#000000;'>家庭年人均纯收入(元)</span>","cspan":1},
+                {"name":obj.HI_PUREAVG,"cspan":1},
+
+                {"name":"<span style='color:#000000;'>全家工资性收入(元)</span>","cspan":1},
+                {"name":obj.HI_WORK,"cspan":1},
+
+                {"name":"<span style='color:#000000;'>全家生产经营性收入(元)</span>","cspan":1},
+                {"name":obj.HI_PRODUCT,"cspan":1},
+
+                {"name":"<span style='color:#000000;'>财产性收入(元)</span>","cspan":1},
+                {"name":obj.HI_PROPERTY,"cspan":1},
+
+                {"name":"<span style='color:#000000;'>五保供养金(元)</span>","cspan":1},
+                {"name":obj.HI_ENDOW,"cspan":1},
+
+                {"name":"<span style='color:#00c400;'>各类补贴(元)</span>","cspan":2},
+                {"name":obj.HI_OTHER,"cspan":2},
+
+                {"name":"<span style='color:#ff0000;'>a.计划生育金(元)</span>","cspan":1},
+                {"name":obj.HI_ONECHILD,"cspan":1},
+
+                {"name":"<span style='color:#ff0000;'>b.低保金(元)</span>","cspan":1},
+                {"name":obj.HI_LOW,"cspan":1},
+
+                {"name":"<span style='color:#ff0000;'>c.养老保险金(元)</span>","cspan":1},
+                {"name":obj.HI_OLD,"cspan":1},
+
+                {"name":"<span style='color:#ff0000;'>d.新农合报销医疗费(元)</span>","cspan":1},
+                {"name":obj.HI_MEDIC,"cspan":1},
+
+                {"name":"<span style='color:#ff0000;'>e.医疗救助金(元)</span>","cspan":1},
+                {"name":obj.HI_MEDHELP,"cspan":1},
+
+                {"name":"<span style='color:#ff0000;'>f.生态补偿金(元)</span>","cspan":1},
+                {"name":obj.HI_ECO,"cspan":1}
             ];
-            $("#xs_poor_detail_tab_income_info").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 3, 40,"","color:#00bbee;min-width:50px;"));
+            var tstr = XS.Main.Poor.createTableCollspan(objArr, 6, 40,"color:#00bbee;min-width:20px;");
+            //XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 3, 40,"","color:#00bbee;min-width:50px;")
+            $("#xs_poor_detail_tab_income_info").empty().append(tstr);
         }
     });
 }
 
+
 /**
  * 自动创建表格
  * @param objArr key-value 数组
- * @param colls 每行有多少列
+ * @param rowObjs 每行有多少对象
  * @param rowH 行高
  * @param nameCollStyle 属性样式
  * @param valueCollStyle 值列样式
  * @returns {string}
  */
-XS.Main.Poor.createTable = function(objArr, colls, rowH, nameCollStyle, valueCollStyle){
+XS.Main.Poor.createTable = function(objArr, rowObjs, rowH, nameCollStyle, valueCollStyle){
     var content =
         '<div class="datagrid-wrap panel-body panel-body-noheader" style="width: 100%; height: auto; margin-top: 5px;">'+
         '<div class="datagrid-body">'+
         '<table class="datagrid-btable" cellspacing="0" cellpadding="0" border="0" width="100%">'+
         '<tbody>';
     var sum = objArr.length;
-    var colspan = Math.ceil(sum/colls)*colls-sum;
+    var colspan = Math.ceil(sum/rowObjs)*rowObjs-sum;
     colspan = (colspan==0)?0:colspan+1;
-    for(var i=0; i<Math.ceil(sum/colls); i++){
+    for(var i=0; i<Math.ceil(sum/rowObjs); i++){
         var rcls = Math.ceil(i/2)-Math.floor(i/2)>0?"datagrid-row datagrid-row-alt":"datagrid-row";
         content += '<tr  style="height: '+rowH+'px;" class="'+rcls+'">';
-        for(var j=i*colls; j<((i+1)*colls)&&j<sum; j++){
+        for(var j=i*rowObjs; j<((i+1)*rowObjs)&&j<sum; j++){
             if(i>0&&j==(sum-1)&&colspan>0){
                 content += '<td  colspan='+"'"+colspan+"'"+'><div class="datagrid-cell" style="'+nameCollStyle+'">'+objArr[j].name+'</div></td>';
                 content += '<td colspan='+"'"+colspan+"'"+'><div  class="datagrid-cell" style="'+valueCollStyle+'">'+objArr[j].value+'</div></td>';
@@ -2128,6 +2171,67 @@ XS.Main.Poor.createTable = function(objArr, colls, rowH, nameCollStyle, valueCol
         }
         content += '</tr>';
     }
+    content +=
+        '</tbody>'+
+        '</table>'+
+        '</div>'+
+        '</div>';
+    return content;
+}
+
+/**
+ * 自动创建表格
+ * @param objArr 数组name -- cspan
+ * @param colls 每行有多少列
+ * @param rowH 行高
+ * @param nameCollStyle 属性样式
+ * @param valueCollStyle 值列样式
+ * @returns {string}
+ */
+XS.Main.Poor.createTableCollspan = function(objArr, colls, rowH, collStyle){
+    var content =
+        '<div class="datagrid-wrap panel-body panel-body-noheader" style="width: 100%; height: auto; margin-top: 5px;">'+
+        '<div class="datagrid-body">'+
+        '<table class="datagrid-btable" cellspacing="0" cellpadding="0" border="0" width="100%">'+
+        '<tbody>';
+            var len = objArr.length;
+            var tdC = 0; //记录每行中当前列的个数
+            var rowC = 0; //记录当前行数
+            for(var i=0; i<len; i++)
+            {
+                var obj = objArr[i];
+
+                if(tdC == rowC*colls){
+                    var rcls = Math.ceil(rowC/2)-Math.floor(rowC/2)>0?"datagrid-row datagrid-row-alt":"datagrid-row";
+                    content += '<tr  style="height: '+rowH+'px;" class="'+rcls+'">';
+                    rowC++;
+                }
+                tdC += obj.cspan;
+                content += '<td  colspan='+"'"+obj.cspan+"'"+'><div class="datagrid-cell" style="'+collStyle+'">'+obj.name+'</div></td>';
+                if(tdC == rowC*colls || (i ==len-1)){
+                    content += '</tr>';
+                }
+            }
+        content +=
+        '</tbody>'+
+        '</table>'+
+        '</div>'+
+        '</div>';
+    return content;
+}
+
+/**
+ * 创建表格，初始化TBody
+ * @param trs 添加tr 元素
+ * @returns {string}
+ */
+XS.Main.Poor.createTableTBody = function(trs){
+    var content =
+        '<div class="datagrid-wrap panel-body panel-body-noheader" style="width: 100%; height: auto; margin-top: 5px;">'+
+        '<div class="datagrid-body">'+
+        '<table class="datagrid-btable" cellspacing="0" cellpadding="0" border="0" width="100%">'+
+        '<tbody>';
+        content += trs;
         content +=
         '</tbody>'+
         '</table>'+
