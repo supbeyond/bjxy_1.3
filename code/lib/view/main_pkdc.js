@@ -294,6 +294,7 @@ XS.Main.Pkjc.pkdc = function(){
         XS.CommonUtil.showMsgDialog("","数据加载未完成，请耐心等待");
         return;
     }
+    XS.CommonUtil.showLoader();
     XS.Main.functionBtnClk();
     XS.Main.hiddenLayers();
     XS.Main.closeDialogs("xs_main_detail");

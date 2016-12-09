@@ -76,43 +76,6 @@ XS.Main.Markers = {
 $(function(){
     //右击-菜单
     $('#xs_rightMeun').menu('appendItem', {
-        text: '贫困洞察',
-        iconCls: 'icon-search',
-        onclick: function(){
-            XS.Main.RightClickMenuHandler('pkdc');
-        }
-    });
-    $('#xs_rightMeun').menu('appendItem', {
-        separator: true
-    });
-    $('#xs_rightMeun').menu('appendItem', {
-        text: '责任监控',
-        iconCls: 'icon-man',
-        onclick: function(){
-            XS.Main.RightClickMenuHandler('zrjk');
-        }
-    });
-    $('#xs_rightMeun').menu('appendItem', {
-        separator: true
-    });
-    $('#xs_rightMeun').menu('appendItem', {
-        text: '任务监控',
-        iconCls: 'icon-man',
-        onclick: function(){
-            XS.Main.RightClickMenuHandler('rwjk');
-        }
-    });
-    $('#xs_rightMeun').menu('appendItem', {
-        separator: true
-    });
-    $('#xs_rightMeun').menu('appendItem', {
-        text: '工具栏',
-        iconCls: 'icon-man',
-        onclick: function(){
-            XS.Main.RightClickMenuHandler('toolbar');
-        }
-    });
-    $('#xs_rightMeun').menu('appendItem', {
         separator: true
     });
     $('#xs_rightMeun').menu('appendItem', {

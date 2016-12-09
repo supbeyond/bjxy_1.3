@@ -1371,6 +1371,7 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
 //项目资金点击函数
 var xs_pkdc_itemFundDgridJson = [];
 XS.Main.Pkjc.clickItemFund = function(currentCode,currentName){
+    XS.CommonUtil.showLoader();
     XS.Main.Pkjc.closeInfoDialog();
     XS.Main.Poor.clearRelocationLayer();
     xs_pkdc_itemFundDgridJson = [];
@@ -1441,6 +1442,8 @@ XS.Main.Pkjc.clickItemFund = function(currentCode,currentName){
             $("#xs_pkdc_itemFound_rowLoading").css({"visibility":"hidden"});
         }
     });
+
+    XS.CommonUtil.hideLoader();
 }
 
 /**

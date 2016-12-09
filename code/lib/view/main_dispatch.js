@@ -41,6 +41,7 @@ XS.Main.Dispatchcmmd.dispatchCommd = function(){
  */
 var xs_dispatch_state = 1; //记录任务的状态 0表示修改 1表添加
 XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
+    XS.CommonUtil.showLoader();
     XS.Main.functionBtnClk();
     XS.Main.Pkjc.closeInfoDialog();
     XS.Main.Poor.clearRelocationLayer();
@@ -395,6 +396,8 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
     $("#xs_dcl_receiver").textbox('setValue', xs_currentZoneName);
 
    $('#xs_dc_tab').tabs("select",0);
+
+    XS.CommonUtil.hideLoader();
 }
 
 //任务查询

@@ -87,7 +87,7 @@ XS.Main.load = function(){
     //鼠标移动监听
     $(window).mousemove(function(e){
         //console.log("X: " + e.pageX + ", Y: " + e.pageY);
-        if(e.pageY>($(window).height()-2)&& e.pageX>$(window).width()/2.0-400&&e.pageX<$(window).width()/2.0+400){
+        if(e.pageY>($(window).height()-30)&& e.pageX>$(window).width()/2.0-400&&e.pageX<$(window).width()/2.0+400){
             XS.Main.showBottomToolBar();
         }
         if(e.pageX<5&& e.pageY>$(window).height()/2.0-250&&e.pageY<$(window).height()/2.0+250){
