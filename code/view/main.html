@@ -29,8 +29,21 @@
     </div>
     <!--右击菜单-->
    <div id="xs_rightMeun" class="easyui-menu" style="width:120px; display: none;">
-       <div data-options="iconCls:'icon-large-chart'">
-           <span>统计分析</span>
+
+       <div data-options="iconCls:'xs_pkdc_c16'" onclick="XS.Main.RightClickMenuHandler('pkdc');">贫困洞察</div>
+       <div class="menu-sep"></div>
+       <div data-options="iconCls:'xs_bfcs_c16'" onclick="XS.Main.RightClickMenuHandler('fpcs');">帮扶措施</div>
+       <div class="menu-sep"></div>
+       <div data-options="iconCls:'xs_ddzh_c16'" onclick="XS.Main.Dispatchcmmd.dispatchCommd();">调度指挥</div>
+       <div class="menu-sep"></div>
+       <div data-options="iconCls:'xs_zrjk_c16'" onclick="XS.Main.RightClickMenuHandler('zrjk');">责任监控</div>
+       <div class="menu-sep"></div>
+       <div data-options="iconCls:'xs_rwjd_c16'" onclick="XS.Main.RightClickMenuHandler('rwjk');">任务监督</div>
+       <div class="menu-sep"></div>
+       <div data-options="iconCls:'xs_ydbq_c16'" onclick="XS.Main.RightClickMenuHandler('ydbq');">易地搬迁</div>
+       <div class="menu-sep"></div>
+       <div data-options="iconCls:'xs_ztdt_c16'">
+           <span>专题地图</span>
            <div style="width:120px;">
                <div>
                    <span>贫困指标</span>
