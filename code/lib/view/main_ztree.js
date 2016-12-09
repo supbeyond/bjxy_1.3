@@ -541,6 +541,13 @@ XS.Main.Ztree.handleZoneData = function(regId, ulevel){
                         });
                     }
                 }
+                if(document.getElementById('xs_dcs_receiver')){
+                    $("#xs_dcs_receiver").textbox('setValue', xs_currentZoneName);
+                }
+                //xs_dcl_sender
+                if(document.getElementById('xs_dcl_receiver')){
+                    $("#xs_dcl_receiver").textbox('setValue', xs_currentZoneName);
+                }
             }
         }
     });
@@ -615,12 +622,5 @@ XS.Main.Ztree.positionMap = function(regId,ulevel,feature,node){
             XS.Main.readyAddRegionMarkersData([feature],xs_currentZoneLevel-1,xs_superZoneCode);
             break;
         }
-    }
-    if(document.getElementById('xs_dcs_receiver')){
-        $("#xs_dcs_receiver").textbox('setValue', xs_currentZoneName);
-    }
-    //xs_dcl_sender
-    if(document.getElementById('xs_dcl_receiver')){
-        $("#xs_dcl_receiver").textbox('setValue', xs_currentZoneName);
     }
 }
