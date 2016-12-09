@@ -37,31 +37,50 @@ XS.Main.Pkjc.detailKV = {
                 unit:["户","户","户","户","户","人","人","人","人","人","人","人","人"]
             },
             {
-                name:["参加新农合人数","参加居民养老人数","享受农村低保人数","劳动力","参加培训人数","省内务工人数",
-                    "省外务工人数","参培务工人数","参合贫困户","需易地搬迁户","需易地搬迁人数","未安全饮用水人数"],
-                value:["CPS_MEDICAL_POP","CPS_OLDINSURE_POP","CPS_LOWGARAN_POP","CPS_LABOR_NUM","CPS_LTRAINED_NUM",
-                    "CPS_IN_LABOR","CPS_OUT_LABOR","CPS_LTRAINED_LABOR","CPS_JOINORG_HHNUM","CPS_MOVE_HHNUM","CPS_MOVE_POP",
-                    "CPS_NOWATER_POP"]
+                name:["县级公共图书馆数","有卫生院乡镇数","有综合文化站乡镇数","通(沥青/水泥)公路行政村数",
+                    "通客运车行政村数","通电行政村数","有农民合作组织行政村数","开展乡村旅游贫困村数",
+                    "有卫生室行政村数","通广播电视自然村数","通宽带网络行政村数","通广播电视行政村数",
+                    "有文化/图书室行政村数","饮用自来水户数","危房户数","已实现安全饮水人数",
+                    "参加新型农村合作医疗人数","城镇居民基本医疗保险人数","已解决安全饮水农村学校数","农民合作组织数"],
+                value:["C79","C65","C81","C30","C31","C39","C46","C57","C66","C84","C86","C83","C82","C36","C43",
+                    "C33","C69","C71","C34","C45"],
+                unit:["个","个","个","个","个","个","个","个","个","个","个","个","个","户","户","人","人","人","个",
+                    "个"]
             },
             {
-                name:["高等公路里程","实现安全饮水人数","通电行政村","农民合作组织数","有农合组织村","开展旅游村",
-                    "有卫生院乡镇","通广播电视行政村","通宽带行政村"],
-                value:["CFI_HIGHERROAD_MILE","CFI_SAFEWATER_POP","CFI_AC_VILNUM","CFI_FARMER_ORGNUM",
-                    "CFI_ORG_VILNUM","CFI_TOURISM_VILNUM","CFI_HOSPL_TOWNSNUM","CFI_TELE_VILNUM","CFI_BAND_VILNUM"]
+                name:["驻村工作队","驻村干部","雨露计划培训人数","雨露计划投入资金","劳动力转移培训人数",
+                    "适用技能培训人数","村致富培训人数","小额信贷覆盖贫困村","小额信贷贷款户","小额信贷发放总额",
+                    "易地搬迁规划户","易地搬迁规划人数","易地搬迁完成户","易地搬迁完成人数","易地搬迁投入资金"],
+                value:["CHS_TEAM_NUM","CHS_LEADER_NUM","CAS_RAIN_POP","CAS_RAIN_INVEST","CAS_TRANS_TRAINNUM","CAS_SKILL_TRAINNUM",
+                "CAS_SKILL_TRAINNUM","CAS_MICROC_VILNUM","CAS_MICROC_HHNUM","CAS_MICROC_AMOUNT","CAS_RESETTLE_HHNUM",
+                "CAS_RESETTLE_POP","CAS_RESETTLE_COMHH","CAS_RESETTLE_COMPOP","CAS_RESETTLE_FUNDS"],
+                unit:["个","个","人","万元","人","人","人","人","户","万元","户","人","户","人","万元"]
             },
             {
-                name:["雨露计划培训人数","雨露计划投入资金","劳动力转移培训人数","适用技能培训人数","村致富培训人数","小额信贷覆盖贫困村",
-                    "小额信贷贷款户","小额信贷发放总额","易地搬迁规划户","易地搬迁规划人数","易地搬迁完成户","易地搬迁完成人数","易地搬迁投入资金"],
-                value:["CAS_RAIN_POP","CAS_RAIN_INVEST","CAS_TRANS_TRAINNUM","CAS_SKILL_TRAINNUM",
-                    "CAS_LEADER_TRAINNUM","CAS_MICROC_VILNUM","CAS_MICROC_HHNUM","CAS_MICROC_AMOUNT","CAS_RESETTLE_HHNUM","CAS_RESETTLE_POP"
-                    ,"CAS_RESETTLE_COMHH","CAS_RESETTLE_COMPOP","CAS_RESETTLE_FUNDS"]
-            },
-            {
-                name:["驻村工作队","驻村干部","脱贫村","脱贫户","脱贫人口","到县扶贫资金","中央财政投入","财政贴息资金",
-                    "以工代赈资金","少数民族发展资金","省级财政扶贫资金","市县财政扶贫资金","行业扶贫资金","社会帮扶资金"],
-                value:["CHS_TEAM_NUM","CHS_LEADER_NUM","CHS_OUTPOVER_VILNUM","CHS_OUTPOVER_HHNUM",
-                    "CHS_OUTPOVER_POP","CHS_TOTAL_AMOUNT","CHS_CENTRAL_INVEST","CHS_INTEREST_FUNDS","CHS_WORK_FUNDS","CHS_MINORITY_FUNDS"
-                    ,"CHS_PROV_FUNDS","CHS_CITY_FUNDS","CHS_PROFESSION_FUNDS","CHS_SOCIAL_FUNDS"]
+                name:["交通部门资金","a.中央资金","b.省级资金","c.市县资金",
+                    "水利部门资金","a.中央资金","b.省级资金","c.市县资金",
+                    "能源部门资金","a.中央资金","b.省级资金","c.市县资金",
+                    "住建部门资金","a.中央资金","b.省级资金","c.市县资金",
+                    "农、林业部门资金","a.中央资金","b.省级资金","c.市县资金",
+                    "教育部门资金","a.中央资金","b.省级资金","c.市县资金",
+                    "卫计部门资金","a.中央资金","b.省级资金","c.市县资金",
+                    "文化部门资金","a.中央资金","b.省级资金","c.市县资金"],
+                value:["C32","C32A","C32B","C32C",
+                    "C38","C38A","C38B","C38C",
+                    "C42","C42A","C42B","C42C",
+                    "C44","C44A","C44B","C44C",
+                    "C53","C53A","C53B","C53C",
+                    "C64","C64A","C64B","C64C",
+                    "C78","C78A","C78B","C78C",
+                    "C85","C85A","C85B","C85C"],
+                unit:["万元","万元","万元","万元",
+                    "万元","万元","万元","万元",
+                    "万元","万元","万元","万元",
+                    "万元","万元","万元","万元",
+                    "万元","万元","万元","万元",
+                    "万元","万元","万元","万元",
+                    "万元","万元","万元","万元",
+                    "万元","万元","万元","万元"]
             }
         ]
     },
@@ -392,7 +411,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc,cashTownV
                         if(xs_pkdc_cashDetailData.city.majorWork){
                             XS.Main.Pkjc.cityDetailShow(xs_pkdc_cashDetailData.city.majorWork,index);
                         }else{
-                            action = "QueryCityFocusInfoByFId";
+                            action = "QueryCityFocusTen";
                         }
                         break;
                     case 5 ://专项扶
@@ -406,7 +425,7 @@ XS.Main.Pkjc.clickDetail = function(level,currentName,currentId,isPkdc,cashTownV
                         if(xs_pkdc_cashDetailData.city.helpInfo){
                             XS.Main.Pkjc.cityDetailShow(xs_pkdc_cashDetailData.city.helpInfo,index);
                         }else{
-                            action = "QueryCityHelpStatByFId";
+                            action = "QueryCityFoundInput";
                         }
                         break;
                 }
@@ -2072,8 +2091,13 @@ XS.Main.Pkjc.cityDetailShow = function(json,index){
         XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.city.tabs[index].name, XS.Main.Pkjc.detailKV.city.tabs[index].value,
             XS.Main.Pkjc.detailKV.city.tabs[index].unit,3,35,[[0,3]]);
         XS.Main.setDetailChildColor("datagrid-cell",[2,3,4,5,6,7],"#00c400");
-    }
-    else{
+    }else if(index == 6){
+        XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.city.tabs[index].name, XS.Main.Pkjc.detailKV.city.tabs[index].value,
+            XS.Main.Pkjc.detailKV.city.tabs[index].unit,3,35,[[0,3],[4,3],[8,3],[12,3],[16,3],[20,3],[24,3],[28,3]]);
+        XS.Main.setDetailChildColor("datagrid-cell",
+            [2,3,4,5,6,7, 10,11,12,13,14,15, 18,19,20,21,22,23, 26,27,28,29,30,31, 34,35,36,37,38,39, 42,43,44,45,46,47,
+            50,51,52,53,54,55, 58,59,60,61,62,63],"#00c400");
+    }else{
         XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.city.tabs[index].name, XS.Main.Pkjc.detailKV.city.tabs[index].value,
             XS.Main.Pkjc.detailKV.city.tabs[index].unit,2,35,[]);
     }
@@ -2121,13 +2145,39 @@ XS.Main.Pkjc.cityDetailShow = function(json,index){
             });
             break;
         case 4 ://重点工作
-            XS.Main.Pkjc.dynScatterSeries(["扶贫措施","center",10], [2, 4, 5, 7, 8], "xs_pkdc_tabsContentPie", 40);
+            $("#xs_pkdc_tabsContent").css({height:"40%",borderBottom:"1px solid #ddd"});
+            $("#xs_pkdc_tabsContentPie").css({height:"60%"});
+            var xAxis = ['','category',["通公路村","通客运村","通电村","有农合村","旅游村","有卫生室村","通广播村","通宽带村","有图书室村"],true];
+            var series = [['','bar',0,[],null,true,'top']];//[[name,type,barGap,data,stack,showLabel,position]]
+            XS.Main.Pkjc.ananlyValueOfJson([json],
+                [series[0][3],series[0][3],series[0][3],series[0][3],series[0][3],series[0][3],series[0][3],series[0][3],series[0][3]],
+                ["C30","C31","C39","C46","C57","C66","C83","C86","C82"],'',[]);
+            XS.Main.Pkjc.ciAnalyOpt([],['axis',['shadow']],[],[40,40,30,20],xAxis,[['村数(个)','value']],[],[],series,"xs_pkdc_tabsContentPie");
+//XS.Main.Pkjc.dynScatterSeries(["扶贫措施","center",10], [2, 4, 5, 7, 8], "xs_pkdc_tabsContentPie", 40);
             break;
-        case 5 ://专项扶
-            XS.Main.Pkjc.tabsContentPie("各项培训情况", [0, 2, 3, 4], "xs_pkdc_tabsContentPie", [], "");
+        case 5 ://专项扶贫
+            $("#xs_pkdc_tabsContent").css({height:"40%",borderBottom:"1px solid #ddd"});
+            $("#xs_pkdc_tabsContentPie").css({height:"60%"});
+            XS.Main.Pkjc.tabsContentPie(["各项培训情况","center"], [2, 4, 5, 6], "xs_pkdc_tabsContentPie", [], "","70%");
             break;
         case 6 ://扶贫信息
-            XS.Main.Pkjc.tabsContentPie(["各项扶贫资金投入情况","center",10], [6, 7, 8, 9, 10, 11, 12, 13], "xs_pkdc_tabsContentPie", [], "");
+            $("#xs_pkdc_tabsContent").css({height:"40%",borderBottom:"1px solid #ddd"});
+            $("#xs_pkdc_tabsContentPie").css({height:"60%"});
+            var xAxis = ['','category',["交通部门","水利部门","能源部门","住建部门","农、林业部门","教育部门","卫计部门","文化部门"],true];
+            var series = [['中央资金','bar',0,[],"资金",false,"inside"],['省级资金','bar',0,[],"资金",false,"inside"],['市县资金','bar',0,[],"资金",false,"inside"]];
+            var labelValues = [];
+            XS.Main.Pkjc.ananlyValueOfJson([json],
+                [series[0][3],series[0][3],series[0][3],series[0][3],series[0][3],series[0][3],series[0][3],series[0][3],
+                    series[1][3],series[1][3],series[1][3],series[1][3],series[1][3],series[1][3],series[1][3],series[1][3],
+                    series[2][3],series[2][3],series[2][3],series[2][3],series[2][3],series[2][3],series[2][3],series[2][3],
+                    labelValues,labelValues,labelValues,labelValues,labelValues,labelValues,labelValues,labelValues],
+                ["C32A","C38A","C42A","C44A","C53A","C64A","C78A","C85A"
+                    ,"C32B","C38B","C42B","C44B","C53B","C64B","C78B","C85B",
+                    "C32C","C38C","C42C","C44C","C53C","C64C","C78C","C85C",
+                    "C32","C38","C42","C44","C53","C64","C78","C85"],'',[]);
+            var legend = [10,['中央资金',"省级资金","市县资金"]];
+            XS.Main.Pkjc.ciAnalyOpt([],['axis',['shadow']],legend,[60,40,70,20],xAxis,[['资金(万元)','value']],[],[],series,"xs_pkdc_tabsContentPie");
+//XS.Main.Pkjc.tabsContentPie(["各项扶贫资金投入情况","center",10], [6, 7, 8, 9, 10, 11, 12, 13], "xs_pkdc_tabsContentPie", [], "");
             break;
     }
 }
@@ -2144,17 +2194,9 @@ XS.Main.Pkjc.countyDetailShow = function(json,index){
     }else if(index == 6){
         XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.county.tabs[index].name, XS.Main.Pkjc.detailKV.county.tabs[index].value,
             XS.Main.Pkjc.detailKV.county.tabs[index].unit,3,35,[[0,3],[4,3],[8,3],[12,3],[16,3],[20,3],[24,3],[28,3]]);
-        var tableTd = $(".datagrid-cell");
-        var changeColorIndexS = [0,1,8,9,16,17,24,25,32,33,40,41,48,49,56,57];
-        for(var i=0;i<tableTd.length;i++){
-            for(var j in changeColorIndexS){
-                var changeColorIndex = changeColorIndexS[j];
-                if(i == changeColorIndex){
-                    var changeDom = tableTd[changeColorIndex];
-                    changeDom.style.color = "#00c400"
-                }
-            }
-        }
+        XS.Main.setDetailChildColor("datagrid-cell",
+            [2,3,4,5,6,7, 10,11,12,13,14,15, 18,19,20,21,22,23, 26,27,28,29,30,31, 34,35,36,37,38,39, 42,43,44,45,46,47,
+                50,51,52,53,54,55, 58,59,60,61,62,63],"#00c400");
         //XS.Searchbox.createTable(objArr,colls, rowH,mergeColls,nameCollStyle,valueCollStyle,addRowIdArr);
 
     }else{
