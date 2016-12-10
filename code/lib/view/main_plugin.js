@@ -343,10 +343,10 @@ XS.Main.RightClickMenuHandler = function(name){
         case 'zrjk': //责任监控
         {
             if(xs_currentZoneFuture != null){
-                XS.Main.Pkjc.clickDutyChain(xs_currentZoneLevel, xs_currentZoneCode);
+                XS.Main.Pkjc.clickDutyChain(xs_currentZoneLevel, xs_currentZoneCode, xs_currentZoneName);
             }else{
                 //  XS.CommonUtil.showMsgDialog("","请先选中区域");
-                XS.Main.Pkjc.clickDutyChain(xs_user_regionLevel,xs_user_regionId);
+                XS.Main.Pkjc.clickDutyChain(xs_user_regionLevel,xs_user_regionId, xs_currentZoneName);
             }
             break;
         }
@@ -1109,7 +1109,6 @@ XS.Main.getMapCacheFeat = function(cacheCounty,geometry){
 }
 //点击地图获得feature之后的操作
 XS.Main.featureAfter = function(level,feature){
-    XS.Main.clearVectorLayer();
     switch (level)
     {
         case XS.Main.ZoneLevel.county:
@@ -1207,12 +1206,11 @@ XS.Main.featureAfter = function(level,feature){
     }
     //xs_MapInstance.getMapObj().zoomToExtent(feature.geometry.getBounds(),false);
     xs_currentZoneFuture = feature;
-    feature.style = xs_stateZoneStyle;
-    if(xs_user_Features[0]){
-        xs_vectorLayer.addFeatures([feature,xs_user_Features[0]]);
-    }else{
-        xs_vectorLayer.addFeatures(feature);
+    if((!xs_user_Features[0])||(xs_currentZoneFuture.id != xs_user_Features[0].id))
+    {
+        feature.style = xs_stateZoneStyle;
     }
+    XS.Main.clearVectorLayer();
     xs_isMapClickTypeNone = true;
     xs_currentZoneLevel = level;
     //查询信息
@@ -1818,16 +1816,13 @@ XS.Main.clearVectorLayer = function(){
         xs_animatorVectorLayer = null;
     }
     xs_vectorLayer.removeAllFeatures();
+
+    if((!xs_user_Features[0])||(xs_currentZoneFuture.id != xs_user_Features[0].id))
+    {
+        xs_vectorLayer.addFeatures(xs_currentZoneFuture);
+    }
     if(xs_user_Features[0]){
-        if(xs_currentZoneFuture){
-            xs_vectorLayer.addFeatures([xs_user_Features[0],xs_currentZoneFuture]);
-        }else{
-            xs_vectorLayer.addFeatures(xs_user_Features);
-        }
-    }else{
-        if(xs_currentZoneFuture){
-            xs_vectorLayer.addFeatures(xs_currentZoneFuture);
-        }
+        xs_vectorLayer.addFeatures(xs_user_Features);
     }
 }
 //清空地图

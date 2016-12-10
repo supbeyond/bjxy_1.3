@@ -274,13 +274,13 @@ XS.Main.Poor.showPoorInfo = function(obj){
                 {field:'value',width:'75%'}
             ]],
             toolbar: [
-               /* {
+                {
                     iconCls: 'e_icon-picture',
                     text: '扶贫动态',
                     handler: function () {
                         XS.Main.Poor.helpDynamic(obj);
                     }
-                },*/
+                },
                /* '-',
                 {
                     iconCls: 'e_icon-film',
@@ -322,7 +322,7 @@ XS.Main.Poor.showPoorInfo = function(obj){
 
 //帮扶动态
 XS.Main.Poor.helpDynamic = function(obj){
-    var content = '<div id="xs_poor_detail_tab" class="easyui-tabs" style="width:450px; height: 170px;"></div>';
+    var content = '<div id="xs_poor_detail_tab" class="easyui-tabs" style="width:450px; height: 255px;"></div>';
     XS.CommonUtil.openDialog("xs_main_detail_1", obj.HB_NAME, "icon-man", content, false, false, false);
     $('#xs_poor_detail_tab').tabs('add',{
         title:'扶贫责任人',
@@ -330,14 +330,26 @@ XS.Main.Poor.helpDynamic = function(obj){
     });
     $('#xs_poor_detail_tab').tabs('add',{
         title:'扶贫项目',
-        content:"<div style='padding: 5px; height: 100%; box-sizing: border-box; padding-top: 10px;'>" +
-        "<div id='xs_poor_detail_tab_project' style='width: 100%; height: 100%; box-sizing: border-box;padding-bottom: 10px;'>" +
-        "</div>"
+        content:"<div id='xs_poor_detail_tab_project' style='padding: 5px; height: 100%; box-sizing: border-box; '></div>"
+    });
+    $('#xs_poor_detail_tab').tabs('add',{
+        title:'扶贫过程',
+        content:"<div id='xs_poor_detail_tab_bfrecord' style='padding: 5px; height: 100%; box-sizing: border-box; '></div>"
+
+    });
+    $('#xs_poor_detail_tab').tabs('add',{
+        title:'巡检查询',
+        content:"<div id='xs_poor_detail_tab_xjrecord' style='padding: 5px; height: 100%; box-sizing: border-box; '></div>"
     });
     $('#xs_poor_detail_tab').tabs("select",0);
 
     var data = {hid: obj.HB_ID};
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTempHouseHelpById", data, function (json) {
+        /*json[0] = {
+            NHP_HELPNAME:111,
+            NHP_HELPUNIT:111,
+            NHP_TEL:111
+        };*/
         if(json && json.length>0){
             //基本信息
             var objArr = [
@@ -345,12 +357,17 @@ XS.Main.Poor.helpDynamic = function(obj){
                 {"name": "单位名称", "value": json[0].NHP_HELPUNIT},
                 {"name": "联系电话", "value": json[0].NHP_TEL}
             ];
-            $("#xs_poor_detail_tab_tasker").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 1, 40,"", "color:#00bbee;min-width=60px;"));
+            $("#xs_poor_detail_tab_tasker").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 1, 60,"", "color:#00bbee;min-width:60px;"));
         }
     });
 
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTempFourFiveByHId", {Hid: obj.HB_ID}, function (json)
     {
+       /* json[0] = {
+            SOLVINGINDUSTING:111,
+            SOLVINGINDUSTINGSIZE:111,
+            NHP_TEL:111
+        };*/
         if (json && json.length>0)
         {
             //基本信息
@@ -358,7 +375,95 @@ XS.Main.Poor.helpDynamic = function(obj){
                 {"name": "帮扶项目", "value": json[0].SOLVINGINDUSTING},
                 {"name": "帮扶规模", "value": json[0].SOLVINGINDUSTINGSIZE}
             ];
-            $("#xs_poor_detail_tab_project").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 1, 60,"", "color:#00bbee;min-width=60px;"));
+            $("#xs_poor_detail_tab_project").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 1, 60,"", "color:#00bbee;min-width:60px;"));
+        }
+    },function(e){});
+    //扶贫过程
+    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryHelprecordByPId", {Hid: obj.HB_ID, pid:obj.HB_ID}, function (json)
+    {
+      /*  json[0] = {
+            REGIONID:111,
+            REGIONNAME:111,
+            PROJECTID:111,
+            PROJECTNAME:111,
+            FOUND:111,
+            HELPMAN:111,
+            HELPTEL:111,
+            HELPUNIT:111,
+            GDATE:111
+        };*/
+        if (json && json.length>0)
+        {
+            //基本信息
+            /**
+             * REGIONID;//区域id
+             REGIONNAME//区域名称
+             PROJECTID //项目id
+             PROJECTNAME//项目名称
+             PROJECTCONTENT//帮扶内容
+             FOUND //帮扶资金（数字）
+             HELPMAN //帮扶人姓名
+             HELPTEL //帮扶人电话或帮扶单位电话
+             HELPUNIT //帮扶单位
+             GDATE//帮扶日期
+             *
+             */
+            var objArr = [
+                {"name": "区域名称", "value": json[0].REGIONNAME},
+                {"name": "项目名称", "value": json[0].PROJECTNAME},
+                {"name": "帮扶内容", "value": json[0].PROJECTCONTENT},
+                {"name": "帮扶资金", "value": json[0].FOUND},
+                {"name": "帮扶人姓名", "value": json[0].HELPMAN},
+                {"name": "帮扶人(单位)电话", "value": json[0].HELPTEL},
+                {"name": "帮扶单位", "value": json[0].HELPUNIT},
+                {"name": "帮扶日期", "value": json[0].GDATE},
+            ];
+            $("#xs_poor_detail_tab_bfrecord").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 2, 50,"", "color:#00bbee;min-width:20px;"));
+        }
+    },function(e){});
+    //巡检查询
+    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTBLEADERRECORDByFid", {Hid: obj.HB_ID, pd_id: obj.HB_ID}, function (json)
+    {
+        /*json = [];
+        for(var i=0;i<15; i++){
+            json.push({HELPMAN:'aa',WORKCOTENT:'bb', FOURFIVE:'ccc'});
+        }*/
+        if (json && json.length>0)
+        {
+            //基本信息
+            /**
+             *  LONGITUDE //经度
+             LATITUDE //纬度
+             LEADERID//领导id
+             HHID //户id
+             HGUID//户guid
+             WORKCOTENT //巡检内容
+             GDATE //巡检日期
+             MEMO //备注
+             HELPMAN //帮扶人
+             FOURFIVE//四有五覆盖
+             FOUND //资金情况
+             PROJECT //项目情况
+             *
+             */
+           $("#xs_poor_detail_tab_xjrecord").empty().append('<table id="xs_poor_detail_tab_xjrecord_list" class="easyui-datagrid" style="width:100%;height:100%;" title="巡查记录"></table>');
+            $('#xs_poor_detail_tab_xjrecord_list').datagrid({
+                data: json,
+                pagination: true,
+                pageSize: 5,
+                pageList: [5, 15,30],
+                striped: true,
+                onSelect:null,
+                singleSelect: true,
+                rownumbers: true,
+                columns: [[
+                    {field: 'HELPMAN', title: '帮扶人',width:'20%'},
+                    {field: 'WORKCOTENT', title: '巡检内容',width:'40%'},
+                    {field: 'FOURFIVE', title: '四有五覆盖',width:'26%'}
+                ]]
+            });
+            $("#xs_poor_detail_tab_xjrecord_list").datagrid("getPager").pagination({displayMsg:""});
+            $('#xs_poor_detail_tab_xjrecord_list').datagrid('clientPaging');
         }
     },function(e){});
 }
@@ -649,6 +754,7 @@ XS.Main.Poor.show45State = function(id,name){
     var data = {Hid: id};
     XS.CommonUtil.showLoader();
     //http://61.159.185.196:7060/Service2.svc/QueryTempFourFiveByHId?Hid=522426213040064
+    //http://61.159.180.162:7060/Service2.svc/QueryTempFourFiveByHId?Hid=522401108100011
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTempFourFiveByHId", data, function (json)
     {
         XS.CommonUtil.hideLoader();
@@ -685,6 +791,7 @@ XS.Main.Poor.show45State = function(id,name){
                             += '</div>'+
                     '<div id="xs_poor_45_aqzf" class="xs_poor_45_c">'+
                         '<div class="xs_poor_45_f">安全住房</div>';
+                        //ISSAFEBUILDING
                         if(json.ISSAFEBUILDING !='是'){
                             content += '<img src="../img/poor/安全住房.jpg" style="-webkit-filter: grayscale(1)">'+
                             '<div class="xs_poor_45_tip"><span style="display: inline-block;">安全住房:否</span></div>';

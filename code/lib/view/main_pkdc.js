@@ -1312,7 +1312,7 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode, zoneName){
         XS.Main.Pkjc.reqOnLineTasker(zoneCode);
     });
 
-    $('#xs_pkdc_taskC>#xs_pkdc_task_search').searchbox({
+    $('#xs_pkdc_task_search').searchbox({
         searcher:function(value,name){
             //请求数据
             if(name=='all'){
