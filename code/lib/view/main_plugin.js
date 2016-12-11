@@ -1206,9 +1206,14 @@ XS.Main.featureAfter = function(level,feature){
     }
     //xs_MapInstance.getMapObj().zoomToExtent(feature.geometry.getBounds(),false);
     xs_currentZoneFuture = feature;
-    if((!xs_user_Features[0])||(xs_currentZoneFuture.id != xs_user_Features[0].id))
-    {
-        feature.style = xs_stateZoneStyle;
+    if(xs_currentZoneFuture != null){
+        var isAdd = true;
+        if(xs_user_Features[0] && (xs_currentZoneFuture.id == xs_user_Features[0].id)){
+            isAdd = false;
+        }
+        if(isAdd){
+            feature.style = xs_stateZoneStyle;
+        }
     }
     XS.Main.clearVectorLayer();
     xs_isMapClickTypeNone = true;
@@ -1817,9 +1822,14 @@ XS.Main.clearVectorLayer = function(){
     }
     xs_vectorLayer.removeAllFeatures();
 
-    if((!xs_user_Features[0])||(xs_currentZoneFuture.id != xs_user_Features[0].id))
-    {
-        xs_vectorLayer.addFeatures(xs_currentZoneFuture);
+    if(xs_currentZoneFuture != null){
+        var isAdd = true;
+        if(xs_user_Features[0] && (xs_currentZoneFuture.id == xs_user_Features[0].id)){
+            isAdd = false;
+        }
+        if(isAdd){
+            xs_vectorLayer.addFeatures(xs_currentZoneFuture);
+        }
     }
     if(xs_user_Features[0]){
         xs_vectorLayer.addFeatures(xs_user_Features);
