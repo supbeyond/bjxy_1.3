@@ -2187,20 +2187,20 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
             var obj = json[0];
 
             var objArr = [
-                {"name":"<span style='color:#00c400;'>耕地面积(亩)</span>","cspan":3},
+                {"name":"<span style='color:#000000;'>耕地面积(亩)</span>","cspan":3},
                 {"name":obj.HDY_TOTAL_EARTH,"cspan":3},
-                {"name":"<span style='color:#ff0000;'>a.有效灌溉面积(亩)</span>","cspan":1},
+                {"name":"<span style='color:#00c400;'>a.有效灌溉面积(亩)</span>","cspan":1},
                 {"name":obj.HDY_IRRI,"cspan":1},
-                {"name":"<span style='color:#ff0000;'>b.田(亩)</span>","cspan":1},
+                {"name":"<span style='color:#00c400;'>b.田(亩)</span>","cspan":1},
                 {"name":obj.HDY_FIELD,"cspan":1},
-                {"name":"<span style='color:#ff0000;'>c.土(亩)</span>","cspan":1},
+                {"name":"<span style='color:#00c400;'>c.土(亩)</span>","cspan":1},
                 {"name":obj.HDY_LAND,"cspan":1},
 
-                {"name":"<span style='color:#00c400;'>林地面积(亩)</span>","cspan":3},
+                {"name":"<span style='color:#000000;'>林地面积(亩)</span>","cspan":3},
                 {"name":obj.HDY_FOREST,"cspan":3},
-                {"name":"<span style='color:#ff0000;'>a.退耕还林面积(亩)</span>","cspan":2},
+                {"name":"<span style='color:#00c400;'>a.退耕还林面积(亩)</span>","cspan":2},
                 {"name":obj.HDY_TGHL,"cspan":1},
-                {"name":"<span style='color:#ff0000;'>b.林果面积(亩)</span>","cspan":2},
+                {"name":"<span style='color:#00c400;'>b.林果面积(亩)</span>","cspan":2},
                 {"name":obj.HDY_FRUIT,"cspan":1},
 
                 {"name":"<span style='color:#000000;'>牧草地面积(亩)</span>","cspan":2},
@@ -2243,25 +2243,25 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
                 {"name":"<span style='color:#000000;'>五保供养金(元)</span>","cspan":1},
                 {"name":obj.HI_ENDOW,"cspan":1},
 
-                {"name":"<span style='color:#00c400;'>各类补贴(元)</span>","cspan":1},
+                {"name":"<span style='color:#000000;'>各类补贴(元)</span>","cspan":1},
                 {"name":obj.HI_OTHER,"cspan":1},
 
-                {"name":"<div style='color:#ff0000;'>a.领取计划生育金<br/>（含少生快富、奖励扶助)(元)</div>","cspan":1},
+                {"name":"<div style='color:#00c400;'>a.领取计划生育金<br/>（含少生快富、奖励扶助)(元)</div>","cspan":1},
                 {"name":obj.HI_ONECHILD,"cspan":1},
 
-                {"name":"<span style='color:#ff0000;'>b.领取低保金(元)</span>","cspan":1},
+                {"name":"<span style='color:#00c400;'>b.领取低保金(元)</span>","cspan":1},
                 {"name":obj.HI_LOW,"cspan":1},
 
-                {"name":"<span style='color:#ff0000;'>c.领取养老保险金(元)</span>","cspan":1},
+                {"name":"<span style='color:#00c400;'>c.领取养老保险金(元)</span>","cspan":1},
                 {"name":obj.HI_OLD,"cspan":1},
 
-                {"name":"<span style='color:#ff0000;'>d.新农合报销医疗费(元)</span>","cspan":1},
+                {"name":"<span style='color:#00c400;'>d.新农合报销医疗费(元)</span>","cspan":1},
                 {"name":obj.HI_MEDIC,"cspan":1},
 
-                {"name":"<span style='color:#ff0000;'>e.临时救助金(元)</span>","cspan":1},
+                {"name":"<span style='color:#00c400;'>e.临时救助金(元)</span>","cspan":1},
                 {"name":obj.HI_MEDHELP,"cspan":1},
 
-                {"name":"<span style='color:#ff0000;'>f.生态补偿金<br/>(含退耕还林、草原生态奖补等)(元)</span>","cspan":1},
+                {"name":"<span style='color:#00c400;'>f.生态补偿金<br/>(含退耕还林、草原生态奖补等)(元)</span>","cspan":1},
                 {"name":obj.HI_ECO,"cspan":1}
             ];
             var tstr = XS.Main.Poor.createTableCollspan(objArr, 4, 40,"color:#00bbee;min-width:20px;");
