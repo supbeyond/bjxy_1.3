@@ -222,7 +222,7 @@ html, body{
     display: block;
     overflow-y: auto;
 }*/
-#xs_poor_legend .poorLegendItemRow:hover{
+#xs_tjfx_range_Legend .poorLegendItemRow:hover{
     cursor: pointer;
     background: #ddd;
 }
