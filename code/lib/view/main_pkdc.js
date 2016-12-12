@@ -180,8 +180,28 @@ XS.Main.Pkjc.barOption = {
     },
     tooltip: {
         show: true,
-        showContent: true,
-        formatter:XS.Main.Pkjc.tipAnalyFarmatterNex
+        formatter :function(params){
+            var returnValue = "";
+            if(params) {
+                if (params.constructor == Object) {
+                    params = [params];
+                }
+                returnValue += params[0].name;
+                for(var i=0;i<params.length;i++){
+                    returnValue += '<br/><div style="width: 10px;height: 10px;display: inline-block;border-radius: 50%;background: ' + params[i].color + ';"></div>';
+                    for(var j=0;j<xs_tipAnalyUnit.length;j++){
+                        if(xs_tipAnalyUnit[j].name == params[0].seriesName){
+                            returnValue += params[i].seriesName + ': ' + params[i].value + xs_tipAnalyUnit[j].value[i];
+                            if(params[i].percent && xs_tipAnalyUnit[j].value[i] != "%"){
+                                returnValue += "("+ params[i].percent +"%)";
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            return returnValue;
+        }
     },
     legend: {
         data:['贫困户','贫困人口']
@@ -249,8 +269,28 @@ XS.Main.Pkjc.pieOption = {
     tooltip: {
         show: true,
         trigger: 'item',
-        showContent: true,
-        formatter:XS.Main.Pkjc.tipAnalyFarmatterCur
+        formatter :function(params){
+            var returnValue = "";
+            if(params) {
+                if (params.constructor == Object) {
+                    params = [params];
+                }
+                returnValue += params[0].seriesName;
+                for(var i=0;i<params.length;i++){
+                    returnValue += '<br/><div style="width: 10px;height: 10px;display: inline-block;border-radius: 50%;background: ' + params[i].color + ';"></div>';
+                    for(var j=0;j<xs_tipAnalyUnit.length;j++){
+                        if(xs_tipAnalyUnit[j].name == params[0].seriesName){
+                            returnValue += params[i].name + ': ' + params[i].value + xs_tipAnalyUnit[j].value[i];
+                            if(params[i].percent && xs_tipAnalyUnit[j].value[i] != "%"){
+                                returnValue += "("+ params[i].percent +"%)";
+                            }
+                            break;
+                        }
+                    }
+                }
+            }
+            return returnValue;
+        }
     },
     series : [
         {
@@ -918,7 +958,6 @@ XS.Main.Pkjc.showOccurRatioPie = function(name, ratio){
         show:false
     };
     // 使用配置项和数据显示贫困发生率的饼图。
-    xs_tipAnalyUnit = [{name:"贫困情况",value:['%']}];
     xs_pkdc_PieChart.setOption(XS.Main.Pkjc.pieOption);
 
 }
@@ -1127,7 +1166,7 @@ XS.Main.Pkjc.showBar = function(regionId,regionName,poorH,poorP,poorRate){
     XS.Main.Pkjc.barOption.series[0].data = xs_pkdc_barChartData.poorHSeries;
     XS.Main.Pkjc.barOption.series[1].data = xs_pkdc_barChartData.poorPSeries;
 
-    xs_tipAnalyUnit = [{name:"贫困户",value:['户']},{name:"贫困户",value:["人"]}];
+    xs_tipAnalyUnit = [{name:"贫困户",value:['户']},{name:"贫困人口",value:["人"]},{name:"贫困情况",value:["%"]}];
     xs_pkdc_BarChart.setOption(XS.Main.Pkjc.barOption);
     XS.Main.Pkjc.showOccurRatioPie(xs_pkdc_categoryData[0],xs_pkdc_poorOccurRate[0]);
 

@@ -76,7 +76,7 @@ XS.Main.Pkjc.detailKV = {
         tabs:[
             {
                 name:["贫困类型","贫困发生率","县区名称","县ID","乡(镇、办事处)数","行政村数","国土总面积","贫困(镇、办事处)数",
-                    "贫困村数","贫困户数","总户数","总人口数","贫困人口"],
+                    "贫困村数","贫困户数","年末总户数","年末总人口","贫困人口"],
                 value:["CBI_type","cps_Poverty_rate","CBI_NAME","CBI_ID","CBI_TOWNS_NUM","CBI_VILLAGE_NUM","CBI_AREA",
                     "CBI_PoorTOWNS_NUM","CBI_PoorVILLAGE_NUM","cps_poor_hhnum","cps_hhnum","cps_pop","cps_poor_pop"],
                 unit:["","%","","","个","个","km²","个","个","户","户","人","人"]
@@ -1472,6 +1472,9 @@ XS.Main.Pkjc.clickItemFund = function(currentCode,currentName){
         pager = $("#xs_pkdc_itemFundDgridDom").datagrid("getPager");
         pager.pagination(XS.Main.Pkjc.ItemFoundPageOpt(pageOption.pageNumber));
     });
+    /*$("#xs_pkdc_itemFundRowDataTreeC").move(function(e){
+        alert(1);
+    });*/
     XS.Main.addDivHover2HiddenUTFGridTip("xs_main_detail");
 
     $("#xs_pkdc_itemFound_rowLoading").css({"visibility":"visible"});
@@ -1565,7 +1568,11 @@ XS.Main.Pkjc.dataTable = function(json,nameArr,valueArr,unitArr,colls,rowH,merge
         if(isNaN(jsonData[valueArr[i]])){
             xs_pkdc_btnCliDatagridObj[i].value = jsonData[valueArr[i]] ? jsonData[valueArr[i]] : "";
         }else{
-            xs_pkdc_btnCliDatagridObj[i].value = jsonData[valueArr[i]] ? jsonData[valueArr[i]] : 0;;
+            if(nameArr[i] == "经度" || nameArr[i] == "纬度" || nameArr[i] == "贫困发生率"){
+                xs_pkdc_btnCliDatagridObj[i].value = jsonData[valueArr[i]] ? jsonData[valueArr[i]].toFixed(2) : 0;
+            }else{
+                xs_pkdc_btnCliDatagridObj[i].value = jsonData[valueArr[i]] ? jsonData[valueArr[i]] : 0;
+            }
         }
     }
     $("#xs_pkdc_tabsContent").empty().append(XS.Searchbox.createTable(xs_pkdc_btnCliDatagridObj,colls, rowH, mergeColls,"","color:#00bbee"));
@@ -2750,8 +2757,8 @@ XS.Main.Pkjc.countyAnalyShow = function(json,index){
             XS.Main.Pkjc.ciAnalyOpt([5,'帮扶措施'],['item',[''],XS.Main.Pkjc.tipAnalyFarmatterCur],legend,[120,40,80,40],xAxis,[['人数(人)','value']],[],[],series,"xs_pkdc_AnalysTabsChart");
             break;
         case 3 ://五通(五四)
-            var field = ["RoadHardNum","BusStateNum","TelNum","WlanNum","ZRoadHardNum","HRoadHardNum","PowerNum"];
-            var xAxis = ['','category',["村沥青路","通客运","通电话","通宽带","通组公路","通户公路","通生产用电"],false];
+            var field = ["RoadHardNum","BusStateNum","WlanNum","HRoadHardNum","PowerNum"];
+            var xAxis = ['','category',["村沥青路","通客运","通宽带","通户公路","通生产用电"],false];
             var legend = [40,[],[]];
             XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
             //[[name,type,yAxisIndex,[[],[]],smooth]]
@@ -2818,8 +2825,8 @@ XS.Main.Pkjc.countyAnalyShow = function(json,index){
             XS.Main.Pkjc.ciAnalyOpt([5,'四有(四有五覆盖)'],['axis',['line'],XS.Main.Pkjc.tipAnalyFarmatterNex],legend,[230,40,70,50],xAxis,[['村(个)','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
             break;
         case 6 ://五覆盖(四五)
-            var field = ["EnroadHardNum","CoMedicNum","InsureNum","WorkSkillNum","EduHelpNum","IndustyNum"];
-            var xAxis = ['','category',["户路硬化","合作医保","养老保险","就业培训","教育资助","增收产业"],false];
+            var field = ["CoMedicNum","InsureNum","WorkSkillNum","EduHelpNum","IndustyNum"];
+            var xAxis = ['','category',["合作医保","养老保险","就业培训","教育资助","增收产业"],false];
             var legend = [40,[],[]];
             XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
             var series = [];

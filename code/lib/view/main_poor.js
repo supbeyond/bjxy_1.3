@@ -98,12 +98,8 @@ XS.Main.readyAddMarkerData = function(objArr){
     if(!(objArr&&objArr.length>0)){
         return;
     }
-    xs_poorHLabel = [];
-    if(document.getElementById("xs_tjfx_range_Legend")){
-        $("#xs_tjfx_range_Legend").remove();
-    }
-    $("#xs_mainC").append(XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.village));
-    $("#xs_tjfx_range_Legend").css("display", "block");
+
+    XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.village,"致贫原因");
 
     if(xs_clickPoorLegendArr.length == 0){
         $(".poorLegendItemRow").css({background:"#eee"});
@@ -122,12 +118,16 @@ XS.Main.readyAddMarkerData = function(objArr){
     for(var i=0; i<objArr.length; i++)
     {
         var obj = objArr[i];
+        if(!obj)continue;
         var iconUrl = "";
         for(var j in XS.Main.poorZonePicArr.poor){
             if(XS.Main.poorZonePicArr.poor[j].name == obj.reason){
                 iconUrl = XS.Main.poorZonePicArr.poor[j].value;
                 break;
             }
+        }
+        if(!iconUrl){
+            iconUrl = "../img/zone/fam/f_09.png";
         }
         obj.xs_p_icon =  iconUrl;
         dataArr.push(obj);

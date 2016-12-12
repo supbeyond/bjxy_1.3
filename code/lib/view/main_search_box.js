@@ -2,14 +2,14 @@
  * Created by GZXS on 2016/6/27.
  */
     XS.Searchbox = {};
-var xs_searchbox_countyFields = [["CITY","所属市"],["C11","国土面积"],["POVERT","贫困发生率(%)"],["C2","镇(乡)数"],["C4","行政村数"],
-    ["C4A","贫困村数"],["C6","总户数"],["C9","贫困户数"],["C7","总人口"],["C10","贫困人口"],["C1","贫困类型"]];
-var xs_searchbox_townFields = [["ECOCROP","耕地面积(亩)"],["GROUPNUM","自然村"],["VILLNUM","行政村"],["TOTALHH","总户数"],
-    ["INPOORHOUSE","贫困户"],["TOTALPOP","总人口"],["POORPOP","贫困人口"],["POVERTYRATE","贫困发生率(%)"]];
+var xs_searchbox_countyFields = [["CITY","所属市"],["C11","国土面积(km²)"],["POVERT","贫困发生率(%)"],["C2","镇(乡)数(个)"],["C4","行政村数(个)"],
+    ["C4A","贫困村数(个)"],["C6","年末总户数(户)"],["C9","贫困户数(户)"],["C7","年末总人口(人)"],["C10","贫困人口(人)"],["C1","贫困类型(户)"]];
+var xs_searchbox_townFields = [["ECOCROP","耕地面积(亩)"],["GROUPNUM","自然村(个)"],["VILLNUM","行政村(个)"],["TOTALHH","年末总户数(户)"],
+    ["INPOORHOUSE","贫困户(户)"],["TOTALPOP","年末总人口(人)"],["POORPOP","贫困人口(人)"],["POVERTYRATE","贫困发生率(%)"]];
 var xs_searchbox_villFields = [["TOWN","所属(乡)镇"],["POVERT","贫困发生率(%)"],["POORTYPE","贫困类型"],["B5","耕地面积(亩)"],
-    ["B2","总户数"],["B2A","贫困户"],["B3","总人口"],["B3A","贫困人口"]];
-var xs_searchbox_poorH = [["HHNAME","户主"],["PTYPE","农户属性"],["AGE","年龄"],["CARDID","身份证"],["POP","家庭人数"],
-    ["PHONE","联系方式"],["A27","住房面积"],["A33","年收入"],["A28","危房"],["A36","各类补贴"],["ISARMYFAMILY","军烈属"],
+    ["B2","总户数(户)"],["B2A","贫困户(户)"],["B3","总人口(人)"],["B3A","贫困人口(人)"]];
+var xs_searchbox_poorH = [["HHNAME","户主"],["PTYPE","农户属性"],["AGE","年龄(岁)"],["CARDID","身份证"],["POP","家庭人数(人)"],
+    ["PHONE","联系方式"],["A27","住房面积(m)²"],["A33","年收入(元)"],["A28","危房"],["A36","各类补贴(元)"],["ISARMYFAMILY","军烈属"],
     ["MAIN_REASON","致贫原因"],["COUNTY","大方县"],["TOWN","乡镇"],["VILL","村"],["VGROUP","组"]];
 var xs_searchbox_replaceFields = [["PTYPE","poorType"],["ALTITUDE","Altitude"],["CARDID","CerNto"],["LATITUDE","Latitude"],["LONGITUDE",
     "Longitude"],["MEMO","Memo"],["HGID","hguid"],["PB_HHID","hid"],["HHNAME","name"],["POP","num"],["MAIN_REASON","reason"]];
@@ -248,9 +248,11 @@ XS.Searchbox.regionBaseInfo = function(i,json,regionId,regionName,fields){
     for(var j in fields){
         if(fields[j][0] == "POVERT"){
             if(xs_searchbox_type == "区县"){
-                baseInfData.push({name:fields[j][1],value:(json[i].C7/json[i].C10) || (json[i].C7/json[i].C10) == 0 ? (json[i].C7/json[i].C10).toFixed(2) : ""});
+                baseInfData.push({name:fields[j][1],value:(json[i].C7/json[i].C10) >= 0 ? (json[i].C7/json[i].C10).toFixed(2) : 0});
+            }else if(xs_searchbox_type == "乡镇"){
+                baseInfData.push({name:fields[j][1],value:(json[i].POORPOP/json[i].TOTALPOP) >= 0 ? (json[i].POORPOP/json[i].TOTALPOP).toFixed(2) : 0});
             }else{
-                baseInfData.push({name:fields[j][1],value:(json[i].B3/json[i].B3A) || (json[i].B3/json[i].B3A) == 0 ? (json[i].B3/json[i].B3A).toFixed(2) : ""});
+                baseInfData.push({name:fields[j][1],value:(json[i].B3/json[i].B3A) >= 0 ? (json[i].B3/json[i].B3A).toFixed(2) : 0});
             }
         }else{
             if(XS.StrUtil.isEmpty(regionId) && XS.StrUtil.isEmpty(regionName) && j>11){

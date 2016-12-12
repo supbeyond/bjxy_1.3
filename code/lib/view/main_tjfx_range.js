@@ -427,13 +427,13 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                     case XS.Main.ZoneLevel.city:
                     {
                         title = obj.CBI_NAME;
-                        jsonObj.push({"name":"贫困镇","value":obj.CBI_PoorTOWNS_NUM});
-                        jsonObj.push({"name":"贫困村","value":obj.CBI_PoorVILLAGE_NUM});
-                        jsonObj.push({"name":"贫困户","value":obj.cps_poor_hhnum});
-                        jsonObj.push({"name":"总人口","value":obj.cps_pop});
-                        jsonObj.push({"name":"贫困人口","value":obj.cps_poor_pop});
-                        jsonObj.push({"name":"贫困发生率","value":obj.cps_Poverty_rate});
-                        jsonObj.push({"name":"贫困类型","value":obj.CBI_type});
+                        jsonObj.push({"name":"贫困镇数","value":obj.CBI_PoorTOWNS_NUM >= 0 ? obj.CBI_PoorTOWNS_NUM + " 个" : ""});
+                        jsonObj.push({"name":"贫困村数","value":obj.CBI_PoorVILLAGE_NUM >= 0 ? obj.CBI_PoorVILLAGE_NUM + " 个" : ""});
+                        jsonObj.push({"name":"贫困户数","value":obj.cps_poor_hhnum >= 0 ? obj.cps_poor_hhnum + " 户" : ""});
+                        jsonObj.push({"name":"年末总人口","value":obj.cps_pop >= 0 ? obj.cps_pop + " 人" : ""});
+                        jsonObj.push({"name":"贫困人口","value":obj.cps_poor_pop >= 0 ? obj.cps_poor_pop + " 人" : ""});
+                        jsonObj.push({"name":"贫困发生率","value":obj.cps_Poverty_rate >= 0 ? obj.cps_Poverty_rate.toFixed(2) + "%" : ""});
+                        jsonObj.push({"name":"贫困类型","value":obj.CBI_type ? obj.CBI_type : ""});
                         break;
                     }
                     case XS.Main.ZoneLevel.county:
@@ -445,23 +445,23 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                         // "TOWB_PoorHouseNum":0,"TOWB_PoorPeopleNum":0,"TOWB_VillNum":5,
                         // "Totolarea":0,"Totolvillnum":8,"tpl_PoorRate":0,"tpl_TownType":"",
                         // "tpl_arden_hhnum":0,"tpl_harden_mile":0,"tpl_team_num":0}
-                        jsonObj.push({"name":"面积","value":obj.Totolarea});
-                        jsonObj.push({"name":"村","value":obj.Totolvillnum});
-                        jsonObj.push({"name":"贫困村","value":obj.TOWB_VillNum});
-                        jsonObj.push({"name":"贫困户","value":obj.TOWB_HouseNum});
-                        jsonObj.push({"name":"贫困人口","value":obj.TOWB_PeopleNum});
-                        jsonObj.push({"name":"贫困发生率","value":obj.tpl_PoorRate});
+                        jsonObj.push({"name":"耕地面积","value":obj.Totolarea >= 0 ? obj.Totolarea + " 亩" : ""});
+                        jsonObj.push({"name":"行政村数","value":obj.Totolvillnum >= 0 ? obj.Totolvillnum + " 个" : ""});
+                        jsonObj.push({"name":"贫困村数","value":obj.TOWB_VillNum >= 0 ? obj.TOWB_VillNum + " 个" : ""});
+                        jsonObj.push({"name":"贫困户数","value":obj.TOWB_HouseNum >= 0 ? obj.TOWB_HouseNum + " 户" : ""});
+                        jsonObj.push({"name":"贫困人口","value":obj.TOWB_PeopleNum >= 0 ? obj.TOWB_PeopleNum + " 人" : ""});
+                        jsonObj.push({"name":"贫困发生率","value":obj.tpl_PoorRate >= 0 ? obj.tpl_PoorRate.toFixed(2) + "%" : ""});
                         break;
                     }
                     case XS.Main.ZoneLevel.town:
                     {
                         title = obj.VBI_NAME;
-                        jsonObj.push({"name":"面积","value":obj.VillArea});
-                        jsonObj.push({"name":"海拔","value":obj.VBI_ALTITUDE});
-                        jsonObj.push({"name":"贫困村","value":obj.VBI_AveIncome});
-                        jsonObj.push({"name":"贫困户","value":obj.VBI_HouseNum});
-                        jsonObj.push({"name":"贫困人口","value":obj.VBI_PeopleNum});
-                        jsonObj.push({"name":"贫困发生率","value":obj.VillPoorRate});
+                        jsonObj.push({"name":"耕地面积","value":obj.VillArea >= 0 ? obj.VillArea + " 亩" : ""});
+                        jsonObj.push({"name":"海拔","value":obj.VBI_ALTITUDE >= 0 ? obj.VBI_ALTITUDE + " m" : ""});
+                        jsonObj.push({"name":"贫困村","value":obj.VBI_AveIncome >= 0 ? obj.VBI_AveIncome + " 个" : ""});
+                        jsonObj.push({"name":"贫困户","value":obj.VBI_HouseNum >= 0 ? obj.VBI_HouseNum + " 户" : ""});
+                        jsonObj.push({"name":"贫困人口","value":obj.VBI_PeopleNum >= 0 ? obj.VBI_PeopleNum + " 人" : ""});
+                        jsonObj.push({"name":"贫困发生率","value":obj.VillPoorRate >= 0 ? obj.VillPoorRate.toFixed(2) + "%" : ""});
                         break;
                     }
                 }
@@ -473,9 +473,9 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                 title = obj.REGION_Name;
                 jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
                 jsonObj.push({"name":"区域","value":obj.REGION_Name});
-                jsonObj.push({"name":"脱贫率","value":obj.OutPoorRate});
-                jsonObj.push({"name":"总户数","value":obj.OutPoorPNum});
-                jsonObj.push({"name":"脱贫户数","value":obj.OutPoorHNum});
+                jsonObj.push({"name":"脱贫率","value":obj.OutPoorRate >= 0 ? obj.OutPoorRate.toFixed(2) + "%" : ""});
+                jsonObj.push({"name":"脱贫户数","value":obj.OutPoorHNum >= 0 ? obj.OutPoorHNum + " 户" : ""});
+                jsonObj.push({"name":"脱贫户数","value":obj.OutPoorPNum >= 0 ? obj.OutPoorPNum + " 户" : ""});
                 break;
             case XS.Main.Tjfx.type.range_wfx:
                 switch (xs_tjfx_zoneLevel){
@@ -490,8 +490,8 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                         title = obj.REGION_Name;
                         jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
                         jsonObj.push({"name":"区域","value":obj.REGION_Name});
-                        jsonObj.push({"name":"危房率","value":obj.DangerHRate});
-                        jsonObj.push({"name":"危房户数","value":obj.DangerHnum});
+                        jsonObj.push({"name":"危房率","value":obj.DangerHRate >= 0 ? obj.DangerHRate.toFixed(2) + "%" : ""});
+                        jsonObj.push({"name":"危房户数","value":obj.DangerHnum >= 0 ? obj.DangerHnum + " 户" : ""});
                         break;
                     case XS.Main.ZoneLevel.county:
                         /*{
@@ -504,15 +504,15 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                         title = obj.REGION_Name;
                         jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
                         jsonObj.push({"name":"区域","value":obj.REGION_Name});
-                        jsonObj.push({"name":"危房率","value":obj.DangerHRate});
-                        jsonObj.push({"name":"危房户数","value":obj.DangerHnum});
+                        jsonObj.push({"name":"危房率","value":obj.DangerHRate >= 0 ? obj.DangerHRate.toFixed(2) + "%" : ""});
+                        jsonObj.push({"name":"危房户数","value":obj.DangerHnum >= 0 ? obj.DangerHnum + " 户" : ""});
                         break;
                     case XS.Main.ZoneLevel.town:
                         title = obj.REGION_Name;
                         jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
                         jsonObj.push({"name":"区域","value":obj.REGION_Name});
-                        jsonObj.push({"name":"危房率","value":obj.DangerHRate});
-                        jsonObj.push({"name":"危房户数","value":obj.DangerHnum});
+                        jsonObj.push({"name":"危房率","value":obj.DangerHRate >= 0 ? obj.DangerHRate.toFixed(2) + "%" : ""});
+                        jsonObj.push({"name":"危房户数","value":obj.DangerHnum >= 0 ? obj.DangerHnum + " 户" : ""});
                         break;
                 }
                 break;
@@ -530,9 +530,9 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                         title = obj.REGION_Name;
                         jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
                         jsonObj.push({"name":"区域","value":obj.REGION_Name});
-                        jsonObj.push({"name":"扶贫搬迁率","value":obj.MoveRate});
-                        jsonObj.push({"name":"搬迁户数","value":obj.MoveHnum});
-                        jsonObj.push({"name":"搬迁人数","value":obj.MovePnum});
+                        jsonObj.push({"name":"扶贫搬迁率","value":obj.MoveRate >= 0 ? obj.MoveRate.toFixed(2) + "%" : ""});
+                        jsonObj.push({"name":"搬迁户数","value":obj.MoveHnum >= 0 ? obj.MoveHnum + " 户" : ""});
+                        jsonObj.push({"name":"搬迁人数","value":obj.MovePnum >= 0 ? obj.MovePnum + " 人" : ""});
                         break;
                     case XS.Main.ZoneLevel.county:
                         /*{
@@ -546,17 +546,17 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                         title = obj.REGION_Name;
                         jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
                         jsonObj.push({"name":"区域","value":obj.REGION_Name});
-                        jsonObj.push({"name":"扶贫搬迁率","value":obj.MoveRate});
-                        jsonObj.push({"name":"搬迁户数","value":obj.MoveHnum});
-                        jsonObj.push({"name":"搬迁人数","value":obj.MovePnum});
+                        jsonObj.push({"name":"扶贫搬迁率","value":obj.MoveRate >= 0 ? obj.MoveRate.toFixed(2) + "%" : ""});
+                        jsonObj.push({"name":"搬迁户数","value":obj.MoveHnum >= 0 ? obj.MoveHnum + " 户" : ""});
+                        jsonObj.push({"name":"搬迁人数","value":obj.MovePnum >= 0 ? obj.MovePnum + " 人" : ""});
                         break;
                     case XS.Main.ZoneLevel.town:
                         title = obj.REGION_Name;
                         jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
                         jsonObj.push({"name":"区域","value":obj.REGION_Name});
-                        jsonObj.push({"name":"扶贫搬迁率","value":obj.MoveRate});
-                        jsonObj.push({"name":"搬迁户数","value":obj.MoveHnum});
-                        jsonObj.push({"name":"搬迁人数","value":obj.MovePnum});
+                        jsonObj.push({"name":"扶贫搬迁率","value":obj.MoveRate >= 0 ? obj.MoveRate.toFixed(2) + "%" : ""});
+                        jsonObj.push({"name":"搬迁户数","value":obj.MoveHnum >= 0 ? obj.MoveHnum + " 户" : ""});
+                        jsonObj.push({"name":"搬迁人数","value":obj.MovePnum >= 0 ? obj.MovePnum + " 人" : ""});
                         break;
                 }
                 break;
@@ -604,7 +604,7 @@ XS.Main.Tjfx.range_showThemeLayerMouseOverTip = function(x, y, title, jsonObjArr
     xs_isShowUtfGridTip = false;
     if ($("#xs_tjfx_range_themeTipC").length < 1)
     {
-        var tag ="<div id='xs_tjfx_range_themeTipC' style='width: 200px; height: 200px; border-radius: 2px; border: 5px solid #00bbee;position:absolute;z-index: 12;opacity: 0.9; display: none;background: #ffffff;'></div>";
+        var tag ="<div id='xs_tjfx_range_themeTipC' style='width: 200px; height: 220px; border-radius: 2px; border: 5px solid #00bbee;position:absolute;z-index: 12;opacity: 0.9; display: none;background: #ffffff;'></div>";
         $("#xs_mainC").append(tag);
     }
     $("#xs_tjfx_range_themeTipC").empty();

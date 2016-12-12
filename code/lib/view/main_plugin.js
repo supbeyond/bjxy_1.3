@@ -1725,7 +1725,6 @@ XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, 
                 }
                 break;
             case XS.Main.ZoneLevel.village:
-                XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,superLevel,'致贫原因');
                 if(data.xt_ctype == XS.Main.ClusterPointerStyle.poor_info_obj){
                     XS.Searchbox.cachePositionMarker(superLevel+1,data.hid,marker);
                 }else{
@@ -1881,6 +1880,7 @@ var xs_isClearMarkers = false;
 XS.Main.clearMarker = function() {
     xs_isClearMarkers = true;
     xs_markerLayer.clearMarkers();
+    xs_markerLayer.addMarker(XS.Main.Markers.city);
     xs_poorLabelLayer.setVisibility(false);
     if($("#xs_tjfx_range_Legend").length>0) $("#xs_tjfx_range_Legend").css({display:"none"});
 }

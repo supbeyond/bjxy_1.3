@@ -196,7 +196,7 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
     xs_tjfx_graph_themeLayer.on("mouseout", XS.Main.Tjfx.Graph.closeInfoWin);
     xs_tjfx_graph_themeLayer.on("click", XS.Main.Tjfx.Graph.themeLayerClickCallback);
 
-    xs_tjfx_graph_themeLayer.setVisibility(false);
+    xs_tjfx_graph_themeLayer.setVisibility(true);
     xs_MapInstance.getMapObj().addLayer(xs_tjfx_graph_themeLayer);
 
     var data = {};
