@@ -67,12 +67,12 @@ html, body{
 }
 #xs_title{
     vertical-align: top;
-    z-index1: 999;
-    position: relative;
-    width1: 100%;
-    left1: -10px;
-    top1: 10px;
-    text-align1: center;
+    z-index1: 10;
+    position: absolute;
+    width: 100%;
+    left: 0px;
+    top: 0px;
+    text-align: center;
     background: transparent;
     font-size: 35px;
     font-weight: 900;
