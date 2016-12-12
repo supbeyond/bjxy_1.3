@@ -428,7 +428,8 @@ XS.Main.Pkjc.pkdc = function(){
                         for(var i in json){
                             if(json[i].TOWB_ID == xs_clickMapFutureId.toString().slice(0,9)){
                                 xs_pkdc_preName = json[i].TOWB_NAME;
-                                XS.Main.Pkjc.showInfoWin(XS.Main.ZoneLevel.village, xs_currentZoneFuture.data.乡镇代码, xs_clickMapFutureId);
+                                XS.Main.Pkjc.showInfoWin(XS.Main.ZoneLevel.village, json[i].TOWB_ID, xs_clickMapFutureId);
+                                break;
                             }
                         }
                     }else{
