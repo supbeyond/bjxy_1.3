@@ -371,11 +371,11 @@ html, body{
 .xs_poor_45_tip{
     position: absolute;
     bottom: 10px;
-    background-color: rgba(0, 0, 0, 0.31);
+    background-color: rgba(0, 0, 0, 0.51);
     width: 130px;
-    text-align: center;
+    text-align: left;
     color: #FFFFFF;
-    padding-bottom: 2px;
+   /* padding-bottom: 2px;*/
     display: block;
     font-size: 13px;
     padding: 8px 0px;
