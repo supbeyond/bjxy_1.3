@@ -179,8 +179,9 @@ XS.Main.Pkjc.barOption = {
     title: {
     },
     tooltip: {
-        show: false,
-        showContent: true
+        show: true,
+        showContent: true,
+        formatter:XS.Main.Pkjc.tipAnalyFarmatterNex
     },
     legend: {
         data:['贫困户','贫困人口']
@@ -212,14 +213,28 @@ XS.Main.Pkjc.barOption = {
         name: '贫困户',
         type: 'bar',
         barGap: 0,
+        label:{
+          normal:{
+              show:true,
+              position:"right",
+              formatter:"{c}户"
+          }
+        },
         data: []
     },
-        {
-            name: '贫困人口',
-            type: 'bar',
-            barGap: 0,
-            data: []
-        }]
+    {
+        name: '贫困人口',
+        type: 'bar',
+        barGap: 0,
+        label:{
+            normal:{
+                show:true,
+                position:"right",
+                formatter:"{c}人"
+            }
+        },
+        data: []
+    }]
 };
 
 //贫困发生率显示的option
@@ -232,10 +247,10 @@ XS.Main.Pkjc.pieOption = {
         right:10
     },
     tooltip: {
-        show: false,
+        show: true,
         trigger: 'item',
         showContent: true,
-        formatter: '{c}'
+        formatter:XS.Main.Pkjc.tipAnalyFarmatterCur
     },
     series : [
         {
@@ -243,11 +258,11 @@ XS.Main.Pkjc.pieOption = {
             type: 'pie',
             radius: '50%',
             animationDuration1: 1,
-            label: {
-                normal: {
-                    show: true,
-                    position: 'inside',
-                    formatter: "{d}%"
+            label:{
+                normal:{
+                    show:true,
+                    position:"inside",
+                    formatter:"{d}%"
                 }
             },
             data:[{
@@ -805,19 +820,29 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
         var xs_pkdc_detailCash = [];
         var xs_pkdc_detailCashJson = null;
         var xs_pkdc_detailClickNum = 0;
-        data = {pd_id:id};
+        data = {pid:id};
+        var isPoorHfinish = false;
         $("#xs_pkdc_msgWin_p").css("display", "block");
-        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryVillBaseById", data, function(json) {
+        XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryVillBaseInfoByPId", data, function(json) {
             $("#xs_pkdc_msgWin_p").css("display", "none");
-            if(json && xs_pkdc_detailClickNum == 0) {
-                xs_pkdc_detailCashJson = json;
+            if(json && json.length>0 && xs_pkdc_detailClickNum == 0) {
+                xs_pkdc_detailCashJson = json[0];
+                isPoorHfinish = true;
+                json = json[0];
                 var villBaseInfNameField = XS.Main.Pkjc.detailKV.village.tabs[0].name;
                 var villBaseInfValueField = XS.Main.Pkjc.detailKV.village.tabs[0].value;
-                for(var i in villBaseInfNameField){
-                    if(villBaseInfNameField[i] == "贫困发生率" || villBaseInfNameField[i] == "贫困发生率(%)"){
-                        xs_pkdc_detailCash.push({name:villBaseInfNameField[i],value:json[villBaseInfValueField[i]] || json[villBaseInfValueField[i]]==0 ? json[villBaseInfValueField[i]].toFixed(2) : ""});
+                var villBaseInfUnitField = XS.Main.Pkjc.detailKV.village.tabs[0].unit;
+                for(var i=0;i<villBaseInfNameField.length;i++){
+                    xs_pkdc_detailCash.push({});
+                    if(villBaseInfUnitField && villBaseInfUnitField[i]){
+                        xs_pkdc_detailCash[i].name = villBaseInfNameField[i] + "(" + villBaseInfUnitField[i] + ")";
                     }else{
-                        xs_pkdc_detailCash.push({name:villBaseInfNameField[i],value:json[villBaseInfValueField[i]] || json[villBaseInfValueField[i]]==0 ? json[villBaseInfValueField[i]] : ""});
+                        xs_pkdc_detailCash[i].name = villBaseInfNameField[i];
+                    }
+                    if(isNaN(json[villBaseInfValueField[i]])){
+                        xs_pkdc_detailCash[i].value = json[villBaseInfValueField[i]] ? json[villBaseInfValueField[i]] : "";
+                    }else{
+                        xs_pkdc_detailCash[i].value = json[villBaseInfValueField[i]] ? json[villBaseInfValueField[i]] : 0;;
                     }
                 }
                 $("#xs_pkdc_msg_barC").empty().append(XS.Main.Poor.createTable(xs_pkdc_detailCash, 2, 50,"","color:#00bbee"));
@@ -840,10 +865,11 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                 $('#xs_pkdc_linkButtonC').append(xs_pkdc_positionBtn);
                 $('#xs_pkdc_positionBtn').linkbutton({iconCls:'icon-main_position'});
                 $('#xs_pkdc_positionBtn').click(function(){
+                    if(!isPoorHfinish)return;
                     XS.Main.Poor.clearRelocationLayer();
-                    if(xs_pkdc_detailCashJson.VBI_LONGITUDE && xs_pkdc_detailCashJson.VBI_LATITUDE){
-                        var lonLat = new SuperMap.LonLat(xs_pkdc_detailCashJson.VBI_LONGITUDE, xs_pkdc_detailCashJson.VBI_LATITUDE);
-                        XS.Main.readyAddMarkers(lonLat,XS.Main.ZoneLevel.village,xs_pkdc_detailCashJson.VBI__ID);
+                    if(xs_pkdc_detailCashJson.LONGITUDE && xs_pkdc_detailCashJson.LATITUDE){
+                        var lonLat = new SuperMap.LonLat(xs_pkdc_detailCashJson.LONGITUDE, xs_pkdc_detailCashJson.LATITUDE);
+                        XS.Main.readyAddMarkers(lonLat,XS.Main.ZoneLevel.village,xs_pkdc_detailCashJson.VID);
                     }
                 });
 
@@ -892,6 +918,7 @@ XS.Main.Pkjc.showOccurRatioPie = function(name, ratio){
         show:false
     };
     // 使用配置项和数据显示贫困发生率的饼图。
+    xs_tipAnalyUnit = [{name:"贫困情况",value:['%']}];
     xs_pkdc_PieChart.setOption(XS.Main.Pkjc.pieOption);
 
 }
@@ -1028,7 +1055,7 @@ XS.Main.Pkjc.reqCurrAndPreName = function(){
     }
 }
 /**
- * 显示市级的下层bar
+ * 显示下级的下层bar
  * @param regionId
  * @param regionName
  * @param poorH
@@ -1045,7 +1072,7 @@ XS.Main.Pkjc.showBar = function(regionId,regionName,poorH,poorP,poorRate){
         xs_pkdc_categoryData.push(xs_pkdc_cacheDataArr[i][regionName]);
         xs_pkdc_barChartData.poorHSeries.push(xs_pkdc_cacheDataArr[i][poorH]);
         xs_pkdc_barChartData.poorPSeries.push(xs_pkdc_cacheDataArr[i][poorP]);
-        xs_pkdc_poorOccurRate.push(xs_pkdc_cacheDataArr[i][poorRate]);
+        xs_pkdc_poorOccurRate.push(xs_pkdc_cacheDataArr[i][poorRate].toFixed(2));
     }
 
     var gridN = xs_pkdc_categoryData.length;
@@ -1100,6 +1127,7 @@ XS.Main.Pkjc.showBar = function(regionId,regionName,poorH,poorP,poorRate){
     XS.Main.Pkjc.barOption.series[0].data = xs_pkdc_barChartData.poorHSeries;
     XS.Main.Pkjc.barOption.series[1].data = xs_pkdc_barChartData.poorPSeries;
 
+    xs_tipAnalyUnit = [{name:"贫困户",value:['户']},{name:"贫困户",value:["人"]}];
     xs_pkdc_BarChart.setOption(XS.Main.Pkjc.barOption);
     XS.Main.Pkjc.showOccurRatioPie(xs_pkdc_categoryData[0],xs_pkdc_poorOccurRate[0]);
 
@@ -1115,6 +1143,11 @@ XS.Main.Pkjc.showBar = function(regionId,regionName,poorH,poorP,poorRate){
 //显示村级的下层grid
 XS.Main.Pkjc.showHouseDataGrid = function(){
     var json = xs_pkdc_cacheDataArr;
+    for(var i=0;i<json.length;i++){
+        json[i].num = json[i].num + "人";
+        json[i].income = json[i].income + "元";
+        json[i].Altitude = json[i].Altitude + "m";
+    }
     $("#xs_pkdc_msg_barC").css("height","100%");
     $('#xs_pkdc_village').datagrid({
         data: json,
