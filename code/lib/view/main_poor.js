@@ -768,101 +768,125 @@ XS.Main.Poor.show45State = function(id,name){
                     '<div class="xs_poor_45_title">四有</div>'+
                     //安全用电
                     '<div id="xs_poor_45_aqyd" class="xs_poor_45_c">'+
-                        '<div class="xs_poor_45_f">安全用电</div>';
-                        if(json.ISSAFEELECTRIC !='是'){
+                        '<div class="xs_poor_45_f">安全用电建设</div>';
+                        if(json.ISSAFEELECTRIC =='否'){
                             content += '<img src="../img/poor/安全用电.jpg" style="-webkit-filter: grayscale(1)">'+
-                            '<div class="xs_poor_45_tip"><span style="display: inline-block;">安全用电:否</span></div>';
+                            '<div class="xs_poor_45_tip"><span style="display: inline-block;text-align: left;">是否有安全用电:<span style="color: #00c5fa;"><否/span></span></div>';
                         }else{
                             content += '<img src="../img/poor/安全用电.jpg">'+
-                            '<div class="xs_poor_45_tip"><span style="display: inline-block;">安全用电:是</span></div>';
+                            '<div class="xs_poor_45_tip"><span style="display: inline-block;">是否有安全用电:<span style="color: #00c5fa;">是</span></span></div>';
                         }
                      content
                      += '</div>'+
                     '<div id="xs_poor_45_aqys" class="xs_poor_45_c">'+
-                        '<div class="xs_poor_45_f">安全饮水</div>';
-                        if(json.ISSAFEWATER !='是'){
+                        '<div class="xs_poor_45_f">安全饮水建设</div>';
+                        if(json.ISSAFEWATER =='否'){
                             content += '<img src="../img/poor/安全饮水.jpg" style="-webkit-filter: grayscale(1)">'+
-                            '<div class="xs_poor_45_tip"><span style="display: inline-block;">安全饮水:否</span></div>';
+                            '<div class="xs_poor_45_tip"><span style="display: inline-block;">是否已解决安全饮水:<span style="color: #00c5fa;">否</span></span></div>';
                         }else{
                             content += '<img src="../img/poor/安全饮水.jpg">'+
-                            '<div class="xs_poor_45_tip"><span style="display: inline-block;">安全饮水:是</span></div>';
+                            '<div class="xs_poor_45_tip"><span style="display: inline-block;">是否已解决安全饮水:<span style="color: #00c5fa;">是</span></span></div>';
                         }
                         content
                             += '</div>'+
                     '<div id="xs_poor_45_aqzf" class="xs_poor_45_c">'+
                         '<div class="xs_poor_45_f">安全住房</div>';
                         //ISSAFEBUILDING
-                        if(json.ISSAFEBUILDING !='是'){
+                        if(json.ISSAFEBUILDING =='否'){
                             content += '<img src="../img/poor/安全住房.jpg" style="-webkit-filter: grayscale(1)">'+
-                            '<div class="xs_poor_45_tip"><span style="display: inline-block;">安全住房:否</span></div>';
+                            '<div class="xs_poor_45_tip"><span style="display: inline-block;">是否有安全住房:<span style="color: #00c5fa;">否</span></span></div>';
                         }else{
                             content += '<img src="../img/poor/安全住房.jpg">'+
-                            '<div class="xs_poor_45_tip"><span style="display: inline-block;">安全住房:是</span></div>';
+                            '<div class="xs_poor_45_tip"><span style="display: inline-block;">是否有安全住房:<span style="color: #00c5fa;">是</span></span></div>';
                         }
                         content
                             += '</div>'+
                     '<div id="xs_poor_45_jnpx" class="xs_poor_45_c">'+
                         '<div class="xs_poor_45_f">就业技能培训</div>';
-                        if(json.ISSKILL !='是'){
+                        if(json.ISSKILL =='否'){
                             content += '<img src="../img/poor/就业技能培训.jpg" style="-webkit-filter: grayscale(1)">'+
-                            '<div class="xs_poor_45_tip"><span style="display: inline-block;">就业技能培训:否</span></div>';
+                            '<div class="xs_poor_45_tip"><span style="display: inline-block;">是否有就业技能:<span style="color: #00c5fa;">否</span></span></div>';
                         }else{
                             content += '<img src="../img/poor/就业技能培训.jpg">'+
-                            '<div class="xs_poor_45_tip"><span style="display: inline-block;">就业技能培训:是</span></div>';
+                            '<div class="xs_poor_45_tip"><span style="display: inline-block;">是否有就业技能:<span style="color: #00c5fa;">是</span></span></div>';
                         }
                         content
                             += '</div>'+
                     '<div class="xs_poor_45_title" style="margin-top: 30px;">五覆盖</div>'+
                     '<div id="xs_poor_45_rhl" class="xs_poor_45_c">'+
-                        '<div class="xs_poor_45_f">入户路</div>';
-                        if(json.ISHARDROAD =='是' && json.ISHARDYARD =='是'){
-                            content += '<img src="../img/poor/入户路.jpg">'+
-                            '<div class="xs_poor_45_tip"><span style="display: inline-block;">入户路:已通</span><span style="display: inline-block;">路到坝子:已到</span></div>';
-                        }else{
+                        '<div class="xs_poor_45_f">入户路及院坝硬化</div>';
+                        if(json.ISHARDROAD =='否' && json.ISHARDYARD =='否'){
                             content += '<img src="../img/poor/入户路.jpg" style="-webkit-filter: grayscale(1)">'+
-                            '<div class="xs_poor_45_tip"><span style="display: inline-block;">入户路:未通</span><span style="display: inline-block;">路到坝子:未到</span></div>';
+                            '<div class="xs_poor_45_tip">' +
+                            '<span style="display: inline-block;">入户路是否已硬化:<span style="color: #00c5fa;">否</span></span>' +
+                            '<div style="padding:0px;margin:2px 0px;height: 1px;line-height:1px; font-size:0px; background-color: rgba(249, 249, 249, 0.56);width: 100%;"></div>' +
+                            '<span style="display: inline-block;">院坝是否已硬化:<span style="color: #00c5fa;">否</span></span>' +
+                            '</div>';
+                        }else{
+                            content += '<img src="../img/poor/入户路.jpg">'+
+                            '<div class="xs_poor_45_tip">' +
+                            '<span style="display: inline-block;">入户路是否已硬化:<span style="color: #00c5fa;">是</span></span>' +
+                            '<div style="padding:0px;margin:2px 0px;height: 1px;line-height:1px; font-size:0px; background-color: rgba(249, 249, 249, 0.56);width: 100%;"></div>' +
+                            '<span style="display: inline-block;">院坝是否已硬化:<span style="color: #00c5fa;">是</span></span>' +
+                            '</div>';
                         }
                         content
                             += '</div>'+
                     '<div id="xs_poor_45_ylbx" class="xs_poor_45_c">'+
-                        '<div class' +
-                        '="xs_poor_45_f">养老保险</div>';
-                        if(json.INSUREDNUM >0 ){
+                        '<div class="xs_poor_45_f">社会养老保险</div>';
+                        if(json.INSUREDNUM >0 || json.INSURINGNUM>0 ){
                             content += '<img src="../img/poor/养老保险.jpg">';
                         }else{
                             content += '<img src="../img/poor/养老保险.jpg" style="-webkit-filter: grayscale(1)">';
                         }
-                            content += '<div class="xs_poor_45_tip"><span style="display: inline-block;">参保人数:'+json.INSUREDNUM+'</span><span style="display: inline-block;">未参保人数:'+json.INSURINGNUM+'</span></div>';
+                            content += '<div class="xs_poor_45_tip">' +
+                            '<span style="display: inline-block;">已参加养老保险人数(人):<span style="color: #00c5fa;">'+json.INSUREDNUM+'</span></span>' +
+                            '<div style="padding:0px;margin:2px 0px;height: 1px;line-height:1px; font-size:0px; background-color: rgba(249, 249, 249, 0.56);width: 100%;"></div>' +
+                            '<span style="display: inline-block;">符合参加养老保险条件而未参加人数(人):<span style="color: #00c5fa;">'+json.INSURINGNUM+'</span></span>' +
+                            '</div>';
                         content
                             += '</div>'+
                     '<div id="xs_poor_45_yljz" class="xs_poor_45_c">'+
-                        '<div class="xs_poor_45_f">医疗救助</div>';
-                        if(json.MEDICALAIDNUM >0 ){
+                        '<div class="xs_poor_45_f">合作医疗及医疗救助</div>';
+                        if(json.MEDICALAIDNUM >0 ||json.MEDICALAIDMONEY>0){
                             content += '<img src="../img/poor/医疗救助.jpg">';
                         }else{
                             content += '<img src="../img/poor/医疗救助.jpg" style="-webkit-filter: grayscale(1)">';
                         }
-                            content += '<div class="xs_poor_45_tip"><span style="display: inline-block;">医保人数:'+json.MEDICALAIDNUM+'</span><span style="display: block;">医保金:'+json.MEDICALAIDMONEY+'</span></div>';
+                            content += '<div class="xs_poor_45_tip">' +
+                            '<span style="display: inline-block;">参加合作医疗人数(人):<span style="color: #00c5fa;">'+json.MEDICALAIDNUM+'</span></span>' +
+                            '<div style="padding:0px;margin:2px 0px;height: 1px;line-height:1px; font-size:0px; background-color: rgba(249, 249, 249, 0.56);width: 100%;"></div>' +
+                            '<span style="display: block;">合医报销外需医疗救助金额(万元):<span style="color: #00c5fa;">'+json.MEDICALAIDMONEY+'</span></span></div>';
                         content
                             += '</div>'+
                     '<div id="xs_poor_45_zscy" class="xs_poor_45_c">'+
                         '<div class="xs_poor_45_f">增收产业</div>';
-                        if(json.HASINDUSTRY =='有'|| json.HASINDUSTRY =='是'){
-                            content += '<img src="../img/poor/增收产业.jpg">';
-                        }else{
+                        if(json.HASINDUSTRY =='没有'|| json.HASINDUSTRY =='否'){
+                            json.HASINDUSTRY = '否';
                             content += '<img src="../img/poor/增收产业.jpg" style="-webkit-filter: grayscale(1)">';
+                        }else{
+                            json.HASINDUSTRY = '是';
+                            content += '<img src="../img/poor/增收产业.jpg">';
                         }
-                        content += '<div class="xs_poor_45_tip"><span style="display: inline-block;">增收产业:'+json.HASINDUSTRY+'</span><span style="display: inline-block;">待增收产业数:'+json['SOLVINGINDUSTINGSIZE']+'</span><span style="display: inline-block;">待增收产业:'+json['SOLVINGINDUSTING']+'</span></div>';
+                        content += '<div class="xs_poor_45_tip">' +
+                        '<span style="display: inline-block;">是否有增生产业:<span style="color: #00c5fa;">'+json.HASINDUSTRY+'</span></span>' +
+                       /* '<span style="display: inline-block;">需扶持解决建设规模:'+json['SOLVINGINDUSTINGSIZE']+'</span>' +
+                        '<span style="display: inline-block;">待增收产业:'+json['SOLVINGINDUSTING']+'</span>' +*/
+                        '</div>';
                         content
                             += '</div>'+
                     '<div id="xs_poor_45_jyzz" class="xs_poor_45_c">'+
                         '<div class="xs_poor_45_f">教育资助</div>';
-                        if(json.HIGHSCHOOLUPNUM >0 ){
+                        if(json.HIGHSCHOOLUPNUM >0 || json.HISCHOOLUPUNHELPEDNUM>0){
                             content += '<img src="../img/poor/教育资助.jpg">';
                         }else{
                             content += '<img src="../img/poor/教育资助.jpg" style="-webkit-filter: grayscale(1)">';
                         }
-                        content += '<div class="xs_poor_45_tip"><span style="display: inline-block;">教育资助数:'+json.HIGHSCHOOLUPNUM+'</span></div>';
+                        content += '<div class="xs_poor_45_tip">' +
+                        '<span style="display: inline-block;">就读高中(中职)以上人数(人):<span style="color: #00c5fa;">'+json.HIGHSCHOOLUPNUM+'</span></span>' +
+                        '<div style="padding:0px;margin:2px 0px;height: 1px;line-height:1px; font-size:0px; background-color: rgba(249, 249, 249, 0.56);width: 100%;"></div>' +
+                        '<span style="display: inline-block;">就读高中(中职)以上未得到国家教育资助人数(人):<span style="color: #00c5fa;">'+json.HISCHOOLUPUNHELPEDNUM+'</span></span>' +
+                        '</div>';
                         content
                             += '</div>'+
                 '</div>';
@@ -2051,16 +2075,16 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
         "</div>"
     });
     $('#xs_poor_detail_tab').tabs('add',{
-        title:'生活环境',
+        title:'生活条件情况',
         content:"<div id='xs_poor_detail_tab_environment' style='padding: 5px; height: 100%; box-sizing: border-box;'></div>"
     });
     $('#xs_poor_detail_tab').tabs('add',{
-        title:'住房信息',
+        title:'住房情况',
         content:"<div id='xs_poor_detail_tab_hose_info' style='padding: 5px; height: 100%; box-sizing: border-box;'></div>",
         closable:false
     });
     $('#xs_poor_detail_tab').tabs('add',{
-        title:'土地信息',
+        title:'生产条件情况',
         content:"<div id='xs_poor_detail_tab_soil_info' style='padding: 5px; height: 100%; box-sizing: border-box;'></div>"
     });
     $('#xs_poor_detail_tab').tabs('add',{
@@ -2088,8 +2112,8 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
        {"name": "人口", "value": obj.PERSON_NUM},
        {"name": "识别标准", "value": obj.HB_STANDARD},
        {"name": "脱贫标识", "value": obj.HB_OUTOFPOOR},
-       {"name": "经度", "value": obj.HB_LONGITUDE},
-       {"name": "纬度", "value": obj.HB_LATITUDE}
+       {"name": "经度", "value": XS.StrUtil.isEmpty(obj.HB_LONGITUDE)?"":(parseFloat(obj.HB_LONGITUDE)).toFixed(2)},
+       {"name": "纬度", "value": XS.StrUtil.isEmpty(obj.HB_LATITUDE)?"":(parseFloat(obj.HB_LATITUDE)).toFixed(2)}
    ];
     $("#xs_poor_detail_tab_info").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 3, 34,"", "color:#00bbee"));
 
@@ -2109,13 +2133,13 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
                 rownumbers: true,
                 columns: [[
                     {field: 'name', title: '姓名', width: '10%',styler: function(value,row,index){return 'height:34px;'}},
-                    {field: 'idcord', title: '证件号码', width: '14%'},
                     {field: 'sex', title: '性别', width: '5%'},
-                    {field: 'age', title: '年龄', width: '5%'},
-                    {field: 'relation', title: '与户主关系', width: '10%'},
-                    {field: 'marriage', title: '劳动力', width: '10%'},
-                    {field: 'healthy', title: '身体状态', width: '10%'},
-                    {field: 'workPlace', title: '打工地', width: '19%'}
+                    {field: 'idcord', title: '证件号码', width: '14%'},
+                    {field: 'relation', title: '关系', width: '10%'},
+                    /*{field: 'age', title: '年龄', width: '5%'},*/
+                    {field: 'marriage', title: '婚姻', width: '10%'},
+                    {field: 'healthy', title: '健康状况', width: '15%'},
+                    {field: 'workPlace', title: '务工状况', width: '19%'}
                 ]]
             });
         }
@@ -2126,17 +2150,17 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
         if(json && json.length>0){
             var obj = json[0];
             var objArr = [
-                {"name":"通电","value":obj.HC_ELECTRIC},
-                {"name":"通广播电视","value":obj.HC_TELEVISION},
-                {"name":"燃料类型","value":obj.HC_FUEL},
+                {"name":"是否通生活用电","value":obj.HC_ELECTRIC},
                 {"name":"饮水情况","value":obj.HC_WATER_STATE},
-                {"name":"燃料类型","value":obj.HC_FUEL},
+                {"name":"饮水是否安全","value":obj.HC_SAFE_WATER},
+                {"name":"是否通广播电视","value":obj.HC_TELEVISION},
+                {"name":"主要燃料类型","value":obj.HC_FUEL},
+                /*{"name":"燃料类型","value":obj.HC_FUEL},*/
                 {"name":"院坝是否硬化","value":obj.ISHARDYARD},
-                {"name":"安全用水","value":obj.HC_SAFE_WATER},
                 {"name":"入户路类型","value":obj.HC_INDOOR_ROAD},
-                {"name":"距离村主路","value":obj.HC_BIGROAD},
                 {"name":"入户路是否硬化","value":obj.ISHARDROAD},
-                {"name":"最近乡镇距离","value":obj.Hc_vill_distan}
+                {"name":"距离村主干路(公里)","value":obj.HC_BIGROAD},
+                {"name":"离最近的乡镇集市距离(公里)","value":obj.Hc_vill_distan}
             ];
             $("#xs_poor_detail_tab_environment").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 3, 50,"", "color:#00bbee"));
         }
@@ -2147,11 +2171,11 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
         if(json && json.length>0){
             var obj = json[0];
             var objArr = [
-                {"name":"住房面积(m²)","value":obj.HH_HOUSE_AREA},
-                {"name":"建房时间","value":obj.HH_HDATE},
-                {"name":"主要结构","value":obj.HH_MAINSTRU},
+                {"name":"住房面积(平方米)","value":obj.HH_HOUSE_AREA},
+                {"name":"建房时间(年份)","value":obj.HH_HDATE},
+                {"name":"房屋主要结构","value":obj.HH_MAINSTRU},
                 {"name":"有无卫生厕所","value":obj.HH_HWC},
-                {"name":"是否政府补助危改放或易地扶贫搬迁户","value":obj.ISHELPHOUSE},
+                {"name":"是否政府补助危改房或易地扶贫搬迁房","value":obj.ISHELPHOUSE},
             ];
             $("#xs_poor_detail_tab_hose_info").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 2, 68,"","color:#00bbee"));
         }
@@ -2163,26 +2187,28 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
             var obj = json[0];
 
             var objArr = [
-                {"name":"<span style='color:#000000;'>牧草地面积(㎡)</span>","cspan":2},
-                {"name":obj.HDY_GRASS,"cspan":1},
-                {"name":"<span style='color:#000000;'>水田面积(㎡)</span>","cspan":2},
-                {"name":obj.HDY_WATER_AREA,"cspan":1},
+                {"name":"<span style='color:#00c400;'>耕地面积(亩)</span>","cspan":3},
+                {"name":obj.HDY_TOTAL_EARTH,"cspan":3},
+                {"name":"<span style='color:#ff0000;'>a.有效灌溉面积(亩)</span>","cspan":1},
+                {"name":obj.HDY_IRRI,"cspan":1},
+                {"name":"<span style='color:#ff0000;'>b.田(亩)</span>","cspan":1},
+                {"name":obj.HDY_FIELD,"cspan":1},
+                {"name":"<span style='color:#ff0000;'>c.土(亩)</span>","cspan":1},
+                {"name":obj.HDY_LAND,"cspan":1},
 
-                {"name":"<span style='color:#00c400;'>林地面积(㎡)</span>","cspan":3},
+                {"name":"<span style='color:#00c400;'>林地面积(亩)</span>","cspan":3},
                 {"name":obj.HDY_FOREST,"cspan":3},
-                {"name":"<span style='color:#ff0000;'>a.退耕还林面积(㎡)</span>","cspan":2},
+                {"name":"<span style='color:#ff0000;'>a.退耕还林面积(亩)</span>","cspan":2},
                 {"name":obj.HDY_TGHL,"cspan":1},
-                {"name":"<span style='color:#ff0000;'>b.林果面积(㎡)</span>","cspan":2},
+                {"name":"<span style='color:#ff0000;'>b.林果面积(亩)</span>","cspan":2},
                 {"name":obj.HDY_FRUIT,"cspan":1},
 
-                {"name":"<span style='color:#00c400;'>耕地面积(㎡)</span>","cspan":3},
-                {"name":obj.HDY_TOTAL_EARTH,"cspan":3},
-                {"name":"<span style='color:#ff0000;'>a.有效灌溉面积(㎡)</span>","cspan":1},
-                {"name":obj.HDY_IRRI,"cspan":1},
-                {"name":"<span style='color:#ff0000;'>b.田(㎡)</span>","cspan":1},
-                {"name":obj.HDY_FIELD,"cspan":1},
-                {"name":"<span style='color:#ff0000;'>c.土(㎡)</span>","cspan":1},
-                {"name":obj.HDY_LAND,"cspan":1},
+                {"name":"<span style='color:#000000;'>牧草地面积(亩)</span>","cspan":2},
+                {"name":obj.HDY_GRASS,"cspan":1},
+                {"name":"<span style='color:#000000;'>水面面积(亩)</span>","cspan":2},
+                {"name":obj.HDY_WATER_AREA,"cspan":1},
+
+
             ];
             var tstr = XS.Main.Poor.createTableCollspan(objArr, 6, 40,"color:#00bbee;min-width:20px;");
 
@@ -2217,30 +2243,33 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
                 {"name":"<span style='color:#000000;'>五保供养金(元)</span>","cspan":1},
                 {"name":obj.HI_ENDOW,"cspan":1},
 
-                {"name":"<span style='color:#00c400;'>各类补贴(元)</span>","cspan":2},
-                {"name":obj.HI_OTHER,"cspan":2},
+                {"name":"<span style='color:#00c400;'>各类补贴(元)</span>","cspan":1},
+                {"name":obj.HI_OTHER,"cspan":1},
 
-                {"name":"<span style='color:#ff0000;'>a.计划生育金(元)</span>","cspan":1},
+                {"name":"<div style='color:#ff0000;'>a.领取计划生育金<br/>（含少生快富、奖励扶助)(元)</div>","cspan":1},
                 {"name":obj.HI_ONECHILD,"cspan":1},
 
-                {"name":"<span style='color:#ff0000;'>b.低保金(元)</span>","cspan":1},
+                {"name":"<span style='color:#ff0000;'>b.领取低保金(元)</span>","cspan":1},
                 {"name":obj.HI_LOW,"cspan":1},
 
-                {"name":"<span style='color:#ff0000;'>c.养老保险金(元)</span>","cspan":1},
+                {"name":"<span style='color:#ff0000;'>c.领取养老保险金(元)</span>","cspan":1},
                 {"name":obj.HI_OLD,"cspan":1},
 
                 {"name":"<span style='color:#ff0000;'>d.新农合报销医疗费(元)</span>","cspan":1},
                 {"name":obj.HI_MEDIC,"cspan":1},
 
-                {"name":"<span style='color:#ff0000;'>e.医疗救助金(元)</span>","cspan":1},
+                {"name":"<span style='color:#ff0000;'>e.临时救助金(元)</span>","cspan":1},
                 {"name":obj.HI_MEDHELP,"cspan":1},
 
-                {"name":"<span style='color:#ff0000;'>f.生态补偿金(元)</span>","cspan":1},
+                {"name":"<span style='color:#ff0000;'>f.生态补偿金<br/>(含退耕还林、草原生态奖补等)(元)</span>","cspan":1},
                 {"name":obj.HI_ECO,"cspan":1}
             ];
-            var tstr = XS.Main.Poor.createTableCollspan(objArr, 6, 40,"color:#00bbee;min-width:20px;");
+            var tstr = XS.Main.Poor.createTableCollspan(objArr, 4, 40,"color:#00bbee;min-width:20px;");
             //XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 3, 40,"","color:#00bbee;min-width:50px;")
             $("#xs_poor_detail_tab_income_info").empty().append(tstr);
+            $("#xs_poor_detail_tab_income_info .datagrid-cell").css({
+                "height":"auto"
+            });
         }
     });
 }
