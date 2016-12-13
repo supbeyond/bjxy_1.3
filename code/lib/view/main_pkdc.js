@@ -191,7 +191,7 @@ XS.Main.Pkjc.barOption = {
                     returnValue += '<br/><div style="width: 10px;height: 10px;display: inline-block;border-radius: 50%;background: ' + params[i].color + ';"></div>';
                     for(var j=0;j<xs_tipAnalyUnit.length;j++){
                         if(xs_tipAnalyUnit[j].name == params[0].seriesName){
-                            returnValue += params[i].seriesName + ': ' + params[i].value + xs_tipAnalyUnit[j].value[i];
+                            returnValue += params[i].seriesName + ': ' + params[i].value.toFixed(2) + xs_tipAnalyUnit[j].value[i];
                             if(params[i].percent && xs_tipAnalyUnit[j].value[i] != "%"){
                                 returnValue += "("+ params[i].percent +"%)";
                             }
@@ -280,7 +280,7 @@ XS.Main.Pkjc.pieOption = {
                     returnValue += '<br/><div style="width: 10px;height: 10px;display: inline-block;border-radius: 50%;background: ' + params[i].color + ';"></div>';
                     for(var j=0;j<xs_tipAnalyUnit.length;j++){
                         if(xs_tipAnalyUnit[j].name == params[0].seriesName){
-                            returnValue += params[i].name + ': ' + params[i].value + xs_tipAnalyUnit[j].value[i];
+                            returnValue += params[i].name + ': ' + params[i].value.toFixed(2) + xs_tipAnalyUnit[j].value[i];
                             if(params[i].percent && xs_tipAnalyUnit[j].value[i] != "%"){
                                 returnValue += "("+ params[i].percent +"%)";
                             }

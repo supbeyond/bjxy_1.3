@@ -12,7 +12,7 @@ XS.Main.Tjfx.Graph.featuersArr = {
 
 //缓存行政区域信息:县级参考：XS.Main.CacheZoneInfos.county
 XS.Main.Tjfx.Graph.CacheZoneInfos = {
-    county:{graphType:-1,data:[]},
+    county:{graphType:-1,parentCode:"",data:[]},
     town:[],
     village:[]
 };
@@ -24,16 +24,16 @@ XS.Main.Tjfx.Graph.filed = [
     ["CoMedicalRate", "EndowRate", "LowRate"],
     ["WaterSafeNum","ElectricSafeNum","HouseSafeNum","YardHardNum"],
     ["CoMedicNum","InsureNum","WorkSkillNum","EduHelpNum","IndustyNum"],
-    ["RoadHardNum","BusStateNum","WlanAndTelNum","PowerNum","ZAndHRoadHardNum"],
-    ["BeautifulNum","HealthRoomNum","CultureNum","EconomyNum"]
+    ["RoadHardNum","BusStateNum","WlanNum","HRoadHardNum","PowerNum"],
+    ["BeautifulNum","CultureNum","EconomyNum","HealthRoomNum"]
 ];
 XS.Main.Tjfx.Graph.axisXLabels = [
     ["耕地","林地","退耕还林","牧草","退耕还草","水域","荒漠化","林果"],
     ["参合率", "养老率", "低保率"],
     ["安全饮水","安全用电","安全住房","院坝硬化"],
-    ["合作医保","养老保险","技能培训","教育资助","增收产业"],
-    ["通村沥青路","通客运","通宽带及电话","通生产用电","通组及户公路"],
-    ["美丽乡村","村卫生室","文化场所","村集体经济"]
+    ["合作医保","养老保险","就业培训","教育资助","增收产业"],
+    ["通沥青路","通客运","通宽带","通户公路","通生产用电"],
+    ["美丽乡村","有文化场所","有集体经济","有卫生室"]
 ];
 
 var xs_tjfx_graph_type = 0;
@@ -146,14 +146,14 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
         }
         case  XS.Main.Tjfx.type.bar.fiveOf54:
         {
-            XS.Main.Tjfx.Graph.themeParam("Bar",XS.Main.Tjfx.Graph.filed[4],[0, 200],[22,15,5,5],[15,30,15],
-                ["200", "150", "100","50", "0"],XS.Main.Tjfx.Graph.axisXLabels[4],380);
+            XS.Main.Tjfx.Graph.themeParam("Bar",XS.Main.Tjfx.Graph.filed[4],[0, 200],[25,15,5,5],[10,25,10],
+                ["200", "150", "100","50", "0"],XS.Main.Tjfx.Graph.axisXLabels[4],330);
             break;
         }
         case  XS.Main.Tjfx.type.bar.fourOf54:
         {
-            XS.Main.Tjfx.Graph.themeParam("Bar",XS.Main.Tjfx.Graph.filed[5],[0, 40],[22,15,5,5],[10,20,10],
-                ["40", "30", "20","10", "0"],XS.Main.Tjfx.Graph.axisXLabels[5],250);
+            XS.Main.Tjfx.Graph.themeParam("Bar",XS.Main.Tjfx.Graph.filed[5],[0, 40],[25,15,5,5],[10,25,10],
+                ["40", "30", "20","10", "0"],XS.Main.Tjfx.Graph.axisXLabels[5],280);
             break;
         }
     }
@@ -210,7 +210,30 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
             //2.获取空间数据
             //3.通过业务数据过滤空间数据
 
-            if(type == XS.Main.Tjfx.Graph.CacheZoneInfos.county.graphType && XS.Main.Tjfx.Graph.CacheZoneInfos.county.data.length > 0){
+            var cacheGraphType = XS.Main.Tjfx.Graph.CacheZoneInfos.county.graphType;
+            var cacheDataLength = XS.Main.Tjfx.Graph.CacheZoneInfos.county.data.length;
+            var currentCode = type;
+            switch (currentCode){
+                case XS.Main.Tjfx.type.bar.fiveOf45:
+                case XS.Main.Tjfx.type.bar.fourOf45:
+                    currentCode = XS.Main.Tjfx.type.bar.fourOf45;
+                    break;
+                case XS.Main.Tjfx.type.bar.fiveOf54:
+                case XS.Main.Tjfx.type.bar.fourOf54:
+                    currentCode = XS.Main.Tjfx.type.bar.fiveOf54;
+                    break;
+            }
+            switch (cacheGraphType){
+                case XS.Main.Tjfx.type.bar.fiveOf45:
+                case XS.Main.Tjfx.type.bar.fourOf45:
+                    cacheGraphType = XS.Main.Tjfx.type.bar.fourOf45;
+                    break;
+                case XS.Main.Tjfx.type.bar.fiveOf54:
+                case XS.Main.Tjfx.type.bar.fourOf54:
+                    cacheGraphType = XS.Main.Tjfx.type.bar.fiveOf54;
+                    break;
+            }
+            if(cacheGraphType == currentCode && cacheDataLength > 0){
                 //2.获取空间数据
                 if(XS.Main.Tjfx.Graph.featuersArr.county.data.length > 0){
                     XS.Main.Tjfx.Graph.addFeatures2Layer(XS.Main.Tjfx.Graph.featuersArr.county.data,XS.Main.Tjfx.Graph.CacheZoneInfos.county.data,0);
@@ -259,18 +282,6 @@ XS.Main.Tjfx.Graph.theme = function(parentLevel,parentCode,type){
                 XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json) {
                     XS.CommonUtil.hideLoader();
                     if (json && json.length > 0) {
-                        switch (type){
-                            case XS.Main.Tjfx.type.bar.fiveOf54:
-                            case XS.Main.Tjfx.type.bar.fourOf54:
-                            {
-                                for(var i in json){
-                                    json[i].WlanAndTelNum = json[i].WlanNum +　json[i].TelNum;
-                                    json[i].ZAndHRoadHardNum = json[i].ZRoadHardNum +　json[i].HRoadHardNum;
-                                }
-
-                                break
-                            }
-                        }
                         XS.Main.Tjfx.Graph.CacheZoneInfos.county.data = json;
                         XS.Main.Tjfx.Graph.CacheZoneInfos.county.graphType = type;
 
@@ -665,8 +676,8 @@ XS.Main.Tjfx.Graph.addFeatures2Layer = function(featureArr, data, parentLevel){ 
             var maxValueLength = axisYInterval.toString().length;
             if(axisYInterval == 0){
                 axisYInterval = 4;
-            }
-            else if(axisYInterval>10 && axisYInterval<=20 && axisYInterval%2!=0){
+            }else if(axisYInterval>10 && axisYInterval<=20 && axisYInterval%2!=0)
+            {
                 axisYInterval += 1;
             }else if(axisYInterval>20 && axisYInterval%(Math.pow(10,maxValueLength-1))!=0){
                 var bottomValue = Math.floor(axisYInterval/(Math.pow(10,maxValueLength-1)))*10;
@@ -718,21 +729,25 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
         var title = "";
         var x = e.event.clientX;
         var y = e.event.clientY;
+        var areaUnit = "";
         switch (xs_tjfx_graph_zoneLevel){
             case XS.Main.ZoneLevel.city:
             {
+                areaUnit = " 公顷";
                 jsonObjArr.push({name:'区域',value:attributes.Name});
                 jsonObjArr.push({name:'区域ID',value:attributes.AdminCode});
                 break;
             }
             case XS.Main.ZoneLevel.county:
             {
+                areaUnit = " 亩";
                 jsonObjArr.push({name:'区域',value:attributes.乡镇名称});
                 jsonObjArr.push({name:'区域ID',value:attributes.乡镇代码});
                 break;
             }
             case XS.Main.ZoneLevel.town:
             {
+                areaUnit = " 亩";
                 jsonObjArr.push({name:'区域',value:attributes.vd_name});
                 jsonObjArr.push({name:'区域ID',value:attributes.OldID});
                 break;
@@ -745,50 +760,50 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
                 switch (info.field){
                     case "C12":{
                         jsonObjArr.push({name:'土地类型',value:"耕地"});
-                        jsonObjArr.push({name:'面积',value:attributes.C12});
-                        jsonObjArr.push({name:'占比(%)',value:new Number((attributes.C12/sum)*100).toFixed(2)});
+                        jsonObjArr.push({name:'耕地面积',value:attributes.C12>=0 ? attributes.C12 + areaUnit : ""});
+                        jsonObjArr.push({name:'占比',value:new Number((attributes.C12/sum)*100).toFixed(2) + "%"});
                         break;
                     }
                     case "C14":{
                         jsonObjArr.push({name:'土地类型',value:"林地"});
-                        jsonObjArr.push({name:'面积',value:attributes.C14});
-                        jsonObjArr.push({name:'占比(%)',value:new Number((attributes.C14/sum)*100).toFixed(2)});
+                        jsonObjArr.push({name:'林地面积',value:attributes.C14>=0 ? attributes.C14 + areaUnit : ""});
+                        jsonObjArr.push({name:'占比',value:new Number((attributes.C14/sum)*100).toFixed(2) + "%"});
                         break;
                     }
                     case "C14A":{
                         jsonObjArr.push({name:'土地类型',value:"退耕还林"});
-                        jsonObjArr.push({name:'面积',value:attributes.C14A});
-                        jsonObjArr.push({name:'占比(%)',value:new Number((attributes.C14A/sum)*100).toFixed(2)});
+                        jsonObjArr.push({name:'面积',value:attributes.C14A>=0 ? attributes.C14A + areaUnit : ""});
+                        jsonObjArr.push({name:'占比',value:new Number((attributes.C14A/sum)*100).toFixed(2) + "%"});
                         break;
                     }
                     case "C15":{
                         jsonObjArr.push({name:'土地类型',value:"牧草"});
-                        jsonObjArr.push({name:'面积',value:attributes.C15});
-                        jsonObjArr.push({name:'占比(%)',value:new Number((attributes.C15/sum)*100).toFixed(2)});
+                        jsonObjArr.push({name:'面积',value:attributes.C15>=0 ? attributes.C15 + areaUnit : ""});
+                        jsonObjArr.push({name:'占比 ',value:new Number((attributes.C15/sum)*100).toFixed(2) + "%"});
                         break;
                     }
                     case "C19":{
                         jsonObjArr.push({name:'土地类型',value:"退耕还草"});
-                        jsonObjArr.push({name:'面积',value:attributes.C19});
-                        jsonObjArr.push({name:'占比(%)',value:new Number((attributes.C19/sum)*100).toFixed(2)});
+                        jsonObjArr.push({name:'面积',value:attributes.C19>=0 ? attributes.C19 + areaUnit : ""});
+                        jsonObjArr.push({name:'占比',value:new Number((attributes.C19/sum)*100).toFixed(2) + "%"});
                         break;
                     }
                     case "C16":{
                         jsonObjArr.push({name:'土地类型',value:"水域"});
-                        jsonObjArr.push({name:'面积',value:attributes.C16});
-                        jsonObjArr.push({name:'占比(%)',value:new Number((attributes.C16/sum)*100).toFixed(2)});
+                        jsonObjArr.push({name:'面积',value:attributes.C16>=0 ? attributes.C16 + areaUnit : ""});
+                        jsonObjArr.push({name:'占比',value:new Number((attributes.C16/sum)*100).toFixed(2) + "%"});
                         break;
                     }
                     case "C17":{
                         jsonObjArr.push({name:'土地类型',value:"荒漠化"});
-                        jsonObjArr.push({name:'面积',value:attributes.C17});
-                        jsonObjArr.push({name:'占比(%)',value:new Number((attributes.C17/sum)*100).toFixed(2)});
+                        jsonObjArr.push({name:'面积',value:attributes.C17>=0 ? attributes.C17 + areaUnit : ""});
+                        jsonObjArr.push({name:'占比',value:new Number((attributes.C17/sum)*100).toFixed(2) + "%"});
                         break;
                     }
                     case "C14B":{
                         jsonObjArr.push({name:'土地类型',value:"林果"});
-                        jsonObjArr.push({name:'面积',value:attributes.C14B});
-                        jsonObjArr.push({name:'占比(%)',value:new Number((attributes.C14B/sum)*100).toFixed(2)});
+                        jsonObjArr.push({name:'面积',value:attributes.C14B>=0 ? attributes.C14B + areaUnit : ""});
+                        jsonObjArr.push({name:'占比',value:new Number((attributes.C14B/sum)*100).toFixed(2) + "%"});
                         break;
                     }
                 }
@@ -798,7 +813,7 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
                 title = "社会保障";
                 for(var i in XS.Main.Tjfx.Graph.filed[1]){
                     if(XS.Main.Tjfx.Graph.filed[1][i] == info.field){
-                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[1][i],value:new Number(info.value).toFixed(2)});
+                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[1][i],value:new Number(info.value).toFixed(2) + "%"});
                     }
                 }
                 break;
@@ -807,7 +822,7 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
                 title = "四有五覆盖(四有)";
                 for(var i in XS.Main.Tjfx.Graph.filed[2]){
                     if(XS.Main.Tjfx.Graph.filed[2][i] == info.field){
-                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[2][i],value:new Number(info.value).toFixed(2)});
+                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[2][i],value:new Number(info.value) + " 户"});
                     }
                 }
                 break;
@@ -816,7 +831,7 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
                 title = "四有五覆盖(五覆盖)";
                 for(var i in XS.Main.Tjfx.Graph.filed[3]){
                     if(XS.Main.Tjfx.Graph.filed[3][i] == info.field){
-                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[3][i],value:new Number(info.value).toFixed(2)});
+                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[3][i],value:new Number(info.value) + " 人"});
                     }
                 }
                 break;
@@ -825,7 +840,7 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
                 title = "四有五覆盖(五覆盖)";
                 for(var i in XS.Main.Tjfx.Graph.filed[4]){
                     if(XS.Main.Tjfx.Graph.filed[4][i] == info.field){
-                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[4][i],value:new Number(info.value).toFixed(2)});
+                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[4][i],value:new Number(info.value) + " 个"});
                     }
                 }
                 break;
@@ -834,7 +849,7 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
                 title = "四有五覆盖(五覆盖)";
                 for(var i in XS.Main.Tjfx.Graph.filed[5]){
                     if(XS.Main.Tjfx.Graph.filed[5][i] == info.field){
-                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[5][i],value:new Number(info.value).toFixed(2)});
+                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[5][i],value:new Number(info.value) + " 个"});
                     }
                 }
                 break;

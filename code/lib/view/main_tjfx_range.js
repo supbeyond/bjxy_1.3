@@ -31,8 +31,8 @@ XS.Main.Tjfx.range = function(level, parentId, type){
     xs_tjfx_type =  type;
 
     xs_isShowUtfGridTip = false;
-    XS.Main.hiddenDivTags();
-    XS.Main.Tjfx.removeLayer();
+    //XS.Main.hiddenDivTags();
+    //XS.Main.Tjfx.removeLayer();
     XS.Main.clearMarker();
     XS.Main.Poor.clearRelocationLayer();
     xs_clickMapType = XS.Main.clickMapType.tjfx_range;
@@ -85,13 +85,13 @@ XS.Main.Tjfx.range = function(level, parentId, type){
             tuliName = "贫困发生率";
             break;
         case XS.Main.Tjfx.type.range_tpx:
-            tuliName = "脱贫率";
+            tuliName = "脱贫户数";
             break;
         case XS.Main.Tjfx.type.range_wfx:
-            tuliName = "危房率";
+            tuliName = "危房户数";
             break;
         case XS.Main.Tjfx.type.range_fpbqx:
-            tuliName = "扶贫搬迁率";
+            tuliName = "扶贫搬迁户数";
             break;
     }
     XS.Main.Tjfx.range_createRangeLegendTag(type,level,tuliName);
@@ -358,6 +358,7 @@ XS.Main.Tjfx.range_addFeatures2Layer = function(featureArr, data, level){ // 0:c
                     break;
                 }
                 var rate = 0;
+                var text = "";
                 switch (xs_tjfx_type)
                 {
                     case XS.Main.Tjfx.type.range_pkfsx:
@@ -373,22 +374,26 @@ XS.Main.Tjfx.range_addFeatures2Layer = function(featureArr, data, level){ // 0:c
                                 rate = obj.VillPoorRate;
                                 break;
                         }
+                        text = (rate*1.0).toFixed(2)+"%";
                         break;
                     case XS.Main.Tjfx.type.range_tpx:
-                        rate = obj.OutPoorRate;
+                        rate = obj.OutPoorHNum;
+                        text = rate+"户";
                         break;
                     case XS.Main.Tjfx.type.range_wfx:
-                        rate = obj.DangerHRate;
+                        rate = obj.DangerHnum;
+                        text = rate+"户";
                         break;
                     case XS.Main.Tjfx.type.range_fpbqx:
-                        rate = obj.MoveRate;
+                        rate = obj.MoveHnum;
+                        text = rate+"户";
                         break;
                 }
 
                 feature.attributes.xs_tjfx_range = rate;
                 feature.data.xs_data = obj;
                 features.push(feature);
-                geoText = new SuperMap.Geometry.GeoText(feature.geometry.getBounds().getCenterLonLat().lon+xOff, feature.geometry.getBounds().getCenterLonLat().lat+yOff,(rate*1.0).toFixed(2)+"%");
+                geoText = new SuperMap.Geometry.GeoText(feature.geometry.getBounds().getCenterLonLat().lon+xOff, feature.geometry.getBounds().getCenterLonLat().lat+yOff,text);
                 geotextFeature = new SuperMap.Feature.Vector(geoText);
                 geotextFeatures.push(geotextFeature);
             }
@@ -473,9 +478,9 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                 title = obj.REGION_Name;
                 jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
                 jsonObj.push({"name":"区域","value":obj.REGION_Name});
-                jsonObj.push({"name":"脱贫率","value":obj.OutPoorRate >= 0 ? obj.OutPoorRate.toFixed(2) + "%" : ""});
+                //jsonObj.push({"name":"脱贫率","value":obj.OutPoorRate >= 0 ? obj.OutPoorRate.toFixed(2) + "%" : ""});
                 jsonObj.push({"name":"脱贫户数","value":obj.OutPoorHNum >= 0 ? obj.OutPoorHNum + " 户" : ""});
-                jsonObj.push({"name":"脱贫户数","value":obj.OutPoorPNum >= 0 ? obj.OutPoorPNum + " 户" : ""});
+                jsonObj.push({"name":"脱贫人数","value":obj.OutPoorPNum >= 0 ? obj.OutPoorPNum + " 人" : ""});
                 break;
             case XS.Main.Tjfx.type.range_wfx:
                 switch (xs_tjfx_zoneLevel){
@@ -490,7 +495,7 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                         title = obj.REGION_Name;
                         jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
                         jsonObj.push({"name":"区域","value":obj.REGION_Name});
-                        jsonObj.push({"name":"危房率","value":obj.DangerHRate >= 0 ? obj.DangerHRate.toFixed(2) + "%" : ""});
+                        //jsonObj.push({"name":"危房率","value":obj.DangerHRate >= 0 ? obj.DangerHRate.toFixed(2) + "%" : ""});
                         jsonObj.push({"name":"危房户数","value":obj.DangerHnum >= 0 ? obj.DangerHnum + " 户" : ""});
                         break;
                     case XS.Main.ZoneLevel.county:
@@ -504,14 +509,14 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                         title = obj.REGION_Name;
                         jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
                         jsonObj.push({"name":"区域","value":obj.REGION_Name});
-                        jsonObj.push({"name":"危房率","value":obj.DangerHRate >= 0 ? obj.DangerHRate.toFixed(2) + "%" : ""});
+                        //jsonObj.push({"name":"危房率","value":obj.DangerHRate >= 0 ? obj.DangerHRate.toFixed(2) + "%" : ""});
                         jsonObj.push({"name":"危房户数","value":obj.DangerHnum >= 0 ? obj.DangerHnum + " 户" : ""});
                         break;
                     case XS.Main.ZoneLevel.town:
                         title = obj.REGION_Name;
                         jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
                         jsonObj.push({"name":"区域","value":obj.REGION_Name});
-                        jsonObj.push({"name":"危房率","value":obj.DangerHRate >= 0 ? obj.DangerHRate.toFixed(2) + "%" : ""});
+                        //jsonObj.push({"name":"危房率","value":obj.DangerHRate >= 0 ? obj.DangerHRate.toFixed(2) + "%" : ""});
                         jsonObj.push({"name":"危房户数","value":obj.DangerHnum >= 0 ? obj.DangerHnum + " 户" : ""});
                         break;
                 }
@@ -530,7 +535,7 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                         title = obj.REGION_Name;
                         jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
                         jsonObj.push({"name":"区域","value":obj.REGION_Name});
-                        jsonObj.push({"name":"扶贫搬迁率","value":obj.MoveRate >= 0 ? obj.MoveRate.toFixed(2) + "%" : ""});
+                        //jsonObj.push({"name":"扶贫搬迁率","value":obj.MoveRate >= 0 ? obj.MoveRate.toFixed(2) + "%" : ""});
                         jsonObj.push({"name":"搬迁户数","value":obj.MoveHnum >= 0 ? obj.MoveHnum + " 户" : ""});
                         jsonObj.push({"name":"搬迁人数","value":obj.MovePnum >= 0 ? obj.MovePnum + " 人" : ""});
                         break;
@@ -546,7 +551,7 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                         title = obj.REGION_Name;
                         jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
                         jsonObj.push({"name":"区域","value":obj.REGION_Name});
-                        jsonObj.push({"name":"扶贫搬迁率","value":obj.MoveRate >= 0 ? obj.MoveRate.toFixed(2) + "%" : ""});
+                        //jsonObj.push({"name":"扶贫搬迁率","value":obj.MoveRate >= 0 ? obj.MoveRate.toFixed(2) + "%" : ""});
                         jsonObj.push({"name":"搬迁户数","value":obj.MoveHnum >= 0 ? obj.MoveHnum + " 户" : ""});
                         jsonObj.push({"name":"搬迁人数","value":obj.MovePnum >= 0 ? obj.MovePnum + " 人" : ""});
                         break;
@@ -554,7 +559,7 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                         title = obj.REGION_Name;
                         jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
                         jsonObj.push({"name":"区域","value":obj.REGION_Name});
-                        jsonObj.push({"name":"扶贫搬迁率","value":obj.MoveRate >= 0 ? obj.MoveRate.toFixed(2) + "%" : ""});
+                        //jsonObj.push({"name":"扶贫搬迁率","value":obj.MoveRate >= 0 ? obj.MoveRate.toFixed(2) + "%" : ""});
                         jsonObj.push({"name":"搬迁户数","value":obj.MoveHnum >= 0 ? obj.MoveHnum + " 户" : ""});
                         jsonObj.push({"name":"搬迁人数","value":obj.MovePnum >= 0 ? obj.MovePnum + " 人" : ""});
                         break;

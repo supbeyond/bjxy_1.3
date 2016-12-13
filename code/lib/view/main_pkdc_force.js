@@ -77,6 +77,7 @@ var xs_pkdc_itemFoundChart = null;
     var data = {regionid: xs_currentZoneCode};
      $("#xs_pkdc_itemFound_rowLoading").css({"visibility":"visible"});
      XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryProjecFundByRegionidLike", data, function(json){
+         $("#xs_pkdc_itemFound_rowLoading").css({"visibility":"hidden"});
          if(json && json.length > 0){
              for(var i=0;i<json.length;i++){
                  if(json[i].FOUNDNUM == rowData.FOUNDNUM){
@@ -140,11 +141,12 @@ var xs_pkdc_itemFoundChart = null;
                      for(var i in xs_pkdc_itemFoundFJsonData[index]){
                          if(xs_pkdc_itemFoundFJsonData[index][i].REGIONID == region_id) {
                              tipStr += xs_pkdc_itemFoundFJsonData[index][i].PROJECTNAME + ": ";
-                             tipStr += xs_pkdc_itemFoundFJsonData[index][i].FINAFOUND + "<br/>";
+                             var findFound = xs_pkdc_itemFoundFJsonData[index][i].FINAFOUND;
+                             tipStr += (findFound>=0 ? findFound + "万元" : "") + "<br/>";
                          }
                      }
                  }else if(params.data.target){
-                     tipStr = params.name + ": " + params.data.value;
+                     tipStr = params.name + ': <br/><hr border="1" color="gray"/>' + params.data.tipValue;
                  }
                  return tipStr;
              }
@@ -176,7 +178,6 @@ var xs_pkdc_itemFoundChart = null;
 
              xs_pkdc_itemFoundChart = echarts.init(document.getElementById("xs_pkdc_itemFundRowDataTree"));
              xs_pkdc_itemFoundChart.setOption(xs_pkdc_itemFoundForceOpt);
-             $("#xs_pkdc_itemFound_rowLoading").css({"visibility":"hidden"});
 
             //资金流节点  点击事件
              xs_pkdc_itemFoundChart.on("click",function(params){
@@ -199,6 +200,10 @@ var xs_pkdc_itemFoundChart = null;
                  var num = 0;
                  for(var i in xs_pkdc_itemFoundFJsonData[index]){
                      if(xs_pkdc_itemFoundFJsonData[index][i].REGIONID == params.data.region_id){
+                         xs_pkdc_itemFoundFJsonData[index][i].REACHCOUNTYFOUNDS = xs_pkdc_itemFoundFJsonData[index][i].REACHCOUNTYFOUNDS>=0 ? xs_pkdc_itemFoundFJsonData[index][i].REACHCOUNTYFOUNDS + "万元" : "";
+                         xs_pkdc_itemFoundFJsonData[index][i].HELPHOUSE = xs_pkdc_itemFoundFJsonData[index][i].HELPHOUSE>=0 ? xs_pkdc_itemFoundFJsonData[index][i].HELPHOUSE + "户" : "";
+                         xs_pkdc_itemFoundFJsonData[index][i].HELPPEOPLE = xs_pkdc_itemFoundFJsonData[index][i].HELPPEOPLE>=0 ? xs_pkdc_itemFoundFJsonData[index][i].HELPPEOPLE + "人" : "";
+                         xs_pkdc_itemFoundFJsonData[index][i].FINAFOUND = xs_pkdc_itemFoundFJsonData[index][i].FINAFOUND>=0 ? xs_pkdc_itemFoundFJsonData[index][i].FINAFOUND + "万元" : "";
                          xs_pkdc_itemFoundFJsonData[index][i].serialNo = num
                          nodeDataArr.push(xs_pkdc_itemFoundFJsonData[index][i]);
                          num ++;
@@ -218,7 +223,6 @@ var xs_pkdc_itemFoundChart = null;
                  });
              });
          }else{
-             $("#xs_pkdc_itemFound_rowLoading").css({"visibility":"hidden"});
              XS.CommonUtil.showMsgDialog("", "获取数据失败！");
          }
      });
@@ -293,6 +297,7 @@ XS.Main.Pkjc.itemFoundMock = function (parentNode, index) {
             source : parentNode.id,
             target : childNode.id,
             weight : 1,
+            tipValue:parentNode.value + "万元 - " + childNode.value + "万元 ",
             value:parentNode.value + " - " + childNode.value
         });
         XS.Main.Pkjc.itemFoundMock(childNode, index + 1);
