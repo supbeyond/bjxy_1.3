@@ -111,30 +111,30 @@ XS.Main.load = function(){
         {
             layerName: "County_Code@"+XS.Constants.dataSourceName,
             utfTileSize: 256,
-            pixcell: 128,
+            pixcell: 32,
             isUseCache: true
         },{
-            utfgridResolution: 128
+            utfgridResolution: 32
         }
     );
     xs_utfGridTownLayer = new SuperMap.Layer.UTFGrid("utfgridtown",XS.Constants.map_query,
         {
             layerName: "Twon_Code@"+XS.Constants.dataSourceName,
             utfTileSize: 256,
-            pixcell: 64,
+            pixcell: 32,
             isUseCache: true
         },{
-            utfgridResolution: 64
+            utfgridResolution: 32
         }
     );
     xs_utfGridVillageLayer = new SuperMap.Layer.UTFGrid("utfgridvillage",XS.Constants.map_query,
         {
             layerName: "Village_Code@"+XS.Constants.dataSourceName,
             utfTileSize: 256,
-            pixcell: 128,
+            pixcell: 32,
             isUseCache: true
         },{
-            utfgridResolution: 128
+            utfgridResolution: 32
         }
     );
     xs_vectorLayer = new SuperMap.Layer.Vector("vectorLayer");

@@ -1292,7 +1292,7 @@ XS.Main.Pkjc.clickDutyChain = function(zoneLevel, stateCode,currentName){
                 var content = '<div id="xs_pkdc_orgchart_container" style="width:auto; min-width: 100%; height:100%; text-align: center;position: relative; top: 0px; left: 0px;line-height: 100%;vertical-align: middle;overflow:auto;background: #ffffff;"></div>';
                 XS.CommonUtil.openDialog("xs_main_detail", currentName+"-责任链", "icon-man", content, false, true, true, 1000, 350,null,null,function(){
                     $("#xs_main_detail").dialog("destroy");
-                    $("#xs_pkdc_msgWin").window("open");
+                   /* $("#xs_pkdc_msgWin").window("open");*/
                 });
                 $('#xs_pkdc_orgchart_container').orgchart({
                     'data' : obj,
@@ -1360,7 +1360,7 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode, zoneName){
     //id, title, iconCls, content, resizable, maximizable, modal, width, height, left, top, closeCallback, maximizeCallback, minimizeCallback
     XS.CommonUtil.openDialog("xs_main_detail", zoneName + "-任务监控", "icon-man", content, false, true, false, 350, 550,0,null,function(){
         $("#xs_main_detail").dialog("destroy");
-        $("#xs_pkdc_msgWin").window("open");
+       /* $("#xs_pkdc_msgWin").window("open");*/
         xs_clusterLayer.destroyCluster();
         xs_clusterControl.deactivate();
         XS.Main.clearVectorLayer();

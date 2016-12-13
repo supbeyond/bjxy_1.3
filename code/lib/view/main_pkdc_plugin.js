@@ -1452,7 +1452,7 @@ XS.Main.Pkjc.clickItemFund = function(currentCode,currentName){
     XS.CommonUtil.openDialog("xs_main_detail", currentName + "-帮扶措施", "icon-man", content, false, true, false, 700,600,0,null,function(){
         $("#xs_echartjs").empty().append('<script src="../base/echart/echarts.js"></script>');
         $("#xs_main_detail").dialog("destroy");
-        $("#xs_pkdc_msgWin").window("open");
+        /*$("#xs_pkdc_msgWin").window("open");*/
     },function(){
         $("#xs_pkdc_itemFundRowDataTreeC").css("width","100%");
         xs_pkdc_itemFoundChart.resize();
