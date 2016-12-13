@@ -675,7 +675,6 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                         xs_pkdc_currentName = xs_pkdc_preName;
                         xs_pkdc_preName = xs_pkdc_countyNames[xs_pkdc_superStateCode];
                         xs_pkdc_zoneLevel = xs_pkdc_zoneLevel - 1;
-
                         XS.Main.Pkjc.showInfoWin(xs_pkdc_zoneLevel, xs_pkdc_superStateCode, xs_pkdc_currentStateCode);
                         break;
                     case XS.Main.ZoneLevel.town:
