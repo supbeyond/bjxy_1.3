@@ -1364,7 +1364,7 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode, zoneName){
         xs_clusterLayer.destroyCluster();
         xs_clusterControl.deactivate();
         XS.Main.clearVectorLayer();
-        XS.Main.showMarker();
+        //XS.Main.showMarker();
         if(xs_pkdc_isTaskline){
             XS.Main.returnBefore();
         }

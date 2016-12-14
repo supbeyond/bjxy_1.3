@@ -479,6 +479,7 @@ XS.Main.Tjfx.range_themeLayerMouseOverCallback = function(event){
                 jsonObj.push({"name":"区域ID","value":obj.REGION_ID});
                 jsonObj.push({"name":"区域","value":obj.REGION_Name});
                 //jsonObj.push({"name":"脱贫率","value":obj.OutPoorRate >= 0 ? obj.OutPoorRate.toFixed(2) + "%" : ""});
+                jsonObj.push({"name":"计划脱贫户数","value":(obj.PlanOutPoorHNum + obj.OutPoorHNum) >= 0 ? (obj.PlanOutPoorHNum + obj.OutPoorHNum) + " 户" : ""});
                 jsonObj.push({"name":"脱贫户数","value":obj.OutPoorHNum >= 0 ? obj.OutPoorHNum + " 户" : ""});
                 jsonObj.push({"name":"脱贫人数","value":obj.OutPoorPNum >= 0 ? obj.OutPoorPNum + " 人" : ""});
                 break;

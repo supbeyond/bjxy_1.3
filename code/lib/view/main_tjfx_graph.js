@@ -837,19 +837,23 @@ XS.Main.Tjfx.Graph.showInfoWin = function(e){
                 break;
             }
             case XS.Main.Tjfx.type.bar.fiveOf54:{
-                title = "四有五覆盖(五覆盖)";
+                title = "五通四有(五通)";
                 for(var i in XS.Main.Tjfx.Graph.filed[4]){
                     if(XS.Main.Tjfx.Graph.filed[4][i] == info.field){
-                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[4][i],value:new Number(info.value) + " 个"});
+                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[4][i] + "行政村",value:new Number(info.value) + " 个"});
                     }
                 }
                 break;
             }
             case XS.Main.Tjfx.type.bar.fourOf54:{
-                title = "四有五覆盖(五覆盖)";
+                title = "五通四有(四有)";
                 for(var i in XS.Main.Tjfx.Graph.filed[5]){
                     if(XS.Main.Tjfx.Graph.filed[5][i] == info.field){
-                        jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[5][i],value:new Number(info.value) + " 个"});
+                        if(XS.Main.Tjfx.Graph.filed[5][i] == "美丽乡村"){
+                            jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[5][i],value:new Number(info.value) + " 个"});
+                        }else{
+                            jsonObjArr.push({name:XS.Main.Tjfx.Graph.axisXLabels[5][i] + "行政村",value:new Number(info.value) + " 个"});
+                        }
                     }
                 }
                 break;

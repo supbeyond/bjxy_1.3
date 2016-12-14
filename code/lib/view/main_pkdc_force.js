@@ -10,7 +10,24 @@ var xs_pkdc_itemFoundForceOpt = {
     },
     tooltip : {
         trigger: 'item',
-        formatter: null//'{b} : {c}'
+        confine:true,
+        position: function (point, params, dom) {
+            var treeTipW = $("#xs_pkdc_itemFundRowDataTree .echarts-tooltip").width();
+            var treeTipH = $("#xs_pkdc_itemFundRowDataTree .echarts-tooltip").height();
+            var treeDomW = $("#xs_pkdc_itemFundRowDataTree").width();
+            var treeDomH = $("#xs_pkdc_itemFundRowDataTree").height();
+            var widthV = (treeDomW - treeTipW - point[0]);
+            var heightV = treeDomH - treeTipH - point[1];
+            if(widthV >10 && heightV>10){
+                return point;
+            }else if(widthV <10 && heightV>10){
+                return [widthV>0 ? point[0]-widthV : point[0]+widthV ,point[1]+30 + treeTipH > treeDomH ? point[1] - treeTipH -10 : point[1]+30];
+            }else if(widthV>10 && heightV<10){
+                return [point[0],point[1] - treeTipH - 30];
+            }else{
+                return [widthV>0 ? point[0]-widthV : point[0]+widthV,point[1] - treeTipH - 10];
+            }
+        }
     },
     toolbox: {
         show : true,
@@ -184,7 +201,7 @@ var xs_pkdc_itemFoundChart = null;
                  if(params.data.target)return;
                  //$("#xs_pkdc_detailDialog").dialog("close");
                  var content = '<div style="height: 100%;padding: 5px;box-sizing: border-box;width: 1000px;">' +
-                     '<div style="height: 100%; width: 900px;">' +
+                     '<div style="height: 100%; width: 100%;">' +
                          '<div id="xs_pkdc_itemFundTree_click" style="height: 100%;"></div>' +
                          '</div>' +
                      '</div>' +
