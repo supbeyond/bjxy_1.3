@@ -13,7 +13,7 @@ XS.Main.Pkjc.detailKV = {
                     "贫困村数","年末总户数","贫困户数","年末总人口","贫困人口","贫困发生率"],
                 value:["regionname","regionid","CountArea","CouseNum","TownNum","PoorTownNum","VillNum","PoorVillNum","HouseNum",
                     "PoorHouseNum","PeopleNum","PoorPeopleNum","PoorRate"],
-                unit:["","","km²","个","个","个","个","个","万户","万户","万人","万人","%"]
+                unit:["",""," km²"," 个"," 个"," 个"," 个"," 个"," 万户"," 万户"," 万人"," 万人"," %"]
             },
             {
                 name:["耕地面积","a.基本农田面积","b.有效灌溉面积","林地面积","a.退耕还林面积",
@@ -21,20 +21,20 @@ XS.Main.Pkjc.detailKV = {
                 value:["CBS_CULLAND_AREA","CBS_BASIC_FARMLAND","CBS_IRRIGATE_AREA","CBS_FOREST_AREA","CBS_REFOREST_AREA",
                     "CBS_ORCHARD_AREA","CBS_PASTURE_AREA","CBS_REGRASS_AREA","CBS_DESERT_AREA","CBS_ROCKY_AREA","CBS_WATER_AREA",
                     "CBS_FOREST_RATE"],
-                unit:["公顷","公顷","公顷","公顷","公顷","公顷","公顷","公顷","公顷","公顷","公顷","%"]
+                unit:[" 公顷"," 公顷"," 公顷"," 公顷"," 公顷"," 公顷"," 公顷"," 公顷"," 公顷"," 公顷"," 公顷"," %"]
             },
             {
                 name:["GDP","a.第一产业","b.第二产业","c.第三产业","公财预算收入","公财预算支出","公财扶贫预算支出",
                     "人均纯收入","人均纯收入增长率","地方生产总值增长率"],
                 value:["CBS_GDP","CBS_FIRST_INDUSTRY","CBS_SECOND_INDUSTRY","CBS_THIRD_INDUSTRY","CBS_LOCAL_REVENUE",
                     "CBS_LOCAL_EXPEND","CBS_LOCAL_POVERTY_EXPEND","CBS_FARMERS_PERNET","CBS_PERNET_RATE","CBS_GDP_RATE"],
-                unit:["万元","万元","万元","万元","万元","万元","万元","万元","%","%"]
+                unit:[" 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元","%","%"]
             },
             {
                 name:["年末总户数","年末总人口","贫困户数","贫困人口","乡村户数","乡村人口","低保户数","低保人口","五保户数",
                         "五保人口","少数民族人口","妇女人口","参加城乡居民基本养老保险人数"],
                 value:["C6","C7","C9","C10","C6A","C7A","C6B","C7C","C6C","C7D","C7B","C7E","C8"],
-                unit:["户","人","户","人","户","人","户","人","户","人","人","人","人"]
+                unit:[" 户"," 人"," 户"," 人"," 户"," 人"," 户"," 人"," 户"," 人"," 人"," 人"," 人"]
             },
             {
                 name:["县级公共图书馆数","有卫生院乡镇数","有综合文化站乡镇数","通(沥青/水泥)公路行政村数",
@@ -44,8 +44,8 @@ XS.Main.Pkjc.detailKV = {
                     "参加新型农村合作医疗人数","城镇居民基本医疗保险人数","已解决安全饮水农村学校数","农民合作组织数"],
                 value:["C79","C65","C81","C30","C31","C39","C46","C57","C66","C84","C86","C83","C82","C36","C43",
                     "C33","C69","C71","C34","C45"],
-                unit:["个","个","个","个","个","个","个","个","个","个","个","个","个","户","户","人","人","人","个",
-                    "个"]
+                unit:[" 个"," 个"," 个"," 个"," 个"," 个"," 个"," 个"," 个"," 个"," 个"," 个"," 个"," 户"," 户"," 人"," 人"," 人"," 个",
+                    " 个"]
             },
             {
                 name:[/*"驻村工作队","驻村干部",*/"雨露计划培训人数","雨露计划投入资金","劳动力转移培训人数",
@@ -54,7 +54,7 @@ XS.Main.Pkjc.detailKV = {
                 value:[/*"CHS_TEAM_NUM","CHS_LEADER_NUM",*/"CAS_RAIN_POP","CAS_RAIN_INVEST","CAS_TRANS_TRAINNUM","CAS_SKILL_TRAINNUM",
                     "CAS_LEADER_TRAINNUM","CAS_MICROC_VILNUM","CAS_MICROC_HHNUM","CAS_MICROC_AMOUNT","CAS_RESETTLE_HHNUM",
                     "CAS_RESETTLE_POP","CAS_RESETTLE_COMHH","CAS_RESETTLE_COMPOP","CAS_RESETTLE_FUNDS"],
-                unit:[/*"个","个",*/"人","万元","人","人","人","人","户","万元","户","人","户","人","万元"]
+                unit:[/*"个","个",*/" 人"," 万元"," 人"," 人"," 人"," 人"," 户"," 万元"," 户"," 人"," 户"," 人"," 万元"]
             },
             {
                 name:["交通部门资金","a.中央资金","b.省级资金","c.市县资金","水利部门资金","a.中央资金","b.省级资金",
@@ -65,9 +65,9 @@ XS.Main.Pkjc.detailKV = {
                 value:["C32","C32A","C32B","C32C","C38","C38A","C38B","C38C","C42","C42A","C42B","C42C","C44",
                     "C44A","C44B","C44C","C53","C53A","C53B","C53C","C64","C64A","C64B","C64C","C78","C78A",
                     "C78B","C78C","C85","C85A","C85B","C85C"],
-                unit:["万元","万元","万元","万元","万元","万元","万元","万元","万元","万元","万元","万元","万元",
-                    "万元","万元","万元","万元","万元","万元","万元","万元","万元","万元","万元","万元","万元",
-                    "万元","万元","万元","万元","万元","万元"]
+                unit:[" 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元",
+                    " 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元",
+                    " 万元"," 万元"," 万元"," 万元"," 万元"," 万元"]
             }
         ]
     },
@@ -79,7 +79,7 @@ XS.Main.Pkjc.detailKV = {
                     "年末总户数","贫困户数","年末总人口","贫困人口","贫困发生率"],
                 value:["CBI_NAME","CBI_ID","CBI_AREA","CBI_type","CBI_TOWNS_NUM","CBI_PoorTOWNS_NUM","CBI_VILLAGE_NUM",
                     "CBI_PoorVILLAGE_NUM","cps_hhnum","cps_poor_hhnum","cps_pop","cps_poor_pop","cps_Poverty_rate"],
-                unit:["","","km²","","个","个","个","个","户","户","人","人","%"]
+                unit:["",""," km²",""," 个"," 个"," 个"," 个"," 户"," 户"," 人"," 人"," %"]
             },
             {
                 name:["耕地面积","a.基本农田面积","b.有效灌溉面积","林地面积","a.退耕还林面积","a.林果面积","牧草地面积","a.退耕还草面积","荒漠化面积",
@@ -87,14 +87,14 @@ XS.Main.Pkjc.detailKV = {
                 value:["CBS_CULLAND_AREA","CBS_BASIC_FARMLAND","CBS_IRRIGATE_AREA","CBS_FOREST_AREA",
                     "CBS_REFOREST_AREA","CBS_ORCHARD_AREA","CBS_PASTURE_AREA","CBS_REGRASS_AREA","CBS_DESERT_AREA",
                     "CBS_ROCKY_AREA","CBS_WATER_AREA","CBS_FOREST_RATE"],
-                unit:["公顷","公顷","公顷","公顷","公顷","公顷","公顷","公顷","公顷","公顷","公顷","公顷","%"]
+                unit:[" 公顷"," 公顷"," 公顷"," 公顷"," 公顷"," 公顷"," 公顷"," 公顷"," 公顷"," 公顷"," 公顷"," 公顷"," %"]
             },
             {
                 name:["地方生产总值GDP","第一产业","第二产业","第三产业","地方公财预算收入","地方公财预算支出","地方公财扶贫预算支出",
                     "农村居民人均纯收入","农村居民人均纯收入增长率","地方生产总值增长率"],
                 value:["CBS_GDP","CBS_FIRST_INDUSTRY","CBS_SECOND_INDUSTRY","CBS_THIRD_INDUSTRY",
                     "CBS_LOCAL_REVENUE","CBS_LOCAL_EXPEND","CBS_LOCAL_POVERTY_EXPEND","CBS_FARMERS_PERNET","CBS_PERNET_RATE","CBS_GDP_RATE"],
-                unit:["万元","万元","万元","万元","万元","万元","万元","元","%","%",]
+                unit:[" 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 元"," %"," %",]
             },
             {
                 /*name:["年末总户数","贫困户","乡村户数","低保户数","五保户数","年末总人口","贫困人口","乡村人口","少数民族人口",
@@ -104,7 +104,7 @@ XS.Main.Pkjc.detailKV = {
                 name:["年末总户数","年末总人口","贫困户数","贫困人口","乡村户数","乡村人口","低保户数","低保人口","五保户数",
                     "五保人口","少数民族人口","妇女人口","参加城乡居民基本养老保险人数"],
                 value:["C6","C7","C9","C10","C6A","C7A","C6B","C7C","C6C","C7D","C7B","C7E","C8"],
-                unit:["户","人","户","人","户","人","户","人","户","人","人","人","人"]
+                unit:[" 户"," 人"," 户"," 人"," 户"," 人"," 户"," 人"," 户"," 人"," 人"," 人"," 人"]
             },
             {
                 name:["县级公共图书馆数","有卫生院乡镇数","有综合文化站乡镇数","通(沥青/水泥)公路行政村数","通客运车行政村数","通电行政村数",
@@ -112,7 +112,7 @@ XS.Main.Pkjc.detailKV = {
                     "通宽带网络行政村数","有文化/图书室行政村数","已解决安全饮水农村学校数","农民合作组织数",
                     "饮用自来水户数","危房户数","参加新型农村合作医疗人数","参加城镇居民基本医疗保险人数","已实现安全饮水人数"],
                 value:["C79","C65","C81","C30","C31","C39","C46","C57","C66","C84","C83","C86","C82","C34","C45","C36","C43","C69","C71","C33"],
-                unit:["个","个","个","个","个","个","个","个","个","个","个","个","个","个","个","户","户","人","人","人"]
+                unit:[" 个"," 个"," 个"," 个"," 个"," 个"," 个"," 个"," 个"," 个"," 个"," 个"," 个"," 个"," 个"," 户"," 户"," 人"," 人"," 人"]
                 /*name:["通(沥青/水泥)公路行政村数","通客运车行政村数","已实现安全饮水人数","已解决安全饮水农村学校数","饮用自来水户数",
                  "通电行政村数","危房户数","农民合作组织数","有农民合作组织行政村数","开展乡村旅游贫困村数","有卫生院乡镇数",
                  "有卫生室行政村数","参加新型农村合作医疗人数","城镇居民基本医疗保险人数","县级公共图书馆数","通广播电视自然村数",
@@ -127,7 +127,7 @@ XS.Main.Pkjc.detailKV = {
                 value:["CHS_TEAM_NUM","CHS_LEADER_NUM","CAS_RAIN_POP","CAS_RAIN_INVEST","CAS_TRANS_TRAINNUM",
                     "CAS_SKILL_TRAINNUM","CAS_LEADER_TRAINNUM","CAS_MICROC_VILNUM","CAS_MICROC_HHNUM","CAS_MICROC_AMOUNT",
                     "CAS_RESETTLE_HHNUM","CAS_RESETTLE_POP","CAS_RESETTLE_COMHH","CAS_RESETTLE_COMPOP","CAS_RESETTLE_FUNDS"],
-                unit:["个","个","人","万元","人","人","人","个","户","万元","户","人","户","人","万元"]
+                unit:[" 个"," 个"," 人"," 万元"," 人"," 人"," 人"," 个"," 户"," 万元"," 户"," 人"," 户"," 人"," 万元"]
             },
             {
                 name:["交通部门资金"," a.中央资金"," b.省级资金"," c.市县资金",
@@ -141,9 +141,9 @@ XS.Main.Pkjc.detailKV = {
                 value:["C32","C32A","C32B","C32C",
                     "C38","C38A","C38B","C38C","C42","C42A","C42B","C42C","C44","C44A","C44B","C44C","C53","C53A",
                     "C53B","C53C","C64","C64A","C64B","C64C","C78","C78A","C78B","C78C","C85","C85A","C85B","C85C"],
-                unit:["万元","万元","万元","万元","万元","万元","万元","万元","万元","万元","万元","万元","万元","万元",
-                    "万元","万元","万元","万元","万元","万元","万元","万元","万元","万元","万元","万元","万元","万元",
-                    "万元","万元","万元","万元"]
+                unit:[" 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元",
+                    " 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元"," 万元",
+                    " 万元"," 万元"," 万元"," 万元"]
             }
         ]
     },
@@ -156,7 +156,7 @@ XS.Main.Pkjc.detailKV = {
                 value:["TOWB_NAME","TOWB_ID","TOWB_LONGITUDE","TOWB_LATITUDE","TOWB_MEAN","Totolarea",
                     "Totolvillnum","TOWB_VillNum","TOWB_HouseNum","TOWB_PoorHouseNum","TOWB_PeopleNum",
                     "TOWB_PoorPeopleNum","tpl_TownType","tpl_PoorRate"],
-                unit:["","","","","m","亩","个","个","户","户","人","人","类","%"]
+                unit:["","","",""," m"," 亩"," 个"," 个"," 户"," 户"," 人"," 人"," 类"," %"]
             },
             {
                 name:["无房户","危房改造户","需易地搬迁户","劳动力人数","省内务工人数","省外务工人数","外出务工人数",
@@ -165,13 +165,13 @@ XS.Main.Pkjc.detailKV = {
                 value:["TBS_MOVE_POP","TBS_RECONSTRU_HHNUM","TBS_MOVE_HHNUM","TBS_LABOR_NUM","TBS_IN_LABOR",
                     "TBS_OUT_LABOR","TBS_LTRAINED_OUTER","TBS_MINORITY_NUM","TBS_NOWATER_POP","TBS_GUARANTEE_POP","TBS_MOVE_HHNUM",
                     "TBS_MEDICAL_POP","TBS_ENDOW_POP"],
-                unit:["户","户","户","人","人","人","人","人","人","人","人","人","人","人"]
+                unit:[" 户"," 户"," 户"," 人"," 人"," 人"," 人"," 人"," 人"," 人"," 人"," 人"," 人"," 人"]
             },
             {
                 name:["图书室","党员活动室","健身器材室","文化/体育广场","公共卫生厕所","卫生室","垃圾堆放点","镇办公电话"],
                 value:["TPS_LIBRARY_NUM","TPS_PARTY_ROOM","TPS_FITNESSEQUIPMENT","TPS_CULTURESPORTSQUARE_NUM","TPS_PUBLICTOILET_NUM",
                     "TPS_CLINIC_NUM","TPS_HOUSEWASTE_NUM","TPS_CONTRACT_PHONE"],
-                unit:["个","个","个","个","个","个","个",""]
+                unit:[" 个"," 个"," 个"," 个"," 个"," 个"," 个",""]
             },
             {
                 name:["通(水泥/沥青)公路里程","通(水泥/沥青)公路自然村","驻村工作队","通广播电视户","有农业大棚户",
@@ -182,13 +182,13 @@ XS.Main.Pkjc.detailKV = {
                     "TPL_BAND_HHNUM","TPL_ANI_HHNUM","TPL_PHONE_HHNUM","TPL_AG_HHNUM","TPL_TOILET_HHNUM",
                     "TPL_DANBUILDINGMAIN_FAMILY","TPL_WATERTOILET_HHNUM","TPL_ENERGY_HHNUM","TPL_NOHOUSE_HHNUM",
                     "TPL_FVEHICLE_HHNUM","TPL_TAPWATER_HHNUM"],
-                unit:["公里","个","个","户","户","户","户","户","户","户","户","户","户","户","户","户"]
+                unit:[" 公里"," 个"," 个"," 户"," 户"," 户"," 户"," 户"," 户"," 户"," 户"," 户"," 户"," 户"," 户"," 户"]
             },
             {
                 name:["主导产业类型","主导产业产值","村级集体经济收入","农民年人均纯收入","年人均粮食产量",
                     "经济作物面积","经济林面积"],
                 value:["LEADINDUSTTYPE","LEADINDUSTVALUE","VILCOLECONOMY","PERCAPITAL","PERGRAIN","PERGRAIN","ECOFOREST"],
-                unit:["","万元","万元","元","kg","亩","亩"]
+                unit:[""," 万元"," 万元"," 元"," kg"," 亩"," 亩"]
             }
         ]
     },
@@ -200,25 +200,25 @@ XS.Main.Pkjc.detailKV = {
                     "年末总户数","年末总人口","贫困人口"],
                 value:["VILLNAME","VID","VILLLEADER","TEL","LONGITUDE","LATITUDE","B5","POORTYPE","B2A"
                     ,"B3A","B3B"],
-                unit:["","","","","","","亩","","户","人","人"]
+                unit:["","","","","",""," 亩",""," 户"," 人"," 人"]
             },
             {
                 name:["耕地面积","a.有效灌溉面积","林地面积","a.退耕还林面积","b.林果面积","牧草林地面积","水域面积","畜牧存栏数"
                     ,"农民年人均纯收入","村级集体经济收入","参加新型农村合作社医疗人数","参加城乡居民养老保险人数","获得医疗救助人数"],
                 value:["B5","B5A","B6","B6A","B6B","B7","B8","B9","B10","B11","B12","B13","B14"],
-                unit:["亩","亩","亩","亩","亩","亩","亩","头","元","元","人","人","人"]
+                unit:[" 亩"," 亩"," 亩"," 亩"," 亩"," 亩"," 亩"," 头"," 元"," 元"," 人"," 人"," 人"]
             },{
                 name:[
                     "年末总户数","年末总人口","国家标准贫困户数","国家标准贫困人口","低保户数","低保人口",
                     "五保户数","五保人口","少数民族人口","妇女人口","残疾人口","劳动力人口","外出务工人口"],
                 value:["B2", "B3","B2A","B3A","B2B","B3B","B2C","B3C","B3D","B3E","B3F","B4","B4A"],
-                unit:["户","人","户","人","户","人","户","人","人","人","人","人","人"]
+                unit:[" 户"," 人"," 户"," 人"," 户"," 人"," 户"," 人"," 人"," 人"," 人"," 人"," 人"]
             },
             {
                 name:["卫生室","公共厕所","生产生活垃圾堆放点","文化(图书)室","执行(助理)医师","行政村信息员",
                     "通广播电视户数","通宽带户数","通宽带村小学个数","能用手机上网户数"],
                 value:["B32","B34","B35","B36","B33","B42","B37","B38","B41","B39"],
-                unit:["个","个","个","个","个","个","户","户","个","户"]
+                unit:[" 个"," 个"," 个"," 个"," 人"," 人"," 户"," 户"," 个"," 户"]
             }
         ]
     }
@@ -255,9 +255,10 @@ XS.Main.Pkjc.DetailPieOpt= {
                     returnValue += '<div style="width: 10px;height: 10px;display: inline-block;border-radius: 50%;background: ' + params[i].color + ';"></div>';
                     for(var j=0;j<xs_tipAnalyUnit.length;j++){
                         if(xs_tipAnalyUnit[j].name == params[0].seriesName){
-                            returnValue += params[i].name + ':<br/> ' + params[i].value + xs_tipAnalyUnit[j].value[i];
+                            var tipValueNum = params[i].value.toString().split(".").length>1 ? params[i].value.toString().split(".")[1].length : 0;
+                            returnValue += params[i].name + ':<br/> ' + (tipValueNum>2 ? (params[i].value-0).toFixed(2) : params[i].value) +xs_tipAnalyUnit[j].value[i];
                             if(params[i].percent && xs_tipAnalyUnit[j].value[i] != "%"){
-                                returnValue += "("+ params[i].percent +"%)";
+                                returnValue += "&nbsp("+ params[i].percent.toFixed(2) +"%)";
                             }
                             break;
                         }
@@ -1448,6 +1449,7 @@ XS.Main.Pkjc.clickAnalysis = function(level,currentCode,currentName,ispkdc){
 var xs_pkdc_itemFundDgridJson = [];
 XS.Main.Pkjc.clickItemFund = function(currentCode,currentName){
     XS.CommonUtil.showLoader();
+    XS.Main.Tjfx.removeLayer();
     XS.Main.Pkjc.closeInfoDialog();
     XS.Main.Poor.clearRelocationLayer();
     xs_pkdc_itemFundDgridJson = [];
@@ -1589,19 +1591,26 @@ XS.Main.Pkjc.dataTable = function(json,nameArr,valueArr,unitArr,colls,rowH,merge
     xs_pkdc_btnCliDatagridObj = [];
     for(var i=0;i<nameArr.length;i++){
         xs_pkdc_btnCliDatagridObj.push({});
-        if(unitArr && unitArr[i]){
-            xs_pkdc_btnCliDatagridObj[i].name = nameArr[i] + "(" + unitArr[i] + ")";
-        }else{
-            xs_pkdc_btnCliDatagridObj[i].name = nameArr[i];
-        }
-        xs_pkdc_btnCliDatagridObj[i].nameNotUnit = nameArr[i];
+        xs_pkdc_btnCliDatagridObj[i].name = nameArr[i];
         if(isNaN(jsonData[valueArr[i]])){
             xs_pkdc_btnCliDatagridObj[i].value = jsonData[valueArr[i]] ? jsonData[valueArr[i]] : "";
         }else{
-            if(nameArr[i] == "经度" || nameArr[i] == "纬度" || nameArr[i] == "贫困发生率"){
-                xs_pkdc_btnCliDatagridObj[i].value = jsonData[valueArr[i]] ? jsonData[valueArr[i]].toFixed(2) : 0;
+            if(unitArr && unitArr[i]){
+                if(nameArr[i] == "经度" || nameArr[i] == "纬度" || nameArr[i] == "贫困发生率" || nameArr[i] == "人均纯收入增长率" || nameArr[i] == "地方生产总值增长率"){
+                    xs_pkdc_btnCliDatagridObj[i].valueNotUnit = (jsonData[valueArr[i]]-0)>=0 ? (jsonData[valueArr[i]]-0).toFixed(2) : "";
+                    xs_pkdc_btnCliDatagridObj[i].value = (jsonData[valueArr[i]]-0)>=0 ? (jsonData[valueArr[i]] - 0).toFixed(2) + unitArr[i] : "";
+                }else{
+                    xs_pkdc_btnCliDatagridObj[i].valueNotUnit = (jsonData[valueArr[i]]-0)>=0 ? (jsonData[valueArr[i]]-0) : "";
+                    xs_pkdc_btnCliDatagridObj[i].value = (jsonData[valueArr[i]]-0)>=0 ? (jsonData[valueArr[i]] - 0) + unitArr[i] : "";
+                }
             }else{
-                xs_pkdc_btnCliDatagridObj[i].value = jsonData[valueArr[i]] ? jsonData[valueArr[i]] : 0;
+                if(nameArr[i] == "经度" || nameArr[i] == "纬度" || nameArr[i] == "贫困发生率"){
+                    xs_pkdc_btnCliDatagridObj[i].valueNotUnit = (jsonData[valueArr[i]]-0)>=0 ? (jsonData[valueArr[i]]-0).toFixed(2) : "";
+                    xs_pkdc_btnCliDatagridObj[i].value = (jsonData[valueArr[i]]-0)>=0 ? (jsonData[valueArr[i]] - 0).toFixed(2) : "";
+                }else{
+                    xs_pkdc_btnCliDatagridObj[i].valueNotUnit = (jsonData[valueArr[i]]-0)>=0 ? (jsonData[valueArr[i]]-0) : "";
+                    xs_pkdc_btnCliDatagridObj[i].value = (jsonData[valueArr[i]]-0)>=0 ? (jsonData[valueArr[i]]-0) : "";
+                }
             }
         }
     }
@@ -1658,18 +1667,17 @@ XS.Main.Pkjc.tabsContentPie = function(titleName,indexArr,domId,otherIndexArr,ot
         XS.Main.Pkjc.DetailPieOpt.series[0].data.push({});
         XS.Main.Pkjc.DetailPieOpt.legend.data.push(otherObjName);
         XS.Main.Pkjc.DetailPieOpt.series[0].data[0].name = otherObjName;
-        XS.Main.Pkjc.DetailPieOpt.series[0].data[0].nameNotUnit = otherObjName;
-        var totalValue = xs_pkdc_btnCliDatagridObj[otherIndexArr[0]].value;
-        var targetValue = xs_pkdc_btnCliDatagridObj[otherIndexArr[1]].value;
+        var totalValue = xs_pkdc_btnCliDatagridObj[otherIndexArr[0]].valueNotUnit;
+        var targetValue = xs_pkdc_btnCliDatagridObj[otherIndexArr[1]].valueNotUnit;
         XS.Main.Pkjc.DetailPieOpt.series[0].data[0].value = (totalValue - targetValue)>0 ? (totalValue - targetValue) : 0;
         pieSum += XS.Main.Pkjc.DetailPieOpt.series[0].data[0].value;
     }
 
     for (var i = 0; i < indexArr.length; i++) {
-        var seriesData = {name:xs_pkdc_btnCliDatagridObj[indexArr[i]].nameNotUnit,value:xs_pkdc_btnCliDatagridObj[indexArr[i]].value};
+        var seriesData = {name:xs_pkdc_btnCliDatagridObj[indexArr[i]].name,value:xs_pkdc_btnCliDatagridObj[indexArr[i]].valueNotUnit};
         XS.Main.Pkjc.DetailPieOpt.series[0].data.push(seriesData);
-        pieSum += xs_pkdc_btnCliDatagridObj[indexArr[i]].value;
-        XS.Main.Pkjc.DetailPieOpt.legend.data.push(xs_pkdc_btnCliDatagridObj[indexArr[i]].nameNotUnit);
+        pieSum += xs_pkdc_btnCliDatagridObj[indexArr[i]].valueNotUnit;
+        XS.Main.Pkjc.DetailPieOpt.legend.data.push(xs_pkdc_btnCliDatagridObj[indexArr[i]].name);
     }
     XS.Main.Pkjc.DetailPieOpt.series[0].data = XS.Main.Pkjc.pieLabelPos(XS.Main.Pkjc.DetailPieOpt.series[0].data,pieSum);
     xs_pkdc_AnalysTabsCInit = echarts.init(document.getElementById(domId));
@@ -1843,40 +1851,6 @@ XS.Main.Pkjc.ciAnalyOpt= function(title,tooltip,legend,grid,xAxis,yAxis,radar,po
     xs_pkdc_AnalysTabsChartArr.push(xs_pkdc_AnalysTabsCInit);
     xs_pkdc_AnalysTabsCInit.setOption(option);
 }
-var xs_tooltipNameArr = [[],[]];
-XS.Main.Pkjc.tooltipFormatter = function(params){
-    var returnValue = "";
-    if(params) {
-        if (params.constructor == Object) {
-            params = [params];
-        }
-        if (params.length == 1) {
-            for (var i = 0; i < xs_tooltipNameArr[0].length; i++) {
-                if (xs_tooltipNameArr[0][i] == params[0].name) {
-                    if (xs_tooltipNameArr[1].length == 0) {
-                        returnValue += xs_tooltipNameArr[0][i] + ": " + "<br/>" + params[0].value;
-                    } else {
-                        returnValue += xs_tooltipNameArr[1][i] + ": " + "<br/>" + params[0].value;
-                    }
-                    if (params.percent) {
-                        returnValue += "(" + params.percent + "%)";
-                    }
-                    break;
-                }
-            }
-        } else {
-            returnValue += params[0].name;
-            for (var i = 0; i < params.length; i++) {
-                for (var j = 0; j < xs_tooltipNameArr[0].length; j++) {
-                    if (xs_tooltipNameArr[0][j] == params[i].seriesName) {
-                        returnValue += "<br/>" + xs_tooltipNameArr[1][j] + ": " + params[i].value;
-                    }
-                }
-            }
-        }
-    }
-    return returnValue;
-}
 var xs_tipAnalyUnit = [];
 //类目为下一级
 XS.Main.Pkjc.tipAnalyFarmatterNex = function(params){
@@ -1885,18 +1859,35 @@ XS.Main.Pkjc.tipAnalyFarmatterNex = function(params){
         if (params.constructor == Object) {
             params = [params];
         }
-        returnValue += params[0].name;
+
+        if(params.length>40){
+            returnValue += '<div style="border1: 1px solid green;position: absolute;width:100%;">'+ params[0].name;
+            returnValue += '</div><div style="border1: 1px solid red;">';
+            returnValue += '<div style="border1: 1px solid green;display: inline-block;">';
+        }else{
+            returnValue += params[0].name;
+        }
+        var isSecondDiv = false;
         for(var i=0;i<params.length;i++){
+            if(params.length>40 && i>params.length/2.0 && !isSecondDiv){
+                returnValue += '</div><div style="width: 5px;border1: 1px solid green;display: inline-block;vertical-align: top;">';
+                returnValue += '</div><div style="border1: 1px solid green;display: inline-block;vertical-align: top;">';
+                isSecondDiv = true;
+            }
             returnValue += '<br/><div style="width: 10px;height: 10px;display: inline-block;border-radius: 50%;background: ' + params[i].color + ';"></div>';
             for(var j=0;j<xs_tipAnalyUnit.length;j++){
                 if(xs_tipAnalyUnit[j].name == params[0].seriesName){
-                    returnValue += params[i].seriesName + ': ' + parseFloat(params[i].value).toFixed(2) + xs_tipAnalyUnit[j].value[i];
+                    var tipValueNum = params[i].value.toString().split(".").length>1 ? params[i].value.toString().split(".")[1].length : 0;
+                    returnValue += params[i].seriesName + ': ' + (tipValueNum>2 ? (params[i].value-0).toFixed(2) : params[i].value) + xs_tipAnalyUnit[j].value[i];
                     if(params[i].percent && xs_tipAnalyUnit[j].value[i] != "%"){
-                        returnValue += "("+ params[i].percent +"%)";
+                        returnValue += "("+ params[i].percent.toFixed(2) +"%)";
                     }
                     break;
                 }
             }
+        }
+        if(params.length>40){
+            returnValue += '</div></div>';
         }
     }
     return returnValue;
@@ -1913,9 +1904,10 @@ XS.Main.Pkjc.tipAnalyFarmatterCur = function(params){
             returnValue += '<br/><div style="width: 10px;height: 10px;display: inline-block;border-radius: 50%;background: ' + params[i].color + ';"></div>';
             for(var j=0;j<xs_tipAnalyUnit.length;j++){
                 if(xs_tipAnalyUnit[j].name == params[0].seriesName){
-                    returnValue += params[i].name + ': ' + (params[i].value>= 0 ? params[i].value.toFixed(2) + xs_tipAnalyUnit[j].value[i] :  "") ;
+                    var tipValueNum = params[i].value.toString().split(".").length>1 ? params[i].value.toString().split(".")[1].length : 0;
+                    returnValue += params[i].name + ': ' + (tipValueNum>2 ? (params[i].value-0).toFixed(2) : params[i].value) + xs_tipAnalyUnit[j].value[i];
                     if(params[i].percent && xs_tipAnalyUnit[j].value[i] != "%"){
-                        returnValue += "("+ params[i].percent +"%)";
+                        returnValue += "("+ params[i].percent.toFixed(2) +"%)";
                     }
                     break;
                 }
@@ -2256,13 +2248,16 @@ XS.Main.Pkjc.cityDetailShow = function(json,index){
         XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.city.tabs[index].name, XS.Main.Pkjc.detailKV.city.tabs[index].value,
             XS.Main.Pkjc.detailKV.city.tabs[index].unit,3,35,[[0,3]]);
         XS.Main.setDetailChildColor("datagrid-cell",[2,3,4,5,6,7],"#00c400");
-    }else if(index == 3){
+    }else if(index == 3)
+    {
         XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.city.tabs[index].name, XS.Main.Pkjc.detailKV.city.tabs[index].value,
             XS.Main.Pkjc.detailKV.city.tabs[index].unit,2,35,[[12,2]]);
-    }else if(index == 5){
+    }else if(index == 5)
+    {
         XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.city.tabs[index].name, XS.Main.Pkjc.detailKV.city.tabs[index].value,
             XS.Main.Pkjc.detailKV.city.tabs[index].unit,2,35,[[12,2]]);
-    }else if(index == 6){
+    }else if(index == 6)
+    {
         XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.city.tabs[index].name, XS.Main.Pkjc.detailKV.city.tabs[index].value,
             XS.Main.Pkjc.detailKV.city.tabs[index].unit,3,35,[[0,3],[4,3],[8,3],[12,3],[16,3],[20,3],[24,3],[28,3]]);
         XS.Main.setDetailChildColor("datagrid-cell",
@@ -2280,9 +2275,10 @@ XS.Main.Pkjc.cityDetailShow = function(json,index){
             var sumIndex = [0, 3, 6, 8, 10];
             var sum = 0;
             for(var i=0;i<sumIndex.length;i++){
-                sum += xs_pkdc_btnCliDatagridObj[sumIndex[i]].value;
+                sum += xs_pkdc_btnCliDatagridObj[sumIndex[i]].valueNotUnit;
             }
-            xs_pkdc_btnCliDatagridObj.push({name:"其他(公顷)",nameNotUnit:"其他",value:(xs_cityArea*100 - sum)>=0 ? (xs_cityArea*100 - sum) : 0});
+            var addValue = (xs_cityArea*100 - sum)>0 ? (xs_cityArea*100 - sum) : 0;
+            xs_pkdc_btnCliDatagridObj.push({name:"其他",valueNotUnit:addValue,value:addValue + "公顷"});
             xs_tipAnalyUnit = [{name:"国有土地分布",value:["公顷"]}];
             XS.Main.Pkjc.tabsContentPie(["国有土地分布","center"], [0, 3, 6, 8, 10,12], "xs_pkdc_tabsContentPie", [], "");
             break;
@@ -2324,11 +2320,9 @@ XS.Main.Pkjc.cityDetailShow = function(json,index){
             $("#xs_pkdc_tabsContentPie").css({height:"60%"});
             var xAxis = ['','category',["通公路村","通客运村","通电村","有农合村","旅游村","有卫生室村","通广播村","通宽带村","有图书室村"],true];
             var series = [['重点工作','bar',0,[],null,[true,"top","{c}个"]]];//[[name,type,barGap,data,stack,showLabel,position]]
-            xs_tooltipNameArr = [xAxis[2],[]];
             for(var i=3;i<=12;i++){
                 if(i == 9)continue;
-                xs_tooltipNameArr[1].push(xs_pkdc_btnCliDatagridObj[i].name);
-                series[0][3].push(xs_pkdc_btnCliDatagridObj[i].value);
+                series[0][3].push(xs_pkdc_btnCliDatagridObj[i].valueNotUnit);
             }
             xs_tipAnalyUnit = [{name:"重点工作",value:["个"]}];
             XS.Main.Pkjc.ciAnalyOpt([],['axis',['shadow'],XS.Main.Pkjc.tipAnalyFarmatterCur],[],[40,40,30,20],xAxis,[['村数(个)','value']],[],[],series,"xs_pkdc_tabsContentPie");
@@ -2346,14 +2340,13 @@ XS.Main.Pkjc.cityDetailShow = function(json,index){
             var xAxis = ['','category',["交通部门","水利部门","能源部门","住建部门","农、林业部门","教育部门","卫计部门","文化部门"],true];
             var series = [['中央资金','bar',0,[],"资金",[false]],['省级资金','bar',0,[],"资金",[false]],['市县资金','bar',0,[],"资金",[false]]];
             var legend = [10,['中央资金',"省级资金","市县资金"]];
-            xs_tooltipNameArr = [legend[1],['中央资金(万元)',"省级资金(万元)","市县资金(万元)"]];
             for(var i=0;i<xs_pkdc_btnCliDatagridObj.length;i++){
                 if(i%4 == 1){
-                    series[0][3].push(xs_pkdc_btnCliDatagridObj[i].value);
+                    series[0][3].push(xs_pkdc_btnCliDatagridObj[i].valueNotUnit);
                 }else if(i%4 == 2){
-                    series[1][3].push(xs_pkdc_btnCliDatagridObj[i].value);
+                    series[1][3].push(xs_pkdc_btnCliDatagridObj[i].valueNotUnit);
                 }else if(i%4 == 3){
-                    series[2][3].push(xs_pkdc_btnCliDatagridObj[i].value);
+                    series[2][3].push(xs_pkdc_btnCliDatagridObj[i].valueNotUnit);
                 }
             }
             xs_tipAnalyUnit = [{name:"中央资金",value:["万元","万元","万元"]}];
@@ -2411,9 +2404,10 @@ XS.Main.Pkjc.countyDetailShow = function(json,index){
             var sumIndex = [0, 3, 6, 8, 10];
             var sum = 0;
             for(var i=0;i<sumIndex.length;i++){
-                sum += xs_pkdc_btnCliDatagridObj[sumIndex[i]].value;
+                sum += xs_pkdc_btnCliDatagridObj[sumIndex[i]].valueNotUnit;
             }
-            xs_pkdc_btnCliDatagridObj.push({name:"其他(公顷)",nameNotUnit:"其他",value:(json[0].CBS_xzqymj*100 - sum)>=0 ? (json[0].CBS_xzqymj*100 - sum) : 0});
+            var addValue = (json[0].CBS_xzqymj*100 - sum)>=0 ? (json[0].CBS_xzqymj*100 - sum) : 0;
+            xs_pkdc_btnCliDatagridObj.push({name:"其他",valueNotUnit:addValue,value:addValue + "公顷"});
             xs_tipAnalyUnit = [{name:"国有土地分布",value:["公顷"]}];
             XS.Main.Pkjc.tabsContentPie(["国有土地分布","center"], [0, 3, 6, 8, 10,12], "xs_pkdc_tabsContentPie", [], "");
             break;
@@ -2446,11 +2440,9 @@ XS.Main.Pkjc.countyDetailShow = function(json,index){
             $("#xs_pkdc_tabsContentPie").css({height:"60%"});
             var xAxis = ['','category',["通公路村","通客运村","通电村","有农合村","旅游村","有卫生室村","通广播村","通宽带村","有图书室村"],true];
             var series = [['重点工作','bar',0,[],null,[true,'top',"{c}个"]]];//[[name,type,barGap,data,stack,showLabel,position]]
-            xs_tooltipNameArr = [xAxis[2],[]];
             for(var i=3;i<=12;i++){
                 if(i == 9)continue;
-                xs_tooltipNameArr[1].push(xs_pkdc_btnCliDatagridObj[i].name);
-                series[0][3].push(xs_pkdc_btnCliDatagridObj[i].value);
+                series[0][3].push(xs_pkdc_btnCliDatagridObj[i].valueNotUnit);
             }
 
             xs_tipAnalyUnit = [{name:"重点工作",value:["个"]}];
@@ -2477,14 +2469,13 @@ XS.Main.Pkjc.countyDetailShow = function(json,index){
             var xAxis = ['','category',["交通部门","水利部门","能源部门","住建部门","农、林业部门","教育部门","卫计部门","文化部门"],true];
             var series = [['中央资金','bar',0,[],"资金",[false]],['省级资金','bar',0,[],"资金",[false]],['市县资金','bar',0,[],"资金",[false]]];
             var legend = [10,['中央资金',"省级资金","市县资金"]];
-            xs_tooltipNameArr = [legend[1],['中央资金(万元)',"省级资金(万元)","市县资金(万元)"]];
             for(var i=0;i<xs_pkdc_btnCliDatagridObj.length;i++){
                 if(i%4 == 1){
-                    series[0][3].push(xs_pkdc_btnCliDatagridObj[i].value);
+                    series[0][3].push(xs_pkdc_btnCliDatagridObj[i].valueNotUnit);
                 }else if(i%4 == 2){
-                    series[1][3].push(xs_pkdc_btnCliDatagridObj[i].value);
+                    series[1][3].push(xs_pkdc_btnCliDatagridObj[i].valueNotUnit);
                 }else if(i%4 == 3){
-                    series[2][3].push(xs_pkdc_btnCliDatagridObj[i].value);
+                    series[2][3].push(xs_pkdc_btnCliDatagridObj[i].valueNotUnit);
                 }
             }
             xs_tipAnalyUnit = [{name:"中央资金",value:["万元","万元","万元"]}];
@@ -2510,7 +2501,7 @@ XS.Main.Pkjc.townDetailShow = function(json,index){
             var series = [['人数统计','bar',0,[],false,[true,'top',"{c}人"]]];
             for(var i=3;i<xs_pkdc_btnCliDatagridObj.length;i++){
                 if(i == 4 || i == 5)continue;
-                series[0][3].push(xs_pkdc_btnCliDatagridObj[i].value);
+                series[0][3].push(xs_pkdc_btnCliDatagridObj[i].valueNotUnit);
             }
             xs_tipAnalyUnit = [{name:"人数统计",value:["人"]}];
             XS.Main.Pkjc.ciAnalyOpt([5,'人数统计'],['item',[""],XS.Main.Pkjc.tipAnalyFarmatterCur],[],[60,40,50,20],xAxis,[['人数(人)','value']],[],[],series,"xs_pkdc_tabsContentPie");
@@ -2518,48 +2509,43 @@ XS.Main.Pkjc.townDetailShow = function(json,index){
         case 2 ://公共服务
             XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value,
                 XS.Main.Pkjc.detailKV.town.tabs[index].unit,3, 40,[[7,2]]);
-            xs_tooltipNameArr = [[],[]];
+            var xAxis = ['','category',[],true];
             var series = [['公共设施','bar',0,[],null,[true,'top',"{c}个"]]];//[[name,type,barGap,data,stack,showLabel,position]]
             for(var i=0;i<xs_pkdc_btnCliDatagridObj.length - 1;i++){
-                xs_tooltipNameArr[0].push(xs_pkdc_btnCliDatagridObj[i].nameNotUnit);
-                xs_tooltipNameArr[1].push(xs_pkdc_btnCliDatagridObj[i].name);
-                series[0][3].push(xs_pkdc_btnCliDatagridObj[i].value);
+                xAxis[2].push(xs_pkdc_btnCliDatagridObj[i].name);
+                series[0][3].push(xs_pkdc_btnCliDatagridObj[i].valueNotUnit);
             }
-            var xAxis = ['','category',xs_tooltipNameArr[0],true];
             xs_tipAnalyUnit = [{name:"公共设施",value:["个"]}];
             XS.Main.Pkjc.ciAnalyOpt([],['axis',['shadow'],XS.Main.Pkjc.tipAnalyFarmatterCur],[],[40,40,30,20],xAxis,[['个数(个)','value']],[],[],series,"xs_pkdc_tabsContentPie");
             break;
         case 3 ://生产生活
             XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value,
                 XS.Main.Pkjc.detailKV.town.tabs[index].unit, 3, 35,[[15,3]]);
-            xs_tooltipNameArr = [[],[]];
+            var yAxis = [['','category',[],true]];
             var series = [['生产生活','bar',0,[],null,[true,'right',"{c}户"]]];//[[name,type,barGap,data,stack,showLabel,position]]
             for(var i=3;i<xs_pkdc_btnCliDatagridObj.length;i++){
-                xs_tooltipNameArr[0].push(xs_pkdc_btnCliDatagridObj[i].nameNotUnit);
-                xs_tooltipNameArr[1].push(xs_pkdc_btnCliDatagridObj[i].name);
-                series[0][3].push(xs_pkdc_btnCliDatagridObj[i].value);
+                yAxis[0][2].push(xs_pkdc_btnCliDatagridObj[i].name);
+                series[0][3].push(xs_pkdc_btnCliDatagridObj[i].valueNotUnit);
             }
-            var yAxis = [['','category',xs_tooltipNameArr[0],true]];
             xs_tipAnalyUnit = [{name:"生产生活",value:["户"]}];
             XS.Main.Pkjc.ciAnalyOpt([],['axis',['shadow'],XS.Main.Pkjc.tipAnalyFarmatterCur],[],[5,30,110,60],['户数(户)','value'],yAxis,[],[],series,"xs_pkdc_tabsContentPie");
             break;
         case 4 ://经济情况
             XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.town.tabs[index].name, XS.Main.Pkjc.detailKV.town.tabs[index].value,
                 XS.Main.Pkjc.detailKV.town.tabs[index].unit, 3, 50,[[6,3]]);
-            xs_tooltipNameArr = [[],[]];
+            var xAxis1 = ['','category',[],true];
+            var xAxis2 = ['','category',[],true];
             var series1 = [['主要经济收入','bar',0,[],null,[true,'top',"{c}万元"]]];//[[name,type,barGap,data,stack,showLabel,position]]
             var series2 = [['种植面积','bar',0,[],null,[true,'top',"{c}亩"]]];//[[name,type,barGap,data,stack,showLabel,position]]
             for(var i=0;i<xs_pkdc_btnCliDatagridObj.length;i++){
-                xs_tooltipNameArr[0].push(xs_pkdc_btnCliDatagridObj[i].nameNotUnit);
-                xs_tooltipNameArr[1].push(xs_pkdc_btnCliDatagridObj[i].name);
                 if(i == 1 || i == 2){
-                    series1[0][3].push(xs_pkdc_btnCliDatagridObj[i].value);
+                    xAxis1[2].push(xs_pkdc_btnCliDatagridObj[i].name);
+                    series1[0][3].push(xs_pkdc_btnCliDatagridObj[i].valueNotUnit);
                 }else if(i == 5 || i == 6){
-                    series2[0][3].push(xs_pkdc_btnCliDatagridObj[i].value);
+                    xAxis2[2].push(xs_pkdc_btnCliDatagridObj[i].name);
+                    series2[0][3].push(xs_pkdc_btnCliDatagridObj[i].valueNotUnit);
                 }
             }
-            var xAxis1 = ['','category',xs_tooltipNameArr[0].slice(1,3),true];
-            var xAxis2 = ['','category',xs_tooltipNameArr[0].slice(5),true];
             xs_tipAnalyUnit = [{name:"主要经济收入",value:["万元"]},{name:"种植面积",value:["亩"]}];
             XS.Main.Pkjc.ciAnalyOpt([],['axis',['shadow'],XS.Main.Pkjc.tipAnalyFarmatterCur],[],[80,40,40,40],xAxis1,[['经济(万元)','value']],[],[],series1,"xs_pkdc_tabsContPieDiv1");
             XS.Main.Pkjc.ciAnalyOpt([],['axis',['shadow'],XS.Main.Pkjc.tipAnalyFarmatterCur],[],[80,40,40,40],xAxis2,[['面积(亩)','value']],[],[],series2,"xs_pkdc_tabsContPieDiv2");
@@ -2585,8 +2571,8 @@ XS.Main.Pkjc.villDetailShow = function(json,index){
             var xAxis = ['','category',[],true];
             var targetData = [0,2,5,6];
             for(var i=0;i<targetData.length;i++){
-                series[0][3].push(xs_pkdc_btnCliDatagridObj[targetData[i]].value);
-                xAxis[2].push(xs_pkdc_btnCliDatagridObj[targetData[i]].nameNotUnit);
+                series[0][3].push(xs_pkdc_btnCliDatagridObj[targetData[i]].valueNotUnit);
+                xAxis[2].push(xs_pkdc_btnCliDatagridObj[targetData[i]].name);
             }
             xs_tipAnalyUnit = [{name:"国土面积分布",value:["亩"]}];
             XS.Main.Pkjc.ciAnalyOpt([],['axis',['shadow'],XS.Main.Pkjc.tipAnalyFarmatterCur],[],[40,40,30,20],xAxis,[['面积(亩)','value']],[],[],series,"xs_pkdc_tabsContentPie");
@@ -2599,7 +2585,7 @@ XS.Main.Pkjc.villDetailShow = function(json,index){
             var series = [['人口统计','bar',0,[],null,[true,'top',"{c}人"]]];//[[name,type,barGap,data,stack,showLabel,position]]
             for(var i=3;i<xs_pkdc_btnCliDatagridObj.length;i++){
                 if(i == 4 || i == 6)continue;
-                series[0][3].push(xs_pkdc_btnCliDatagridObj[i].value);
+                series[0][3].push(xs_pkdc_btnCliDatagridObj[i].valueNotUnit);
             }
             var xAxis = ['','category',["国家标准贫困","低保","五保户","少数民族","妇女","残疾","劳动力","外出务工"],true];
             xs_tipAnalyUnit = [{name:"人口统计",value:["人"]}];
@@ -2626,14 +2612,12 @@ XS.Main.Pkjc.villDetailShow = function(json,index){
         case 3://公共服务
             XS.Main.Pkjc.dataTable(json, XS.Main.Pkjc.detailKV.village.tabs[index].name, XS.Main.Pkjc.detailKV.village.tabs[index].value,
                 XS.Main.Pkjc.detailKV.village.tabs[index].unit,3, 50,[[9,3]]);
-            xs_tooltipNameArr = [[],[]];
+            var xAxis = ['','category',[],true];
             var series = [['公共设施','bar',50,[],null,[true,'top',"{c}人"]]];//[[name,type,barGap,data,stack,showLabel,position]]
             for(var i=0;i<=3;i++){
-                xs_tooltipNameArr[0].push(xs_pkdc_btnCliDatagridObj[i].nameNotUnit);
-                xs_tooltipNameArr[1].push(xs_pkdc_btnCliDatagridObj[i].name);
-                series[0][3].push(xs_pkdc_btnCliDatagridObj[i].value);
+                xAxis[2].push(xs_pkdc_btnCliDatagridObj[i].name);
+                series[0][3].push(xs_pkdc_btnCliDatagridObj[i].valueNotUnit);
             }
-            var xAxis = ['','category',xs_tooltipNameArr[0],true];
             xs_tipAnalyUnit = [{name:"公共设施",value:["人"]}];
             XS.Main.Pkjc.ciAnalyOpt([],['axis',['shadow'],XS.Main.Pkjc.tipAnalyFarmatterCur],[],[60,40,60,40],xAxis,[['个数(个)','value']],[],[],series,"xs_pkdc_tabsContentPie");
             //XS.Main.Pkjc.tabsContentPie(["公共设施情况","center",10], [0, 1, 2, 3, 4], "xs_pkdc_tabsContentPie", [], "");

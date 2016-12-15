@@ -1755,15 +1755,19 @@ XS.Main.addCacheMarker2Layer = function(cacheDatArr){
  * 添加毕节市图标到图层
  */
 XS.Main.addCityMarker2Layer = function(){
-    XS.Main.Markers.city = XS.MarkerUtil.createMarker(56, 56, 105.16+0.095, 27.07-0.07, "../img/zone/city/city.png");
-    //var marker = XS.MarkerUtil.createMarkerToLayer(xs_cityMarkerLayer, 56, 56, 105.16+0.095, 27.07-0.07, "../img/zone/city/city.png");
+        XS.Main.Markers.city = XS.MarkerUtil.createMarker(56, 56, 105.16+0.095, 27.07-0.07, "../img/zone/city/city.png");
+        //var marker = XS.MarkerUtil.createMarkerToLayer(xs_cityMarkerLayer, 56, 56, 105.16+0.095, 27.07-0.07, "../img/zone/city/city.png");
 
-    xs_markerLayer.addMarker(XS.Main.Markers.city);
-    XS.Main.Markers.city.events.on({click: function(marker) {
-        //点击marker回调lonLat
-        XS.Main.depClearMap();
-        XS.Main.Pkjc.clickDetail(XS.Main.ZoneLevel.city,"毕节市",xs_cityID,false);
-    }});
+        xs_markerLayer.addMarker(XS.Main.Markers.city);
+            XS.Main.Markers.city.events.on({click: function(marker) {
+                //点击marker回调lonLat
+                XS.Main.depClearMap();
+                if(xs_user_regionLevel == XS.Main.ZoneLevel.city) {
+                    XS.Main.Pkjc.clickDetail(XS.Main.ZoneLevel.city, "毕节市", xs_cityID, false);
+                }else{
+                    XS.CommonUtil.showMsgDialog("","你的权限不够");
+                }
+            }});
 }
 
 //隐藏所有Tip的Div标签
@@ -1873,7 +1877,6 @@ XS.Main.depClearMap = function() {
 
     XS.Main.Poor.clearRelocationLayer();
     XS.Main.clearMarker();
-    xs_markerFeaturess = [];
     xs_isClearMarkers = false;
     if($("#xs_tjfx_range_Legend").length>0) $("#xs_tjfx_range_Legend").remove();
 }
@@ -1898,61 +1901,6 @@ XS.Main.showMarker = function(level){
         case XS.Main.ZoneLevel.village:
 
             break;
-    }
-    if(scale>300000){ //county
-        XS.Main.addCacheMarker2Layer(XS.Main.Markers.city);
-        if(!xs_tjfx_themeLayer && !xs_tjfx_graph_themeLayer){
-            $("#xs_tjfx_range_Legend").remove();
-        }
-    }else if(scale<=300000&& scale>100000) //town
-    {
-        if(XS.Main.Markers.town.data.length>0){
-            XS.Main.addCacheMarker2Layer(XS.Main.Markers.town.data);
-            if(!xs_tjfx_themeLayer && !xs_tjfx_graph_themeLayer){
-                $("#xs_tjfx_range_Legend").remove();
-                XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.county,'贫困级别');
-            }
-        }else{
-            if(!xs_tjfx_themeLayer && !xs_tjfx_graph_themeLayer && !xs_pkdc_isTaskline){
-                xs_markerLayer.clearMarkers();
-                $("#xs_tjfx_range_Legend").remove();
-            }
-        }
-    }else if(scale<=100000&& scale>30000)//vill
-    {
-        xs_poorLabelLayer.setVisibility(false);
-        if(XS.Main.Markers.vill.data.length>0){
-            XS.Main.addCacheMarker2Layer(XS.Main.Markers.vill.data);
-            if(!xs_tjfx_themeLayer && !xs_tjfx_graph_themeLayer){
-                $("#xs_tjfx_range_Legend").remove();
-                XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.town,'贫困类型');
-            }
-        }else{
-            if(!xs_tjfx_themeLayer && !xs_tjfx_graph_themeLayer && !xs_pkdc_isTaskline){
-                xs_markerLayer.clearMarkers();
-                $("#xs_tjfx_range_Legend").remove();
-            }
-        }
-    }else{//poor
-        var poorHMarker = XS.Main.Markers.poor.data;
-        if(poorHMarker.length>0){
-            XS.Main.addCacheMarker2Layer(poorHMarker);
-            if(poorHMarker[0].data.xt_ctype != XS.Main.ClusterPointerStyle.poor_info_obj){
-                xs_poorLabelLayer.removeAllFeatures();
-                xs_poorLabelLayer.addFeatures(xs_poorHLabel);
-            }
-            xs_poorLabelLayer.setVisibility(true);
-            if(!xs_tjfx_themeLayer && !xs_tjfx_graph_themeLayer){
-                $("#xs_tjfx_range_Legend").remove();
-                XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.village,'致贫原因');
-            }
-        }else{
-            if(!xs_tjfx_themeLayer && !xs_tjfx_graph_themeLayer && !xs_pkdc_isTaskline){
-                xs_markerLayer.clearMarkers();
-                xs_poorLabelLayer.setVisibility(false);
-                $("#xs_tjfx_range_Legend").remove();
-            }
-        }
     }
 }
 //清空marker缓存

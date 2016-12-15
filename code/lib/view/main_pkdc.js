@@ -182,6 +182,8 @@ XS.Main.Pkjc.barOption = {
         show: true,
         formatter :function(params){
             var returnValue = "";
+            returnValue += '<div style="width1: 30px;height1: 50px;border: 1px solid green;display: inline-block;"></div>' +
+                '<div style="width1: 30px;height1: 50px;border: 1px solid green;display: inline-block;"></div>';
             if(params) {
                 if (params.constructor == Object) {
                     params = [params];
@@ -191,7 +193,8 @@ XS.Main.Pkjc.barOption = {
                     returnValue += '<br/><div style="width: 10px;height: 10px;display: inline-block;border-radius: 50%;background: ' + params[i].color + ';"></div>';
                     for(var j=0;j<xs_tipAnalyUnit.length;j++){
                         if(xs_tipAnalyUnit[j].name == params[0].seriesName){
-                            returnValue += params[i].seriesName + ': ' + params[i].value.toFixed(2) + xs_tipAnalyUnit[j].value[i];
+                            var tipValueNum = params[i].value.toString().split(".").length>1 ? params[i].value.toString().split(".")[1].length : 0;
+                            returnValue += params[i].seriesName + ': ' + (tipValueNum>2 ? (params[i].value-0).toFixed(2) : params[i].value) + xs_tipAnalyUnit[j].value[i];
                             if(params[i].percent && xs_tipAnalyUnit[j].value[i] != "%"){
                                 returnValue += "("+ params[i].percent +"%)";
                             }
@@ -280,7 +283,8 @@ XS.Main.Pkjc.pieOption = {
                     returnValue += '<br/><div style="width: 10px;height: 10px;display: inline-block;border-radius: 50%;background: ' + params[i].color + ';"></div>';
                     for(var j=0;j<xs_tipAnalyUnit.length;j++){
                         if(xs_tipAnalyUnit[j].name == params[0].seriesName){
-                            returnValue += params[i].name + ': ' + params[i].value.toFixed(2) + xs_tipAnalyUnit[j].value[i];
+                            var tipValueNum = params[i].value.toString().split(".").length>1 ? params[i].value.toString().split(".")[1].length : 0;
+                            returnValue += params[i].name + ': ' + (tipValueNum>2 ? (params[i].value-0).toFixed(2) : params[i].value) + xs_tipAnalyUnit[j].value[i];
                             if(params[i].percent && xs_tipAnalyUnit[j].value[i] != "%"){
                                 returnValue += "("+ params[i].percent +"%)";
                             }
@@ -350,7 +354,7 @@ XS.Main.Pkjc.pkdc = function(){
         return;
     }
     XS.CommonUtil.showLoader();
-    XS.Main.functionBtnClk();
+    //XS.Main.functionBtnClk();
     XS.Main.hiddenLayers();
     XS.Main.closeDialogs("xs_main_detail");
 
@@ -869,20 +873,28 @@ XS.Main.Pkjc.showInfoWin = function(level, superId, id){
                 xs_pkdc_detailCashJson = json[0];
                 isPoorHfinish = true;
                 json = json[0];
-                var villBaseInfNameField = XS.Main.Pkjc.detailKV.village.tabs[0].name;
-                var villBaseInfValueField = XS.Main.Pkjc.detailKV.village.tabs[0].value;
-                var villBaseInfUnitField = XS.Main.Pkjc.detailKV.village.tabs[0].unit;
-                for(var i=0;i<villBaseInfNameField.length;i++){
+                var NameField = XS.Main.Pkjc.detailKV.village.tabs[0].name;
+                var ValueField = XS.Main.Pkjc.detailKV.village.tabs[0].value;
+                var UnitField = XS.Main.Pkjc.detailKV.village.tabs[0].unit;
+                for(var i=0;i<NameField.length;i++){
                     xs_pkdc_detailCash.push({});
-                    if(villBaseInfUnitField && villBaseInfUnitField[i]){
-                        xs_pkdc_detailCash[i].name = villBaseInfNameField[i] + "(" + villBaseInfUnitField[i] + ")";
+                    xs_pkdc_detailCash[i].name = NameField[i];
+                    if(isNaN(json[ValueField[i]])){
+                        xs_pkdc_detailCash[i].value = json[ValueField[i]] ? json[ValueField[i]] : "";
                     }else{
-                        xs_pkdc_detailCash[i].name = villBaseInfNameField[i];
-                    }
-                    if(isNaN(json[villBaseInfValueField[i]])){
-                        xs_pkdc_detailCash[i].value = json[villBaseInfValueField[i]] ? json[villBaseInfValueField[i]] : "";
-                    }else{
-                        xs_pkdc_detailCash[i].value = json[villBaseInfValueField[i]] ? json[villBaseInfValueField[i]] : 0;;
+                        if(UnitField && UnitField[i]){
+                            if(NameField[i] == "经度" || NameField[i] == "纬度" || NameField[i] == "贫困发生率"){
+                                xs_pkdc_detailCash[i].value = (json[ValueField[i]]-0)>=0 ? (json[ValueField[i]] - 0).toFixed(2) + UnitField[i] : "";
+                            }else{
+                                xs_pkdc_detailCash[i].value = (json[ValueField[i]]-0)>=0 ? (json[ValueField[i]] - 0) + UnitField[i] : "";
+                            }
+                        }else{
+                            if(NameField[i] == "经度" || NameField[i] == "纬度" || NameField[i] == "贫困发生率"){
+                                xs_pkdc_detailCash[i].value = (json[ValueField[i]]-0)>=0 ? (json[ValueField[i]] - 0).toFixed(2) : "";
+                            }else{
+                                xs_pkdc_detailCash[i].value = (json[ValueField[i]]-0)>=0 ? (json[ValueField[i]]-0) : "";
+                            }
+                        }
                     }
                 }
                 $("#xs_pkdc_msg_barC").empty().append(XS.Main.Poor.createTable(xs_pkdc_detailCash, 2, 50,"","color:#00bbee"));
@@ -1259,6 +1271,8 @@ XS.Main.Pkjc.clickDutyChain = function(zoneLevel, stateCode,currentName){
     // "region_shortname":"大方县","regionid":"5224","workid":"522400045",
     // "workname":"蔡志君","workpost":"省政协副主席","worktel":"0","workunit":""}
     XS.Main.Pkjc.minInfoWinDialog();
+    XS.Main.Pkjc.closeInfoDialog();
+    XS.Main.Tjfx.removeLayer();
     var data = {pd_id:stateCode};
     XS.CommonUtil.showLoader();
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryBrigInviBySId", data, function (json) {
@@ -1325,6 +1339,7 @@ var xs_pkdc_isTaskline = false;
 XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode, zoneName){
     XS.Main.Pkjc.minInfoWinDialog();
     XS.Main.Pkjc.closeInfoDialog();
+    XS.Main.Tjfx.removeLayer();
     if(XS.StrUtil.isEmpty(zoneCode)){
         XS.CommonUtil.showMsgDialog("","请先选择区域");
         return;
@@ -1478,7 +1493,6 @@ XS.Main.Pkjc.task_queryLine = function(){
     }
     //轨迹查询
     XS.Main.clearMap();
-    XS.Main.clearMarker();
     $("#xs_pkdc_task_loading").css({"visibility":"visible"});
     //string workid,string begintime,string endtime
     var data = {workid: xs_pkdc_task_rdata.SU_ACCOUNT, begintime:sdate, endtime:ddate};
@@ -1503,6 +1517,7 @@ XS.Main.Pkjc.task_queryLine = function(){
         };
         if(json && json.length>0)
         {
+            XS.Main.clearMarker();
             xs_pkdc_isTaskline = true;
             var pArr = [];
             var a_features = [];
