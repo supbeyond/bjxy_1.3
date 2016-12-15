@@ -73,7 +73,6 @@ var xs_animatorVectorLayer = null; //矢量动画图层
 var xs_markerLayer = null; //marker图层
 var xs_poorLabelLayer; //显示贫困户标签图层
 //var xs_cityMarkerLayer; //显示毕节市标签图层
-var xs_cityMarkerFeature = null; //显示毕节市标签图层
 
 var xs_labelLayer = null; //标签图层
 

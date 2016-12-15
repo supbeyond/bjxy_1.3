@@ -1860,7 +1860,7 @@ XS.Main.Pkjc.tipAnalyFarmatterNex = function(params){
             params = [params];
         }
 
-        if(params.length>40){
+        if(params.length>25){
             returnValue += '<div style="border1: 1px solid green;position: absolute;width:100%;">'+ params[0].name;
             returnValue += '</div><div style="border1: 1px solid red;">';
             returnValue += '<div style="border1: 1px solid green;display: inline-block;">';
@@ -1869,7 +1869,7 @@ XS.Main.Pkjc.tipAnalyFarmatterNex = function(params){
         }
         var isSecondDiv = false;
         for(var i=0;i<params.length;i++){
-            if(params.length>40 && i>params.length/2.0 && !isSecondDiv){
+            if(params.length>25 && i>params.length/2.0 && !isSecondDiv){
                 returnValue += '</div><div style="width: 5px;border1: 1px solid green;display: inline-block;vertical-align: top;">';
                 returnValue += '</div><div style="border1: 1px solid green;display: inline-block;vertical-align: top;">';
                 isSecondDiv = true;
@@ -1886,7 +1886,7 @@ XS.Main.Pkjc.tipAnalyFarmatterNex = function(params){
                 }
             }
         }
-        if(params.length>40){
+        if(params.length>25){
             returnValue += '</div></div>';
         }
     }
@@ -2799,7 +2799,7 @@ XS.Main.Pkjc.countyAnalyShow = function(json,index){
             break;
         case 3 ://五通(五四)
             var field = ["RoadHardNum","BusStateNum","WlanNum","HRoadHardNum","PowerNum"];
-            var xAxis = ['','category',["村沥青路","通客运","通宽带","通户公路","通生产用电"],false];
+            var xAxis = ['','category',["通(沥青/水泥)公路行政村","通客运行政村","通宽带行政村","通户公路行政村","通生产用电行政村"],false];
             var legend = [40,[],[]];
             XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
             //[[name,type,yAxisIndex,[[],[]],smooth]]
@@ -2818,11 +2818,11 @@ XS.Main.Pkjc.countyAnalyShow = function(json,index){
                     series[i-jaonIsNullNum][3].push(json[i][field[j]]);
                 }
             }
-            XS.Main.Pkjc.ciAnalyOpt([5,'五通(五通四有)'],['axis',['line'],XS.Main.Pkjc.tipAnalyFarmatterNex],legend,[230,40,50,40],xAxis,[['村(个)','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
+            XS.Main.Pkjc.ciAnalyOpt([5,'五通(五通四有)'],['axis',['line'],XS.Main.Pkjc.tipAnalyFarmatterNex],legend,[230,40,50,70],xAxis,[['行政村(个)','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
             break;
         case 4 ://四有(五四)
             var field = ["BeautifulNum","CultureNum","EconomyNum","HealthRoomNum"];
-            var xAxis = ['','category',["美丽乡村","文化场所","村集体经济","村卫生室"],false];
+            var xAxis = ['','category',["美丽乡村","有文化场所行政村","有集体经济行政村","有卫生室行政村"],false];
             var legend = [40,[],[]];
             XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
             //[[name,type,yAxisIndex,[[],[]],smooth]]
@@ -2841,11 +2841,11 @@ XS.Main.Pkjc.countyAnalyShow = function(json,index){
                     series[i-jaonIsNullNum][3].push(json[i][field[j]]);
                 }
             }
-            XS.Main.Pkjc.ciAnalyOpt([5,'四有(五通四有)'],['axis',['line'],XS.Main.Pkjc.tipAnalyFarmatterNex],legend,[230,40,50,40],xAxis,[['村(个)','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
+            XS.Main.Pkjc.ciAnalyOpt([5,'四有(五通四有)'],['axis',['line'],XS.Main.Pkjc.tipAnalyFarmatterNex],legend,[230,40,50,70],xAxis,[['行政村(个)','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
             break;
         case 5 ://四有(四五)
             var field = ["WaterSafeNum","ElectricSafeNum","HouseSafeNum","YardHardNum"];
-            var xAxis = ['','category',["安全饮水","安全用电","安全住房","院坝硬化"],false];
+            var xAxis = ['','category',["安全饮水户数","安全用电户数","安全住房户数","院坝硬化户数"],false];
             var legend = [40,[],[]];
             XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
             var series = [];
@@ -2863,11 +2863,11 @@ XS.Main.Pkjc.countyAnalyShow = function(json,index){
                     series[i-jaonIsNullNum][3].push(json[i][field[j]]);
                 }
             }
-            XS.Main.Pkjc.ciAnalyOpt([5,'四有(四有五覆盖)'],['axis',['line'],XS.Main.Pkjc.tipAnalyFarmatterNex],legend,[230,40,70,50],xAxis,[['村(个)','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
+            XS.Main.Pkjc.ciAnalyOpt([5,'四有(四有五覆盖)'],['axis',['line'],XS.Main.Pkjc.tipAnalyFarmatterNex],legend,[230,40,70,60],xAxis,[['户数(户)','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
             break;
         case 6 ://五覆盖(四五)
             var field = ["CoMedicNum","InsureNum","WorkSkillNum","EduHelpNum","IndustyNum"];
-            var xAxis = ['','category',["合作医保","养老保险","就业培训","教育资助","增收产业"],false];
+            var xAxis = ['','category',["参加合作医保人数","参加养老保险人数","参加就业培训人数","教育资助人数","增收产业人数"],false];
             var legend = [40,[],[]];
             XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
             var series = [];
@@ -2885,7 +2885,7 @@ XS.Main.Pkjc.countyAnalyShow = function(json,index){
                     series[i-jaonIsNullNum][3].push(json[i][field[j]]);
                 }
             }
-                XS.Main.Pkjc.ciAnalyOpt([5,'五覆盖(四有五覆盖)'],['axis',['line'],XS.Main.Pkjc.tipAnalyFarmatterNex],legend,[230,40,70,50],xAxis,[['村(个)','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
+                XS.Main.Pkjc.ciAnalyOpt([5,'五覆盖(四有五覆盖)'],['axis',['line'],XS.Main.Pkjc.tipAnalyFarmatterNex],legend,[230,40,70,60],xAxis,[['人数(人)','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
             break;
     }
 }
@@ -2953,7 +2953,7 @@ XS.Main.Pkjc.townAnalyShow = function(json,index){
             break;
         case 3 ://五通(五四)
             var field = ["RoadHardNum","BusStateNum","WlanNum","HRoadHardNum","PowerNum"];
-            var xAxis = ['','category',["村沥青路","通客运","通宽带","通户公路","通生产用电"],false];
+            var xAxis = ['','category',["通(沥青/水泥)路行政村","通客运行政村","通宽带行政村","通户公路行政村","通生产用电行政村"],false];
             var legend = [80,[],[]];
             XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
             //[[name,type,yAxisIndex,[[],[]],smooth,stack]]
@@ -2972,11 +2972,11 @@ XS.Main.Pkjc.townAnalyShow = function(json,index){
                     series[i-jaonIsNullNum][3].push(json[i][field[j]]);
                 }
             }
-            XS.Main.Pkjc.ciAnalyOpt([20,'五通(五通四有)'],['axis',['line'],XS.Main.Pkjc.tipAnalyFarmatterNex],legend,[200,40,40,50],xAxis,[['村(个)','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
+            XS.Main.Pkjc.ciAnalyOpt([20,'五通(五通四有)'],['axis',['line'],XS.Main.Pkjc.tipAnalyFarmatterNex],legend,[200,40,40,70],xAxis,[['行政村(个)','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
             break;
         case 4 ://四有(五四)
             var field = ["BeautifulNum","CultureNum","EconomyNum","HealthRoomNum",];
-            var xAxis = ['','category',["美丽乡村","文化场所","村集体经济","村卫生室"],false];
+            var xAxis = ['','category',["美丽乡村","有文化场所行政村","有集体经济行政村","有卫生室行政村"],false];
             var legend = [80,[],[]];
             XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
             //[[name,type,yAxisIndex,[[],[]],smooth,stack]]
@@ -2995,11 +2995,11 @@ XS.Main.Pkjc.townAnalyShow = function(json,index){
                     series[i-jaonIsNullNum][3].push(json[i][field[j]]);
                 }
             }
-            XS.Main.Pkjc.ciAnalyOpt([20,'四有(五通四有)'],['axis',['line'],XS.Main.Pkjc.tipAnalyFarmatterNex],legend,[200,40,40,50],xAxis,[['村(个)','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
+            XS.Main.Pkjc.ciAnalyOpt([20,'四有(五通四有)'],['axis',['line'],XS.Main.Pkjc.tipAnalyFarmatterNex],legend,[200,40,40,70],xAxis,[['行政村(个)','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
             break;
         case 5 ://四有(四五)
             var field = ["WaterSafeNum","ElectricSafeNum","HouseSafeNum","YardHardNum"];
-            var xAxis = ['','category',["安全饮水","安全用电","安全住房","院坝硬化"],false];
+            var xAxis = ['','category',["安全饮水户","安全用电户","安全住房户","院坝硬化户"],false];
             var legend = [60,[],[]];
             XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
             var series = [];
@@ -3017,11 +3017,11 @@ XS.Main.Pkjc.townAnalyShow = function(json,index){
                     series[i-jaonIsNullNum][3].push(json[i][field[j]]);
                 }
             }
-            XS.Main.Pkjc.ciAnalyOpt([5,'四有(四有五覆盖)'],['axis',['line'],XS.Main.Pkjc.tipAnalyFarmatterNex],legend,[200,40,40,50],xAxis,[['村(个)','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
+            XS.Main.Pkjc.ciAnalyOpt([5,'四有(四有五覆盖)'],['axis',['line'],XS.Main.Pkjc.tipAnalyFarmatterNex],legend,[200,40,40,50],xAxis,[['户数(户)','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
             break;
         case 6 ://五覆盖(四五)
             var field = ["CoMedicNum","InsureNum","WorkSkillNum","EduHelpNum","IndustyNum"];
-            var xAxis = ['','category',["合作医保","养老保险","就业培训","教育资助","增收产业"],false];
+            var xAxis = ['','category',["参加合作医保人数","参加养老保险人数","参加就业培训人数","教育资助人数","增收产业人数"],false];
             var legend = [60,[],[]];
             XS.Main.Pkjc.ananlyValueOfJson(json,[legend[1]],['REGION_Name'],'',[]);
             var series = [];
@@ -3039,7 +3039,7 @@ XS.Main.Pkjc.townAnalyShow = function(json,index){
                     series[i-jaonIsNullNum][3].push(json[i][field[j]]);
                 }
             }
-            XS.Main.Pkjc.ciAnalyOpt([5,'五覆盖(四有五覆盖)'],['axis',['line'],XS.Main.Pkjc.tipAnalyFarmatterNex],legend,[200,40,40,50],xAxis,[['村(个)','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
+            XS.Main.Pkjc.ciAnalyOpt([5,'五覆盖(四有五覆盖)'],['axis',['line'],XS.Main.Pkjc.tipAnalyFarmatterNex],legend,[200,40,40,60],xAxis,[['人数(人)','value']],[],[],series,"xs_pkdc_AnalysTabsChart",[]);
             break;
     }
 }
