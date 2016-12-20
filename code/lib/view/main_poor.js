@@ -1737,7 +1737,77 @@ XS.Main.Poor.preloc_handleVill = function(level, parentId){
     xs_poor_elementsLayer.setVisibility(true);
     if($("#xs_utfGridC").length>0) $("#xs_utfGridC").css("display","none");
     XS.CommonUtil.hideLoader();
-    var testObj = [
+
+    XS.CommonUtil.showLoader();
+    XS.MapQueryUtil.queryBySql(XS.Constants.dataSourceName, "Village_Code", "Town_id=="+xs_superZoneCode, XS.Constants.map_query,function(queryEventArgs)
+    {
+        var i, feature, features, result = queryEventArgs.result;
+        XS.CommonUtil.hideLoader();
+        if (result && result.recordsets&&result.recordsets[0].features.length>0) {
+            features = result.recordsets[0].features;
+            var centerPointert = xs_currentZoneFuture.geometry.getBounds().getCenterLonLat();
+            var testObj = [];
+            var nameArr = ["李彬","王成","杨晓君","陈育勋","马贤军","李牧","丁秀","王辉","陈涛","张阳","鹿易英",
+                "刘梅","高强","肖剑","杨晓","王婷","安澜","周建","刘莹莹"];
+            var num = 0;
+            for(i=0;i<features.length;i++){
+                if(features[i].data.OldID != xs_currentZoneCode){
+                    feature = features[i];
+                    var centerPointerf = feature.geometry.getBounds().getCenterLonLat();
+                    testObj.push({'name':nameArr[num++], 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':feature.data.vd_name, 'flon':centerPointerf.lon, 'flat':centerPointerf.lat, 'to':xs_currentZoneFuture.data.vd_name, 'tlon':centerPointert.lon, 'tlat':centerPointert.lat, 'fpic':'','fv':'','tpic':'','tv':''});
+                }
+            }
+            //1.搬迁人口列表
+            var content =
+                '<div id="xs_poor_reloc_C" style="width: 100%; height:100%;padding: 5px;box-sizing: border-box;">'+
+                '<div id="xs_poor_reloc_tabC" style="width:100%;height:465px;"></div>'+
+                '<i id="xs_poor_reloc_loading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: -25px;visibility: hidden;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading"></i>'+
+                '</div>';
+            content += '</div>';
+            //id, title, iconCls, content, resizable, maximizable, modal, width, height, left, top, closeCallback, maximizeCallback, minimizeCallback
+            XS.CommonUtil.openDialog("xs_main_detail_relocation", "扶贫搬迁", "icon-man", content, false, true, false, 350, null,0,null,function(){
+                if(xs_poor_detail_is_relocationdialog_open)
+                {
+                    xs_poor_detail_is_relocationdialog_open = false;
+                    xs_currentZoneFuture = null;
+                    XS.Main.clearVectorLayer();
+                    //XS.Main.Poor.clearRelocationLayer();
+                }
+            });
+            xs_poor_detail_is_relocationdialog_open = true;
+            for(var i=0;i<testObj.length;i++){
+                testObj[i].sum += "元";
+            }
+            $("#xs_poor_reloc_tabC").empty().append('<table id="xs_poor_reloc_dg" class="easyui-datagrid" style="width:100%;height:100%;" ></table>');
+            $('#xs_poor_reloc_dg').datagrid({
+                data: testObj,
+                pagination: true,
+                pageSize: 15,
+                pageList: [15,20,30],
+                striped: true,
+                onSelect:function(index, data){
+                    XS.Main.Poor.preloc_handleData(level, parentId, data);
+                },
+                singleSelect: true,
+                rownumbers: true,
+                columns: [[
+                    {field: 'name', title: '姓名',width:'10%'},
+                    {field: 'helpdepartment', title: '扶贫单位',width:'20%'},
+                    {field: 'sum', title: '扶贫资金',width:'20%'},
+                    {field: 'from', title: '原始地',width:'20%'},
+                    {field: 'to', title: '搬迁地',width:'25%'}
+                ]]
+            });
+            $("#xs_poor_reloc_dg").datagrid("getPager").pagination({displayMsg:""});
+            $('#xs_poor_reloc_dg').datagrid('clientPaging');
+        }else{
+            XS.CommonUtil.showMsgDialog("","暂无相关数据");
+        }
+    }, function(e){
+        XS.CommonUtil.showMsgDialog("","请求失败");
+        XS.CommonUtil.hideLoader();
+    });
+    /*var testObj = [
         {'name':'李彬', 'sum':5000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'镰刀湾村', 'flon':105.43084410858, 'flat':27.7626084993159, 'to':'青林村', 'tlon':105.40357648564, 'tlat':27.7557783311176, 'fpic':'','fv':'','tpic':'','tv':''},
         {'name':'王成 ', 'sum':4000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'煤冲村', 'flon':105.283967412228, 'flat':27.2141378668798, 'to':'核桃村', 'tlon':105.272751223953, 'tlat':27.2173935617529, 'fpic':'','fv':'','tpic':'','tv':''},
         {'name':'杨晓君', 'sum':8000, 'helpdepartment':'县扶贫办', 'helper':'XXX', 'from':'沙朗村', 'flon':105.34166954055, 'flat':27.2097694416046, 'to':'双堰村', 'tlon':105.286757418278, 'tlat':27.195028364937, 'fpic':'','fv':'','tpic':'','tv':''},
@@ -1784,7 +1854,7 @@ XS.Main.Poor.preloc_handleVill = function(level, parentId){
         ]]
     });
     $("#xs_poor_reloc_dg").datagrid("getPager").pagination({displayMsg:""});
-    $('#xs_poor_reloc_dg').datagrid('clientPaging');
+    $('#xs_poor_reloc_dg').datagrid('clientPaging');*/
 }
 
 //清除扶贫搬迁Layer
@@ -2112,8 +2182,8 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
        {"name": "人口", "value": obj.PERSON_NUM},
        {"name": "识别标准", "value": obj.HB_STANDARD},
        {"name": "脱贫标识", "value": obj.HB_OUTOFPOOR},
-       {"name": "经度", "value": XS.StrUtil.isEmpty(obj.HB_LONGITUDE)?"":(parseFloat(obj.HB_LONGITUDE)).toFixed(2)},
-       {"name": "纬度", "value": XS.StrUtil.isEmpty(obj.HB_LATITUDE)?"":(parseFloat(obj.HB_LATITUDE)).toFixed(2)}
+       {"name": "经度", "value": XS.StrUtil.isEmpty(obj.LONGITUDE)?"":(parseFloat(obj.LONGITUDE)).toFixed(2)},
+       {"name": "纬度", "value": XS.StrUtil.isEmpty(obj.LATITUDE)?"":(parseFloat(obj.LATITUDE)).toFixed(2)}
    ];
     $("#xs_poor_detail_tab_info").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 3, 34,"", "color:#00bbee"));
 

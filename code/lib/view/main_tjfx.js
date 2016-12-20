@@ -124,13 +124,16 @@ XS.Main.Tjfx.removeLayer = function(){
     if(xs_labelLayer != null){
         xs_MapInstance.getMapObj().removeLayer(xs_labelLayer);
         xs_labelLayer = null;
+        xs_clickMapType = XS.Main.clickMapType.none
     }
     if(xs_tjfx_themeLayer != null){
         xs_MapInstance.getMapObj().removeLayer(xs_tjfx_themeLayer);
         xs_tjfx_themeLayer = null;
+        xs_clickMapType = XS.Main.clickMapType.none
     }
     if(xs_tjfx_graph_themeLayer != null){
         xs_MapInstance.getMapObj().removeLayer(xs_tjfx_graph_themeLayer);
         xs_tjfx_graph_themeLayer = null;
+        xs_clickMapType = XS.Main.clickMapType.none
     }
 }

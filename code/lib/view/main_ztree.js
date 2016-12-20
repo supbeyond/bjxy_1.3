@@ -568,6 +568,8 @@ XS.Main.Ztree.positionMap = function(regId,ulevel,feature,node){
     var targetMarker = null;
 
     if(feature){
+        feature.data.comefrome = true;
+        xs_currentZoneFuture = feature;
         feature.style = xs_stateZoneStyle;
         xs_vectorLayer.addFeatures(feature);
         xs_MapInstance.getMapObj().zoomToExtent(feature.geometry.getBounds(),false);
@@ -604,6 +606,7 @@ XS.Main.Ztree.positionMap = function(regId,ulevel,feature,node){
             targetMarker = XS.Searchbox.getMakerOfCache(xs_currentZoneLevel,xs_superZoneCode,xs_currentZoneCode);
             if(targetMarker){
                 XS.Searchbox.cachePositionMarker(xs_currentZoneLevel,xs_currentZoneCode,targetMarker);
+                xs_isClearMarkers = false;
                 return;
             }
             feature.data.xs_position = true;
@@ -618,6 +621,7 @@ XS.Main.Ztree.positionMap = function(regId,ulevel,feature,node){
             targetMarker = XS.Searchbox.getMakerOfCache(xs_currentZoneLevel,xs_superZoneCode,xs_currentZoneCode);
             if(targetMarker){
                 XS.Searchbox.cachePositionMarker(xs_currentZoneLevel,xs_currentZoneCode,targetMarker);
+                xs_isClearMarkers = false;
                 return;
             }
             feature.data.xs_position = true;

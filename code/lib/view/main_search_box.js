@@ -11,8 +11,8 @@ var xs_searchbox_villFields = [["TOWN","所属(乡)镇"],["POVERT","贫困发生
 var xs_searchbox_poorH = [["HHNAME","户主"],["PTYPE","农户属性"],["AGE","年龄(岁)"],["CARDID","身份证"],["POP","家庭人数(人)"],
     ["PHONE","联系方式"],["A27","住房面积(m)²"],["A33","年收入(元)"],["A28","危房"],["A36","各类补贴(元)"],["ISARMYFAMILY","军烈属"],
     ["MAIN_REASON","致贫原因"],["COUNTY","大方县"],["TOWN","乡镇"],["VILL","村"],["VGROUP","组"]];
-var xs_searchbox_replaceFields = [["PTYPE","poorType"],["ALTITUDE","Altitude"],["CARDID","CerNto"],["LATITUDE","Latitude"],["LONGITUDE",
-    "Longitude"],["MEMO","Memo"],["HGID","hguid"],["PB_HHID","hid"],["HHNAME","name"],["POP","num"],["MAIN_REASON","reason"]];
+var xs_searchbox_replaceFields = [["PTYPE","poorType"],["ALTITUDE","Altitude"],["CARDID","CerNto"],["LATITUDE","Latitude"],["LATITUDE","HB_LATITUDE"],
+    ["LONGITUDE","Longitude"],["LONGITUDE","HB_LONGITUDE"],["MEMO","Memo"],["HGID","hguid"],["PB_HHID","hid"],["HHNAME","name"],["POP","num"],["MAIN_REASON","reason"]];
 
 var xs_search_cashData = [];
 var xs_searchbox_action = "";
@@ -362,11 +362,14 @@ XS.Searchbox.searchType = function(){
  * 搜索结果选项点击
  */
 XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
-    xs_poorLabelLayer.removeAllFeatures();
-    xs_currentZoneFuture = null;
-    xs_markerFeaturess = [];
-    XS.Main.clearVectorLayer();
-    xs_markerLayer.clearMarkers();
+    if(regionName != '贫困户详情'){
+        xs_poorLabelLayer.removeAllFeatures();
+        xs_markerLayer.clearMarkers();
+    }
+    if(xs_currentZoneFuture && xs_currentZoneCode != regionId){
+        xs_currentZoneFuture = null;
+        XS.Main.clearVectorLayer();
+    }
     XS.Main.Poor.clearRelocationLayer();
     $("#xs_tjfx_range_Legend").remove();
     var targetMarker = null;
@@ -391,7 +394,9 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
                     var geotextFeature = new SuperMap.Feature.Vector(geoText);
                     xs_poorLabelLayer.removeAllFeatures();
                     xs_poorLabelLayer.addFeatures(geotextFeature);
+                    xs_poorHLabel = [geotextFeature];
                     xs_poorLabelLayer.setVisibility(true);
+                    xs_isClearMarkers = false;
                     return;
                 }
             }
@@ -402,7 +407,8 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
         XS.Main.Poor.showPoor(xs_pkdc_cacheDataArr[poorHIndex].hid,null);
         return;
     }else if(regionName == '贫困户详情' && xs_pkdc_cacheDataArr[poorHIndex].LONGITUDE && xs_pkdc_cacheDataArr[poorHIndex].LATITUDE){
-        XS.Main.Poor.showPoorDetailInfo(xs_pkdc_cacheDataArr[poorHIndex]);
+        //XS.Main.Poor.showPoorDetailInfo(xs_pkdc_cacheDataArr[poorHIndex]);
+        XS.Main.Poor.clickClusterCallback(xs_pkdc_cacheDataArr[poorHIndex]);
         return;
     }
 
@@ -495,12 +501,14 @@ XS.Searchbox.featurePosition = function (level,feature,regionId,regionName,poorH
     }else if(regionName == '贫困户详情'){
         xs_isClickMapFinish = true;
         var centerPointer = feature.geometry.getBounds().getCenterLonLat();
-        xs_pkdc_cacheDataArr[poorHIndex].LONGITUDE = centerPointer.lon;
-        xs_pkdc_cacheDataArr[poorHIndex].LATITUDE = centerPointer.lat;
-        XS.Main.Poor.showPoorDetailInfo(xs_pkdc_cacheDataArr[poorHIndex]);
+        xs_pkdc_cacheDataArr[poorHIndex].HB_LONGITUDE = centerPointer.lon;
+        xs_pkdc_cacheDataArr[poorHIndex].HB_LATITUDE = centerPointer.lat;
+        XS.Main.Poor.clickClusterCallback(xs_pkdc_cacheDataArr[poorHIndex]);
+        //XS.Main.Poor.showPoorDetailInfo(xs_pkdc_cacheDataArr[poorHIndex]);
         return;
     }
     //xs_MapInstance.getMapObj().zoomToExtent(feature.geometry.getBounds(),false);
+    feature.data.comefrome = true;
     xs_currentZoneFuture = feature;
     feature.style = xs_stateZoneStyle;
     XS.Main.clearVectorLayer();
@@ -527,6 +535,7 @@ XS.Searchbox.featurePosition = function (level,feature,regionId,regionName,poorH
             xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 6);
             if(marker){
                 XS.Searchbox.cachePositionMarker(level,xs_currentZoneCode,marker);
+                xs_isClearMarkers = false;
                 return;
             }
             feature.data.xs_position = true;
@@ -540,6 +549,7 @@ XS.Searchbox.featurePosition = function (level,feature,regionId,regionName,poorH
             xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 9);
             if(marker){
                 XS.Searchbox.cachePositionMarker(level,xs_currentZoneCode,marker);
+                xs_isClearMarkers = false;
                 return;
             }
             feature.data.xs_position = true;

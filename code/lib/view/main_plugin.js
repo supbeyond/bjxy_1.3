@@ -1330,11 +1330,19 @@ XS.Main.poorZonePicArr = {
     ]
 };
 //准备向点击的区域中添加标记Markers
-XS.Main.readyAddMarkers = function(centerPoint,level,currentId){
+XS.Main.readyAddMarkers = function(centerPoint,level,currentId,isClose){
     switch (level){
         case XS.Main.ZoneLevel.county:
-            xs_MapInstance.getMapObj().setCenter(centerPoint, 6);
-            XS.Main.Pkjc.clickDetail(level,xs_currentZoneName,currentId,false);
+            if(xs_currentZoneFuture.data.comefrome){
+                xs_MapInstance.getMapObj().zoomToExtent(xs_currentZoneFuture.geometry.getBounds(),false);
+                xs_isClearMarkers = false;
+                return;
+            }else{
+                xs_MapInstance.getMapObj().setCenter(centerPoint, 6);
+            }
+            if(!isClose){
+                XS.Main.Pkjc.clickDetail(level,xs_currentZoneName,currentId,false);
+            }
 
             if(XS.Main.Markers.town.superId == xs_clickMapFutureId && XS.Main.Markers.town.data.length>0){
                 XS.Main.addCacheMarker2Layer(XS.Main.Markers.town.data);
@@ -1345,25 +1353,58 @@ XS.Main.readyAddMarkers = function(centerPoint,level,currentId){
             XS.Main.addTownVillPlevelMarker2Layer(level,currentId);
             break;
         case XS.Main.ZoneLevel.town:
-            xs_MapInstance.getMapObj().setCenter(centerPoint, 9);
-            XS.Main.Pkjc.clickDetail(level,xs_currentZoneName,currentId,false);
-
-            if(XS.Main.Markers.vill.superId == xs_clickMapFutureId && XS.Main.Markers.vill.data.length>0){
-                XS.Main.addCacheMarker2Layer(XS.Main.Markers.vill.data);
-                return;
+            if(xs_currentZoneFuture.data.comefrome){
+                xs_MapInstance.getMapObj().zoomToExtent(xs_currentZoneFuture.geometry.getBounds(),false);
+            }else{
+                xs_MapInstance.getMapObj().setCenter(centerPoint, 9);
+            }
+            if(!isClose){
+                XS.Main.Pkjc.clickDetail(level,xs_currentZoneName,currentId,false);
+            }
+            if(xs_currentZoneFuture.data.comefrome){
+                if(XS.Main.Markers.town.superId == xs_clickMapFutureId && XS.Main.Markers.town.data.length>0){
+                    XS.Main.addCacheMarker2Layer(XS.Main.Markers.town.data);
+                    xs_isClearMarkers = false;
+                    return;
+                }
+            }else{
+                if(XS.Main.Markers.vill.superId == xs_clickMapFutureId && XS.Main.Markers.vill.data.length>0){
+                    XS.Main.addCacheMarker2Layer(XS.Main.Markers.vill.data);
+                    xs_isClearMarkers = false;
+                    return;
+                }
             }
             XS.Main.clearMarCache(level,currentId);
             XS.Main.addTownVillPlevelMarker2Layer(level, currentId);
             break;
         case XS.Main.ZoneLevel.village:
-            xs_MapInstance.getMapObj().setCenter(centerPoint, 11);
-            XS.Main.Pkjc.clickDetail(level,xs_currentZoneName,currentId,false);
-
+            if(xs_currentZoneFuture){
+                if(xs_currentZoneFuture.data.comefrome){
+                    xs_MapInstance.getMapObj().zoomToExtent(xs_currentZoneFuture.geometry.getBounds(),false);
+                }else{
+                    xs_MapInstance.getMapObj().setCenter(centerPoint, 11);
+                }
+            }else{
+                xs_MapInstance.getMapObj().setCenter(centerPoint, 11);
+            }
+            if(!isClose){
+                XS.Main.Pkjc.clickDetail(level,xs_currentZoneName,currentId,false);
+            }
+            if(xs_currentZoneFuture){
+                if(xs_currentZoneFuture.data.comefrome){
+                    if(XS.Main.Markers.vill.superId == xs_clickMapFutureId && XS.Main.Markers.vill.data.length>0){
+                        XS.Main.addCacheMarker2Layer(XS.Main.Markers.vill.data);
+                        xs_isClearMarkers = false;
+                        return;
+                    }
+                }
+            }
             if(XS.Main.Markers.poor.superId == xs_clickMapFutureId && XS.Main.Markers.poor.data.length>0){
                 XS.Main.addCacheMarker2Layer(XS.Main.Markers.poor.data);
                 xs_poorLabelLayer.removeAllFeatures();
                 xs_poorLabelLayer.addFeatures(xs_poorHLabel);
                 xs_poorLabelLayer.setVisibility(true);
+                xs_isClearMarkers = false;
                 return;
             }
             XS.Main.clearMarCache(level,currentId);
@@ -1815,7 +1856,6 @@ XS.Main.hiddenLayers = function(){
    // xs_zone_vectorLayer.removeAllFeatures();
     xs_clusterLayer.destroyCluster();
     xs_clusterControl.deactivate();
-    XS.Main.clearVectorLayer();
 
 }
 //清除矢量图层
