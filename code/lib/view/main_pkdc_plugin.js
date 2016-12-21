@@ -162,8 +162,8 @@ XS.Main.Pkjc.detailKV = {
                 name:["无房户","危房改造户","需易地搬迁户","劳动力人数","省内务工人数","省外务工人数","外出务工人数",
                     "少数民族人数","未安全饮水人数","享受农村低保人数","需易地搬迁人数","参加新农合人数",
                     "参加居民养老人数"],
-                value:["TBS_MOVE_POP","TBS_RECONSTRU_HHNUM","TBS_MOVE_HHNUM","TBS_LABOR_NUM","TBS_IN_LABOR",
-                    "TBS_OUT_LABOR","TBS_LTRAINED_OUTER","TBS_MINORITY_NUM","TBS_NOWATER_POP","TBS_GUARANTEE_POP","TBS_MOVE_HHNUM",
+                value:["TBS_NOHOME_HHNUM","TBS_RECONSTRU_HHNUM","TBS_MOVE_HHNUM","TBS_LABOR_NUM","TBS_IN_LABOR",
+                    "TBS_OUT_LABOR","TBS_LTRAINED_OUTER","TBS_MINORITY_NUM","TBS_NOWATER_POP","TBS_GUARANTEE_POP","TBS_MOVE_POP",
                     "TBS_MEDICAL_POP","TBS_ENDOW_POP"],
                 unit:[" 户"," 户"," 户"," 人"," 人"," 人"," 人"," 人"," 人"," 人"," 人"," 人"," 人"," 人"]
             },
