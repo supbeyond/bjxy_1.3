@@ -610,7 +610,17 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level,tuliName){
             {
                 //tag += '<td class="legendItemHeader">贫困原因</td><td class="poorLegendItemValue">图标</td></tr>';
                 for(var i in XS.Main.poorZonePicArr.poor){
-                    tag += '<tr class="poorLegendItemRow">';
+                    var isHaveEqual = false;
+                    for(var j in xs_clickPoorLegendArr){
+                        if(XS.Main.poorZonePicArr.poor[i].name == xs_clickPoorLegendArr[j].name){
+                            tag += '<tr class="poorLegendItemRow" style="background: #ddd;">';
+                            isHaveEqual = true;
+                            break;
+                        }
+                    }
+                    if(!isHaveEqual){
+                        tag += '<tr class="poorLegendItemRow"">';
+                    }
                     tag += '<td class="legendItemHeader">'+XS.Main.poorZonePicArr.poor[i].name+'</td>';
                     tag += '<td class="legendItemValue" style1="background:url("'+XS.Main.poorZonePicArr.poor[i].value+'") no-repeat 100px 0 #fff;>' +
                         '<img style="width:18px;heigth:18px;" src="'+XS.Main.poorZonePicArr.poor[i].value+'" alt=""/>' +
@@ -624,7 +634,10 @@ XS.Main.Tjfx.range_createRangeLegendTag = function(type, level,tuliName){
 
     $("#xs_mainC").append(tag);
     XS.Main.addDivHover2HiddenUTFGridTip("xs_tjfx_range_Legend");
-
+    for(var i in $(".poorLegendItemRow")){
+        XS.Main.Poor.legendRowHover($(".poorLegendItemRow").eq(i),"#ccc");
+    }
+    $(".poorLegendItemRow").click(XS.Main.Poor.legendClick);
     return tag;
 }
 
@@ -665,12 +678,22 @@ XS.Main.Tjfx.legendClose = function(){
 }
 //鼠标在贫困户图例中移动事件
 XS.Main.Poor.legendRowHover = function(rowObjs,overColor,outColor){
-    rowObjs.hover(
+    if(!outColor){
+        var background = "#fff";
+    }
+        rowObjs.hover(
         function(){
-            $(this).css({background:overColor});
+            if(!outColor){
+                background = $(this).css("background") ? $(this).css("background") : background;
+            }
+            $(this).css({background:overColor,cursor: "pointer"});
         },
         function(){
-            $(this).css({background:outColor});
+            if(!outColor){
+                $(this).css({background:background,cursor: "pointer"});
+            }else{
+                $(this).css({background:outColor,cursor: "pointer"});
+            }
         }
     );
 }
