@@ -26,12 +26,12 @@ XS.Main.Poor.showPoor = function(id,centerPointer){
             for(var i in XS.Main.poorZonePicArr.poor){
                 if(XS.Main.poorZonePicArr.poor[i].name == json[0].reason){
                     isEqual = true;
-                    xs_clickPoorLegendArr = [json[0].reason];
+                    xs_clickPoorLegendArr = [XS.Main.poorZonePicArr.poor[i]];
                     break;
                 }
             }
             if(!isEqual){
-                xs_clickPoorLegendArr = ['其它'];
+                xs_clickPoorLegendArr = [XS.Main.poorZonePicArr.poor[8]];
                 json[0].reason = '其它';
             }
             //XS.Main.addVectorPoint2ClusterLayer(json, XS.Main.ClusterPointerStyle.poor_info_obj);
@@ -53,6 +53,7 @@ XS.Main.Poor.showPoors = function(objArr,centerPointer){
     XS.Main.Poor.clearRelocationLayer();
     if(objArr&&objArr.length>0){
         var dataArr = [];
+        xs_clickPoorLegendArr =XS.Main.poorZonePicArr.poor;
         for(var i in objArr){
             var lng = 0;
             var lat = 0;
@@ -76,7 +77,7 @@ XS.Main.Poor.showPoors = function(objArr,centerPointer){
             dataArr.push({LONGITUDE:lng, LATITUDE:lat, hid:objArr[i].id, name:objArr[i].name,reason:objArr[i].reason,xt_ctype:XS.Main.ClusterPointerStyle.poor_info_id});
         }
         //xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(objArr[0].Longitude, objArr[0].Latitude), 11);
-        xs_clickPoorLegendArr =[];
+
         XS.Main.readyAddMarkerData(dataArr);
         //XS.Main.addVectorPoint2ClusterLayer(dataArr, XS.Main.ClusterPointerStyle.poor_info_id);
 
@@ -89,6 +90,7 @@ XS.Main.Poor.showPoors = function(objArr,centerPointer){
  * @param type
  */
 var xs_poorHLabel = [];
+var xs_isFirstClick = true;
 XS.Main.readyAddMarkerData = function(objArr){
     //XS.Main.clearMap();
     //XS.Main.Poor.clearRelocationLayer();
@@ -100,8 +102,8 @@ XS.Main.readyAddMarkerData = function(objArr){
     }
 
     XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.village,"致贫原因");
-
-    if(xs_clickPoorLegendArr.length == 0){
+    //XS.Main.Poor.legendRowHover($(".poorLegendItemRow"),"#ddd");
+    /*if(xs_clickPoorLegendArr.length == 0){
         $(".poorLegendItemRow").css({background:"#eee"});
         XS.Main.Poor.legendRowHover($(".poorLegendItemRow"),"#ddd","#eee");
     }else if(xs_clickPoorLegendArr.length == 1){
@@ -112,7 +114,7 @@ XS.Main.readyAddMarkerData = function(objArr){
                 break;
             }
         }
-    }
+    }*/
     var geotextFeatures = [];
     var dataArr = [];
     for(var i=0; i<objArr.length; i++)
@@ -141,53 +143,59 @@ XS.Main.readyAddMarkerData = function(objArr){
     xs_poorLabelLayer.setVisibility(true);
     //xs_clusterLayer.addFeatures(features);
     XS.Main.addMarkers2Layer(dataArr, "LONGITUDE", "LATITUDE", "xs_p_icon", 25, 25, 3);
-
-
-    var isFirstClick = true;
-    $(".poorLegendItemRow").click(function (e) {
+    xs_isFirstClick = true;
+     /*$(".poorLegendItemRow").click(function(e){
         var onlyReasonClick = $(this).children()[0].innerHTML;
-        if(isFirstClick){
-            isFirstClick = false;
-            if(xs_clickPoorLegendArr.length != 1){
-                $(".poorLegendItemRow").css({background:"#fff"});
-                XS.Main.Poor.legendRowHover($(".poorLegendItemRow"),"#ddd","#fff");
+        XS.Main.Poor.legendClick(e,dataArr,onlyReasonClick)
+    });*/
+}
+//贫困户图例click事件
+XS.Main.Poor.legendClick = function (e){
+    if(xs_isFirstClick){
+        xs_isFirstClick = false;
+        if(xs_clickPoorLegendArr.length != 1){
+            xs_clickPoorLegendArr = [];
+            $(".poorLegendItemRow").css({background:"#fff"});
+        }
+    }
+
+    var isHaveReason = false;
+    for (var i in xs_clickPoorLegendArr) {
+        if ($(this).children()[0].innerHTML == xs_clickPoorLegendArr[i].name) {
+            isHaveReason = true;
+            xs_clickPoorLegendArr.splice(i,1);
+            $(this).css({background:"#fff"});
+            XS.Main.Poor.legendRowHover($(this),"#ccc","#fff");
+            break;
+        }
+    }
+    if (!isHaveReason) {
+        xs_clickPoorLegendArr.push({name:$(this).children()[0].innerHTML});
+        $(this).css({background:"#ddd"});
+        XS.Main.Poor.legendRowHover($(this),"#ccc","#ddd");
+    }
+
+    var clickPoorLegendLabels = [];
+    var clickPoorLegendMarkers = [];
+    for (var i in xs_clickPoorLegendArr) {
+        for (var j in XS.Main.Markers.poor.data) {
+            var markerData = XS.Main.Markers.poor.data[j].data;
+            if (xs_clickPoorLegendArr[i].name == markerData.reason) {
+                clickPoorLegendMarkers.push(XS.Main.Markers.poor.data[j]);
+
+                var geoText = new SuperMap.Geometry.GeoText(markerData.LONGITUDE, markerData.LATITUDE, markerData.name);
+                var geotextFeature = new SuperMap.Feature.Vector(geoText);
+                clickPoorLegendLabels.push(geotextFeature);
             }
         }
-        var isHaveReason = false;
-        for (var i in xs_clickPoorLegendArr) {
-            if (onlyReasonClick == xs_clickPoorLegendArr[i]) {
-                isHaveReason = true;
-                xs_clickPoorLegendArr.splice(i, 1);
-                $(this).css({background:"#fff"});
-                XS.Main.Poor.legendRowHover($(this),"#ddd","#fff");
-                break;
-            }
-        }
-        if (!isHaveReason) {
-            xs_clickPoorLegendArr.push(onlyReasonClick);
-            $(this).css({background:"#eee"});
-            XS.Main.Poor.legendRowHover($(this),"#ddd","#eee");
-        }
 
-        var clickPoorLegendLabels = [];
-        var clickPoorLegendMarkers = [];
-        for (var i in xs_clickPoorLegendArr) {
-            for (var j in dataArr) {
-                if (xs_clickPoorLegendArr[i] == dataArr[j].reason) {
-                    clickPoorLegendMarkers.push(dataArr[j]);
-
-                    var geoText = new SuperMap.Geometry.GeoText(dataArr[j].LONGITUDE, dataArr[j].LATITUDE, dataArr[j].name);
-                    var geotextFeature = new SuperMap.Feature.Vector(geoText);
-                    clickPoorLegendLabels.push(geotextFeature);
-                }
-            }
-
-        }
-        xs_poorLabelLayer.removeAllFeatures();
-        xs_poorLabelLayer.addFeatures(clickPoorLegendLabels);
-        //xs_poorLabelLayer.setVisibility(true);
-        XS.Main.addMarkers2Layer(clickPoorLegendMarkers, "LONGITUDE", "LATITUDE", "xs_p_icon", 25, 25, 3);
-    });
+    }
+    xs_poorLabelLayer.removeAllFeatures();
+    xs_poorLabelLayer.addFeatures(clickPoorLegendLabels);
+    xs_poorLabelLayer.setVisibility(true);
+    XS.Main.addCacheMarker2Layer(clickPoorLegendMarkers);
+    //xs_poorLabelLayer.setVisibility(true);
+    //XS.Main.addMarkers2Layer(clickPoorLegendMarkers, "LONGITUDE", "LATITUDE", "xs_p_icon", 25, 25, 3);
 }
 
 //点击聚散点--查看贫困户的基本信息
@@ -236,7 +244,7 @@ XS.Main.Poor.showPoorInfo = function(obj){
         {"name":"电话","value":obj.Hb_Tel},
         {"name":"贫困类型","value":obj.HB_TYPE},
         {"name":"致贫原因","value":obj.HB_REASON},
-        {"name":"人口","value":obj.PERSON_NUM}
+        {"name":"人口","value":obj.PERSON_NUM>0 ? obj.PERSON_NUM + "人" : ""}
         /*{"name":"主要原因","value":obj.MAIN_REASON},
         {"name":"次要原因","value":obj.OTHER_REASON},
         {"name":"脱贫状态","value":obj.OUTPOORTAT},
@@ -310,7 +318,7 @@ XS.Main.Poor.showPoorInfo = function(obj){
             ]
         });
 
-    var data = {pdid: obj.HB_NAME};
+    var data = {pdid: obj.HB_ID};
     //获取贫困户头像
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryRegionFileByHeadid", data, function (json) {
         if (json && json.length>0)
