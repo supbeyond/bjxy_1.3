@@ -9,7 +9,7 @@ var xs_searchbox_townFields = [["ECOCROP","耕地面积(亩)"],["GROUPNUM","自�
 var xs_searchbox_villFields = [["TOWN","所属(乡)镇"],["POVERT","贫困发生率(%)"],["POORTYPE","贫困类型"],["B5","耕地面积(亩)"],
     ["B2","总户数(户)"],["B2A","贫困户(户)"],["B3","总人口(人)"],["B3A","贫困人口(人)"]];
 var xs_searchbox_poorH = [["HHNAME","户主"],["PTYPE","农户属性"],["AGE","年龄(岁)"],["CARDID","身份证"],["POP","家庭人数(人)"],
-    ["PHONE","联系方式"],["A27","住房面积(m)²"],["A33","年收入(元)"],["A28","危房"],["A36","各类补贴(元)"],["ISARMYFAMILY","军烈属"],
+    ["PHONE","联系方式"],["A27","住房面积(m²)"],["A33","年收入(元)"],["A28","危房"],["A36","各类补贴(元)"],["ISARMYFAMILY","军烈属"],
     ["MAIN_REASON","致贫原因"],["COUNTY","大方县"],["TOWN","乡镇"],["VILL","村"],["VGROUP","组"]];
 var xs_searchbox_replaceFields = [["PTYPE","poorType"],["ALTITUDE","Altitude"],["CARDID","CerNto"],["LATITUDE","Latitude"],["LATITUDE","HB_LATITUDE"],
     ["LONGITUDE","Longitude"],["LONGITUDE","HB_LONGITUDE"],["MEMO","Memo"],["HGID","hguid"],["PB_HHID","hid"],["HHNAME","name"],["POP","num"],["MAIN_REASON","reason"]];
@@ -388,6 +388,8 @@ XS.Searchbox.baseInfoClick = function(level,regionId,regionName,poorHIndex){
             if(regionName == '贫困户'){
                 targetMarker = XS.Searchbox.getMakerOfCache(level,regionId,xs_pkdc_cacheDataArr[poorHIndex].hid);
                 if(targetMarker){
+                    xs_clickPoorLegendArr = [{name:targetMarker.data.reason}];
+                    XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.village,"致贫原因");
                     XS.Searchbox.cachePositionMarker(level,xs_pkdc_cacheDataArr[poorHIndex].hid,targetMarker);
                     xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(targetMarker.data.LONGITUDE, targetMarker.data.LATITUDE), 10);
                     var geoText = new SuperMap.Geometry.GeoText(targetMarker.data.LONGITUDE, targetMarker.data.LATITUDE, targetMarker.data.name);
@@ -534,6 +536,7 @@ XS.Searchbox.featurePosition = function (level,feature,regionId,regionName,poorH
             xs_isClickMapFinish = true;
             xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 6);
             if(marker){
+                XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.county,"贫困级别");
                 XS.Searchbox.cachePositionMarker(level,xs_currentZoneCode,marker);
                 xs_isClearMarkers = false;
                 return;
@@ -548,6 +551,7 @@ XS.Searchbox.featurePosition = function (level,feature,regionId,regionName,poorH
             xs_isClickMapFinish = true;
             xs_MapInstance.getMapObj().setCenter(feature.geometry.getBounds().getCenterLonLat(), 9);
             if(marker){
+                XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.town,"贫困类型");
                 XS.Searchbox.cachePositionMarker(level,xs_currentZoneCode,marker);
                 xs_isClearMarkers = false;
                 return;
