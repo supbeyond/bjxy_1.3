@@ -1279,11 +1279,19 @@ XS.Main.zoomedMapCallback = function(e){
         }else{//poor
             var poorHMarker = XS.Main.Markers.poor.data;
             if(poorHMarker.length>0){
-                XS.Main.addCacheMarker2Layer(poorHMarker);
-                if(poorHMarker[0].data.xt_ctype != XS.Main.ClusterPointerStyle.poor_info_obj){
-                    xs_poorLabelLayer.removeAllFeatures();
-                    xs_poorLabelLayer.addFeatures(xs_poorHLabel);
+                var targetMarkers = [];
+                var targetLayers = [];
+                for(var i in xs_clickPoorLegendArr){
+                    for(var j in poorHMarker){
+                        if(xs_clickPoorLegendArr[i].name == poorHMarker[j].data.reason){
+                            targetMarkers.push(poorHMarker[j]);
+                            targetLayers.push(xs_poorHLabel[j]);
+                        }
+                    }
                 }
+                XS.Main.addCacheMarker2Layer(targetMarkers);
+                xs_poorLabelLayer.removeAllFeatures();
+                xs_poorLabelLayer.addFeatures(targetLayers);
                 xs_poorLabelLayer.setVisibility(true);
                 if(!xs_tjfx_themeLayer && !xs_tjfx_graph_themeLayer){
                     $("#xs_tjfx_range_Legend").remove();
@@ -1345,6 +1353,7 @@ XS.Main.readyAddMarkers = function(centerPoint,level,currentId,isClose){
             }
 
             if(XS.Main.Markers.town.superId == xs_clickMapFutureId && XS.Main.Markers.town.data.length>0){
+                XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.county,"致贫级别");
                 XS.Main.addCacheMarker2Layer(XS.Main.Markers.town.data);
                 return;
             }
@@ -1363,12 +1372,14 @@ XS.Main.readyAddMarkers = function(centerPoint,level,currentId,isClose){
             }
             if(xs_currentZoneFuture.data.comefrome){
                 if(XS.Main.Markers.town.superId == xs_clickMapFutureId && XS.Main.Markers.town.data.length>0){
+                    XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.county,"致贫级别");
                     XS.Main.addCacheMarker2Layer(XS.Main.Markers.town.data);
                     xs_isClearMarkers = false;
                     return;
                 }
             }else{
                 if(XS.Main.Markers.vill.superId == xs_clickMapFutureId && XS.Main.Markers.vill.data.length>0){
+                    XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.village,"贫困类型");
                     XS.Main.addCacheMarker2Layer(XS.Main.Markers.vill.data);
                     xs_isClearMarkers = false;
                     return;
@@ -1393,6 +1404,7 @@ XS.Main.readyAddMarkers = function(centerPoint,level,currentId,isClose){
             if(xs_currentZoneFuture){
                 if(xs_currentZoneFuture.data.comefrome){
                     if(XS.Main.Markers.vill.superId == xs_clickMapFutureId && XS.Main.Markers.vill.data.length>0){
+                        XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.town,"贫困类型");
                         XS.Main.addCacheMarker2Layer(XS.Main.Markers.vill.data);
                         xs_isClearMarkers = false;
                         return;
@@ -1400,6 +1412,8 @@ XS.Main.readyAddMarkers = function(centerPoint,level,currentId,isClose){
                 }
             }
             if(XS.Main.Markers.poor.superId == xs_clickMapFutureId && XS.Main.Markers.poor.data.length>0){
+                xs_clickPoorLegendArr = XS.Main.poorZonePicArr.poor;
+                XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.village,"致贫原因");
                 XS.Main.addCacheMarker2Layer(XS.Main.Markers.poor.data);
                 xs_poorLabelLayer.removeAllFeatures();
                 xs_poorLabelLayer.addFeatures(xs_poorHLabel);
