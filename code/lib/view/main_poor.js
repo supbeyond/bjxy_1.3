@@ -585,6 +585,7 @@ XS.Main.Poor.showVideo2Path = function(title, path){
     $_dl.dialog({
         title: title,
         closed: true,
+        closable:false,
         tools:[
             {
                 /*iconCls:'e_icon-arrow_rotate_clockwise',*/
@@ -594,6 +595,16 @@ XS.Main.Poor.showVideo2Path = function(title, path){
                     $("#xs_poor_video").css({
                         "transform": "rotate("+deg+"deg)"
                     });
+                }
+            },
+            {
+                /*iconCls:'e_icon-arrow_rotate_clockwise',*/
+                iconCls:'panel-tool-close',
+                handler:function(){
+                    try{
+                        $('#xs_main_detail').dialog("destroy");
+                    }catch (e){};
+                    $('#xs_main_detail').remove();
                 }
             }
         ],
