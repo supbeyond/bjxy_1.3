@@ -619,6 +619,7 @@ html, body{
 #xs_searchbox_resultC{
     width: 353px;
     height: auto;
+    background: #ffffff;
     margin-top: 1px;
     position: relative;
     vertical-align: top;
@@ -658,7 +659,7 @@ html, body{
 }
 #xs_searchbox_resultBaseInf{
     width: 100%;
-    background: #ffffff;
+    background1: #ffffff;
     box-sizing: border-box;
     overflow-y: auto;
 }
@@ -675,8 +676,8 @@ html, body{
 .xs_searchbox_baseInfPanelC{
     width: 100%;
     position: relative;
-    top: 15px;
-    margin-bottom: 15px;
+    margin-top: 15px;
+    margin-bottom1: 15px;
 }
 .xs_searchbox_baseInfPanel{
     width: 90%;
@@ -692,6 +693,6 @@ html, body{
     height: 35px;
     line-height: 35px;
     background: #fff;
-    border-top: 1px solid #808080;
+    border-top: 1px solid #eee;
     border-radius: 0px 0px 2px 2px;
 }
