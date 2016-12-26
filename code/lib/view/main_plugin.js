@@ -1355,6 +1355,7 @@ XS.Main.readyAddMarkers = function(centerPoint,level,currentId,isClose){
             if(XS.Main.Markers.town.superId == xs_clickMapFutureId && XS.Main.Markers.town.data.length>0){
                 XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.county,"致贫级别");
                 XS.Main.addCacheMarker2Layer(XS.Main.Markers.town.data);
+                xs_isClearMarkers = false;
                 return;
             }
             XS.Main.clearMarCache(level,currentId);
@@ -1379,7 +1380,7 @@ XS.Main.readyAddMarkers = function(centerPoint,level,currentId,isClose){
                 }
             }else{
                 if(XS.Main.Markers.vill.superId == xs_clickMapFutureId && XS.Main.Markers.vill.data.length>0){
-                    XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.village,"贫困类型");
+                    XS.Main.Tjfx.range_createRangeLegendTag(XS.Main.Tjfx.type.poorType,XS.Main.ZoneLevel.town,"贫困类型");
                     XS.Main.addCacheMarker2Layer(XS.Main.Markers.vill.data);
                     xs_isClearMarkers = false;
                     return;

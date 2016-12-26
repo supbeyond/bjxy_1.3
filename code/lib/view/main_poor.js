@@ -244,7 +244,7 @@ XS.Main.Poor.showPoorInfo = function(obj){
         {"name":"电话","value":obj.Hb_Tel},
         {"name":"贫困类型","value":obj.HB_TYPE},
         {"name":"致贫原因","value":obj.HB_REASON},
-        {"name":"人口","value":obj.PERSON_NUM>0 ? obj.PERSON_NUM + "人" : ""}
+        {"name":"人口(人)","value":obj.PERSON_NUM}
         /*{"name":"主要原因","value":obj.MAIN_REASON},
         {"name":"次要原因","value":obj.OTHER_REASON},
         {"name":"脱贫状态","value":obj.OUTPOORTAT},
@@ -1037,14 +1037,9 @@ var xs_poor_echart_option =
 var xs_poor_isUpOneLevel = false;
 XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
     XS.Main.hiddenLayers();
-    xs_markerFeaturess = [];
-    xs_markerLayer.clearMarkers();
-   // xs_markerLayer.addMarker(xs_cityMarkerFeature);
-    xs_poorLabelLayer.removeAllFeatures();
-
-
+    XS.Main.clearMarker();
     if($("#xs_utfGridC").length>0) $("#xs_utfGridC").css("display","none");
-    if($("#xs_tjfx_range_Legend").length>0) $("#xs_tjfx_range_Legend").remove();
+    //if($("#xs_tjfx_range_Legend").length>0) $("#xs_tjfx_range_Legend").remove();
 
     xs_poor_isELayerVisible = false;
     xs_isShowUtfGridTip = false;
@@ -2198,7 +2193,7 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
        {"name": "电话", "value": obj.Hb_Tel},
        {"name": "贫困类型", "value": obj.HB_TYPE},
        {"name": "致贫原因", "value": obj.HB_REASON},
-       {"name": "人口", "value": obj.PERSON_NUM},
+       {"name": "人口(人)", "value": obj.PERSON_NUM},
        {"name": "识别标准", "value": obj.HB_STANDARD},
        {"name": "脱贫标识", "value": obj.HB_OUTOFPOOR},
        {"name": "经度", "value": XS.StrUtil.isEmpty(obj.LONGITUDE)?"":(parseFloat(obj.LONGITUDE)).toFixed(2)},

@@ -181,6 +181,7 @@ XS.Main.Pkjc.barOption = {
     tooltip: {
         show: true,
         formatter :function(params){
+            xs_tipAnalyUnit = [{name:"贫困户",value:['户']},{name:"贫困人口",value:["人"]},{name:"贫困情况",value:["%"]}];
             var returnValue = "";
             if(params) {
                 if (params.constructor == Object) {
@@ -271,6 +272,7 @@ XS.Main.Pkjc.pieOption = {
         show: true,
         trigger: 'item',
         formatter :function(params){
+            xs_tipAnalyUnit = [{name:"贫困户",value:['户']},{name:"贫困人口",value:["人"]},{name:"贫困情况",value:["%"]}];
             var returnValue = "";
             if(params) {
                 if (params.constructor == Object) {
@@ -1508,6 +1510,7 @@ XS.Main.Pkjc.task_queryLine = function(){
     }
     //轨迹查询
     XS.Main.clearMap();
+    XS.Main.clearVectorLayer();
     $("#xs_pkdc_task_loading").css({"visibility":"visible"});
     //string workid,string begintime,string endtime
     var data = {workid: xs_pkdc_task_rdata.SU_ACCOUNT, begintime:sdate, endtime:ddate};

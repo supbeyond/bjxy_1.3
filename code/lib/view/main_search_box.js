@@ -698,7 +698,7 @@ XS.Searchbox.tool = function(i,json,regionIdV,regionNameV,regionId,regionName,fi
                     nextRegion = "行政村";
                     selectOptNum = json[i].VILLNUM;
                 }
-                xs_searchbox_tool += '<td colspan="4" align1="center" style="vert-align: middle;">' +
+                xs_searchbox_tool += '<td colspan="4" align1="center" style="vert-align: middle;line-height: 30px;">' +
                     '<button class="xs_searchbox_detail" style="cursor: pointer;position:relative;left:20px;" regionId="'+regionIdV+'" regionName="'+ regionNameV+'">详情</button>'+
                     '<span class="datagrid-cell" style="display1: inline-block;position:relative;left:80px;">'+nextRegion+'</span>' +
                     '<select class="xs_searchbox_nextSeleect" style="display: inline-block;position:relative;left:80px;" regionId="'+regionIdV+'" regionName="'+ regionNameV+'">'+
@@ -712,7 +712,7 @@ XS.Searchbox.tool = function(i,json,regionIdV,regionNameV,regionId,regionName,fi
             }
         case "行政村":
             {
-                xs_searchbox_tool += '<td colspan="4" align="center" style="border-right: 0;">' +
+                xs_searchbox_tool += '<td colspan="4" align="center" style="border-right: 0;line-height: 30px;">' +
                     '<button class="xs_searchbox_detail" style="cursor: pointer;" regionId="'+regionIdV+'" regionName="'+ regionNameV+'">详情</button>' +
                     '</td>';
                 $(".xs_searchbox_tool:last").append(xs_searchbox_tool);
@@ -720,7 +720,7 @@ XS.Searchbox.tool = function(i,json,regionIdV,regionNameV,regionId,regionName,fi
             }
         default :
             {
-                xs_searchbox_tool += '<td colspan="4" align="center" style="border-right: 0;">' +
+                xs_searchbox_tool += '<td colspan="4" align="center" style="border-right: 0;line-height: 30px;">' +
                         '<button class="xs_searchbox_detail" style="cursor: pointer;" poorHIndex="'+regionIdV+'">详情</button>' +
                     '</td>';
                 $(".xs_searchbox_tool:last").append(xs_searchbox_tool);
@@ -759,14 +759,15 @@ XS.Searchbox.BaseInfPanel = function(i,json,regionId,regionName){
     if(XS.StrUtil.isEmpty(regionId) && XS.StrUtil.isEmpty(regionName) && $("#xs_searchbox_pager").length == 0){
         $("#xs_searchbox_resultC").append('<div id="xs_searchbox_pager"></div>');
     }
-    $("#xs_searchbox_resultBaseInf").css({display:'block'})
+    $("#xs_searchbox_resultBaseInf").css({display:'block'});
+
     if(xs_searchbox_resultBaseInfH < 320 ){
         $("#xs_searchbox_resultBaseInf").height(xs_searchbox_resultBaseInfH);
-        $("#xs_searchbox_resultC").animate({height:xs_searchbox_resultBaseInfH + 30},{duration: 1000 });
+        $("#xs_searchbox_resultC").animate({height:xs_searchbox_resultBaseInfH },{duration: 1000 });
     }else{
         $("#xs_searchbox_resultBaseInf,#xs_searchbox_resultC").css({display:'block'});
         $("#xs_searchbox_resultBaseInf").height(320);
-        $("#xs_searchbox_resultC").animate({height:350},{duration: 1000 });
+        $("#xs_searchbox_resultC").animate({height:335},{duration: 1000 });
     }
     $(".xs_searchbox_positionBtn").click(function(){
         var regionIdValue = $(this).attr("regionId");

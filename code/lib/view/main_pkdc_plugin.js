@@ -3082,7 +3082,7 @@ XS.Main.Pkjc.villAnalyShow = function(json,index){
             XS.Main.Pkjc.ciAnalyOpt([5,'致贫原因'],['',[]],[],[],[],[],radar,[],series,"xs_pkdc_AnalysTabsChart",['rgba(0,0,255,1)']);*/
 
             var yAxis = [['','category',[]]];
-            var series = [['致贫原因','bar',0,[],false,[true,"top","{c}人"]]];
+            var series = [['致贫原因','bar',0,[],false,[true,"right","{c}人"]]];
             XS.Main.Pkjc.ananlyValueOfJson(json,[yAxis[0][2],series[0][3]],['REASON','NUM'],'',[]);
 
             for(var i=0;i<yAxis[0][2].length-1;i++){
