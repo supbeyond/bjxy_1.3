@@ -696,3 +696,7 @@ html, body{
     border-top: 1px solid #eee;
     border-radius: 0px 0px 2px 2px;
 }
+#xs_pkdc_task_tabC .panel-header,#xs_pkdc_task_pollingDialog .panel-header{
+    background-color:#ccc;
+    border: #ccc;
+}
