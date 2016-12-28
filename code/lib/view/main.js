@@ -110,10 +110,10 @@ XS.Main.load = function(){
         {
             layerName: "County_Code@"+XS.Constants.dataSourceName,
             utfTileSize: 256,
-            pixcell: 32,
+            pixcell: 16,
             isUseCache: true
         },{
-            utfgridResolution: 32
+            utfgridResolution: 16
         }
     );
     xs_utfGridTownLayer = new SuperMap.Layer.UTFGrid("utfgridtown",XS.Constants.map_query,
