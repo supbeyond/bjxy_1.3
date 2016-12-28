@@ -358,15 +358,22 @@ XS.Main.Poor.helpDynamic = function(obj){
             NHP_HELPUNIT:111,
             NHP_TEL:111
         };*/
+        var objArr = [];
         if(json && json.length>0){
             //基本信息
-            var objArr = [
+            objArr = [
                 {"name": "联系人", "value": json[0].NHP_HELPNAME},
                 {"name": "单位名称", "value": json[0].NHP_HELPUNIT},
                 {"name": "联系电话", "value": json[0].NHP_TEL}
             ];
-            $("#xs_poor_detail_tab_tasker").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 1, 60,"", "color:#00bbee;min-width:60px;"));
+        }else{
+            objArr = [
+                {"name": "联系人", "value": ""},
+                {"name": "单位名称", "value": ""},
+                {"name": "联系电话", "value": ""}
+            ];
         }
+        $("#xs_poor_detail_tab_tasker").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 1, 60,"", "color:#00bbee;min-width:60px;"));
     });
 
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTempFourFiveByHId", {Hid: obj.HB_ID}, function (json)
@@ -400,6 +407,7 @@ XS.Main.Poor.helpDynamic = function(obj){
             HELPUNIT:111,
             GDATE:111
         };*/
+        var objArr = [];
         if (json && json.length>0)
         {
             //基本信息
@@ -416,7 +424,7 @@ XS.Main.Poor.helpDynamic = function(obj){
              GDATE//帮扶日期
              *
              */
-            var objArr = [
+            objArr = [
                 {"name": "区域名称", "value": json[0].REGIONNAME},
                 {"name": "项目名称", "value": json[0].PROJECTNAME},
                 {"name": "帮扶内容", "value": json[0].PROJECTCONTENT},
@@ -426,8 +434,19 @@ XS.Main.Poor.helpDynamic = function(obj){
                 {"name": "帮扶单位", "value": json[0].HELPUNIT},
                 {"name": "帮扶日期", "value": json[0].GDATE},
             ];
-            $("#xs_poor_detail_tab_bfrecord").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 2, 50,"", "color:#00bbee;min-width:20px;"));
+        }else{
+            objArr = [
+                {"name": "区域名称", "value": ""},
+                {"name": "项目名称", "value": ""},
+                {"name": "帮扶内容", "value": ""},
+                {"name": "帮扶资金", "value": ""},
+                {"name": "帮扶人姓名", "value": ""},
+                {"name": "帮扶人(单位)电话", "value": ""},
+                {"name": "帮扶单位", "value": ""},
+                {"name": "帮扶日期", "value": ""},
+            ];
         }
+        $("#xs_poor_detail_tab_bfrecord").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 2, 50,"", "color:#00bbee;min-width:20px;"));
     },function(e){});
     //巡检查询
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTBLEADERRECORDByFid", {Hid: obj.HB_ID, pd_id: obj.HB_ID}, function (json)
@@ -1038,6 +1057,10 @@ var xs_poor_isUpOneLevel = false;
 XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
     XS.Main.hiddenLayers();
     XS.Main.clearMarker();
+    if(xs_tasker_animatorVectorLayer.getDrawedFeatures()){
+        xs_poorLabelLayer.removeAllFeatures();
+    }
+    xs_tasker_animatorVectorLayer.removeAllFeatures();
     if($("#xs_utfGridC").length>0) $("#xs_utfGridC").css("display","none");
     //if($("#xs_tjfx_range_Legend").length>0) $("#xs_tjfx_range_Legend").remove();
 
@@ -1873,6 +1896,10 @@ XS.Main.Poor.preloc_handleVill = function(level, parentId){
 
 //清除扶贫搬迁Layer
 XS.Main.Poor.clearRelocationLayer = function(){
+    if(xs_tasker_animatorVectorLayer.getDrawedFeatures()){
+        xs_poorLabelLayer.removeAllFeatures();
+    }
+    xs_tasker_animatorVectorLayer.removeAllFeatures();
     if(xs_poor_elementsLayer){
         xs_clickMapType = XS.Main.clickMapType.none;
         xs_isShowUtfGridTip = true;

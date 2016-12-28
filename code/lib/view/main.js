@@ -318,6 +318,7 @@ XS.Main.addLayers = function(){
     //xs_author_vectorLayer.setVisibility(false);
 
     xs_MapInstance.getMapObj().setCenter(xs_MapInstance.getMapCenterPoint(), 0);
+
     xs_MapInstance.getMapObj().events.on({ "click": XS.Main.clickMapCallback});
     xs_MapInstance.getMapObj().events.on({ "zoomend": XS.Main.zoomedMapCallback});
     xs_MapInstance.getMapObj().events.on({ "moveend": XS.Main.movedMapCallback});

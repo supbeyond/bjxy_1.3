@@ -1287,6 +1287,7 @@ XS.Main.Pkjc.clickDutyChain = function(zoneLevel, stateCode,currentName){
     XS.Main.Pkjc.minInfoWinDialog();
     XS.Main.Pkjc.closeInfoDialog();
     XS.Main.Tjfx.removeLayer();
+    XS.Main.Poor.clearRelocationLayer();
     var data = {pd_id:stateCode};
     XS.CommonUtil.showLoader();
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryBrigInviBySId", data, function (json) {
@@ -1308,7 +1309,7 @@ XS.Main.Pkjc.clickDutyChain = function(zoneLevel, stateCode,currentName){
                 }
             }else{
                 XS.CommonUtil.showMsgDialog("", "没有下级相关责任人");
-                $("#xs_pkdc_msgWin").window("open");
+                //$("#xs_pkdc_msgWin").window("open");
             }
             if(obj.name || obj.children){
                 if(!obj.name){
@@ -1354,14 +1355,15 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode, zoneName){
     XS.Main.Pkjc.minInfoWinDialog();
     XS.Main.Pkjc.closeInfoDialog();
     XS.Main.Tjfx.removeLayer();
+    XS.Main.Poor.clearRelocationLayer();
     if(XS.StrUtil.isEmpty(zoneCode)){
         XS.CommonUtil.showMsgDialog("","请先选择区域");
         return;
     }
-    if(zoneCode== xs_cityID){
+    /*if(zoneCode== xs_cityID){
         XS.CommonUtil.showMsgDialog("","毕节市太大，请先选择下级区县");
         return;
-    }
+    }*/
     if(document.getElementById("xs_pkdc_taskC")){
         $("#xs_pkdc_taskC").remove();
     }
@@ -1377,10 +1379,16 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode, zoneName){
                 '</div>';
             content += '<div style="margin:5px 0px;"><label>起始:</label><input id="xs_pkdc_task_ds" style="width: 37%;" class="easyui-datebox" data-options="formatter:XS.CommonUtil.dateFormatter,parser:XS.CommonUtil.dateParser"/>';
             content += '<label>&nbsp;终止:</label><input id="xs_pkdc_task_dd" style="width: 37%;" class="easyui-datebox" data-options="formatter:XS.CommonUtil.dateFormatter,parser:XS.CommonUtil.dateParser"/></div>';
-            content += '<a href="javascript:0;" id="xs_pkdc_task_linebtn" style="width: 40%; margin-right: 5px;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;" class="fa fa-search"></i>轨迹</a>';
-    /*content += '<a href="javascript:0;" id="xs_pkdc_task_taskbtn" style="width: 22%; margin-right: 5px;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;" class="fa fa-tasks"></i>任务</a>';
-            content += '<a href="javascript:0;" id="xs_pkdc_task_alertbtn" style="width: 22%; margin-right: 5px;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;" class="fa fa-warning"></i>预警</a>';*/
-            content += '<a href="javascript:0;" id="xs_pkdc_task_monitorbtn" style="width: 40%;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;"class="fa fa-map-marker"></i>动态</a>';
+            if(zoneLevel == XS.Main.ZoneLevel.village){
+                content += '<a href="javascript:0;" id="xs_pkdc_task_linebtn" style="width: 32%; margin-right: 7px;background: #eee;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;" class="fa fa-search"></i>轨迹</a>';
+                content += '<a href="javascript:0;" id="xs_pkdc_task_monitorbtn" style="width: 32%; margin-right: 7px;background: #eee;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;" class="fa fa-search"></i>动态</a>';
+                /*content += '<a href="javascript:0;" id="xs_pkdc_task_taskbtn" style="width: 22%; margin-right: 5px;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;" class="fa fa-tasks"></i>任务</a>';
+                 content += '<a href="javascript:0;" id="xs_pkdc_task_alertbtn" style="width: 22%; margin-right: 5px;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;" class="fa fa-warning"></i>预警</a>';*/
+                content += '<a href="javascript:0;" id="xs_pkdc_task_polling" style="width: 32%;background: #eee;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;"class="fa fa-map-marker"></i>巡检查询</a>';
+            }else{
+                content += '<a href="javascript:0;" id="xs_pkdc_task_linebtn" style="width: 40%; margin-right: 5px;background: #eee;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;" class="fa fa-search"></i>轨迹</a>';
+                content += '<a href="javascript:0;" id="xs_pkdc_task_monitorbtn" style="width: 40%;background: #eee;" class="easyui-linkbutton"><i style="color: #1b1b1b; margin-right: 4px;"class="fa fa-map-marker"></i>动态</a>';
+            }
             content += '<div style="margin-top: 5px;position: relative;">' +
             '<div id="xs_pkdc_task_tabC" style="width:100%;height:415px;"></div>' +
             '<i id="xs_pkdc_task_loading" style="position: absolute;top: 50%; left: 50%;margin-left: -25px;margin-top: -25px;visibility: visible;" class="fa fa-spinner fa-pulse fa-3x fa-fw xs_loading"></i>'+
@@ -1393,6 +1401,7 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode, zoneName){
         xs_clusterLayer.destroyCluster();
         xs_clusterControl.deactivate();
         XS.Main.clearVectorLayer();
+        xs_poorLabelLayer.removeAllFeatures();
         if(xs_currentZoneFuture){
             XS.Main.readyAddMarkers(xs_currentZoneFuture.geometry.getBounds().getCenterLonLat(),xs_currentZoneLevel,xs_currentZoneCode,true);
         }
@@ -1415,6 +1424,10 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode, zoneName){
         xs_pkdc_tasker_isFirstReq = true;
         XS.Main.Pkjc.reqOnLineTasker(zoneCode);
     });
+    //巡检查询
+    $("#xs_pkdc_task_polling").click(function(){
+        XS.Main.Pkjc.reqPolling(zoneCode,zoneName);
+    });
 
     $('#xs_pkdc_task_search').searchbox({
         searcher:function(value,name){
@@ -1432,6 +1445,7 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode, zoneName){
     });
     //请求数据
     xs_pkdc_task_rdata = null;
+    XS.CommonUtil.hideLoader();
     XS.Main.Pkjc.reqTasker(zoneCode, type="", value="");
 }
 
@@ -1511,6 +1525,9 @@ XS.Main.Pkjc.task_queryLine = function(){
     //轨迹查询
     XS.Main.clearMap();
     XS.Main.clearVectorLayer();
+    xs_poorLabelLayer.removeAllFeatures();
+    xs_tasker_animatorVectorLayer.removeAllFeatures();
+
     $("#xs_pkdc_task_loading").css({"visibility":"visible"});
     //string workid,string begintime,string endtime
     var data = {workid: xs_pkdc_task_rdata.SU_ACCOUNT, begintime:sdate, endtime:ddate};
@@ -1644,6 +1661,9 @@ XS.Main.Pkjc.reqOnLineTasker = function(regionid){
     xs_poorLabelLayer.setVisibility(true);
     XS.Main.clearMap();
     XS.Main.clearMarker();
+    xs_clusterLayer.destroyCluster();
+    xs_clusterControl.deactivate();
+    XS.Main.clearVectorLayer();
 
     XS.CommonUtil.showLoader();
     var data = {regionid: regionid};
@@ -1659,13 +1679,17 @@ XS.Main.Pkjc.reqOnLineTasker = function(regionid){
             var a_features = [];
             var a_style = {
                 fillColor: "#ff0000",
-                fillOpacity: 0.5,
-                strokeOpacity: 0,
-                pointRadius: 5
-            };
+            fillOpacity: 0.5,
+            strokeOpacity: 0,
+            pointRadius: 5
+        };
             for(var i=0; i<json.length; i++){
                 var obj = json[i];
-                var geoText = new SuperMap.Geometry.GeoText(obj.LONGITUDE, obj.LATITUDE,obj.NAME);
+                /*var geoText = new SuperMap.Geometry.GeoText(obj.LONGITUDE, obj.LATITUDE,obj.NAME);
+                var geotextFeature = new SuperMap.Feature.Vector(geoText);
+                geotextFeatures.push(geotextFeature);*/
+                var latitude = obj.LATITUDE + 0.025;
+                var geoText = new SuperMap.Geometry.GeoText(obj.LONGITUDE, latitude, obj.NAME);
                 var geotextFeature = new SuperMap.Feature.Vector(geoText);
                 geotextFeatures.push(geotextFeature);
 
@@ -1684,7 +1708,9 @@ XS.Main.Pkjc.reqOnLineTasker = function(regionid){
                 xs_pkdc_tasker_isFirstReq = false;
             }
 
+            xs_poorLabelLayer.removeAllFeatures();
             xs_poorLabelLayer.addFeatures(geotextFeatures);
+            xs_poorLabelLayer.setVisibility(true);
 
             xs_tasker_animatorVectorLayer.addFeatures(a_features);
             xs_tasker_animatorVectorLayer.animator.start();
@@ -1698,6 +1724,48 @@ XS.Main.Pkjc.reqOnLineTasker = function(regionid){
             XS.CommonUtil.showMsgDialog("","该区域暂无在线责任人");
         }
     },function(e){ XS.CommonUtil.hideLoader();});
+}
+
+XS.Main.Pkjc.reqPolling = function(vid,villName){
+    xs_poorLabelLayer.removeAllFeatures();
+    xs_tasker_animatorVectorLayer.removeAllFeatures();
+    xs_clusterLayer.destroyCluster();
+    xs_clusterControl.deactivate();
+    XS.Main.clearVectorLayer();
+    //巡检查询
+    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryTbLeaderrecordVByVidDT", {Vid: vid}, function (json)
+    {
+        if (json && json.length>0)
+        {
+            //$("#xs_pkdc_task_tabC").empty().append('<table id="xs_poor_detail_tab_xjrecord_list" class="easyui-datagrid" style="width:100%;height:100%;" title="巡查记录"></table>');
+            var content = '<div style="width: 100%;height: 100%;padding: 5px;padding-top: 10px;box-sizing: border-box;">' +
+                '<div style="height: 100%; width: 100%;">' +
+                '<table id="xs_pkdc_task_pollingGrid" class="easyui-datagrid" style="width:100%;height:100%;" title="巡查记录"></table>' +
+                '</div>' +
+                '</div>';
+            XS.CommonUtil.openDialog("xs_pkdc_task_pollingDialog", villName + "-巡检查询", "icon-man", content, true, false, false, 600, 300);
+            XS.Main.addDivHover2HiddenUTFGridTip("xs_pkdc_task_pollingDialog");
+            $('#xs_pkdc_task_pollingGrid').datagrid({
+                data: json,
+                pagination: true,
+                pageSize: 5,
+                pageList: [5, 15,30],
+                striped: true,
+                onSelect:null,
+                singleSelect: true,
+                rownumbers: true,
+                columns: [[
+                    {field: 'LEADERname', title: '巡检人',width:'10%'},
+                    {field: 'LEADERtel', title: '联系电话',width:'15%'},
+                    {field: 'WORKCONTENT', title: '巡检内容',width:'45%'},
+                    {field: 'FIVEFOUR', title: '五通四有',width:'40%'},
+                    {field: 'WORKTEAM', title: '驻村工作队',width:'40%'}
+                ]]
+            });
+            $("#xs_pkdc_task_pollingGrid").datagrid("getPager").pagination({displayMsg:""});
+            $('#xs_pkdc_task_pollingGrid').datagrid('clientPaging');
+        }
+    },function(e){});
 }
 
 //点击聚散点--查看采集人的基本信息

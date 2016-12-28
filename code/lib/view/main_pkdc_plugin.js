@@ -9,7 +9,7 @@ XS.Main.Pkjc.detailKV = {
         title:["基本信息","土地信息","经济情况","人口统计","重点工作","专项扶贫","帮扶信息"],
         tabs:[
             {
-                name:["市","市ID","国土面积","重点县(市、区旗)数","乡(镇、办事处)数","贫困乡(镇、办事处)数","行政村数",
+                name:["市","市ID","国土面积","重点县数","乡(镇、办事处)数","贫困乡(镇、办事处)数","行政村数",
                     "贫困村数","年末总户数","贫困户数","年末总人口","贫困人口","贫困发生率"],
                 value:["regionname","regionid","CountArea","CouseNum","TownNum","PoorTownNum","VillNum","PoorVillNum","HouseNum",
                     "PoorHouseNum","PeopleNum","PoorPeopleNum","PoorRate"],
@@ -1452,6 +1452,7 @@ XS.Main.Pkjc.clickItemFund = function(currentCode,currentName){
     XS.CommonUtil.showLoader();
     XS.Main.Tjfx.removeLayer();
     XS.Main.Pkjc.closeInfoDialog();
+    xs_tasker_animatorVectorLayer.removeAllFeatures();
     XS.Main.Poor.clearRelocationLayer();
     xs_pkdc_itemFundDgridJson = [];
     XS.Main.Pkjc.minInfoWinDialog();

@@ -181,6 +181,7 @@ XS.Main.init = function(){
     //右击-菜单
     $("#xs_Map").bind('contextmenu',function(e){
         e.preventDefault();
+        XS.Main.addDivHover2HiddenUTFGridTip("xs_rightMeun");
         $('#xs_rightMeun').menu('show', {
             left: e.pageX,
             top: e.pageY
@@ -353,6 +354,7 @@ XS.Main.RightClickMenuHandler = function(name){
         case 'rwjk': //任务监控
         {
             if(xs_currentZoneFuture != null){
+                XS.Main.Pkjc.clickTaskMonitor(xs_currentZoneLevel, xs_currentZoneCode, xs_currentZoneName);
                 XS.Main.Pkjc.clickTaskMonitor(xs_currentZoneLevel, xs_currentZoneCode, xs_currentZoneName);
             }else{
                 //  XS.CommonUtil.showMsgDialog("","请先选中区域");
