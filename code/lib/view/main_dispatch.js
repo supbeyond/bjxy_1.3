@@ -46,6 +46,10 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
     XS.Main.Pkjc.closeInfoDialog();
     XS.Main.Poor.clearRelocationLayer();
     XS.Main.clearMap();
+    XS.Main.clearVectorLayer();
+    if(xs_isClearMarkers){
+        XS.Main.returnBeforeMarker();
+    }
     $("#xs_echartjs").empty().append('<script src="../base/echart/echarts.js"></script>');
     xs_dispatch_state = 1;
     var content = '<div id="xs_dc_tab" class="easyui-tabs" style="width:410px; height: 530px;box-sizing: border-box;">'+

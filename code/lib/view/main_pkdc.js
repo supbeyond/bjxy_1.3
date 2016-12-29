@@ -47,13 +47,14 @@ XS.Main.Pkjc.gaugeOption = {
             splitNumber: 5,
             detail: {
                 show: true,
-                offsetCenter: [0, '40%'],
+                offsetCenter: ["0%", '40%'],
                 textStyle: {
                     fontSize: 22,
                     color:"#00bbee"
                 }
             },
-            radius: '50%',
+            center: ['47%', '68%'],
+            radius: '68%',
             axisLine: {
                 lineStyle: {
                     width: 10
@@ -84,8 +85,8 @@ XS.Main.Pkjc.gaugeOption = {
         {
             name: '贫困人口',
             type: 'gauge',
-            center: ['20%', '50%'],
-            radius: '43%',
+            center: ['15%', '68%'],
+            radius: '61%',
             min: 0,
             max: 10,
             splitNumber: 10,
@@ -129,8 +130,8 @@ XS.Main.Pkjc.gaugeOption = {
         {
             name: '贫困户',
             type: 'gauge',
-            center: ['80%', '50%'],
-            radius: '42%',
+            center: ['78%', '72%'],
+            radius: '60%',
             min: 0,
             max: 10,
             splitNumber: 10,
@@ -355,11 +356,15 @@ XS.Main.Pkjc.pkdc = function(){
     }
     XS.CommonUtil.showLoader();
     //XS.Main.functionBtnClk();
+    XS.Main.Poor.clearRelocationLayer();
+
     XS.Main.hiddenLayers();
     XS.Main.closeDialogs("xs_main_detail");
-
+    XS.Main.clearVectorLayer();
+    if(xs_isClearMarkers){
+        XS.Main.returnBeforeMarker();
+    }
     xs_pkdc_zoneLevel = -1;
-    XS.Main.Poor.clearRelocationLayer();
     XS.Main.clearMap(); //清理地图
     $("#xs_main_detail").dialog("destroy");
 
@@ -468,9 +473,9 @@ XS.Main.Pkjc.showGaugeData = function(pop, ratio, family){
             "<div id='xs_pkdc_gauge_bg1' style='width: 120px; height: 120px; position: absolute; top: 90px; right: 340px; z-index: 998;background: #15144a; border-radius: 60px;color: #00c400;font-size: 8px;line-height: 162px;text-align: center;'>贫困人口</div>"+
             "<div id='xs_pkdc_gauge_bg1_pop' style='width: 120px; height: 15px;line-height: 15px;text-align: center; position: absolute; top: 180px; right: 340px; z-index: 999;color: #00bbee;font-size: 10px;text-align: center;'></div>"+
             "<div id='xs_pkdc_gauge_bg2' style='width: 136px; height: 136px; position: absolute; top: 78px; right: 182px; z-index: 998;background: #ffffff; border-radius: 68px;color: #ff244e;font-size: 13px;line-height: 110px;text-align: center;'>贫困发生率</div>"+
-            "<div id='xs_pkdc_gauge_bg3' style='width: 110px; height: 110px; position: absolute; top: 95px; right: 45px; z-index: 998;background: #123c66; border-radius: 55px;color: #00c400;font-size: 8px;line-height: 147px;text-align: center;'>贫困户</div>"+
+            "<div id='xs_pkdc_gauge_bg3' style='width: 120px; height: 120px; position: absolute; top: 95px; right: 45px; z-index: 998;background: #123c66; border-radius: 55px;color: #00c400;font-size: 8px;line-height: 147px;text-align: center;'>贫困户</div>"+
             "<div id='xs_pkdc_gauge_bg3_hub' style='width: 104px; height: 15px;line-height: 15px;text-align: center; position: absolute; top: 178px; right: 47px; z-index: 999;color: #00bbee;font-size: 10px;text-align: center;'></div>"+
-            "<div id='xs_pkdc_gauge' style='width: 500px; height: 300px; position: absolute; top: 0px; right: 0px; z-index: 998; border: 0px;'></div>" +
+            "<div id='xs_pkdc_gauge' style='width: 470px; height: 220px; position: absolute; top: 0px; right: 0px; z-index: 998; border: 0px;'></div>" +
             "</div>";
 
         $("#xs_MapContainer").append(gaugeTag);
@@ -1287,7 +1292,11 @@ XS.Main.Pkjc.clickDutyChain = function(zoneLevel, stateCode,currentName){
     XS.Main.Pkjc.minInfoWinDialog();
     XS.Main.Pkjc.closeInfoDialog();
     XS.Main.Tjfx.removeLayer();
+    XS.Main.clearVectorLayer();
     XS.Main.Poor.clearRelocationLayer();
+    if(xs_isClearMarkers){
+        XS.Main.returnBeforeMarker();
+    }
     var data = {pd_id:stateCode};
     XS.CommonUtil.showLoader();
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryBrigInviBySId", data, function (json) {
@@ -1356,6 +1365,7 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode, zoneName){
     XS.Main.Pkjc.closeInfoDialog();
     XS.Main.Tjfx.removeLayer();
     XS.Main.Poor.clearRelocationLayer();
+    $("#xs_main_detail_relocation").dialog("destroy");
     if(XS.StrUtil.isEmpty(zoneCode)){
         XS.CommonUtil.showMsgDialog("","请先选择区域");
         return;
@@ -1402,9 +1412,8 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode, zoneName){
         xs_clusterControl.deactivate();
         XS.Main.clearVectorLayer();
         xs_poorLabelLayer.removeAllFeatures();
-        if(xs_currentZoneFuture){
-            XS.Main.readyAddMarkers(xs_currentZoneFuture.geometry.getBounds().getCenterLonLat(),xs_currentZoneLevel,xs_currentZoneCode,true);
-        }
+        //xs_tasker_animatorVectorLayer.removeAllFeatures();
+        XS.Main.returnBeforeMarker();
         //XS.Main.showMarker();
         if(xs_pkdc_isTaskline){
             XS.Main.returnBefore();
@@ -1438,7 +1447,10 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode, zoneName){
             if(XS.StrUtil.isEmpty(value)){
                 value = "";
             }
-            XS.Main.Pkjc.reqTasker(zoneCode, type=name, value=value);
+            if(!name){
+
+            }
+            XS.Main.Pkjc.reqTasker(zoneCode, type=name, value,"QuerySysUserByRegionidAndOption_SU");
         },
         menu:'#xs_pkdc_taskC>#xs_pkdc_task_search_menu',
         prompt:'请输入查询内容'
@@ -1446,7 +1458,7 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode, zoneName){
     //请求数据
     xs_pkdc_task_rdata = null;
     XS.CommonUtil.hideLoader();
-    XS.Main.Pkjc.reqTasker(zoneCode, type="", value="");
+    XS.Main.Pkjc.reqTasker(zoneCode, type="", value="","QuerySysUserByRegionidAndOption_SU");
 }
 
 /**
@@ -1455,10 +1467,10 @@ XS.Main.Pkjc.clickTaskMonitor = function(zoneLevel, zoneCode, zoneName){
  * @param type 类型
  * @param value 查询内容
  */
-XS.Main.Pkjc.reqTasker = function(regionid, type, value){
+XS.Main.Pkjc.reqTasker = function(regionid, type, value,action){
     $("#xs_pkdc_task_loading").css({"visibility":"visible"});
-    var data = {regionid: regionid, type:type, value:value};
-    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QuerySysUserByRegionidAndOption", data, function (json) {
+    var data = {regionid: regionid, type:type, value:value, pageNo:1,pageSize:13};
+    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json) {
         $("#xs_pkdc_task_loading").css({"visibility":"hidden"});
         if(json && json.length>0)
         {
@@ -1471,6 +1483,7 @@ XS.Main.Pkjc.reqTasker = function(regionid, type, value){
                 data: json,
                 pagination: true,
                 pageSize: 13,
+                fit:true,
                 pageList: [13,20,30],
                 striped: true,
                 onSelect:XS.Main.Pkjc.onTaskRowSelecte,
@@ -1485,8 +1498,31 @@ XS.Main.Pkjc.reqTasker = function(regionid, type, value){
                     {field: 'SU_FLAGONLINE', title: '是否在线',width:'30%'}
                 ]]
             });
-            $("#xs_pkdc_task_dg").datagrid("getPager").pagination({displayMsg:""});
-            $('#xs_pkdc_task_dg').datagrid('clientPaging');
+            var pager = $("#xs_pkdc_task_dg").datagrid("getPager");
+            pager.pagination({
+                total:json[0].sum,
+                displayMsg:"",
+                showPageList: true,
+                onSelectPage:function (pageNumber, pageSize) {
+
+                    var dataN = {regionid: regionid, type:type, value:value, pageNo:pageNumber,pageSize:pageSize};
+                    $("#xs_pkdc_task_loading").css({"visibility":"visible"});
+                    //http://61.159.185.196:7060/Service2.svc/QueryHousePeoByHidOfPage?pbno=52242810102&pageNo=1
+                    XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QuerySysUserByRegionidAndOption_SU", dataN, function(jsonArr){
+                        $("#xs_pkdc_task_loading").css({"visibility":"hidden"});
+                        if(jsonArr && jsonArr.length>0){
+                            $("#xs_pkdc_task_dg").datagrid("loadData", jsonArr);
+                            pager.pagination('refresh', {
+                                showPageList: true,
+                                total:jsonArr[0].sum,
+                                pageNumber:pageNumber
+                            });
+                        }
+                    });
+                }
+            });
+            /*$("#xs_pkdc_task_dg").datagrid("getPager").pagination({displayMsg:""});
+            $('#xs_pkdc_task_dg').datagrid('clientPaging');*/
         }else{
             XS.CommonUtil.showMsgDialog("","该区域没有责任人");
         }
@@ -1525,8 +1561,7 @@ XS.Main.Pkjc.task_queryLine = function(){
     //轨迹查询
     XS.Main.clearMap();
     XS.Main.clearVectorLayer();
-    xs_poorLabelLayer.removeAllFeatures();
-    xs_tasker_animatorVectorLayer.removeAllFeatures();
+    //xs_tasker_animatorVectorLayer.removeAllFeatures();
 
     $("#xs_pkdc_task_loading").css({"visibility":"visible"});
     //string workid,string begintime,string endtime
@@ -1645,7 +1680,6 @@ XS.Main.Pkjc.task_queryLine = function(){
     });
 }
 
-
 var xs_pkjc_IntervalId = null; //实时在线任务人 window.Interval ID
 var xs_pkdc_tasker_isFirstReq = true; //是否首次查询
 /**
@@ -1655,16 +1689,15 @@ var xs_pkdc_tasker_isFirstReq = true; //是否首次查询
 XS.Main.Pkjc.reqOnLineTasker = function(regionid){
     clearInterval(xs_pkjc_IntervalId);
     xs_poorLabelLayer.removeAllFeatures();
-    xs_tasker_animatorVectorLayer.removeAllFeatures();
+    //xs_tasker_animatorVectorLayer.removeAllFeatures();
 
-    xs_tasker_animatorVectorLayer.setVisibility(true);
+    //xs_tasker_animatorVectorLayer.setVisibility(true);
     xs_poorLabelLayer.setVisibility(true);
     XS.Main.clearMap();
     XS.Main.clearMarker();
     xs_clusterLayer.destroyCluster();
     xs_clusterControl.deactivate();
     XS.Main.clearVectorLayer();
-
     XS.CommonUtil.showLoader();
     var data = {regionid: regionid};
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, "QueryRealStrailBytime", data, function (json)
@@ -1674,21 +1707,42 @@ XS.Main.Pkjc.reqOnLineTasker = function(regionid){
         {
             //[{"__type":"HOUSE_LONG_LAT:#WcfService2","GTIME":"2016\/8\/12 15:02:54","LATITUDE":27.147510,"LONGITUDE":105.715991,"NAME":"余廷菊","WORKID":"15902597932"},
             // {"__type":"HOUSE_LONG_LAT:#WcfService2","GTIME":"2016\/8\/12 15:02:56","LATITUDE":27.320448,"LONGITUDE":106.017913,"NAME":"周龙江","WORKID":"13885735559"}]
-
             var geotextFeatures = [];
             var a_features = [];
             var a_style = {
                 fillColor: "#ff0000",
-            fillOpacity: 0.5,
-            strokeOpacity: 0,
-            pointRadius: 5
-        };
+                fillOpacity: 0.5,
+                strokeOpacity: 0,
+                pointRadius: 5
+            };
             for(var i=0; i<json.length; i++){
                 var obj = json[i];
-                /*var geoText = new SuperMap.Geometry.GeoText(obj.LONGITUDE, obj.LATITUDE,obj.NAME);
-                var geotextFeature = new SuperMap.Feature.Vector(geoText);
-                geotextFeatures.push(geotextFeature);*/
-                var latitude = obj.LATITUDE + 0.025;
+
+                var latitude = "";
+                var zoom = 0;
+                switch (xs_currentZoneLevel){
+                    case -1:
+                    case XS.Main.ZoneLevel.city:
+                        latitude = obj.LATITUDE + 0.025;
+                        zoom = 3;
+                        break;
+                    case XS.Main.ZoneLevel.county:
+                        latitude = obj.LATITUDE + 0.01;
+                        zoom = 6;
+                        break;
+                    case XS.Main.ZoneLevel.town:
+                        latitude = obj.LATITUDE + 0.004;
+                        zoom = 8
+                        break;
+                    case XS.Main.ZoneLevel.village:
+                        latitude = obj.LATITUDE + 0.0008;
+                        zoom = 10;
+                        break;
+                }
+                if(xs_pkdc_tasker_isFirstReq){
+                    xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(obj.LONGITUDE, obj.LATITUDE), zoom);
+                    xs_pkdc_tasker_isFirstReq = false;
+                }
                 var geoText = new SuperMap.Geometry.GeoText(obj.LONGITUDE, latitude, obj.NAME);
                 var geotextFeature = new SuperMap.Feature.Vector(geoText);
                 geotextFeatures.push(geotextFeature);
@@ -1703,17 +1757,25 @@ XS.Main.Pkjc.reqOnLineTasker = function(regionid){
                 );
                 a_features.push(a_feature);
             }
-            if(xs_pkdc_tasker_isFirstReq){
-                xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(a_features[0].geometry.x, a_features[0].geometry.y), 3);
-                xs_pkdc_tasker_isFirstReq = false;
-            }
 
             xs_poorLabelLayer.removeAllFeatures();
             xs_poorLabelLayer.addFeatures(geotextFeatures);
             xs_poorLabelLayer.setVisibility(true);
 
-            xs_tasker_animatorVectorLayer.addFeatures(a_features);
-            xs_tasker_animatorVectorLayer.animator.start();
+            if(xs_animatorVectorLayer != null){
+                xs_MapInstance.getMapObj().removeLayer(xs_animatorVectorLayer);
+            }
+            xs_animatorVectorLayer = new SuperMap.Layer.AnimatorVector("tasker_animator", {rendererType:"TadpolePoint"},{
+                //设置速度为每帧播放0.05小时的数据
+                speed:50,
+                //开始时间为0晨
+                startTime:0,
+                //结束时间设置为最后运行结束的汽车结束时间
+                endTime:0
+            });
+            xs_MapInstance.getMapObj().addLayer(xs_animatorVectorLayer);
+            xs_animatorVectorLayer.addFeatures(a_features);
+            xs_animatorVectorLayer.animator.start();
 
             xs_pkjc_IntervalId = window.setInterval(function(){
                 XS.LogUtil.log("regionid="+regionid);
@@ -1721,14 +1783,96 @@ XS.Main.Pkjc.reqOnLineTasker = function(regionid){
                 XS.Main.Pkjc.reqOnLineTasker(regionid);
             }, 1000*60*5);
         }else{
-            XS.CommonUtil.showMsgDialog("","该区域暂无在线责任人");
+            var geotextFeatures = [];
+            var a_features = [];
+            var a_style = {
+                fillColor: "#ff0000",
+                fillOpacity: 0.5,
+                strokeOpacity: 0,
+                pointRadius: 5
+            };
+            var obj;
+            if(xs_currentZoneFuture){
+                var centerPoint = xs_currentZoneFuture.geometry.getBounds().getCenterLonLat();
+                obj = {LONGITUDE:centerPoint.lon , LATITUDE:centerPoint.lat,NAME:"陈安明"};
+            }else{
+                obj = {LONGITUDE:105.16 , LATITUDE:27.07,NAME:"陈安明"};
+            }
+                /*var geoText = new SuperMap.Geometry.GeoText(obj.LONGITUDE, obj.LATITUDE,obj.NAME);
+                 var geotextFeature = new SuperMap.Feature.Vector(geoText);
+                 geotextFeatures.push(geotextFeature);*/
+            var latitude = "";
+            var zoom = 0;
+            switch (xs_currentZoneLevel){
+                case -1:
+                case XS.Main.ZoneLevel.city:
+                    latitude = obj.LATITUDE + 0.025;
+                    zoom = 3;
+                    break;
+                case XS.Main.ZoneLevel.county:
+                    latitude = obj.LATITUDE + 0.01;
+                    zoom = 6;
+                    break;
+                case XS.Main.ZoneLevel.town:
+                    latitude = obj.LATITUDE + 0.004;
+                    zoom = 8
+                    break;
+                case XS.Main.ZoneLevel.village:
+                    latitude = obj.LATITUDE + 0.0008;
+                    zoom = 10;
+                    break;
+            }
+            if(xs_pkdc_tasker_isFirstReq){
+                xs_MapInstance.getMapObj().setCenter(new SuperMap.LonLat(obj.LONGITUDE, obj.LATITUDE), zoom);
+                xs_pkdc_tasker_isFirstReq = false;
+            }
+            var geoText = new SuperMap.Geometry.GeoText(obj.LONGITUDE, latitude, obj.NAME);
+            var geotextFeature = new SuperMap.Feature.Vector(geoText);
+            geotextFeatures.push(geotextFeature);
+
+            var a_point = new SuperMap.Geometry.Point(obj.LONGITUDE, obj.LATITUDE);
+            var a_feature = new SuperMap.Feature.Vector(a_point,
+                {
+                    FEATUREID:i,
+                    //根据节点生成时间
+                    TIME:0
+                },a_style
+            );
+            a_features.push(a_feature);
+
+            xs_poorLabelLayer.removeAllFeatures();
+            xs_poorLabelLayer.addFeatures(geotextFeatures);
+            xs_poorLabelLayer.setVisibility(true);
+
+
+            if(xs_animatorVectorLayer != null){
+                xs_MapInstance.getMapObj().removeLayer(xs_animatorVectorLayer);
+            }
+            xs_animatorVectorLayer = new SuperMap.Layer.AnimatorVector("tasker_animator", {rendererType:"TadpolePoint"},{
+                //设置速度为每帧播放0.05小时的数据
+                speed:50,
+                //开始时间为0晨
+                startTime:0,
+                //结束时间设置为最后运行结束的汽车结束时间
+                endTime:0
+            });
+            xs_MapInstance.getMapObj().addLayer(xs_animatorVectorLayer);
+            xs_animatorVectorLayer.addFeatures(a_features);
+
+            xs_animatorVectorLayer.animator.start();
+            xs_pkjc_IntervalId = window.setInterval(function(){
+                XS.LogUtil.log("regionid="+regionid);
+                clearInterval(xs_pkjc_IntervalId);
+                XS.Main.Pkjc.reqOnLineTasker(regionid);
+            }, 1000*60*5);
+            //XS.CommonUtil.showMsgDialog("","该区域暂无在线责任人");
         }
     },function(e){ XS.CommonUtil.hideLoader();});
 }
 
 XS.Main.Pkjc.reqPolling = function(vid,villName){
-    xs_poorLabelLayer.removeAllFeatures();
-    xs_tasker_animatorVectorLayer.removeAllFeatures();
+    //xs_poorLabelLayer.removeAllFeatures();
+    //xs_tasker_animatorVectorLayer.removeAllFeatures();
     xs_clusterLayer.destroyCluster();
     xs_clusterControl.deactivate();
     XS.Main.clearVectorLayer();

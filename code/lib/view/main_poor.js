@@ -1057,10 +1057,12 @@ var xs_poor_isUpOneLevel = false;
 XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
     XS.Main.hiddenLayers();
     XS.Main.clearMarker();
-    if(xs_tasker_animatorVectorLayer.getDrawedFeatures()){
+    XS.Main.clearVectorLayer();
+    $("#xs_main_detail").dialog("destroy");
+    /*if(xs_tasker_animatorVectorLayer.getDrawedFeatures()){
         xs_poorLabelLayer.removeAllFeatures();
     }
-    xs_tasker_animatorVectorLayer.removeAllFeatures();
+    xs_tasker_animatorVectorLayer.removeAllFeatures();*/
     if($("#xs_utfGridC").length>0) $("#xs_utfGridC").css("display","none");
     //if($("#xs_tjfx_range_Legend").length>0) $("#xs_tjfx_range_Legend").remove();
 
@@ -1357,6 +1359,7 @@ XS.Main.Poor.povertyRelocation = function(level, parentId, pdata) {
 //扶贫搬迁点击获得矢量要素Feature的处理事件
 XS.Main.Poor.povertyRelocatFeature = function(feature,params,superId,currentLevel,regionNameF,regionIdF){
     xs_currentZoneFuture = feature;
+    xs_currentZoneFuture.data.comefrome = true;
     feature.style = xs_stateZoneStyle;
     XS.Main.clearVectorLayer();
     if(xs_user_Features[0]){
@@ -1806,7 +1809,6 @@ XS.Main.Poor.preloc_handleVill = function(level, parentId){
                 if(xs_poor_detail_is_relocationdialog_open)
                 {
                     xs_poor_detail_is_relocationdialog_open = false;
-                    xs_currentZoneFuture = null;
                     XS.Main.clearVectorLayer();
                     //XS.Main.Poor.clearRelocationLayer();
                 }
@@ -1896,10 +1898,12 @@ XS.Main.Poor.preloc_handleVill = function(level, parentId){
 
 //清除扶贫搬迁Layer
 XS.Main.Poor.clearRelocationLayer = function(){
-    if(xs_tasker_animatorVectorLayer.getDrawedFeatures()){
+    //if(xs_tasker_animatorVectorLayer.getDrawedFeatures() && xs_tasker_animatorVectorLayer.getDrawedFeatures().length>0){
+    /*if(xs_pkdc_isAnimal){
+        xs_pkdc_isAnimal = false;
         xs_poorLabelLayer.removeAllFeatures();
     }
-    xs_tasker_animatorVectorLayer.removeAllFeatures();
+    xs_tasker_animatorVectorLayer.removeAllFeatures();*/
     if(xs_poor_elementsLayer){
         xs_clickMapType = XS.Main.clickMapType.none;
         xs_isShowUtfGridTip = true;
@@ -2223,8 +2227,8 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
        {"name": "人口(人)", "value": obj.PERSON_NUM},
        {"name": "识别标准", "value": obj.HB_STANDARD},
        {"name": "脱贫标识", "value": obj.HB_OUTOFPOOR},
-       {"name": "经度", "value": XS.StrUtil.isEmpty(obj.LONGITUDE)?"":(parseFloat(obj.LONGITUDE)).toFixed(2)},
-       {"name": "纬度", "value": XS.StrUtil.isEmpty(obj.LATITUDE)?"":(parseFloat(obj.LATITUDE)).toFixed(2)}
+       {"name": "经度", "value": XS.StrUtil.isEmpty(obj.HB_LATITUDE)?"":(parseFloat(obj.HB_LATITUDE)).toFixed(2)},
+       {"name": "纬度", "value": XS.StrUtil.isEmpty(obj.HB_LATITUDE)?"":(parseFloat(obj.HB_LATITUDE)).toFixed(2)}
    ];
     $("#xs_poor_detail_tab_info").empty().append(XS.Main.Poor.createTable(XS.Main.Poor.handleArrNull(objArr,['value']), 3, 34,"", "color:#00bbee"));
 

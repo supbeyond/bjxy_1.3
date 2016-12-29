@@ -264,7 +264,6 @@ XS.Main.init = function(){
     {
         XS.Main.showBottomToolBar();
     });
-
 }
 
 var xs_btoolbar_isShowing = false;
@@ -1032,13 +1031,15 @@ XS.Main.clickMapCallback = function(mouseEvent){
         xs_poor_isUpOneLevel = false;
         return;
     }
-    if(xs_clickMapType != XS.Main.clickMapType.none && xs_clickMapType != XS.Main.clickMapType.marker){
+
+    if((xs_clickMapType != XS.Main.clickMapType.none && xs_clickMapType != XS.Main.clickMapType.marker) || xs_pkdc_isTaskline){
         return;
     }
     xs_isClickMapFinish = false;
     xs_isMapClickTypeNone = false;
     xs_poorLabelLayer.removeAllFeatures();
     xs_markerLayer.clearMarkers();
+    
     //XS.Main.Poor.clearRelocationLayer();
     $("#xs_tjfx_range_Legend").css("display", "none");
 
@@ -1217,15 +1218,15 @@ XS.Main.featureAfter = function(level,feature){
             feature.style = xs_stateZoneStyle;
         }
     }
-    XS.Main.clearVectorLayer();
     xs_isMapClickTypeNone = true;
     xs_currentZoneLevel = level;
     //查询信息
     XS.CommonUtil.hideLoader();
     XS.Main.showBottomToolBar();
     xs_isClickMapFinish = true;
-
+    if(XS.Main.clearVectorLayer())return;
     if(xs_tjfx_themeLayer || xs_tjfx_graph_themeLayer || xs_poor_elementsLayer){
+        xs_currentZoneFuture.data.comefrome = true;
         return;
     }
     //  XS.Main.showFunMenu();
@@ -1572,8 +1573,10 @@ XS.Main.readyAddRegionMarkersData = function (features,superLevel,superId) {
     //请求数据
     var data = {pbno:superId};
     XS.CommonUtil.showLoader();
+    var xs_currentZoneCode_copy = xs_currentZoneCode;
     XS.CommonUtil.ajaxHttpReq(XS.Constants.web_host, action, data, function (json)
     {
+        xs_currentZoneCode = xs_currentZoneCode_copy;
         XS.CommonUtil.hideLoader();
         var dataArr = [];
         if (json && json.length>0)
@@ -1757,8 +1760,8 @@ XS.Main.addMarkers2Layer = function(dataArr, lonKey, latKey, iconUriKey, iconW, 
                     break;
                 case XS.Main.ZoneLevel.village:
                     xs_clickMapType = XS.Main.clickMapType.marker;
-                    XS.Main.Pkjc.closeInfoDialog();
-                    XS.Main.Poor.clearRelocationLayer();
+                    //XS.Main.Pkjc.closeInfoDialog();
+                    //XS.Main.Poor.clearRelocationLayer();
 
                     $("#xs_clusterTipC").css({display: 'none'});
                     //XS.Main.readyAddMarkers(lonLat,superLevel+1);
@@ -1877,25 +1880,37 @@ XS.Main.hiddenLayers = function(){
 }
 //清除矢量图层
 XS.Main.clearVectorLayer = function(){
-    xs_pkdc_isTaskline = false;
+    xs_vectorLayer.removeAllFeatures();
+    var addFeature = XS.Main.getUserAndCurrFeature();
+    if(addFeature.length>0){
+        xs_vectorLayer.addFeatures(addFeature);
+    }
     if(xs_animatorVectorLayer != null){
+        if(!xs_pkdc_isTaskline){
+            xs_poorLabelLayer.removeAllFeatures();
+        }
         xs_MapInstance.getMapObj().removeLayer(xs_animatorVectorLayer);
         xs_animatorVectorLayer = null;
     }
-    xs_vectorLayer.removeAllFeatures();
-
+    xs_pkdc_isTaskline = false;
+}
+//获取选中项和权限项feature
+XS.Main.getUserAndCurrFeature = function(){
+    var addFeature = [];
     if(xs_currentZoneFuture != null){
         var isAdd = true;
         if(xs_user_Features[0] && (xs_currentZoneFuture.id == xs_user_Features[0].id)){
             isAdd = false;
         }
         if(isAdd){
-            xs_vectorLayer.addFeatures(xs_currentZoneFuture);
+            xs_currentZoneFuture.style = xs_stateZoneStyle;
+            addFeature = [xs_currentZoneFuture];
         }
     }
     if(xs_user_Features[0]){
-        xs_vectorLayer.addFeatures(xs_user_Features);
+        addFeature.push(xs_user_Features[0]);
     }
+    return addFeature;
 }
 //清空地图
 XS.Main.clearMap = function(){
@@ -1930,7 +1945,7 @@ XS.Main.depClearMap = function() {
     XS.Main.depClearMarkers();
     clearInterval(xs_pkjc_IntervalId);
     //xs_tasker_labelLayer.removeAllFeatures();
-    xs_tasker_animatorVectorLayer.removeAllFeatures();
+    //xs_tasker_animatorVectorLayer.removeAllFeatures();
 
     XS.Main.Poor.clearRelocationLayer();
     XS.Main.clearMarker();
@@ -1989,6 +2004,21 @@ XS.Main.returnBefore = function(){
         }else{
             xs_MapInstance.getMapObj().zoomToExtent(xs_userZoomBounds, true);
         }
+    }
+}
+//回到选中状态或默认状态，并添加图标
+XS.Main.returnBeforeMarker = function(){
+    if(xs_currentZoneFuture){
+        if(xs_currentZoneCode == xs_user_regionId){
+            XS.Main.returnBefore();
+        }else{
+            if(xs_currentZoneFuture.data.comefrome){
+                XS.Searchbox.featurePosition(xs_currentZoneLevel,xs_currentZoneFuture,xs_currentZoneCode,xs_currentZoneName,"");
+            }
+            XS.Main.readyAddMarkers(xs_currentZoneFuture.geometry.getBounds().getCenterLonLat(),xs_currentZoneLevel,xs_currentZoneCode,true);
+        }
+    }else{
+        XS.Main.returnBefore();
     }
 }
 //根据条件判断是否回到选中状态或默认状态

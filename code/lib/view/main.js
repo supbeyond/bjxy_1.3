@@ -143,14 +143,14 @@ XS.Main.load = function(){
     xs_clusterLayer = new SuperMap.Layer.ClusterLayer("cluster");
 
     /*xs_markerLayer = new SuperMap.Layer.Maker("marker");*/
-    xs_tasker_animatorVectorLayer = new SuperMap.Layer.AnimatorVector("tasker_animator", {rendererType:"TadpolePoint"},{
+    /*xs_tasker_animatorVectorLayer = new SuperMap.Layer.AnimatorVector("tasker_animator", {rendererType:"TadpolePoint"},{
             //设置速度为每帧播放0.05小时的数据
             speed:50,
             //开始时间为0晨
             startTime:0,
             //结束时间设置为最后运行结束的汽车结束时间
             endTime:0
-        });
+        });*/
     var strategy = new SuperMap.Strategy.GeoText({isOverLay:true});
     strategy.style = {
         fontColor:"#00bbee",
@@ -302,7 +302,7 @@ XS.Main.addLayers = function(){
         xs_utfGridTownLayer,
         xs_utfGridVillageLayer,
         xs_vectorLayer,
-        xs_tasker_animatorVectorLayer,
+        //xs_tasker_animatorVectorLayer,
         xs_clusterLayer,
         xs_poorLabelLayer,
         xs_markerLayer
@@ -311,7 +311,7 @@ XS.Main.addLayers = function(){
         //xs_tasker_labelLayer,
         //xs_cityMarkerLayer
     ]);
-    xs_tasker_animatorVectorLayer.setVisibility(false);
+    //xs_tasker_animatorVectorLayer.setVisibility(false);
     //xs_tasker_labelLayer.setVisibility(false);
     //xs_author_vectorLayer.setVisibility(false);
     //xs_markerLayer.setVisibility(false);
