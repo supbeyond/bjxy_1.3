@@ -369,7 +369,11 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
     $("#xs_dcs_btn_clear").linkbutton({"onClick":function(){
         XS.Main.Dispatchcmmd.clearSenderTab();
     }});
-    $("#xs_dcs_receiver").textbox('setValue', xs_currentZoneName);
+    if(xs_currentZoneFuture){
+        $("#xs_dcs_receiver").textbox('setValue', xs_currentZoneName);
+    }else{
+        $("#xs_dcs_receiver").textbox('setValue', xs_userZoneName);
+    }
 
     //-----------------------------------------------------------------------------------------------
     $("#xs_dcl_dsender").datebox();
@@ -397,7 +401,11 @@ XS.Main.Dispatchcmmd.dispatchCommd_send = function(receiver, receiverID){
         }
     });
 
-    $("#xs_dcl_receiver").textbox('setValue', xs_currentZoneName);
+    if(xs_currentZoneFuture){
+        $("#xs_dcl_receiver").textbox('setValue', xs_currentZoneName);
+    }else{
+        $("#xs_dcl_receiver").textbox('setValue', xs_userZoneName);
+    }
 
    $('#xs_dc_tab').tabs("select",0);
 
@@ -644,7 +652,11 @@ XS.Main.Dispatchcmmd.clearSenderTab = function(){
     $("#xs_dcs_sender").textbox('setValue',xs_Username);
     $("#xs_dcs_senderid").textbox('setValue',xs_user_regionId);
 
-    $("#xs_dcs_receiver").textbox('setValue',xs_currentZoneName);
+    if(xs_currentZoneFuture){
+        $("#xs_dcs_receiver").textbox('setValue',xs_currentZoneName);
+    }else{
+        $("#xs_dcs_receiver").textbox('setValue',xs_userZoneName);
+    }
 
     $("#xs_dcs_type").combobox('setValue',"1");
     $("#xs_dcs_ds").textbox('setValue',"");

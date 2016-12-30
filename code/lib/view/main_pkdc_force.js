@@ -231,7 +231,7 @@ var xs_pkdc_itemFoundChart = null;
                      data: nodeDataArr,
                      fit: true,
                      striped: true,
-                     singleSelect: false,
+                     singleSelect: true,
                      rownumbers: false,
                      rowStyler: function(rowIndex,rowData){
                          return 'height:40px;';

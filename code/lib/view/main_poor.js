@@ -428,7 +428,7 @@ XS.Main.Poor.helpDynamic = function(obj){
                 {"name": "区域名称", "value": json[0].REGIONNAME},
                 {"name": "项目名称", "value": json[0].PROJECTNAME},
                 {"name": "帮扶内容", "value": json[0].PROJECTCONTENT},
-                {"name": "帮扶资金", "value": json[0].FOUND},
+                {"name": "帮扶资金(元)", "value": json[0].FOUND},
                 {"name": "帮扶人姓名", "value": json[0].HELPMAN},
                 {"name": "帮扶人(单位)电话", "value": json[0].HELPTEL},
                 {"name": "帮扶单位", "value": json[0].HELPUNIT},
@@ -687,6 +687,7 @@ XS.Main.Poor.showVideo2Path1 = function(title, path, left ,dw, dh, vw, vh, modal
     $_dl.dialog({
         title: title,
         closed: true,
+        closable:false,
         tools:[
             {
                 /*iconCls:'e_icon-arrow_rotate_clockwise',*/
@@ -697,8 +698,30 @@ XS.Main.Poor.showVideo2Path1 = function(title, path, left ,dw, dh, vw, vh, modal
                         "transform": "rotate("+deg+"deg)"
                     });
                 }
+            },
+            {
+                /*iconCls:'e_icon-arrow_rotate_clockwise',*/
+                iconCls:'panel-tool-close',
+                handler:function(){
+                    try{
+                        $('#xs_main_detail_1').dialog("destroy");
+                    }catch (e){};
+                    $('#xs_main_detail_1').remove();
+                }
             }
         ],
+        /*tools:[
+            {
+                /!*iconCls:'e_icon-arrow_rotate_clockwise',*!/
+                iconCls:'xs_poor_rotate',
+                handler:function(){
+                    var deg = 90*((++xs_poor_video_rotate1)%4);
+                    $("#xs_poor_video1").css({
+                        "transform": "rotate("+deg+"deg)"
+                    });
+                }
+            }
+        ],*/
         maximizable:false,
         modal:modal?true:false,
         left:left,
@@ -760,9 +783,32 @@ XS.Main.Poor.showVideo2Path2 = function(title, path, left ,dw, dh, vw, vh, modal
     $_dl.dialog({
         title: title,
         closed: true,
+        closable:false,
         tools:[
             {
                 /*iconCls:'e_icon-arrow_rotate_clockwise',*/
+                iconCls:'xs_poor_rotate',
+                handler:function(){
+                    var deg = 90*((++xs_poor_video_rotate1)%4);
+                    $("#xs_poor_video1").css({
+                        "transform": "rotate("+deg+"deg)"
+                    });
+                }
+            },
+            {
+                /*iconCls:'e_icon-arrow_rotate_clockwise',*/
+                iconCls:'panel-tool-close',
+                handler:function(){
+                    try{
+                        $('#xs_main_detail_2').dialog("destroy");
+                    }catch (e){};
+                    $('#xs_main_detail_2').remove();
+                }
+            }
+        ],
+        /*tools:[
+            {
+                /!*iconCls:'e_icon-arrow_rotate_clockwise',*!/
                 iconCls:'xs_poor_rotate',
                 handler:function(){
                     var deg = 90*((++xs_poor_video_rotate1)%4);
@@ -771,7 +817,7 @@ XS.Main.Poor.showVideo2Path2 = function(title, path, left ,dw, dh, vw, vh, modal
                     });
                 }
             }
-        ],
+        ],*/
         maximizable:false,
         modal:modal?true:false,
         left:left,
@@ -1830,11 +1876,11 @@ XS.Main.Poor.preloc_handleVill = function(level, parentId){
                 singleSelect: true,
                 rownumbers: true,
                 columns: [[
-                    {field: 'name', title: '姓名',width:'10%'},
+                    {field: 'name', title: '姓名',width:'15%'},
                     {field: 'helpdepartment', title: '扶贫单位',width:'20%'},
                     {field: 'sum', title: '扶贫资金',width:'20%'},
                     {field: 'from', title: '原始地',width:'20%'},
-                    {field: 'to', title: '搬迁地',width:'25%'}
+                    {field: 'to', title: '搬迁地',width:'20%'}
                 ]]
             });
             $("#xs_poor_reloc_dg").datagrid("getPager").pagination({displayMsg:""});
@@ -2247,14 +2293,19 @@ XS.Main.Poor.showPoorDetailInfo = function(obj){
                 singleSelect: true,
                 rownumbers: true,
                 columns: [[
-                    {field: 'name', title: '姓名', width: '10%',styler: function(value,row,index){return 'height:34px;'}},
+                    {field: 'name', title: '姓名', width: '8%',styler: function(value,row,index){return 'height:34px;'}},
                     {field: 'sex', title: '性别', width: '5%'},
-                    {field: 'idcord', title: '证件号码', width: '14%'},
-                    {field: 'relation', title: '关系', width: '10%'},
+                    {field: 'nation', title: '民族', width: '5%'},
+                    {field: 'police', title: '政治面貌', width: '10%'},
+                    {field: 'idcord', title: '证件号码', width: '19%'},
+                    {field: 'relation', title: '关系', width: '5%'},
                     /*{field: 'age', title: '年龄', width: '5%'},*/
-                    {field: 'marriage', title: '婚姻', width: '10%'},
-                    {field: 'healthy', title: '健康状况', width: '15%'},
-                    {field: 'workPlace', title: '务工状况', width: '19%'}
+                    {field: 'marriage', title: '婚姻', width: '5%'},
+                    {field: 'schoolstate', title: '在校情况', width: '10%'},
+                    {field: 'edu', title: '文化程度', width: '10%'},
+                    {field: 'healthy', title: '健康状况', width: '10%'},
+                    {field: 'workible', title: '劳动能力', width: '10%'},
+                    {field: 'workPlace', title: '务工状况', width: '10%'}
                 ]]
             });
         }

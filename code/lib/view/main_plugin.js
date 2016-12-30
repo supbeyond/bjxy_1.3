@@ -1242,6 +1242,13 @@ XS.Main.zoomedMapCallback = function(e){
         XS.LogUtil.log("scale=" + 1/scale);
         XS.LogUtil.log("moon=" + moon);
 
+        if(xs_animatorVectorLayer && !xs_pkdc_isTaskline){
+            if(xs_currentZoneFuture){
+                XS.Main.Pkjc.onlineJson(xs_onLineJson,-1,xs_currentZoneCode);
+            }else{
+                XS.Main.Pkjc.onlineJson(xs_onLineJson,-1,xs_user_regionId);
+            }
+        }
         if(xs_isClearMarkers){
             return;
         }
@@ -1825,9 +1832,9 @@ XS.Main.addCityMarker2Layer = function(){
                 XS.Main.depClearMap();
                 if(xs_user_regionLevel == XS.Main.ZoneLevel.city) {
                     XS.Main.Pkjc.clickDetail(XS.Main.ZoneLevel.city, "毕节市", xs_cityID, false);
-                }else{
+                }/*else{
                     XS.CommonUtil.showMsgDialog("","你的权限不够");
-                }
+                }*/
             }});
 }
 
